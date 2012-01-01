@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: HTML | Eric Florenzano's Blog]]></title>
+  <link href="http://ericflo.github.com/blog/categories/html/atom.xml" rel="self"/>
+  <link href="http://ericflo.github.com/"/>
+  <updated>2011-12-31T23:14:37-08:00</updated>
+  <id>http://ericflo.github.com/</id>
+  <author>
+    <name><![CDATA[Eric Florenzano]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Django Tip: A Denormalization Alternative]]></title>
+    <link href="http://ericflo.github.com/blog/2008/02/15/django-tip-denormalization-alternative/"/>
+    <updated>2008-02-15T13:28:06-08:00</updated>
+    <id>http://ericflo.github.com/blog/2008/02/15/django-tip-denormalization-alternative</id>
+    <content type="html"><![CDATA[<p>
+In creating an any website with textual content, you have the choice of either writing plaintext or writing in a markup language of some kind.  The immediately obvious choice for markup language is HTML (or XHTML), but HTML is not as human-readable as something like Textile<em>, Markdown</em>, or <code>Restructured Text</code>_.  The advantage of choosing one of those human-readable alternatives is that content encoded using one of them can be translated very easily into HTML.</p>
+
+<p>When one of my friends_ started designing his blog using Django, it got me thinking about how best to deal with that translated HTML.  It seems like a waste to keep re-translating it every time a visitor views the page, but it also seems like it's redundant to keep the translated HTML stored in the database.</p>
+
+<p>Here's my solution to the problem: <strong>cache it</strong>.  For a month.  Here's an example, using Restructured Text:</p>
+
+<p>.. code-block:: python</p>
+
+<pre><code>from django.db import models
+from django.contrib.markup.templatetags.markup import restructuredtext
+from django.core.cache import cache
+from django.utils.safestring import mark_safe
+
+class MyContent(models.Model):
+    content = models.TextField()
+
+    def _get_content_html(self):
+        key = 'mycontent_html_%s' % str(self.pk)
+        html = cache.get(key)
+        if not html:
+            html = restructuredtext(self.content)
+            cache.set(key, html, 60*60*24*30)
+        return mark_safe(html)
+    content_html = property(_get_content_html)
+
+    def save(self):
+        if self.id:
+            cache.delete('mycontent_html_%s' % str(self.pk))
+        super(MyContent, self).save()
+</code></pre>
+
+<p>What I'm doing here is writing a method which either gets the translated HTML from the cache, or translates it and stores it in the cache for a month.  Then, it returns it as safe HTML to display in a template.  The last thing that we do is override the save method on the model, so that whenever the model is re-saved, the cache is deleted.</p>
+
+<p>There we go!  We now have the HTML-rendered data that we want, and no duplicated data in the database.  Keep in mind that this way of doing things becomes more and more useful the more RAM that your webserver has.</p>
+
+<p>.. <em>Textile: http://www.textism.com/tools/textile/
+.. </em>Markdown: http://daringfireball.net/projects/markdown/
+.. <em><code>Restructured Text</code>: http://docutils.sourceforge.net/rst.html
+.. </em>friends: http://thauber.com/
+</p>
+]]></content>
+  </entry>
+  
+</feed>

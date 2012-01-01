@@ -1,0 +1,521 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Exploring Mixins with Django Model Inheritance - Eric Florenzano's Blog</title>
+  <meta name="author" content="Eric Florenzano">
+
+  
+  <meta name="description" content="Django now supports Model Inheritance, and one of the coolest new opportunities that model inheritance brings is the possibility of the creation of &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://ericflo.github.com/blog/2008/05/17/exploring-mixins-django-model-inheritance">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Eric Florenzano's Blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-1959803-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Eric Florenzano's Blog</a></h1>
+  
+    <h2>I am me.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:ericflo.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Exploring Mixins With Django Model Inheritance</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-05-17T00:24:03-07:00" pubdate data-updated="true">May 17<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><a class="reference external" href="http://www.djangoproject.com/">Django</a> now supports <a class="reference external" href="http://www.djangoproject.com/documentation/model-api/#model-inheritance">Model Inheritance</a>, and one of the coolest new opportunities that model inheritance brings is the possibility of the creation of <a class="reference external" href="http://en.wikipedia.org/wiki/Mixin">mixins</a>, so in this post I&#8217;ll walk through the steps I went through to create some simple examples. This is just an excercise (although it could be modified to be more robust)&#8211;and right now there are better ways to achieve all of the effects of the following mixins.  (See <a class="reference external" href="http://code.google.com/p/django-mptt/">django-mptt</a>, for example).</p>
+<div class="section" id="model-and-field-setup">
+<h2>Model and Field Setup</h2>
+<p>First let&#8217;s just set up two basic models.  The first will be our mixin, <tt class="docutils literal">NaiveHierarchy</tt>, which has a single field, <tt class="docutils literal">parent</tt>, which is a reference to itself.  Using this, we can traverse the tree and find all sorts of fun hierarchical information.  Also, we&#8217;ll create the canonical example model: the blog post.  Our models start out looking something like this:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+</span><span class="line">
+</span><span class="line"><span class="k">class</span> <span class="nc">NaiveHierarchy</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+</span><span class="line">    <span class="n">parent</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="s">&#39;self&#39;</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</span><span class="line">
+</span><span class="line">    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+</span><span class="line">        <span class="n">abstract</span> <span class="o">=</span> <span class="bp">True</span>
+</span><span class="line">
+</span><span class="line"><span class="k">class</span> <span class="nc">BlogPost</span><span class="p">(</span><span class="n">NaiveHierarchy</span><span class="p">):</span>
+</span><span class="line">    <span class="n">title</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span> <span class="o">=</span> <span class="mi">128</span><span class="p">)</span>
+</span><span class="line">    <span class="n">body</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+</span><span class="line">
+</span><span class="line">    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span class="line">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span>
+</span></code></pre></td></tr></table></div></figure><p>Now let&#8217;s test to make sure that worked.  We&#8217;ll create some data and test that <tt class="docutils literal">parent</tt> exists on the instances.</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class="pycon"><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">mixins.models</span> <span class="kn">import</span> <span class="n">BlogPost</span>
+</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">bp</span> <span class="o">=</span> <span class="n">BlogPost</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s">&quot;post1&quot;</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="s">&quot;First post!&quot;</span><span class="p">)</span>
+</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">bp2</span> <span class="o">=</span> <span class="n">BlogPost</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s">&quot;post2&quot;</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="s">&quot;Second post!&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">bp</span><span class="p">)</span>
+</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">bp3</span> <span class="o">=</span> <span class="n">BlogPost</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s">&quot;post3&quot;</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="s">&quot;Third post!&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">bp2</span><span class="p">)</span>
+</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">bp</span><span class="o">.</span><span class="n">parent</span>
+</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">bp2</span><span class="o">.</span><span class="n">parent</span>
+</span><span class="line"><span class="go">&lt;BlogPost: post1&gt;</span>
+</span></code></pre></td></tr></table></div></figure></div>
+<div class="section" id="inherited-class-level-methods">
+<h2>Inherited Class-Level Methods</h2>
+<p>So as you can see, everything is working correctly!  But that really doesn&#8217;t save us much time yet, as it&#8217;s fairly easy to copy and paste fields onto new models, and we still have to write methods which take advantage of those new fields.  In this case, I already know that I&#8217;m going to want to get the related children and descendants of my blogposts.  So why not write those methods on the abstract model?  Thanks to inheritance, those methods will apply to the new model as well.</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="k">class</span> <span class="nc">NaiveHierarchy</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+</span><span class="line">    <span class="n">parent</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="s">&#39;self&#39;</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</span><span class="line">
+</span><span class="line">    <span class="k">def</span> <span class="nf">get_children</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span class="line">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_manager</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+</span><span class="line">
+</span><span class="line">    <span class="k">def</span> <span class="nf">get_descendants</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span class="line">        <span class="n">descs</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_children</span><span class="p">())</span>
+</span><span class="line">        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">descs</span><span class="p">):</span>
+</span><span class="line">            <span class="n">descs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">get_descendants</span><span class="p">())</span>
+</span><span class="line">        <span class="k">return</span> <span class="n">descs</span>
+</span><span class="line">
+</span><span class="line">    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+</span><span class="line">        <span class="n">abstract</span> <span class="o">=</span> <span class="bp">True</span>
+</span></code></pre></td></tr></table></div></figure><p>Now, getting all the children or descendents of a particular node is easy:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="pycon"><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">bp</span><span class="o">.</span><span class="n">get_children</span><span class="p">()</span>
+</span><span class="line"><span class="go">[&lt;BlogPost: post2&gt;]</span>
+</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">bp</span><span class="o">.</span><span class="n">get_descendants</span><span class="p">()</span>
+</span><span class="line"><span class="go">set([&lt;BlogPost: post2&gt;, &lt;BlogPost: post3&gt;])</span>
+</span></code></pre></td></tr></table></div></figure><p>Now this <tt class="docutils literal">NaiveHierarchy</tt> mixin is starting to become quite useful!  But what happens if I want to get all of the BlogPosts that have no parents?  It&#8217;s really manager-level functionality.  So let&#8217;s write a manager which defines a <tt class="docutils literal">get_roots</tt> function.  Unfortunately, using abstract managers doesn&#8217;t quite work yet (it works for non-abstract inheritance), but it probably will in future versions of Django.  In fact, by applying the latest patch on either Django ticket <a class="reference external" href="http://code.djangoproject.com/ticket/7252">7252</a> or <a class="reference external" href="http://code.djangoproject.com/ticket/7154">7154</a>, it will work today. Let&#8217;s see how this would look:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="k">class</span> <span class="nc">NaiveHierarchyManager</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Manager</span><span class="p">):</span>
+</span><span class="line">    <span class="k">def</span> <span class="nf">get_roots</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span class="line">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_query_set</span><span class="p">()</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">parent__isnull</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</span><span class="line">
+</span><span class="line"><span class="k">class</span> <span class="nc">NaiveHierarchy</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+</span><span class="line">    <span class="n">parent</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="s">&#39;self&#39;</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</span><span class="line">
+</span><span class="line">    <span class="n">tree</span> <span class="o">=</span> <span class="n">NaiveHierarchyManager</span><span class="p">()</span>
+</span><span class="line">
+</span><span class="line">    <span class="k">def</span> <span class="nf">get_children</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span class="line">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_manager</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+</span><span class="line">
+</span><span class="line">    <span class="k">def</span> <span class="nf">get_descendants</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span class="line">        <span class="n">descs</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_children</span><span class="p">())</span>
+</span><span class="line">        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">descs</span><span class="p">):</span>
+</span><span class="line">            <span class="n">descs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">get_descendants</span><span class="p">())</span>
+</span><span class="line">        <span class="k">return</span> <span class="n">descs</span>
+</span><span class="line">
+</span><span class="line">    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+</span><span class="line">        <span class="n">abstract</span> <span class="o">=</span> <span class="bp">True</span>
+</span><span class="line">
+</span><span class="line"><span class="k">class</span> <span class="nc">BlogPost</span><span class="p">(</span><span class="n">NaiveHierarchy</span><span class="p">):</span>
+</span><span class="line">    <span class="n">title</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span> <span class="o">=</span> <span class="mi">128</span><span class="p">)</span>
+</span><span class="line">    <span class="n">body</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+</span><span class="line">
+</span><span class="line">    <span class="n">objects</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Manager</span><span class="p">()</span>
+</span><span class="line">
+</span><span class="line">    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span class="line">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span>
+</span></code></pre></td></tr></table></div></figure><p>Note that we needed to explicitly define objects as the basic manager, because once a parent class specifies a manager, it gets set as the default manager on all inherited subclasses.  This would play out exactly how you would expect:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="pycon"><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">BlogPost</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">get_roots</span><span class="p">()</span>
+</span><span class="line"><span class="go">[&lt;BlogPost: post1&gt;]</span>
+</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">BlogPost</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+</span><span class="line"><span class="go">[&lt;BlogPost: post1&gt;, &lt;BlogPost: post2&gt;, &lt;BlogPost: post3&gt;]</span>
+</span></code></pre></td></tr></table></div></figure></div>
+<div class="section" id="advanced-stuff">
+<h2>Advanced Stuff</h2>
+<p>So now I really wanted to push the limit, and write a mixin which would enhance one of the basic methods of all <tt class="docutils literal">Model</tt> classes: <tt class="docutils literal">save()</tt>.  This would be a DateMixin which would contain <tt class="docutils literal">date_added</tt> and <tt class="docutils literal">date_modified</tt>, where <tt class="docutils literal">date_modified</tt> was updated on each save.  To my surprise, this <em>Just Worked</em>.  Let&#8217;s see the final result:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+<span class="line-number">34</span>
+<span class="line-number">35</span>
+<span class="line-number">36</span>
+<span class="line-number">37</span>
+<span class="line-number">38</span>
+<span class="line-number">39</span>
+<span class="line-number">40</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="kn">import</span> <span class="nn">datetime</span>
+</span><span class="line"><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+</span><span class="line">
+</span><span class="line"><span class="k">class</span> <span class="nc">DateMixin</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+</span><span class="line">    <span class="n">date_added</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">)</span>
+</span><span class="line">    <span class="n">date_modified</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">()</span>
+</span><span class="line">
+</span><span class="line">    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span class="line">        <span class="bp">self</span><span class="o">.</span><span class="n">date_modified</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+</span><span class="line">        <span class="nb">super</span><span class="p">(</span><span class="n">DateMixin</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+</span><span class="line">
+</span><span class="line"><span class="k">class</span> <span class="nc">NaiveHierarchyManager</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Manager</span><span class="p">):</span>
+</span><span class="line">    <span class="k">def</span> <span class="nf">get_roots</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span class="line">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_query_set</span><span class="p">()</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">parent__isnull</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</span><span class="line">
+</span><span class="line"><span class="k">class</span> <span class="nc">NaiveHierarchy</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+</span><span class="line">    <span class="n">parent</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="s">&#39;self&#39;</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</span><span class="line">
+</span><span class="line">    <span class="n">tree</span> <span class="o">=</span> <span class="n">NaiveHierarchyManager</span><span class="p">()</span>
+</span><span class="line">
+</span><span class="line">    <span class="k">def</span> <span class="nf">get_children</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span class="line">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_manager</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+</span><span class="line">
+</span><span class="line">    <span class="k">def</span> <span class="nf">get_descendants</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span class="line">        <span class="n">descs</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_children</span><span class="p">())</span>
+</span><span class="line">        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">descs</span><span class="p">):</span>
+</span><span class="line">            <span class="n">descs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">get_descendants</span><span class="p">())</span>
+</span><span class="line">        <span class="k">return</span> <span class="n">descs</span>
+</span><span class="line">
+</span><span class="line">    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+</span><span class="line">        <span class="n">abstract</span> <span class="o">=</span> <span class="bp">True</span>
+</span><span class="line">
+</span><span class="line"><span class="k">class</span> <span class="nc">BlogPost</span><span class="p">(</span><span class="n">NaiveHierarchy</span><span class="p">,</span> <span class="n">DateMixin</span><span class="p">):</span>
+</span><span class="line">    <span class="n">title</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span> <span class="o">=</span> <span class="mi">128</span><span class="p">)</span>
+</span><span class="line">    <span class="n">body</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+</span><span class="line">
+</span><span class="line">    <span class="n">objects</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">Manager</span><span class="p">()</span>
+</span><span class="line">
+</span><span class="line">    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span class="line">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span>
+</span></code></pre></td></tr></table></div></figure></div>
+<div class="section" id="conclusions">
+<h2>Conclusions</h2>
+<p><a class="reference external" href="http://en.wikipedia.org/wiki/Mixin">Mixins</a> can be powerful tools, but there are some hazards in using mixins, which all boil down to the same basic problem:  unexpected consequences.  In the case of the <tt class="docutils literal">DateMixin</tt>, if any other class has defined a <tt class="docutils literal">save()</tt> method, our custom <tt class="docutils literal">save()</tt> method simply won&#8217;t be called unless called explicitly.  Perhaps this is a documentation problem, but perhaps it&#8217;s a fault in the idea of a date mixin altogether.</p>
+<p>So all that being said, I&#8217;m not suggesting to go off and start using any of the mixins that I have provided here, but rather to illustrate how a mixin can be constructed with <a class="reference external" href="http://www.djangoproject.com/">Django</a>&#8217;s new <a class="reference external" href="http://www.djangoproject.com/documentation/model-api/#model-inheritance">Model Inheritance</a>.  I do hope that a reusable app emerges with some great mixins that are useful for a large variety of tasks.  Because mixins are powerful, and new shiny things that Django can do, and new shiny things are worth being explored!</p>
+</div></div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Eric Florenzano</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-05-17T00:24:03-07:00" pubdate data-updated="true">May 17<span>th</span>, 2008</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/django/'>Django</a>, <a class='category' href='/blog/categories/object-oriented-programming/'>Object Oriented Programming</a>, <a class='category' href='/blog/categories/programming/'>Programming</a>, <a class='category' href='/blog/categories/python/'>Python</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://ericflo.github.com/blog/2008/05/17/exploring-mixins-django-model-inheritance/" data-via="ericflo" data-counturl="http://ericflo.github.com/blog/2008/05/17/exploring-mixins-django-model-inheritance/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2008/05/15/revolutionary-ideas/" title="Previous Post: Revolutionary Ideas">&laquo; Revolutionary Ideas</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2008/05/24/managers-and-voting-and-subqueries-oh-my/" title="next Post: Managers and Voting and Subqueries, Oh My!">Managers and Voting and Subqueries, Oh My! &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2011/02/16/technology-behind-convore/">The Technology Behind Convore</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/10/10/object-lesson-how-respond-criticism/">An Object Lesson in How to Respond to Criticism</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/09/27/why-node-disappoints-me/">Why node.js disappoints me</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/05/20/we-need-new-word-open/">We need a new word for "Open"</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/02/08/how-do-we-kick-our-synchronous-addiction/">How do we kick our synchronous addiction?</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("ericflo", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/ericflo" class="twitter-follow-button" data-show-count="false">Follow @ericflo</a>
+  
+</section>
+
+
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/109591387819364984777?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2011 - Eric Florenzano -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

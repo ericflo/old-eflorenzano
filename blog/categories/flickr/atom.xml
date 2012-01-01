@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Flickr | Eric Florenzano's Blog]]></title>
+  <link href="http://ericflo.github.com/blog/categories/flickr/atom.xml" rel="self"/>
+  <link href="http://ericflo.github.com/"/>
+  <updated>2011-12-31T23:14:37-08:00</updated>
+  <id>http://ericflo.github.com/</id>
+  <author>
+    <name><![CDATA[Eric Florenzano]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA["Web Hooks"]]></title>
+    <link href="http://ericflo.github.com/blog/2008/11/26/web-hooks/"/>
+    <updated>2008-11-26T20:43:30-08:00</updated>
+    <id>http://ericflo.github.com/blog/2008/11/26/web-hooks</id>
+    <content type="html"><![CDATA[<p>
+A few months back GitHub<em> rolled out its implementation of something that they
+call "Service Hooks".  The idea behind these hooks is that when you commit
+some new piece of code to GitHub, they want to be able to alert other services
+that you have committed that code.  For example, one of the service hooks is
+the ability to send a tweet to Twitter, and another of those hooks updates the
+Lighthouse</em> ticket tracker.</p>
+
+<p>I thought this was a really good idea when they rolled it out, so I did a bit of
+searching and found out that there is a larger body of work surrounding this
+idea, and that body of work is called <code>Web Hooks</code>_.  The central idea behind
+web hooks is that a user supplies a service that they use with a URL.  Then,
+when that user performs an action on that service, the service agrees to send an
+HTTP POST request to the user's specified URL, with some information about the
+action that the user took on the service.</p>
+
+<p>SlideShare has an excellent presentation_ deck about this idea, which likens it
+to Unix pipes.  That analogy makes a lot of sense if you think about it.  With
+the standard model that most websites follow today, a client can only send
+requests.  This means repeated polling until the client receives the information
+that it is interested in.  With web hooks, however, the service is responsible
+for passing that action along to the next service.  This simple yet powerful
+mechanism can allow for very advanced systems which interoperate very simply
+through chaining.</p>
+
+<p>Let's expore a concrete example of what this might look like.  A few months back
+I signed up for a pro account on Flickr<em>, so that I could upload some of the
+pictures that I had stored on my computer.  What I did was to upload some
+pictures with descriptions, and then I went and posted on Twitter some of the
+links to those pictures.  I also went and added that new Flickr account to
+FriendFeed</em> so that others could see my pictures as well.</p>
+
+<p>This was all a manual process.  If both Flickr and Twitter supported web hooks,
+I could have simply set up their respective URLs and uploaded my pictures.  The
+process might have happened like this:  First, the pictures are uploaded.  Then
+Flickr sends a POST request to Twitter, with the description of the picture and
+a link to the picture.  Twitter sends a POST request to FriendFeed, adding the
+new item to my FriendFeed lifestream.</p>
+
+<p>You could even write custom scripts to handle the web hooks. For example let's
+say that I want any tweet with the name 'Kevin' to be sent to my brother's email
+address.  I could add a URL to Twitter linking to a script on my computer which
+scans the contents of the tweet.  If the tweet has the name 'Kevin' in it, it
+would send an email.  If not, it might do nothing.</p>
+
+<p>I think that this concept is very powerful not only in terms of rendering
+trivial the interoperability between disparate services, but also in terms of
+simply saving on bandwidth and computing power.  Technologies which constantly
+poll resources hoping for updated content seem silly in comparison to the
+powerful simplicity that web hooks provide.</p>
+
+<p>There are definitely some drawbacks to a system like this.  Firstly, the name: I
+actually can't think of a worse name for this concept.  Web hooks?!  Let's come
+up with something better.  All joking aside though, this type of system does
+face a serious problem when it comes to the question of reliability.  If a
+script receives no POST, it could mean that either no event happened, or that
+the internet connection went down for a bit, or that the service is down, or any
+number of other possible things.  I think the solution for this is a hybrid
+model of sparse polling in conjunction with web hooks.</p>
+
+<p>Most of all, this technology just seems so underused.  There are ridiculously
+few people who implement something like this, yet it seems like an undeniably
+useful service--especially given its relative simplicity to implement.  Let's
+all try to encourage the services that we use on a daily basis to support web
+hooks, because by doing just that, we can make the web a lot better.</p>
+
+<p>.. <em>GitHub: http://github.com/
+.. </em>Lighthouse: http://lighthouseapp.com/
+.. <em><code>Web Hooks</code>: http://webhooks.pbwiki.com/
+.. </em>presentation: http://www.slideshare.net/progrium/web-hooks
+.. <em>Flickr: http://flickr.com/
+.. </em>FriendFeed: http://friendfeed.com/
+</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[New Site Live!]]></title>
+    <link href="http://ericflo.github.com/blog/2006/12/03/new-site-live/"/>
+    <updated>2006-12-03T14:23:54-08:00</updated>
+    <id>http://ericflo.github.com/blog/2006/12/03/new-site-live</id>
+    <content type="html"><![CDATA[<p>
+Hello all!  I have finally put my new website up for the world to see!  I'm still not much for designing the look and feel of websites, but after learning all about Django, I felt like I just had to update my website to use Django.</p>
+
+<p>Under the hood, there is low-level caching being done on both the Digg RSS feed and the Yahoo Flickr feed.  There are two RSS feeds available for the site: new blog posts, and new run information.  To show the graph under runs, I've used some AJAX to get the running data dynamically and create the graph with javascript.  Finally, I've created a custom Django template tag to allow me to post syntax-highlighted code using Pygments.</p>
+
+<p>Example of pygmentized code (the one from this site, actually, that gets my latest digg articles):</p>
+
+<p>.. code-block:: python</p>
+
+<pre><code>def get_digg_rss():
+    d = feedparser.parse('http://www.digg.com/rss/floguy/index2.xml')
+    dugg_dicts = cache.get('dugg_dicts')
+    if dugg_dicts == None:
+        print "Had to re-fetch digg links"
+        dugg_dicts = []
+        for entry in d.entries:
+            dugg_dicts.append({'title':entry.title, 'link':entry.link})
+        cache.set('dugg_dicts', dugg_dicts, 60*60)
+    return dugg_dicts
+</code></pre>
+
+<p>I hope that you all enjoy the website, and I also hope that you'll begin to frequent it, because I'll be keeping it up-to-date with the goings-on of my professional life.
+</p>
+]]></content>
+  </entry>
+  
+</feed>

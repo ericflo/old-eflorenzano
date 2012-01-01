@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: django-threadedcomments | Eric Florenzano's Blog]]></title>
+  <link href="http://ericflo.github.com/blog/categories/django-threadedcomments/atom.xml" rel="self"/>
+  <link href="http://ericflo.github.com/"/>
+  <updated>2011-12-31T23:14:37-08:00</updated>
+  <id>http://ericflo.github.com/</id>
+  <author>
+    <name><![CDATA[Eric Florenzano]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Intermediary Models and PyMag]]></title>
+    <link href="http://ericflo.github.com/blog/2008/07/29/intermediary-models-and-pymag/"/>
+    <updated>2008-07-29T23:11:17-07:00</updated>
+    <id>http://ericflo.github.com/blog/2008/07/29/intermediary-models-and-pymag</id>
+    <content type="html"><![CDATA[<p></p>
+
+<h2>Journey to Intermediary Models</h2>
+
+<p>It's been around an 8 month journey in adding intermediary model support to Django, starting with <code>a ticket</code><em> opened during a sprint by <code>Jacob Kaplan-Moss</code></em>.  Earlier that month I had been wrestling with several pretty nasty models, each with two foreign keys and many extra properties on that relation.  I kept thinking that Django makes everything else so easy, but that in at least this one aspect, it doesn't make things easy enough.  When Jacob posted his API idea, I was hooked.</p>
+
+<p>I quickly posted some thoughts and asked for a bit of clarification, and volunteered to write the patch.  Jacob responded saying he was glad to help me out.  It was only then that I actually delved into the code to see how it could be done.  It was only then that I realized that I had absolutely no knowledge or familiarity with that portion of the codebase--a portion that is nontrivial, to say the least.  But that's the good thing about committing to something: you feel pressure to follow through.</p>
+
+<p>Despite my incredible NaA-vitA, the patch got to a rudimentary usable state very quickly, and then started to flounder.  It was then that <code>Russell Keith-Magee</code>_ came into the picture, continually prodding me to add more tests, and thinking up many different test cases that I would have never come up with on my own.  I'm 100% certain that if Russ had not lent his expertise and guidance on this patch, it would have gotten lost and forgotten for a long time until someone more capable came along to take a look at it.</p>
+
+<p>A few hours ago, Russ <code>committed the patch to trunk</code><em>.  It's interesting to see the <code>reactions</code></em> that <code>some people have</code><em>, but on any project like this you'll always be scrutinized.  In any case, check out the <code>two</code></em> new bits of <code>documentation</code>_, and see if intermediary models are right for your project.  After having this great experience with working on a patch for Django, I'll definitely be looking to help out in other places as well.  My advice for anyone looking to get involved with the project is to, well, get involved!  Jump in over your head.  It's more fun that way.</p>
+
+<h2>PyMag</h2>
+
+<p>For around as long as I have been working on intermediary model support, I've been supporting another Django project of mine: django-threadedcomments<em>.  One of the things that I noticed a few months into maintaining the project is that outside of a few people who were actively using it, not many people really knew about its existence.  So when <code>Doug Hellmann</code> (of the famously excellent PyMOTW</em> series) contacted me about writing an article for PyMag_, it was immediately apparent what I would love to write about.  Over 4000 words later, between finals and school projects and moving across state boundaries, the article was written.</p>
+
+<p>To be honest, I had almost completely forgotten about having written it, aside from one short e-mail conversation with the technical editor.  It turns out that the July 2008 edition of PyMag<em> has arrived and my article is listed under "featured articles".  How cool is that!?  I'm quite proud of the article, and really hope that it helps some people out with their Django websites.  If you aren't a PyMag</em> subscriber, then what are you waiting for?</p>
+
+<p>This post seems to be doing a lot of self-promotion--sorry for that.  But these two things really made my day, and to me, blogging is about sharing those awesome days with others.</p>
+
+<p>.. <em><code>a ticket</code>: http://code.djangoproject.com/ticket/6095
+.. </em><code>Jacob Kaplan-Moss</code>: http://www.jacobian.org/
+.. <em><code>Russell Keith-Magee</code>: http://djangopeople.net/freakboy3742/
+.. </em><code>committed the patch to trunk</code>: http://code.djangoproject.com/changeset/8136
+.. <em><code>reactions</code>: http://www.reddit.com/comments/6tzig/django_gets_intermediate_models/
+.. </em><code>some people have</code>: http://www.reddit.com/comments/6ty8n/extra_fields_on_m2m_relationships_has_landed_in/
+.. <em><code>two</code>: http://www.djangoproject.com/documentation/model-api/#extra-fields-on-many-to-many-relationships
+.. </em>PyMag: http://pymag.phparch.com/
+.. <em><code>documentation</code>: http://www.djangoproject.com/documentation/admin/#working-with-many-to-many-intermediary-models
+.. </em>django-threadedcomments: http://code.google.com/p/django-threadedcomments/
+.. _PyMOTW: http://blog.doughellmann.com/search/label/PyMOTW
+</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Ideas and Execution]]></title>
+    <link href="http://ericflo.github.com/blog/2008/03/12/ideas-and-execution/"/>
+    <updated>2008-03-12T03:57:30-07:00</updated>
+    <id>http://ericflo.github.com/blog/2008/03/12/ideas-and-execution</id>
+    <content type="html"><![CDATA[<p>
+After my <code>last post about django-threadedcomments</code><em>, there have been several new releases.  We've integrated completely with comment_utils</em>, added support for gravatar<em>, and added some internationalization (I love that we abbreviate this as i18n) support as well.  Every day more and more people seem to be adding bug reports, patches, and feature requests to the ticket tracker.  This couldn't make me happier, and I hope to see it continue.  But what does this have to do with ideas?  It's the first programming idea that I've taken through conception, execution and all the way to support.  After django-threadedcomments</em>, I've decided to change my outlook on how to organize and deal with ideas that I get every day.</p>
+
+<h2>Supporting a Project</h2>
+
+<p>There sure is a thrill to just sitting down and quickly hammering out the solution to a problem.  Who cares if it's hacky and incomplete?  You just proved that your idea was doable and you did it.  It instills quite the sense of accomplishment.  That's the style of project that I've worked on until now (aside from work).  With django-threadedcomments_, however, there's a completely different feeling that's just as thrilling:  people are actually using it.  It gives a completely different and stronger sense of accomplishment.  The reason is because I made a conscious effort to support the application after its initial release, for my own benefit and for others'.</p>
+
+<p>Admittedly it can be tedious at first.  I'm convinced that nobody enjoys writing test code, and writing documentation can take as long as writing the code itself (especially if you delete and re-write as much as I do), but being able to apply patches that people submit and actually <em>ghasp</em> re-use your own code in other projects is where the reward really lies.</p>
+
+<h2>Ideas</h2>
+
+<p>I have ideas all the time--as I think most people do.  Whether it be while writing code for one project, sitting idly in class, or even eating my cereal in the morning, ideas for nifty programs or websites or APIs just sort of pop into my head.  What do I do with them?  Until recently, what happened is that I'd start working on it and lose interest after a while.  Over the last few months, however, I've begun to form a list instead of starting on the projects.</p>
+
+<p>Why make a list?  Looking at my track record of starting and abandoning projects--and assuming that I'd like to do that far less often--it seems that something needs to change.  The change that I've settled on is to put them on a list instead of hastily implementing them.  When I attack one of these ideas, I'll attack it fully and correctly; bringing it from conception to implementation, and finally to support.  The reasons for this are three-fold:</p>
+
+<ol>
+<li><p>It's a good incubation period.  After a while, some ideas seem stupid, while others keep begging to be solved.</p></li>
+<li><p>It allows for a greater sense of accomplishment.  Once you cross out a few items on your list, you'll realize that what you've done is quite a feat.</p></li>
+<li><p>You can simply remember all those crazy ideas that you have had.</p></li>
+</ol>
+
+
+<h2>What is on my List?</h2>
+
+<p>I'm sure many of you may be asking what, specifically, I have on my list.  django-threadedcomments<em> is on there, and my next project is django-simplestats</em>.  The latter is not ready for public consumption yet, but check it out if you'd like to see a sneak peek.  There are also several other items, but I'm not going to talk about them because it would take all the fun away from me!  Honestly though, don't ask me for my list.  Come up with your own and work through it for yourself.</p>
+
+<h2>And You</h2>
+
+<p>Enough about me in this rambling post, what about you--how do you deal with ideas that you get every day?  Am I crazy for actually enjoying supporting a project?  Do you have any tips for me in my organizational endeavours?  Please respond in the comment section below.</p>
+
+<p>.. <em><code>last post about django-threadedcomments</code>: /blog/post/ajax-voting-nicer-css-threadedcomments-test/
+.. </em>comment_utils: http://code.google.com/p/django-comment-utils/
+.. <em>gravatar: http://site.gravatar.com/
+.. </em>django-threadedcomments: http://code.google.com/p/django-threadedcomments/
+.. _django-simplestats: http://code.google.com/p/django-simplestats/
+</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[AJAX, Voting, and Some Nicer CSS: Putting django-threadedcomments to the Test]]></title>
+    <link href="http://ericflo.github.com/blog/2008/01/30/ajax-voting-nicer-css-threadedcomments-test/"/>
+    <updated>2008-01-30T10:02:13-08:00</updated>
+    <id>http://ericflo.github.com/blog/2008/01/30/ajax-voting-nicer-css-threadedcomments-test</id>
+    <content type="html"><![CDATA[<p>
+It's an interesting feeling open-sourcing an application that you've developed for your own purposes.  Will people use it?  Will people find major design flaws?  Is it just a big waste of time?  These were the questions that were going through my mind before open-sourcing django-threadedcomments_.  Fortunately, my worries were quelled almost instantly as a people reacted quite positively to the application.  There was one recurring comment, however, that almost everyone who tried the sample implementation said: <strong>those colors are hideous</strong>.</p>
+
+<p>Beyond even that though, it seems that people saw the sample implementation and got the impression that django-threadedcomments = that sample implementation.  To me, that's an underestimation of the power of the modular django app.  I think that <code>James Bennett</code>_ hits the nail on the head when he says that:</p>
+
+<pre><code>"Rather than a single definitive 'Django blog' application, for example, I think it--  s much more likely 
+we--  ll see a collection of applications which, taken together, provide all the key 
+functionality..."
+</code></pre>
+
+<p>It was this sentiment that pervaded nearly all of the design decisions behind django-threadedcomments: it should be flexible, modular, and reusable so that, taken together with other similarly-designed apps, it can provide some compelling functionality at a fraction of the effort.  Now we most assuredly didn't achieve all of those design goals fully, but I believe we're headed in at least the right direction with its development.</p>
+
+<p>To prove my point, I decided to create an improved Digg/Reddit comment system clone using <code>Jonathan Buchanan</code><em>'s wonderful django-voting</em> application, alongside django-threadedcomments<em>, and a fair bit of jQuery</em>.  Being almost completely new to Javascript, I was pleasantly surprised by how easy it was to not only integrate all of these technologies and use extensive client- and server-side scripting, but also to achieve a compelling commenting system in well under a week of spare time.  Oh, and this time there was actually some effort in making the look and feel of the commenting system acceptable!  As with the first example, this one is completely open sourced and available in the django-threadedcomments SVN repository.</p>
+
+<p>Without further ado, the <code>Example Digg/Reddit Comment Clone Plus Focus</code>_.</p>
+
+<p>.. <em>django-threadedcomments: http://code.google.com/p/django-threadedcomments/
+.. </em><code>James Bennett</code>: http://www.b-list.org/weblog/2007/nov/29/django-blog/
+.. <em><code>Jonathan Buchanan</code>: http://insin.webfactional.com/weblog/
+.. </em>django-voting: http://code.google.com/p/django-voting/
+.. <em>jQuery: http://jquery.com/
+.. </em><code>Example Digg/Reddit Comment Clone Plus Focus</code>: http://www.eflorenzano.com/threadexample/blog/
+</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Announcing django-threadedcomments]]></title>
+    <link href="http://ericflo.github.com/blog/2008/01/23/announcing-django-threadedcomments/"/>
+    <updated>2008-01-23T09:26:04-08:00</updated>
+    <id>http://ericflo.github.com/blog/2008/01/23/announcing-django-threadedcomments</id>
+    <content type="html"><![CDATA[<p>
+Django-threadedcomments_ is a simple yet flexible threaded commenting system for Django.  What I mean when I say threaded is that commenters can reply not only to the original item, but to other comments as well.  It is very similar to what Reddit or Digg have in their comments sections.</p>
+
+<p>The idea for this application started about a month and a half ago, when my good friend Tony Hauber asked if I would work with him on a project idea that he had (more info on this in the future).  One of the major components of the project would need to be threaded comments.  Naturally, the first thing that I did was attempt to make <code>django.contrib.comments</code> work for this purpose.  In the end, however, I kept running into problems which all basically boiled down to the fact that <code>django.contrib.comments</code> was never meant for this purpose.</p>
+
+<p>So I used <code>django.contrib.comments</code> as a starting point, brought in some of the best features of the excellent django-comment-utils<em> (In fact, django-threadedcomments</em> actually provides a fair amount of compatiblity with the Managers from django-comment-utils), and added a bit of my own alchemy.  This is the result of those things.</p>
+
+<p>A lot of effort has gone into documentation on this project: inline documentation, <code>a tutorial on setting it up with a blog</code><em>, and <code>complete API documentation</code></em>.  In fact, to see what you'll get after completing <code>the tutorial</code><em>, head on over to <code>this page</code></em>.  Please excuse my color scheme there--It's the comments that I'm trying to show off, not my design skills (or lack thereof).</p>
+
+<p>If you're worried about the hassle of writing a script to migrate all of your <code>django.contrib.comments</code> comments to this new system, then fear not: there's an included migration script and you'll only need to run <code>python manage.py migratecomments</code> and the migration is automatically taken care of for you.</p>
+
+<p>I really hope that this can be a useful tool for people looking to add a threaded commenting system to a project of theirs.  <code>Check it out</code>_ and see if it's right for you!</p>
+
+<p>.. <em>Django-threadedcomments: http://code.google.com/p/django-threadedcomments/
+.. </em>django-comment-utils: http://code.google.com/p/django-comment-utils/
+.. <em>django-threadedcomments: http://code.google.com/p/django-threadedcomments/
+.. </em><code>a tutorial on setting it up with a blog</code>: http://api.rst2a.com/1.0/rst2/html?uri=http%3A//django-threadedcomments.googlecode.com/svn/trunk/docs/tutorial.txt&amp;style=zope
+.. <em><code>complete API documentation</code>: http://api.rst2a.com/1.0/rst2/html?uri=http%3A//django-threadedcomments.googlecode.com/svn/trunk/docs/api.txt&amp;style=zope
+.. </em><code>the tutorial</code>: http://api.rst2a.com/1.0/rst2/html?uri=http%3A//django-threadedcomments.googlecode.com/svn/trunk/docs/tutorial.txt&amp;style=zope
+.. <em><code>this page</code>: http://www.eflorenzano.com/threadedcomments/example/
+.. </em><code>Check it out</code>: http://code.google.com/p/django-threadedcomments/
+</p>
+]]></content>
+  </entry>
+  
+</feed>

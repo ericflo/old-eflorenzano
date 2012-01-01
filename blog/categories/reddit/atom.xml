@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Reddit | Eric Florenzano's Blog]]></title>
+  <link href="http://ericflo.github.com/blog/categories/reddit/atom.xml" rel="self"/>
+  <link href="http://ericflo.github.com/"/>
+  <updated>2011-12-31T23:14:37-08:00</updated>
+  <id>http://ericflo.github.com/</id>
+  <author>
+    <name><![CDATA[Eric Florenzano]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[AJAX, Voting, and Some Nicer CSS: Putting django-threadedcomments to the Test]]></title>
+    <link href="http://ericflo.github.com/blog/2008/01/30/ajax-voting-nicer-css-threadedcomments-test/"/>
+    <updated>2008-01-30T10:02:13-08:00</updated>
+    <id>http://ericflo.github.com/blog/2008/01/30/ajax-voting-nicer-css-threadedcomments-test</id>
+    <content type="html"><![CDATA[<p>
+It's an interesting feeling open-sourcing an application that you've developed for your own purposes.  Will people use it?  Will people find major design flaws?  Is it just a big waste of time?  These were the questions that were going through my mind before open-sourcing django-threadedcomments_.  Fortunately, my worries were quelled almost instantly as a people reacted quite positively to the application.  There was one recurring comment, however, that almost everyone who tried the sample implementation said: <strong>those colors are hideous</strong>.</p>
+
+<p>Beyond even that though, it seems that people saw the sample implementation and got the impression that django-threadedcomments = that sample implementation.  To me, that's an underestimation of the power of the modular django app.  I think that <code>James Bennett</code>_ hits the nail on the head when he says that:</p>
+
+<pre><code>"Rather than a single definitive 'Django blog' application, for example, I think it--  s much more likely 
+we--  ll see a collection of applications which, taken together, provide all the key 
+functionality..."
+</code></pre>
+
+<p>It was this sentiment that pervaded nearly all of the design decisions behind django-threadedcomments: it should be flexible, modular, and reusable so that, taken together with other similarly-designed apps, it can provide some compelling functionality at a fraction of the effort.  Now we most assuredly didn't achieve all of those design goals fully, but I believe we're headed in at least the right direction with its development.</p>
+
+<p>To prove my point, I decided to create an improved Digg/Reddit comment system clone using <code>Jonathan Buchanan</code><em>'s wonderful django-voting</em> application, alongside django-threadedcomments<em>, and a fair bit of jQuery</em>.  Being almost completely new to Javascript, I was pleasantly surprised by how easy it was to not only integrate all of these technologies and use extensive client- and server-side scripting, but also to achieve a compelling commenting system in well under a week of spare time.  Oh, and this time there was actually some effort in making the look and feel of the commenting system acceptable!  As with the first example, this one is completely open sourced and available in the django-threadedcomments SVN repository.</p>
+
+<p>Without further ado, the <code>Example Digg/Reddit Comment Clone Plus Focus</code>_.</p>
+
+<p>.. <em>django-threadedcomments: http://code.google.com/p/django-threadedcomments/
+.. </em><code>James Bennett</code>: http://www.b-list.org/weblog/2007/nov/29/django-blog/
+.. <em><code>Jonathan Buchanan</code>: http://insin.webfactional.com/weblog/
+.. </em>django-voting: http://code.google.com/p/django-voting/
+.. <em>jQuery: http://jquery.com/
+.. </em><code>Example Digg/Reddit Comment Clone Plus Focus</code>: http://www.eflorenzano.com/threadexample/blog/
+</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Announcing django-threadedcomments]]></title>
+    <link href="http://ericflo.github.com/blog/2008/01/23/announcing-django-threadedcomments/"/>
+    <updated>2008-01-23T09:26:04-08:00</updated>
+    <id>http://ericflo.github.com/blog/2008/01/23/announcing-django-threadedcomments</id>
+    <content type="html"><![CDATA[<p>
+Django-threadedcomments_ is a simple yet flexible threaded commenting system for Django.  What I mean when I say threaded is that commenters can reply not only to the original item, but to other comments as well.  It is very similar to what Reddit or Digg have in their comments sections.</p>
+
+<p>The idea for this application started about a month and a half ago, when my good friend Tony Hauber asked if I would work with him on a project idea that he had (more info on this in the future).  One of the major components of the project would need to be threaded comments.  Naturally, the first thing that I did was attempt to make <code>django.contrib.comments</code> work for this purpose.  In the end, however, I kept running into problems which all basically boiled down to the fact that <code>django.contrib.comments</code> was never meant for this purpose.</p>
+
+<p>So I used <code>django.contrib.comments</code> as a starting point, brought in some of the best features of the excellent django-comment-utils<em> (In fact, django-threadedcomments</em> actually provides a fair amount of compatiblity with the Managers from django-comment-utils), and added a bit of my own alchemy.  This is the result of those things.</p>
+
+<p>A lot of effort has gone into documentation on this project: inline documentation, <code>a tutorial on setting it up with a blog</code><em>, and <code>complete API documentation</code></em>.  In fact, to see what you'll get after completing <code>the tutorial</code><em>, head on over to <code>this page</code></em>.  Please excuse my color scheme there--It's the comments that I'm trying to show off, not my design skills (or lack thereof).</p>
+
+<p>If you're worried about the hassle of writing a script to migrate all of your <code>django.contrib.comments</code> comments to this new system, then fear not: there's an included migration script and you'll only need to run <code>python manage.py migratecomments</code> and the migration is automatically taken care of for you.</p>
+
+<p>I really hope that this can be a useful tool for people looking to add a threaded commenting system to a project of theirs.  <code>Check it out</code>_ and see if it's right for you!</p>
+
+<p>.. <em>Django-threadedcomments: http://code.google.com/p/django-threadedcomments/
+.. </em>django-comment-utils: http://code.google.com/p/django-comment-utils/
+.. <em>django-threadedcomments: http://code.google.com/p/django-threadedcomments/
+.. </em><code>a tutorial on setting it up with a blog</code>: http://api.rst2a.com/1.0/rst2/html?uri=http%3A//django-threadedcomments.googlecode.com/svn/trunk/docs/tutorial.txt&amp;style=zope
+.. <em><code>complete API documentation</code>: http://api.rst2a.com/1.0/rst2/html?uri=http%3A//django-threadedcomments.googlecode.com/svn/trunk/docs/api.txt&amp;style=zope
+.. </em><code>the tutorial</code>: http://api.rst2a.com/1.0/rst2/html?uri=http%3A//django-threadedcomments.googlecode.com/svn/trunk/docs/tutorial.txt&amp;style=zope
+.. <em><code>this page</code>: http://www.eflorenzano.com/threadedcomments/example/
+.. </em><code>Check it out</code>: http://code.google.com/p/django-threadedcomments/
+</p>
+]]></content>
+  </entry>
+  
+</feed>

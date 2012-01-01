@@ -1,0 +1,310 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Legacy Code - Eric Florenzano's Blog</title>
+  <meta name="author" content="Eric Florenzano">
+
+  
+  <meta name="description" content="Prompted by this whole blog post-per-day thing, I&#8217;ve begun looking at the source
+code for this site again. It was my first real Django project &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://ericflo.github.com/blog/2008/11/08/legacy-code">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Eric Florenzano's Blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-1959803-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Eric Florenzano's Blog</a></h1>
+  
+    <h2>I am me.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:ericflo.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Legacy Code</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-11-08T18:45:13-08:00" pubdate data-updated="true">Nov 8<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Prompted by this whole blog post-per-day thing, I&#8217;ve begun looking at the source
+code for this site again.  It was my first real Django project in early 2006,
+and I was excited about all of the features that it gave me.  The community was
+much smaller then, and although I suspect the guys from <a class="reference external" href="http://www.mediaphormedia.com/">Lawrence</a> had a good
+idea of where site logic should go, at that time there was not the
+<a class="reference external" href="http://www.b-list.org/weblog/2007/mar/27/reusable-django-apps/">widespread</a> <a class="reference external" href="http://pinaxproject.com/">knowledge</a> of <a class="reference external" href="http://apress.com/book/view/1590599969">best</a> <a class="reference external" href="http://www.djangobook.com/">practices</a>.</p>
+<p>No knowledge of best practices, still learning Django, and being a relative
+web development newbie, means that the code ended up being quite bad.  It was
+all under one application, named &#8216;blog&#8217;.  All of the content loaded into the
+sidebar was done via context processors (one processor called back to this
+<tt class="docutils literal">get_digg_rss</tt> function that I <a class="reference external" href="http://www.eflorenzano.com/blog/post/new-site-live/">blogged about</a>, for example), and all the
+templates were housed under that application.</p>
+<p>Yeah.  It was that bad.</p>
+<p>But over the years, Django evolved, and some code that this blog used were
+deprecated while new functionality was added.  Over time as things broke, little
+by little things were fixed and broken out into their own apps.  In short, the
+site got better.  It was always organic improvement, though, and never a
+deliberate effort.  Meaning that while it&#8217;s better than it was, it&#8217;s still not
+very good.</p>
+<p>Browsing through the code gives me a bit of nostalgia, but overwhelmingly my
+urge is to just delete the entire thing and start over, picking from the best
+reusable apps and migrating data as needed.  After some consideration, I don&#8217;t
+think that urge is a good urge to act upon.  While it would take me a few
+afternoons to fix the code of the site, it would take several days to start
+from scratch.</p>
+<p>This is one of my biggest faults as a programmer.  Instead of working with ugly
+code and molding it into better code, I always enjoy starting from a clean slate
+and building it up from there&#8211;so much so that I&#8217;ll sacrifice productivity to
+do so.  I&#8217;m going to attempt to face this fault by not giving in to the
+temptation to rebuild, and instead to work with what I&#8217;ve got.  Who knows, maybe
+I&#8217;ll even open-source it.  I won&#8217;t open-source it unless its quality is up to
+par with the other open source apps in the Django reusable app ecosystem.</p>
+<p>How do you deal with legacy code?  Do you have any tips or tricks on how to do
+it?  Do you think that it&#8217;s better to just start from scratch?</p></div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Eric Florenzano</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-11-08T18:45:13-08:00" pubdate data-updated="true">Nov 8<span>th</span>, 2008</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/django/'>Django</a>, <a class='category' href='/blog/categories/programming/'>Programming</a>, <a class='category' href='/blog/categories/python/'>Python</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://ericflo.github.com/blog/2008/11/08/legacy-code/" data-via="ericflo" data-counturl="http://ericflo.github.com/blog/2008/11/08/legacy-code/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2008/11/07/its-caches-all-way-down/" title="Previous Post: It's Caches All the Way Down">&laquo; It's Caches All the Way Down</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2008/11/09/using-couchdb-django/" title="next Post: Using CouchDB with Django">Using CouchDB with Django &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2011/02/16/technology-behind-convore/">The Technology Behind Convore</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/10/10/object-lesson-how-respond-criticism/">An Object Lesson in How to Respond to Criticism</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/09/27/why-node-disappoints-me/">Why node.js disappoints me</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/05/20/we-need-new-word-open/">We need a new word for "Open"</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/02/08/how-do-we-kick-our-synchronous-addiction/">How do we kick our synchronous addiction?</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("ericflo", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/ericflo" class="twitter-follow-button" data-show-count="false">Follow @ericflo</a>
+  
+</section>
+
+
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/109591387819364984777?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2011 - Eric Florenzano -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

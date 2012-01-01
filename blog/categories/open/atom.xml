@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Open | Eric Florenzano's Blog]]></title>
+  <link href="http://ericflo.github.com/blog/categories/open/atom.xml" rel="self"/>
+  <link href="http://ericflo.github.com/"/>
+  <updated>2011-12-31T23:14:37-08:00</updated>
+  <id>http://ericflo.github.com/</id>
+  <author>
+    <name><![CDATA[Eric Florenzano]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[We need a new word for "Open"]]></title>
+    <link href="http://ericflo.github.com/blog/2010/05/20/we-need-new-word-open/"/>
+    <updated>2010-05-20T00:09:27-07:00</updated>
+    <id>http://ericflo.github.com/blog/2010/05/20/we-need-new-word-open</id>
+    <content type="html"><![CDATA[<p>
+When I say I'm developing an "open" API, what does that mean to you?</p>
+
+<p>To Facebook, it means something where you can get at some of your own data, as long as you abide by their restrictions on what you can do with it.</p>
+
+<p>To Twitter, it means something where you get back what you put in.</p>
+
+<p>To Flickr, it means something where you can get every single piece of data that you've ever put in the system, enriched by any value that Flickr can provide.</p>
+
+<p>To Google, it means something where you can get back what you put in, you can host your own version of the API on your own server, and your server has exactly the same status as any Google server has, and that Google's servers and your server will interact and work as a system.</p>
+
+<p>We need new words.  Words that have more specific meaning--which encompass the broad idea of "open", yet remain accessible and recognizable by everyone.  Federated is a good word, but it's possible to have a closed, federated system.</p>
+
+<p>What words should we use?
+</p>
+]]></content>
+  </entry>
+  
+</feed>

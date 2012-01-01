@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: George Patton | Eric Florenzano's Blog]]></title>
+  <link href="http://ericflo.github.com/blog/categories/george-patton/atom.xml" rel="self"/>
+  <link href="http://ericflo.github.com/"/>
+  <updated>2011-12-31T23:14:37-08:00</updated>
+  <id>http://ericflo.github.com/</id>
+  <author>
+    <name><![CDATA[Eric Florenzano]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Lessons Learned]]></title>
+    <link href="http://ericflo.github.com/blog/2008/04/10/lessions-learned/"/>
+    <updated>2008-04-10T10:08:40-07:00</updated>
+    <id>http://ericflo.github.com/blog/2008/04/10/lessions-learned</id>
+    <content type="html"><![CDATA[<p>
+Yesterday I came across a quote from <code>George Patton</code><em> (via</em>), which stuck me as really insightful, but later something burned the quote directly into my brain.</p>
+
+<p>  --  A good plan, violently executed now, is better than a perfect plan next week.--</p>
+
+<p>It's a quote which rings quite similar to the commonly-said open source phrase, coined by <code>Eric S. Raymond</code><em> in his article <code>The Cathedral and the Bazaar</code></em>.</p>
+
+<p>  "Release early.  Release often."</p>
+
+<p>The thing which burned these ideas into my brain is the discovery of djangoplugables.com_.  Simply put: this is an excellent site, which follows the ideas that I mentioned above completely.  The premise behind it is essentially to list all of the available django reusable applications on google code, and to display a bit of information about each app.</p>
+
+<p>A group of about 5 people, including myself, have been silently working on a very similar site for the past month or so (the bulk of our work took place during PyCon), but we utterly failed to follow the above sentiment.  We debated for hours over how users would be able to submit applications, claim them, and how we could ensure that those claims were accurate.  We had tagging, voting, comments, voting ON comments, graphs detailing how "hot" each application was (based on a frequency analysis of the votes over time), and OpenID integration.</p>
+
+<p>But all of this functionality took time, and we implemented it behind closed doors, in a vacuum--without ever seriously focusing on the user interface.  I don't know yet what will become of all of our work, but I have a feeling that it will be discontinued in favor of the much better-looking and simpler djangoplugables.com_.  Maybe we'll see parts of it resurface again, but that's not really the message behind this post.  The real message to take away from this experience is that we should practice what we so often preach.  In the case of web development, execute the good plan now and iterate, versus trying to perfect everything before release.</p>
+
+<p>The upside of all of this is that our goal has been achieved.  What we really wanted to accomplish is what now exists: an excellent resource for finding reusable django applications, and no matter who implements it, that's a win for everyone!</p>
+
+<p>.. <em><code>George Patton</code>: http://en.wikipedia.org/wiki/George_S.</em>Patton
+.. <em>via: http://www.37signals.com/svn/posts/944-george-patton-quotes
+.. </em><code>Eric S. Raymond</code>: http://www.catb.org/~esr/
+.. <em><code>The Cathedral and the Bazaar</code>: http://www.firstmonday.org/issues/issue3_3/raymond/#d4
+.. </em>djangoplugables.com: http://djangoplugables.com/
+</p>
+]]></content>
+  </entry>
+  
+</feed>

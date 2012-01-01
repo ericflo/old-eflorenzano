@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Meme | Eric Florenzano's Blog]]></title>
+  <link href="http://ericflo.github.com/blog/categories/meme/atom.xml" rel="self"/>
+  <link href="http://ericflo.github.com/"/>
+  <updated>2011-12-31T23:14:37-08:00</updated>
+  <id>http://ericflo.github.com/</id>
+  <author>
+    <name><![CDATA[Eric Florenzano]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Trying to Start a Programming Meme]]></title>
+    <link href="http://ericflo.github.com/blog/2008/11/24/trying-start-programming-meme/"/>
+    <updated>2008-11-24T21:13:18-08:00</updated>
+    <id>http://ericflo.github.com/blog/2008/11/24/trying-start-programming-meme</id>
+    <content type="html"><![CDATA[<p>
+I've never tried to start a meme before, but since I don't really have anything
+great to post about, I'd like to try to start one.  I think this one could be
+particularly fun because it encourages implementation of a basic program in many
+different languages.</p>
+
+<p>Rules:</p>
+
+<ol>
+<li><p>Implement a program that takes in a user's name and their age, and prints
+hello to them once for every year that they have been alive.</p></li>
+<li><p>Post these rules, the source code for your solution, and the following list
+(with you included) on your blog.</p></li>
+<li><p>Bonus points if you implement it in a language not yet seen on the following
+list!</p></li>
+</ol>
+
+
+<p>The List:</p>
+
+<ol>
+<li>[Python] http://www.eflorenzano.com/blog/post/trying-start-programming-meme</li>
+<li>[Bash] http://aartemenko.com/texts/bash-meme/</li>
+<li>[C] http://dakrauth.com/media/site/text/hello.c</li>
+<li>[Java] http://adoleo.com/blog/2008/nov/25/programming-meme/</li>
+<li>[Python 3] http://mikewatkins.ca/2008/11/25/hello-meme/</li>
+<li>[Ruby] http://stroky.l.googlepages.com/gem</li>
+<li>[Ruby] http://im.camronflanders.com/archive/meme/</li>
+<li>[Lisp] http://justinlilly.com/blog/2008/nov/25/back-on-the-horse/</li>
+<li>[Lua] http://aartemenko.com/texts/lua-hello-meme/</li>
+<li>[Functional Python] http://aartemenko.com/texts/python-functional-hello-meme/</li>
+<li>[Erlang] http://surfacedepth.blogspot.com/2008/11/erics-programming-meme-in-erlang.html</li>
+<li>[Haskell] http://jasonwalsh.us/meme.html</li>
+<li>[PHP] http://fitzgeraldsteele.wordpress.com/2008/11/25/memeing-in-php-2/</li>
+<li>[Javascript] http://www.taylanpince.com/blog/posts/responding-to-a-programming-meme/</li>
+<li>[Single-File Django] http://www.pocketuniverse.ca/archive/2008/november/27/florenzano-factor/</li>
+</ol>
+
+
+<p>(...and make sure to check out the comments on this post for some other fun implementations!)</p>
+
+<p>And here's my implementation:</p>
+
+<p>.. code-block:: python</p>
+
+<pre><code>name = raw_input('Please enter your name: ')
+age = int(raw_input('Please enter your age: '))
+
+for i in xrange(age):
+    print "%2d) Hello, %s" % (i, name)
+</code></pre>
+
+<p>And its output:</p>
+
+<p>.. code-block:: bash</p>
+
+<pre><code>Please enter your name: Eric Florenzano
+Please enter your age: 22
+ 0) Hello, Eric Florenzano
+ 1) Hello, Eric Florenzano
+ 2) Hello, Eric Florenzano
+ 3) Hello, Eric Florenzano
+ 4) Hello, Eric Florenzano
+ 5) Hello, Eric Florenzano
+ 6) Hello, Eric Florenzano
+ 7) Hello, Eric Florenzano
+ 8) Hello, Eric Florenzano
+ 9) Hello, Eric Florenzano
+10) Hello, Eric Florenzano
+11) Hello, Eric Florenzano
+12) Hello, Eric Florenzano
+13) Hello, Eric Florenzano
+14) Hello, Eric Florenzano
+15) Hello, Eric Florenzano
+16) Hello, Eric Florenzano
+17) Hello, Eric Florenzano
+18) Hello, Eric Florenzano
+19) Hello, Eric Florenzano
+20) Hello, Eric Florenzano
+21) Hello, Eric Florenzano
+</code></pre>
+
+<p>Well there you have it, my attempt at a programming meme.  I hope someone enjoys it!
+</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Book Meme]]></title>
+    <link href="http://ericflo.github.com/blog/2008/11/12/book-meme/"/>
+    <updated>2008-11-12T21:19:41-08:00</updated>
+    <id>http://ericflo.github.com/blog/2008/11/12/book-meme</id>
+    <content type="html"><![CDATA[<p>
+"Another feature that's easy to add is a per-entry way to allow or disallow comments."
+From <em>Practical Django Projects</em> by <code>James Bennett</code>_.</p>
+
+<p>Meme from <code>James Tauber</code><em>, <code>Greg Newman</code></em>, <code>Justin Lilly</code><em> and <code>Brian Rosner</code></em>.</p>
+
+<ul>
+<li>Grab the nearest book.</li>
+<li>Open it to page 56.</li>
+<li>Find the fifth sentence.</li>
+<li>Post the text of the sentence in your journal along with these instructions.</li>
+<li>Don't dig for your favorite book, the cool book, or the intellectual one: pick the CLOSEST.</li>
+</ul>
+
+
+<p>The MOST ironic part about this all, is that I was not going to do this meme tonight, and instead write a post.  However, I was so busy trying to beat James Bennett's score on level 3 of <code>this challenge</code>_, that I ran out of time for tonight.</p>
+
+<p>P.S. I dare you to beat my now 357,500 points on level 3 of the game in that link.  I bet you can't.</p>
+
+<p>.. <em><code>James Bennett</code>: http://www.b-list.org/
+.. </em><code>James Tauber</code>: http://jtauber.com/blog/2008/11/12/book_meme/
+.. <em><code>Greg Newman</code>: http://www.20seven.org/journal/2008/11/book-meme.html
+.. </em><code>Justin Lilly</code>: http://justinlilly.com/blog/2008/nov/12/book-memery/
+.. <em><code>Brian Rosner</code>: http://oebfare.com/blog/2008/nov/12/book-memery/
+.. </em><code>this challenge</code>: http://www.mochiads.com/challenge/accept/68dbee0cb670b06e8d0ced46fd616c87
+</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Programming Languages I've Learned (In Rough Order) Meme]]></title>
+    <link href="http://ericflo.github.com/blog/2008/09/28/programming-languages-ive-learned-rough-order/"/>
+    <updated>2008-09-28T17:49:15-07:00</updated>
+    <id>http://ericflo.github.com/blog/2008/09/28/programming-languages-ive-learned-rough-order</id>
+    <content type="html"><![CDATA[<p>
+Via <code>James Tauber</code><em> via <code>Dougal Matthews</code></em> and also <code>Steven Lott</code>_.</p>
+
+<ul>
+<li>Logo</li>
+<li>C</li>
+<li>Tcl/Tk</li>
+<li>VB6</li>
+<li>Java</li>
+<li>C++</li>
+<li>Python</li>
+<li>Javascript</li>
+<li>Scheme</li>
+<li>MIPS Assembly</li>
+<li>Perl</li>
+<li>Erlang</li>
+<li>ActionScript</li>
+</ul>
+
+
+<p>I've dabbled in a bunch more, like Ruby, but these are all of the ones that I've done one or more projects with.  This is fun--everyone should post their list!</p>
+
+<p>.. <em><code>James Tauber</code>: http://jtauber.com/blog/2008/09/28/programming_languages_i've_learned_in_order/
+.. </em><code>Dougal Matthews</code>: http://blog.dougalmatthews.com/2008/09/languages-ive-learned-in-order/
+.. _<code>Steven Lott</code>: http://homepage.mac.com/s_lott/iblog/architecture/C588245363/E20080928192106/index.html
+</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,1477 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Eric Florenzano's Blog</title>
+  <meta name="author" content="Eric Florenzano">
+
+  
+  <meta name="description" content="Lately I&#8217;ve really fallen in love with writing utilities whose interface is
+simply HTTP. By making it accessible via HTTP, it&#8217;s really &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://ericflo.github.com/blog/page/2">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Eric Florenzano's Blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-1959803-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Eric Florenzano's Blog</a></h1>
+  
+    <h2>I am me.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:ericflo.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/01/08/writing-blazing-fast-infinitely-scalable-pure-wsgi/">Writing Blazing Fast, Infinitely Scalable, Pure-WSGI Utilities</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-01-08T02:29:10-08:00" pubdate data-updated="true">Jan 8<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Lately I&#8217;ve really fallen in love with writing utilities whose interface is
+simply HTTP.  By making it accessible via HTTP, it&#8217;s really easy to write
+clients that talk to the utility and, if the need arises, there are lots of
+tools that already exist for doing things with HTTP, like load balancing and
+caching, etc.</p>
+<p>While it would be easy to use a framework to build these utilities, lately I&#8217;ve
+been choosing not to do so.  Web frameworks like <a class="reference external" href="http://www.djangoproject.com/">Django</a> and <a class="reference external" href="http://pylonshq.com/">Pylons</a> are great
+when you need to build a fully-featured web application that will be accessible
+by people.  When it will only be computers talking to the service, however, a
+lot of the machinery provided by frameworks is unneeded and will only slow your
+utility down.  Instead of using a framework, we&#8217;re going to write a pure <a class="reference external" href="http://wsgi.org/wsgi/">WSGI</a>
+application.</p>
+<div class="section" id="an-example-music-discovery-website">
+<h2>An Example: Music Discovery Website</h2>
+<p>This has all been very abstract, so let&#8217;s take an example: Suppose you run a
+music discovery website that lets you play songs online.  Next to each song, you
+simply want to display how many times the song has been played.</p>
+<p>One solution to that problem could be to have a <tt class="docutils literal">play_count</tt> column on the
+table where the song metadata is stored.  Every time someone plays the song, you
+could issue an <tt class="docutils literal">UPDATE</tt> on the row and increase the <tt class="docutils literal">play_count</tt> by one.
+This solution will work while your site is small, but as more and more people
+begin using the application, the number of writes to your database is going to
+kill its performance.</p>
+<p>A much more robust and scalable solution is to append a new line to a text
+log file every time a song is played, and have a process run regularly to scoop
+up all of the log files and update those <tt class="docutils literal">play_count</tt> fields in the database.</p>
+<p>However, even if you have that regular process run once every hour, there&#8217;s
+still too great a lag time between when a user takes an action and when they see
+the results of that action.  This is where our WSGI utility comes into play. It
+can serve as a realtime play counter to count the plays in between the time when
+the logs are analyzed and the <tt class="docutils literal">play_count</tt> columns updated.</p>
+</div>
+<div class="section" id="song-play-counter">
+<h2>Song Play Counter</h2>
+<p>We can design the interface for our WSGI song play counter utility any way that
+we like, but I&#8217;m going to try to keep it as <a class="reference external" href="http://en.wikipedia.org/wiki/Representational_State_Transfer">RESTful</a> as I can.  The interface
+will look like this:</p>
+<ul class="simple">
+<li><tt class="docutils literal">GET /song/SONGID</tt> will return the current play count of the given song</li>
+<li><tt class="docutils literal">POST /song/SONGID</tt> will increment the play count of the given song by one, and return its new value</li>
+<li><tt class="docutils literal">GET /</tt> will return a mapping of all songs registered to their respective play counts</li>
+<li><tt class="docutils literal">DELETE /</tt> will clear the whole mapping</li>
+</ul>
+<p>So let&#8217;s get started.  First, I always like to start with a very basic skeleton:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="k">def</span> <span class="nf">application</span><span class="p">(</span><span class="n">environ</span><span class="p">,</span> <span class="n">start_response</span><span class="p">):</span>
+</span><span class="line">    <span class="n">start_response</span><span class="p">(</span><span class="s">&#39;200 OK&#39;</span><span class="p">,</span> <span class="p">[(</span><span class="s">&#39;content-type&#39;</span><span class="p">,</span> <span class="s">&#39;text/plain&#39;</span><span class="p">)])</span>
+</span><span class="line">    <span class="k">return</span> <span class="p">(</span><span class="s">&#39;Hello world!&#39;</span><span class="p">,)</span>
+</span></code></pre></td></tr></table></div></figure><p>This does what you would imagine, returns <tt class="docutils literal">Hello world!</tt> to each and every
+request that it receives.  Not very useful, so let&#8217;s make it more interesting:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+</span><span class="line"><span class="n">counts</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+</span><span class="line">
+</span><span class="line"><span class="k">def</span> <span class="nf">application</span><span class="p">(</span><span class="n">environ</span><span class="p">,</span> <span class="n">start_response</span><span class="p">):</span>
+</span><span class="line">    <span class="k">global</span> <span class="n">counts</span>
+</span><span class="line">    <span class="n">path</span> <span class="o">=</span> <span class="n">environ</span><span class="p">[</span><span class="s">&#39;PATH_INFO&#39;</span><span class="p">]</span>
+</span><span class="line">    <span class="n">method</span> <span class="o">=</span> <span class="n">environ</span><span class="p">[</span><span class="s">&#39;REQUEST_METHOD&#39;</span><span class="p">]</span>
+</span><span class="line">    <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;/song/&#39;</span><span class="p">):</span>
+</span><span class="line">        <span class="n">song_id</span> <span class="o">=</span> <span class="n">path</span><span class="p">[</span><span class="mi">6</span><span class="p">:]</span>
+</span><span class="line">        <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s">&#39;GET&#39;</span><span class="p">:</span>
+</span><span class="line">            <span class="n">start_response</span><span class="p">(</span><span class="s">&#39;200 OK&#39;</span><span class="p">,</span> <span class="p">[(</span><span class="s">&#39;content-type&#39;</span><span class="p">,</span> <span class="s">&#39;text/plain&#39;</span><span class="p">)])</span>
+</span><span class="line">            <span class="k">return</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">counts</span><span class="p">[</span><span class="n">song_id</span><span class="p">]),)</span>
+</span><span class="line">        <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s">&#39;POST&#39;</span><span class="p">:</span>
+</span><span class="line">            <span class="n">counts</span><span class="p">[</span><span class="n">song_id</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+</span><span class="line">            <span class="n">start_response</span><span class="p">(</span><span class="s">&#39;200 OK&#39;</span><span class="p">,</span> <span class="p">[(</span><span class="s">&#39;content-type&#39;</span><span class="p">,</span> <span class="s">&#39;text/plain&#39;</span><span class="p">)])</span>
+</span><span class="line">            <span class="k">return</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">counts</span><span class="p">[</span><span class="n">song_id</span><span class="p">]),)</span>
+</span><span class="line">        <span class="k">else</span><span class="p">:</span>
+</span><span class="line">            <span class="n">start_response</span><span class="p">(</span><span class="s">&#39;405 METHOD NOT ALLOWED&#39;</span><span class="p">,</span> <span class="p">[(</span><span class="s">&#39;content-type&#39;</span><span class="p">,</span> <span class="s">&#39;text/plain&#39;</span><span class="p">)])</span>
+</span><span class="line">            <span class="k">return</span> <span class="p">(</span><span class="s">&#39;Method Not Allowed&#39;</span><span class="p">,)</span>
+</span><span class="line">    <span class="n">start_response</span><span class="p">(</span><span class="s">&#39;404 NOT FOUND&#39;</span><span class="p">,</span> <span class="p">[(</span><span class="s">&#39;content-type&#39;</span><span class="p">,</span> <span class="s">&#39;text/plain&#39;</span><span class="p">)])</span>
+</span><span class="line">    <span class="k">return</span> <span class="p">(</span><span class="s">&#39;Not Found&#39;</span><span class="p">,)</span>
+</span></code></pre></td></tr></table></div></figure><p>We&#8217;ve now added the data structure that we&#8217;re using to keep track of the counts,
+which in this case is a <tt class="docutils literal">defaultdict(int)</tt>.  We&#8217;re also now looking at the
+request path and method, as well.  If it&#8217;s a GET starting with /song/, we look
+up the count and return it, and if it&#8217;s a POST starting with /song/, we
+increment it by one before returning it.  Also, we&#8217;re doing the proper thing if
+we detect a method that&#8217;s not allowed: we&#8217;re returning HTTP error code 405.</p>
+<p>Now let&#8217;s add the final bit of functionality:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+</span><span class="line"><span class="n">counts</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+</span><span class="line">
+</span><span class="line"><span class="k">def</span> <span class="nf">application</span><span class="p">(</span><span class="n">environ</span><span class="p">,</span> <span class="n">start_response</span><span class="p">):</span>
+</span><span class="line">    <span class="c"># ... start of app</span>
+</span><span class="line">    <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;/song/&#39;</span><span class="p">):</span>
+</span><span class="line">        <span class="c"># ... song-specific logic</span>
+</span><span class="line">    <span class="k">elif</span> <span class="n">path</span> <span class="o">==</span> <span class="s">&#39;/&#39;</span><span class="p">:</span>
+</span><span class="line">        <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s">&#39;GET&#39;</span><span class="p">:</span>
+</span><span class="line">            <span class="n">res</span> <span class="o">=</span> <span class="s">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">=</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">counts</span><span class="o">.</span><span class="n">iteritems</span><span class="p">()])</span>
+</span><span class="line">            <span class="n">start_response</span><span class="p">(</span><span class="s">&#39;200 OK&#39;</span><span class="p">,</span> <span class="p">[(</span><span class="s">&#39;content-type&#39;</span><span class="p">,</span> <span class="s">&#39;text/plain&#39;</span><span class="p">)])</span>
+</span><span class="line">            <span class="k">return</span> <span class="p">(</span><span class="n">res</span><span class="p">,)</span>
+</span><span class="line">        <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s">&#39;DELETE&#39;</span><span class="p">:</span>
+</span><span class="line">            <span class="n">counts</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+</span><span class="line">            <span class="n">start_response</span><span class="p">(</span><span class="s">&#39;200 OK&#39;</span><span class="p">,</span> <span class="p">[(</span><span class="s">&#39;content-type&#39;</span><span class="p">,</span> <span class="s">&#39;text/plain&#39;</span><span class="p">)])</span>
+</span><span class="line">            <span class="k">return</span> <span class="p">(</span><span class="s">&#39;OK&#39;</span><span class="p">,)</span>
+</span><span class="line">        <span class="k">else</span><span class="p">:</span>
+</span><span class="line">            <span class="n">start_response</span><span class="p">(</span><span class="s">&#39;405 METHOD NOT ALLOWED&#39;</span><span class="p">,</span> <span class="p">[(</span><span class="s">&#39;content-type&#39;</span><span class="p">,</span> <span class="s">&#39;text/plain&#39;</span><span class="p">)])</span>
+</span><span class="line">            <span class="k">return</span> <span class="p">(</span><span class="s">&#39;Method Not Allowed&#39;</span><span class="p">,)</span>
+</span><span class="line">    <span class="c"># ... rest of app</span>
+</span></code></pre></td></tr></table></div></figure><p>We&#8217;ve done basically the same thing here as we did with the previous example: we
+are looking at the request path and method and doing the appropriate action.
+There really is nothing very tricky going on here.  We&#8217;re inventing our own
+format for the case where we return the counts for all songs, but it&#8217;s nothing
+that will be hard to parse.</p>
+<p><strong>NOTE:</strong> Generally you would want to use some sort of threading lock primitive
+before accessing a global dictionary like this.  I will be using <a class="reference external" href="http://pypi.python.org/pypi/Spawning/0.7">Spawning</a> to
+run this <a class="reference external" href="http://wsgi.org/wsgi/">WSGI</a> application, with a threadpool size of 0 to use cooperative
+coroutines instead of standard threads, so I am able to get away without locks
+for this application.  To install <a class="reference external" href="http://pypi.python.org/pypi/Spawning/0.7">Spawning</a> for yourself, just type:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line">sudo easy_install Spawning
+</span></code></pre></td></tr></table></div></figure></div>
+<div class="section" id="running-the-utility">
+<h2>Running the Utility</h2>
+<p>Let&#8217;s just take a quick look at how this utility works, from the command line:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line"><span class="nv">$ </span>spawn -t 0 -p 8000 counter.application
+</span></code></pre></td></tr></table></div></figure><p>&#8230;and in another window:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line"><span class="nv">$ </span>curl http://127.0.0.1:8000/song/1
+</span><span class="line">0
+</span><span class="line"><span class="nv">$ </span>curl -X POST http://127.0.0.1:8000/song/1
+</span><span class="line">1
+</span><span class="line"><span class="nv">$ </span>curl http://127.0.0.1:8000/song/1
+</span><span class="line">1
+</span><span class="line"><span class="nv">$ </span>curl -X POST http://127.0.0.1:8000/song/5
+</span><span class="line">1
+</span><span class="line"><span class="nv">$ </span>curl -X POST http://127.0.0.1:8000/song/5
+</span><span class="line">2
+</span><span class="line"><span class="nv">$ </span>curl http://127.0.0.1:8000/
+</span><span class="line"><span class="nv">1</span><span class="o">=</span>1,5<span class="o">=</span>2
+</span><span class="line"><span class="nv">$ </span>curl -X DELETE http://127.0.0.1:8000/
+</span><span class="line">OK
+</span></code></pre></td></tr></table></div></figure><p>As you can see, it seems to be working correctly. The play counter is behaving
+as expected.</p>
+</div>
+<div class="section" id="writing-a-client-to-talk-to-our-utility">
+<h2>Writing a Client to Talk to our Utility</h2>
+<p>Now that we have our WSGI utility written to keep track of the counts on our
+songs, we should write a client library to communicate with this server.</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+<span class="line-number">34</span>
+<span class="line-number">35</span>
+<span class="line-number">36</span>
+<span class="line-number">37</span>
+<span class="line-number">38</span>
+<span class="line-number">39</span>
+<span class="line-number">40</span>
+<span class="line-number">41</span>
+<span class="line-number">42</span>
+<span class="line-number">43</span>
+<span class="line-number">44</span>
+<span class="line-number">45</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="kn">import</span> <span class="nn">httplib</span>
+</span><span class="line">
+</span><span class="line"><span class="k">class</span> <span class="nc">CountClient</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+</span><span class="line">    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">servers</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;127.0.0.1:8000&#39;</span><span class="p">]):</span>
+</span><span class="line">        <span class="bp">self</span><span class="o">.</span><span class="n">servers</span> <span class="o">=</span> <span class="n">servers</span>
+</span><span class="line">
+</span><span class="line">    <span class="k">def</span> <span class="nf">_get_server</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">song_id</span><span class="p">):</span>
+</span><span class="line">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">servers</span><span class="p">[</span><span class="n">song_id</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">servers</span><span class="p">)]</span>
+</span><span class="line">
+</span><span class="line">    <span class="k">def</span> <span class="nf">_song_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">song_id</span><span class="p">,</span> <span class="n">method</span><span class="p">):</span>
+</span><span class="line">        <span class="n">conn</span> <span class="o">=</span> <span class="n">httplib</span><span class="o">.</span><span class="n">HTTPConnection</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_server</span><span class="p">(</span><span class="n">song_id</span><span class="p">))</span>
+</span><span class="line">        <span class="n">conn</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="s">&#39;/song/</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">song_id</span><span class="p">,))</span>
+</span><span class="line">        <span class="n">resp</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">getresponse</span><span class="p">()</span>
+</span><span class="line">        <span class="n">play_count</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">resp</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+</span><span class="line">        <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</span><span class="line">        <span class="k">return</span> <span class="n">play_count</span>
+</span><span class="line">
+</span><span class="line">    <span class="k">def</span> <span class="nf">get_play_count</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">song_id</span><span class="p">):</span>
+</span><span class="line">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_song_request</span><span class="p">(</span><span class="n">song_id</span><span class="p">,</span> <span class="s">&#39;GET&#39;</span><span class="p">)</span>
+</span><span class="line">
+</span><span class="line">    <span class="k">def</span> <span class="nf">increment_play_count</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">song_id</span><span class="p">):</span>
+</span><span class="line">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_song_request</span><span class="p">(</span><span class="n">song_id</span><span class="p">,</span> <span class="s">&#39;POST&#39;</span><span class="p">)</span>
+</span><span class="line">
+</span><span class="line">    <span class="k">def</span> <span class="nf">get_all_play_counts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span class="line">        <span class="n">dct</span> <span class="o">=</span> <span class="p">{}</span>
+</span><span class="line">        <span class="k">for</span> <span class="n">server</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">servers</span><span class="p">:</span>
+</span><span class="line">            <span class="n">conn</span> <span class="o">=</span> <span class="n">httplib</span><span class="o">.</span><span class="n">HTTPConnection</span><span class="p">(</span><span class="n">server</span><span class="p">)</span>
+</span><span class="line">            <span class="n">conn</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s">&#39;GET&#39;</span><span class="p">,</span> <span class="s">&#39;/&#39;</span><span class="p">)</span>
+</span><span class="line">            <span class="n">counts</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">getresponse</span><span class="p">()</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</span><span class="line">            <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</span><span class="line">            <span class="k">if</span> <span class="ow">not</span> <span class="n">counts</span><span class="p">:</span>
+</span><span class="line">                <span class="k">continue</span>
+</span><span class="line">            <span class="n">dct</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">dict</span><span class="p">([</span><span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">pair</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;=&#39;</span><span class="p">))</span> <span class="k">for</span> <span class="n">pair</span> <span class="ow">in</span> <span class="n">counts</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)]))</span>
+</span><span class="line">        <span class="k">return</span> <span class="n">dct</span>
+</span><span class="line">
+</span><span class="line">    <span class="k">def</span> <span class="nf">reset_all_play_counts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span class="line">        <span class="n">status</span> <span class="o">=</span> <span class="bp">True</span>
+</span><span class="line">        <span class="k">for</span> <span class="n">server</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">servers</span><span class="p">:</span>
+</span><span class="line">            <span class="n">conn</span> <span class="o">=</span> <span class="n">httplib</span><span class="o">.</span><span class="n">HTTPConnection</span><span class="p">(</span><span class="n">server</span><span class="p">)</span>
+</span><span class="line">            <span class="n">conn</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="s">&#39;DELETE&#39;</span><span class="p">,</span> <span class="s">&#39;/&#39;</span><span class="p">)</span>
+</span><span class="line">            <span class="n">resp</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">getresponse</span><span class="p">()</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</span><span class="line">            <span class="k">if</span> <span class="n">resp</span> <span class="o">!=</span> <span class="s">&#39;OK&#39;</span><span class="p">:</span>
+</span><span class="line">                <span class="n">status</span> <span class="o">=</span> <span class="bp">False</span>
+</span><span class="line">            <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</span><span class="line">        <span class="k">return</span> <span class="n">status</span>
+</span></code></pre></td></tr></table></div></figure><p>What we have here is a simple class that converts Python method calls to the
+RESTful HTTP equivalents that we have written for our WSGI utility.  The best
+part about this setup, though, is that it uses a hash based on the song_id to
+determine which server to connect to.  If you only ever do per-song operations,
+this setup is quite literally infinitely scalable.  You could have thousands of
+servers keeping track of song counts, none of them knowing about each other.
+Since the decision about which server to talk to happens on the client side,
+there needs to be no communication between the servers whatsoever.</p>
+<p>However, if you start to use the <tt class="docutils literal">get_all_play_counts</tt> and
+<tt class="docutils literal">reset_all_play_counts</tt>, then eventually after many many servers are added it
+will start to get slower.</p>
+<p>Let&#8217;s explore this client:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+</pre></td><td class="code"><pre><code class="pycon"><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">countclient</span> <span class="kn">import</span> <span class="n">CountClient</span>
+</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">CountClient</span><span class="p">()</span>
+</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">get_play_count</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span><span class="line"><span class="go">0</span>
+</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">increment_play_count</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span><span class="line"><span class="go">1</span>
+</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">increment_play_count</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span><span class="line"><span class="go">2</span>
+</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">get_play_count</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span><span class="line"><span class="go">2</span>
+</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">increment_play_count</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+</span><span class="line"><span class="go">1</span>
+</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">get_all_play_counts</span><span class="p">()</span>
+</span><span class="line"><span class="go">{1: 2, 5: 1}</span>
+</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">reset_all_play_counts</span><span class="p">()</span>
+</span><span class="line"><span class="go">True</span>
+</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">get_all_play_counts</span><span class="p">()</span>
+</span><span class="line"><span class="go">{}</span>
+</span></code></pre></td></tr></table></div></figure></div>
+<div class="section" id="benchmarks">
+<h2>Benchmarks!</h2>
+<p>I&#8217;m not a benchmarking nut in any way, shape, or form these days.  However, in
+Python it&#8217;s quite tough to beat pure-WSGI applications for raw speed.  Using my
+MacBook Pro with a 2.5GHz Intel Core 2 Duo and 2 GB 667 MHz DDR2 SDRAM I got
+these results from ApacheBench:</p>
+<pre class="literal-block">
+e:Desktop ericflo$ ab -n 10000 http://127.0.0.1:8000/song/1
+...
+Concurrency Level:      1
+Time taken for tests:   7.792 seconds
+Complete requests:      10000
+Failed requests:        0
+Write errors:           0
+Total transferred:      1020000 bytes
+HTML transferred:       10000 bytes
+Requests per second:    1283.31 [#/sec] (mean)
+Time per request:       0.779 [ms] (mean)
+Time per request:       0.779 [ms] (mean, across all concurrent requests)
+Transfer rate:          127.83 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.1      0       2
+Processing:     0    1   0.8      1      43
+Waiting:        0    1   0.5      0      43
+Total:          1    1   0.8      1      43
+</pre>
+<p>Take these results with a huge grain of salt, but suffice it to say, it&#8217;s fast.
+It would probably be even faster using <a class="reference external" href="http://code.google.com/p/modwsgi/">mod_wsgi</a> instead of <a class="reference external" href="http://pypi.python.org/pypi/Spawning/0.7">Spawning</a>.</p>
+</div>
+<div class="section" id="drawing-conclusions-from-this-exercise">
+<h2>Drawing Conclusions From This Exercise</h2>
+<p>I don&#8217;t want to misconstrue my standpoint on this: frameworks definitely have
+their place.  There&#8217;s no way you would want to write an entire user-facing
+application with pure WSGI unless you were using lots of middleware and stuff
+and at some point you&#8217;re just recreating <a class="reference external" href="http://pylonshq.com/">Pylons</a>.  But when you&#8217;re writing a
+HTTP utility like we did here, then I think that pure-WSGI is the way to go.</p>
+<p>I&#8217;d like to touch on one more nice side effect of using pure-WSGI: You can run
+it in any application server that supports WSGI.  That means
+<a class="reference external" href="http://code.google.com/appengine/">Google App Engine</a>, Apache, Spawning, CherryPy, and many other containers. It
+can easily be served by pure python so even on very restrictive shared hosting
+it&#8217;s possible to run your utility.</p>
+<p>What do you think of pure-WSGI utilities?  Are you using them in your app? I&#8217;d
+love to hear about it&#8211;leave me a comment and tell me your thoughts on this
+subject.</p>
+</div></div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/01/02/2008-review-2009-goals/">2008 in Review & 2009 Goals</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-01-02T19:19:17-08:00" pubdate data-updated="true">Jan 2<span>nd</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Yesterday was the day of &quot;2008 in review&quot; posts.  I really enjoyed reading over
+what people had accomplished during the year, and what they planned on doing in
+the new year.  I hadn&#8217;t planned on writing this post, but for some reason I&#8217;m
+doing it anyway.  So here goes, not much technical stuff ahead, so if personal
+stuff bores you then click away now.</p>
+<div class="section" id="in-review">
+<h2>2008 in Review</h2>
+<p>What a fantastic year.  What a crazy year.  I don&#8217;t think there&#8217;s ever been a
+year in my life so filled with change.  For starters, I&#8230;</p>
+<ul class="simple">
+<li>Learned Erlang</li>
+<li>Joined <a class="reference external" href="http://twitter.com/ericflo">Twitter</a> and <a class="reference external" href="http://friendfeed.com/ericflo">FriendFeed</a></li>
+<li>Drove 3 hours to caucus in Iowa (what a strange ritual that is!)</li>
+<li>Met <a class="reference external" href="http://lazypython.blogspot.com/">some</a> <a class="reference external" href="http://oebfare.com/">really</a> <a class="reference external" href="http://blog.michaeltrier.com/">cool</a> <a class="reference external" href="http://jtauber.com/">people</a> at <a class="reference external" href="http://us.pycon.org/2008/about/">PyCon 2008</a></li>
+<li>Became involved in the <a class="reference external" href="http://pinaxproject.com/">Pinax</a> project</li>
+<li>Wrote and released my first 7 open source Django applications</li>
+<li>Guest hosted <a class="reference external" href="http://thisweekindjango.com/">a podcast</a></li>
+<li>Learned how to use <a class="reference external" href="http://git.or.cz/">Git</a></li>
+<li>Graduated from college with bachelor&#8217;s degree in Computer Science</li>
+<li>Accepted a job offer with <a class="reference external" href="http://www.mochimedia.com/">Mochi Media</a></li>
+<li>Moved to San Francisco</li>
+<li>Released a series of <a class="reference external" href="http://thisweekindjango.com/screencasts/">14 screencasts</a> building a project from the ground up</li>
+<li>Wrote <a class="reference external" href="http://www.eflorenzano.com/blog/archive/2008/11/">one blog post every day</a> in the month of November</li>
+<li>Quit drinking soda</li>
+<li>Participated in the most notable election of my lifetime</li>
+<li>Started a <a class="reference external" href="http://www.meetup.com/The-San-Francisco-Django-Meetup-Group/">Django San Francisco local user group</a></li>
+</ul>
+<p>&#8230;but those are just the highlights.  It&#8217;s been really interesting
+transitioning from college student to the real world.  Somehow I thought that
+not having homework would mean that I would have more free time to do other
+things, but it turns out that you actually have less time if you have a job to
+go to every day.</p>
+<p>But I don&#8217;t think that being a student ever stopped.  I&#8217;ve learned so much from
+my coworkers: different ways of thinking about problems, theoretical problems,
+real world challenges, prioritizing work, RESTful principles of the web, and
+a whole lot about databases.  This is what I like about this industry.  However
+much you know, there&#8217;s more to learn, and people are generally willing to share
+their expertise with you.</p>
+<p>I&#8217;ve learned a lot about what it means to be part of a community; part of a
+company.  I&#8217;ve learned a lot about life, this year.</p>
+<p>But the learning&#8217;s not over.</p>
+</div>
+<div class="section" id="goals-for-2009">
+<h2>Goals for 2009</h2>
+<p>While I&#8217;m weary of posting my goals for all the world to see, I think it&#8217;s
+important to codify them and make them public.  That way, maybe it&#8217;ll compel me
+to actually follow through on these goals.  I&#8217;ve tried to keep them realistic
+and with a few exceptions, specific enough to be testable.  Without further ado,
+here are my goals for 2009 (in no particular order):</p>
+<ul class="simple">
+<li>Learn a concatenative/stack-based language</li>
+<li>Meet new people, especially those that I wouldn&#8217;t normally meet</li>
+<li>Write a virtual machine</li>
+<li>Double both my blog and Twitter followership</li>
+<li>Be more consistent in my contributions to the Pinax project, instead of helping in fits and spurts like I currently am</li>
+<li>Post at least twice a month to this blog</li>
+<li>Release some non-open source software, and maybe even charge for it</li>
+<li>Work out an average of 2 times a week or more over the whole year</li>
+<li>Learn <a class="reference external" href="http://processing.org/">Processing</a></li>
+<li>Learn about investments, and invest 10% of my earnings each month</li>
+<li>Give a talk at a conference</li>
+</ul>
+<p>I think that all of these goals are achievable.  In fact, I&#8217;d like to do more
+than just what I listed here, but these are the ones I&#8217;m willing to commit to.
+Frankly, I can&#8217;t wait to see how this year shapes up.  If it turns out to be
+anything like last year, I&#8217;m in for quite a ride.</p>
+</div></div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/11/30/its-been-wild-ride/">It&#8217;s Been a Wild Ride</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-11-30T15:58:11-08:00" pubdate data-updated="true">Nov 30<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>This post is my final post in the blog-post-per-day challenge.  There have been days when I really didn&#8217;t want to blog (resulting in posts <a class="reference external" href="http://www.eflorenzano.com/blog/post/why-you-should-blog/">like this</a>), and there have been days where I was excited about what I was writing about and spent a lot of time on a post (resulting in posts like <a class="reference external" href="http://www.eflorenzano.com/blog/post/easy-multi-database-support-django/">this one</a>).  It was much more difficult and time-consuming than I was expecting.  Another thing I wasn&#8217;t expecting which actually kept motivating me to write more: actual traffic to this site.  Previously this site saw maybe 100 hits/day due to mostly various google hits on certain Django topics.  When I started doing the blog post-per-day thing, however, this is what my traffic turned into:</p>
+<img alt="http://media.eflorenzano.com/img/analytics.png" src="http://media.eflorenzano.com/img/analytics.png" />
+<p>But as I started to look at where that traffic was coming from, I realized it wasn&#8217;t organic at all.  <em>(insert sad puppy face here)</em>  In fact, most of the traffic was coming from just a few sites.  Here&#8217;s what my top 10 referring sites were:</p>
+<img alt="http://media.eflorenzano.com/img/analytics-2.png" src="http://media.eflorenzano.com/img/analytics-2.png" />
+<p>Once I found out that nearly all my traffic was coming from <a class="reference external" href="http://reddit.com/">reddit</a>, I started to try to cater towards that audience.  To reddit&#8217;s credit, however, the more I tried to target content towards what I thought redditers would like, the less successful the articles did over there.  Either I was doing a bad job of writing articles for that audience, or they wisened up to my act (I&#8217;m thinking the latter is more likely).</p>
+<p>I was also very surprised by which articles turned out to be the most popular.  Here&#8217;s the list of articles that I thought were my best:</p>
+<ol class="arabic simple">
+<li><a class="reference external" href="http://www.eflorenzano.com/blog/post/easy-multi-database-support-django/">Easy Multi-Database Support for Django</a></li>
+<li><a class="reference external" href="http://www.eflorenzano.com/blog/post/writing-markov-chain-irc-bot-twisted-and-python/">Writing an Markov-Chain IRC Bot with Twisted and Python</a></li>
+<li><a class="reference external" href="http://www.eflorenzano.com/blog/post/lambda-calculus/">Lambda Calculus</a></li>
+<li><a class="reference external" href="http://www.eflorenzano.com/blog/post/drop-dead-simple-django-caching/">Drop-dead simple Django caching</a></li>
+<li><a class="reference external" href="http://www.eflorenzano.com/blog/post/using-couchdb-django/">Using CouchDB with Django</a></li>
+<li><a class="reference external" href="http://www.eflorenzano.com/blog/post/why-couchdb-rocks/">Why CouchDB Rocks</a></li>
+<li><a class="reference external" href="http://www.eflorenzano.com/blog/post/web-hooks/">&quot;Web Hooks&quot;</a></li>
+<li><a class="reference external" href="http://www.eflorenzano.com/blog/post/reverse-http/">Reverse HTTP</a></li>
+</ol>
+<p>Here&#8217;s the list of my top 8 most popular articles over the past few days, in order, by traffic:</p>
+<ol class="arabic simple">
+<li><a class="reference external" href="http://www.eflorenzano.com/blog/post/gems-python/">Gems of Python</a></li>
+<li><a class="reference external" href="http://www.eflorenzano.com/blog/post/why-couchdb-sucks/">Why CouchDB Sucks</a></li>
+<li><a class="reference external" href="http://www.eflorenzano.com/blog/post/its-caches-all-way-down/">It&#8217;s caches all the way down</a></li>
+<li><a class="reference external" href="http://www.eflorenzano.com/blog/post/internet-immediate-danger-collapse/">The internet is in immediate danger of collapse</a></li>
+<li><a class="reference external" href="http://www.eflorenzano.com/blog/post/why-use-varchar-when-you-can-use-text/">Why use VARCHAR when you can use TEXT?</a></li>
+<li><a class="reference external" href="http://www.eflorenzano.com/blog/post/using-couchdb-django/">Using CouchDB with Django</a></li>
+<li><a class="reference external" href="http://www.eflorenzano.com/blog/post/why-couchdb-rocks/">Why CouchDB Rocks</a></li>
+<li><a class="reference external" href="http://www.eflorenzano.com/blog/post/secrets-django-orm/">Secrets of the Django ORM</a></li>
+</ol>
+<p>Interestingly enough there are only two posts that appear on both lists.  Really, it surprised me which articles got picked up and which didn&#8217;t.  I suppose it has something to do with the sensational titles and the sometimes-controversial posts.  Specifically the VARCHAR/TEXT post got much much more push-back than I was expecting.  In hindsight, I was wrong to mention anything other than PostgreSQL and SQLite, as those are what I&#8217;ve actually done the TEXT-only experimentation in.</p>
+<p>After doing <a class="reference external" href="http://showmedo.com/videos/series?name=PPN7NA155">14 screencasts</a> and now <a class="reference external" href="http://www.eflorenzano.com/blog/archive/2008/11/">30 blog posts</a> over the past few months, I&#8217;m pretty well spent in terms of creating new, original, content.  That&#8217;s not to say that I&#8217;m going to stop writing here or anything like that, but certainly I won&#8217;t be posting quite as much.  When I do, it will be because I legitimately have something to say, instead of because of an obligation.</p>
+<p>Thanks for visiting my site while I participated in this challenge.  I hope you stick around.</p></div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/11/29/why-couchdb-rocks/">Why CouchDB Rocks</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-11-29T14:31:31-08:00" pubdate data-updated="true">Nov 29<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Last week I wrote an article called <a class="reference external" href="http://www.eflorenzano.com/blog/post/why-couchdb-sucks/">Why CouchDB Sucks</a>, which many people
+correctly said should have been called &quot;What CouchDB Sucks at Doing&quot;.  Nearly
+everyone pointed out that it was not designed to do the things that I was
+mentioning in the article.  This time around, I&#8217;d like to focus on some of the
+features about CouchDB that I think absolutely rock.</p>
+<div class="section" id="couchdb-is-schema-free">
+<h2>CouchDB is schema-free</h2>
+<p>One of the most annoying parts of dealing with a traditional SQL database is
+that you invariably need to change your schemata. This can be done usually with
+some <tt class="docutils literal">ALTER TABLE</tt> statements, but other times it requires scripts and careful
+use of transactions, etc.  In CouchDB, the solution is to just start using your
+new schema.  No migration needed.  If it&#8217;s a significant change, then you might
+need to change your views slightly, but nothing as annoying as what would be
+needed with SQL.</p>
+<p>The other advantage of having no schema is that some types of data just aren&#8217;t
+well suited to having a strict schema enforced upon them.  My CouchDB-based
+<a class="reference external" href="http://github.com/ericflo/django-couch-lifestream/tree/master">lifestreaming application</a> is a perfect example of the inherent flexibility of
+CouchDB&#8217;s schemaless design is that all kinds of disparate information can be
+stored alongside each other and sorted and aggregated.  There&#8217;s also no reason
+that you need to use its schema-free nature this way.  You could, for example,
+manually enforce a schema for certain databases, if needed.</p>
+</div>
+<div class="section" id="couchdb-is-restful-http">
+<h2>CouchDB is RESTFUL HTTP</h2>
+<p>When is the last time you tried to install MySQL or PostgreSQL drivers for your
+web development platform of choice?  If you&#8217;re using <tt class="docutils literal"><span class="pre">apt-get</span></tt> it&#8217;s not so
+bad, but for just about every other platform, it&#8217;s a total pain to get these
+drivers up and running.  With CouchDB, there&#8217;s no need.  It speaks HTTP.  Want
+to create a new database?  Send an HTTP PUT request.  Want to retrieve a
+document from the database?  Send an HTTP GET.  Want to delete a database?  Send
+an HTTP DELETE.  As you can see, the API is quite straightforward and if a
+client library doesn&#8217;t already exist for your language of choice (hint:
+<a class="reference external" href="http://wiki.apache.org/couchdb/Basics">it does</a>), then it will take you only a few minutes to write one.</p>
+<p>But the best part about this is that we already have so many amazing and
+well-tested tools to deal with HTTP.  For example, let&#8217;s say you want to store
+one database on one server and another database on another server?  It&#8217;s as
+simple as setting up <a class="reference external" href="http://wiki.codemongers.com/Main">nginx</a> or <a class="reference external" href="http://www.danga.com/perlbal/">perlbal</a> or <a class="reference external" href="http://varnish.projects.linpro.no/">varnish</a> as a reverse proxy and
+having each URL go to a different machine.  The same thing goes for transparent
+caching, etc.  Oh, and also, web browsers know how to speak HTTP, too.  You
+could easily write <a class="reference external" href="http://jchris.mfdz.com/code/2008/11/my_couch_or_yours__shareable_ap">whole web apps served only from CouchDB</a>.</p>
+</div>
+<div class="section" id="map-reduce">
+<h2>Map/Reduce</h2>
+<blockquote>
+Map/Reduce will kill every traditional data warehousing vendor in the
+market.  Those who adapt to it as a design/deployment pattern will survive,
+the rest won&#8217;t.</blockquote>
+<p>Sounds like someone from Google must have said this, or some Hadoop evangelist,
+or maybe someone who works on CouchDB.  In fact, this comes from <a class="reference external" href="http://krow.livejournal.com/622006.html">Brian Aker</a>,
+a MySQL hacker who was Director of Architecture at MySQL AB and is now
+developing the open source fork of MySQL named <a class="reference external" href="http://drizzle.org/wiki/Main_Page">Drizzle</a> (also a very exciting
+project in its own right).  He&#8217;s right, too.  Google was on to something in a
+big way when they unveiled their whitepaper on <a class="reference external" href="http://labs.google.com/papers/mapreduce.html">Map/Reduce</a>.  It&#8217;s not the
+be-all end-all for processing and generating large data sets, but it certainly
+is a proven technology for that task.</p>
+<p><a class="reference external" href="http://krow.livejournal.com/622006.html">Brian</a> talks about massively multi-core machines which seem the inevitability
+these days, and we will need to start writing logic that is massively
+parallelizable to take advantage of these masses of CPUs.  Map/Reduce is one
+way to force ourselves to write logic that can be parallelized.  It is a good
+choice for any new database system to adopt for this reason, and that&#8217;s why
+it&#8217;s great to see that CouchDB has adopted it.  It&#8217;s just one more reason why
+CouchDB rocks.</p>
+</div>
+<div class="section" id="so-much-more">
+<h2>So much more</h2>
+<p>I could talk about how it can handle 2,500 concurrent requests in 10mb of
+resident memory usage.  I could talk about its pluggable view server backends,
+so that instead of writing views in JavaScript you can write them in Python or
+any other language (given the correct bindings).  I could talk about <a class="reference external" href="http://jan.prima.de/~jan/plok/archives/142-CouchDBX-Revival.html">CouchDBX</a>,
+which makes installing it on the Mac, quite literally, one click.  I could even
+talk about how it&#8217;s written in Erlang, with an eye towards scalability.  Or
+maybe about how its database store is append-only.</p>
+<p>I could talk about any of those things, and more.  It just comes down to this:
+CouchDB rocks.  But don&#8217;t take my word for it&#8211;try it out for yourself!</p>
+</div></div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/11/28/drop-dead-simple-django-caching/">Drop-dead Simple Django Caching</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-11-28T21:30:13-08:00" pubdate data-updated="true">Nov 28<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Caching is easy to screw up.  Usually it&#8217;s a manual process which is error-prone
+and tedious.  It&#8217;s actually quite easy to cache, but knowing when to invalidate
+which caches becomes a lot harder.  There is a subset of caching the caching
+problem that, with Django, can be done quite easily.  The underlying idea is
+that every Django model has a primary key, which makes for an excellent key to
+a cache.  Using this basic idea, we can cover a fairly large use case for
+caching, automatically, in a much more deterministic way.  Let&#8217;s begin.</p>
+<p>First, we need to decide upon a setting for how long each individual item should
+be saved in the cache.  I&#8217;m going to call that <tt class="docutils literal">SIMPLE_CACHE_SECONDS</tt> and
+grab it like so:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
+</span><span class="line">
+</span><span class="line"><span class="n">SIMPLE_CACHE_SECONDS</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s">&#39;SIMPLE_CACHE_SECONDS&#39;</span><span class="p">,</span> <span class="mi">2592000</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure><p>The next thing we need to do is be able to generate a cache key from an instance
+of a model.  Thanks to Django&#8217;s <tt class="docutils literal">_meta</tt> information, we can get the app label
+and model name, plus the primary key, and we&#8217;re all set.</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="k">def</span> <span class="nf">key_from_instance</span><span class="p">(</span><span class="n">instance</span><span class="p">):</span>
+</span><span class="line">    <span class="n">opts</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">_meta</span>
+</span><span class="line">    <span class="k">return</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">.</span><span class="si">%s</span><span class="s">:</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">opts</span><span class="o">.</span><span class="n">app_label</span><span class="p">,</span> <span class="n">opts</span><span class="o">.</span><span class="n">module_name</span><span class="p">,</span> <span class="n">instance</span><span class="o">.</span><span class="n">pk</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure><p>So now let&#8217;s start setting the cache!  My preferred way to do it is via a
+signal, but you could do it in a less generic way by overriding <tt class="docutils literal">save</tt> on a
+model.  My signal looks like this:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="kn">from</span> <span class="nn">django.core.cache</span> <span class="kn">import</span> <span class="n">cache</span>
+</span><span class="line"><span class="kn">from</span> <span class="nn">django.db.models.signals</span> <span class="kn">import</span> <span class="n">post_save</span>
+</span><span class="line">
+</span><span class="line"><span class="k">def</span> <span class="nf">post_save_cache</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span class="line">    <span class="n">cache</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">key_from_instance</span><span class="p">(</span><span class="n">instance</span><span class="p">),</span> <span class="n">instance</span><span class="p">,</span> <span class="n">SIMPLE_CACHE_SECONDS</span><span class="p">)</span>
+</span><span class="line"><span class="n">post_save</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">post_save_cache</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure><p>Now that we&#8217;re putting items in the cache, we should probably delete them from
+the cache when the model instance is deleted:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="kn">from</span> <span class="nn">django.db.models.signals</span> <span class="kn">import</span> <span class="n">pre_delete</span>
+</span><span class="line">
+</span><span class="line"><span class="k">def</span> <span class="nf">pre_delete_uncache</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span class="line">    <span class="n">cache</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">key_from_instance</span><span class="p">(</span><span class="n">instance</span><span class="p">))</span>
+</span><span class="line"><span class="n">pre_delete</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">pre_delete_uncache</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure><p>This is all good and well, but right now we don&#8217;t really have a way to get at
+that information.  Cache is pretty useless if we never use it!  Our interface to
+the database is through the model&#8217;s <tt class="docutils literal">QuerySet</tt>, so let&#8217;s make sure that our
+QuerySet is making good use of our newly-populated cache.  To do so, we&#8217;ll
+subclass <tt class="docutils literal">QuerySet</tt>:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="kn">from</span> <span class="nn">django.db.models.query</span> <span class="kn">import</span> <span class="n">QuerySet</span>
+</span><span class="line">
+</span><span class="line"><span class="k">class</span> <span class="nc">SimpleCacheQuerySet</span><span class="p">(</span><span class="n">QuerySet</span><span class="p">):</span>
+</span><span class="line">    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span class="line">        <span class="n">pk</span> <span class="o">=</span> <span class="bp">None</span>
+</span><span class="line">        <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;pk&#39;</span><span class="p">,</span> <span class="s">&#39;pk__exact&#39;</span><span class="p">,</span> <span class="s">&#39;id&#39;</span><span class="p">,</span> <span class="s">&#39;id__exact&#39;</span><span class="p">):</span>
+</span><span class="line">            <span class="k">if</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+</span><span class="line">                <span class="n">pk</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">val</span><span class="p">]</span>
+</span><span class="line">                <span class="k">break</span>
+</span><span class="line">        <span class="k">if</span> <span class="n">pk</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+</span><span class="line">            <span class="n">opts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_meta</span>
+</span><span class="line">            <span class="n">key</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">.</span><span class="si">%s</span><span class="s">:</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">opts</span><span class="o">.</span><span class="n">app_label</span><span class="p">,</span> <span class="n">opts</span><span class="o">.</span><span class="n">module_name</span><span class="p">,</span> <span class="n">pk</span><span class="p">)</span>
+</span><span class="line">            <span class="n">obj</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+</span><span class="line">            <span class="k">if</span> <span class="n">obj</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+</span><span class="line">                <span class="bp">self</span><span class="o">.</span><span class="n">_result_cache</span> <span class="o">=</span> <span class="p">[</span><span class="n">obj</span><span class="p">]</span>
+</span><span class="line">        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">SimpleCacheQuerySet</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure><p>The only method that we really need to overwrite is <tt class="docutils literal">filter</tt>, since <tt class="docutils literal">get</tt>
+and <tt class="docutils literal">get_or_create</tt> both just rely on filter anyway.  The first <tt class="docutils literal">for</tt> loop
+in the filter method just checks to see if there is a query by <tt class="docutils literal">id</tt> or <tt class="docutils literal">pk</tt>,
+and if so, then we construct a key and try to fetch it from the cache.  If we
+found the item in the cache, then we place it into Django&#8217;s internal result
+cache.  At that point we&#8217;re as good as done.  Then we just let Django do the
+rest!</p>
+<p>This <tt class="docutils literal">SimpleCacheQuerySet</tt> won&#8217;t be used all on its own though, we need to
+actually force a model to use it.  How do we do that?  We create a manager:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+</span><span class="line">
+</span><span class="line"><span class="k">class</span> <span class="nc">SimpleCacheManager</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Manager</span><span class="p">):</span>
+</span><span class="line">    <span class="k">def</span> <span class="nf">get_query_set</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span class="line">        <span class="k">return</span> <span class="n">SimpleCacheQuerySet</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure><p>Now that we have this transparent caching library set up, we can go around to
+all of our models and import it and attach it as needed.  Here&#8217;s how that might
+look:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+</span><span class="line"><span class="kn">from</span> <span class="nn">django_simplecache</span> <span class="kn">import</span> <span class="n">SimpleCacheManager</span>
+</span><span class="line">
+</span><span class="line"><span class="k">class</span> <span class="nc">BlogPost</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+</span><span class="line">    <span class="n">title</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+</span><span class="line">    <span class="n">body</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+</span><span class="line">
+</span><span class="line">    <span class="n">objects</span> <span class="o">=</span> <span class="n">SimpleCacheManager</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure><p>That&#8217;s it!  Just by attaching this manager to our model we&#8217;re getting all the
+benefits of per-object caching right away. Of course, this isn&#8217;t comprehensive.
+It does hit the vast majority of use cases, though.  If you were to use this for
+a real site, however, then you wouldn&#8217;t be able to use <tt class="docutils literal">update</tt> method.  It&#8217;s
+a little bit trickier since there&#8217;s no <tt class="docutils literal">post_update</tt> signal, but it&#8217;s nowhere
+near impossible. Let&#8217;s just say that, for now, it&#8217;s being left unimplemented as
+an exercise for the reader. <tt class="docutils literal">in_bulk</tt> would be actually quite fun to
+implement, too, because you could get all of the results possible from cache,
+and all the rest could be gotten from the database, then merge those two
+dictionaries before returning.</p>
+<p>I think this would be a really good reusable Django application.  Essentially,
+we&#8217;ve grown a library from the ground up that really isn&#8217;t all that much code.
+I think it took me 20 minutes to write the actual code, but with some serious
+polish and love, this library could evolve into something that I think many
+reusable apps would use to great benefit.  What do you think?  What should a
+good, simple, Django caching library have?</p></div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/11/27/reverse-http/">Reverse HTTP</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-11-27T10:31:05-08:00" pubdate data-updated="true">Nov 27<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Yesterday I <a class="reference external" href="http://www.eflorenzano.com/blog/post/web-hooks/">wrote about Web Hooks</a> and how powerful it could be if one web
+service sends HTTP requests to another web service.  Today I want to take that
+concept one step further.  What if you tell that service that you would like it
+to send a POST request back to <strong>you</strong>, whenever an event happens?  This slight
+modification makes for a very powerful tool.</p>
+<p>Let&#8217;s take the example of popular real-time web applications like Facebook&#8217;s
+instant messenger or FriendFeed&#8217;s &quot;Real-time&quot; view.  Both of these services make
+use of a technique called <a class="reference external" href="http://cometdaily.com/2007/11/16/more-on-long-polling/">long polling</a>, where the client sends an HTTP
+request and the server does not respond until it has some event to deliver.  The
+client can only keep the request open for so long, so it periodically times out
+and re-sends the request. (It also re-sends the request if it does receive some
+data).</p>
+<p>The problem with this technique is that it&#8217;s really trying to turn a client into
+a server.  It&#8217;s really fighting against the way that HTTP wants to work.  So why
+fight it?  Imagine that all of our browsers have simple, lightweight, HTTP
+servers installed.  The client could request to upgrade to reverse HTTP, and
+then the <em>server</em> could initiate a connection with the <em>client</em>.  Now, as events
+come in to the web service, the service could directly send those updates to the
+client.</p>
+<p>Going back to the example of Facebook IM, here&#8217;s how that would work: When I
+open a Facebook page, my client sends a request to Facebook&#8217;s IM server.
+Facebook&#8217;s IM server sends a response with the HTTP/1.1 Upgrade header reading
+&quot;PTTH/0.9&quot;  (funny, huh?).  Then, the client knows to accept an HTTP connection
+from Facebook&#8217;s IM server.  Facebook&#8217;s IM server then opens that connection with
+the client, and sends HTTP POSTs every time it receives a new instant message
+that the client should receive.  The client&#8217;s web browser would have some
+JavaScript hooks to parse the body of those requests, so that it could update
+the content of the instant message window on the page.</p>
+<p>Isn&#8217;t this brilliant?  It directly meshes with the HTTP protocol, and makes this
+system which seems like a hack right now, instantly become an elegant solution.
+I really wish I could take credit for thinking this up, but I did not.  My
+coworker <a class="reference external" href="http://ulaluma.com/pyx/">Donovan Preston</a> blew my mind with this a few weeks back.  If you&#8217;re
+looking for a more visual example of how this might work, or a reference
+implementation of the protocol in action, check out <a class="reference external" href="http://wiki.secondlife.com/wiki/Reverse_HTTP">this wiki page</a>.</p></div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/11/26/web-hooks/">&#8220;Web Hooks&#8221;</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-11-26T20:43:30-08:00" pubdate data-updated="true">Nov 26<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>A few months back <a class="reference external" href="http://github.com/">GitHub</a> rolled out its implementation of something that they
+call &quot;Service Hooks&quot;.  The idea behind these hooks is that when you commit
+some new piece of code to GitHub, they want to be able to alert other services
+that you have committed that code.  For example, one of the service hooks is
+the ability to send a tweet to Twitter, and another of those hooks updates the
+<a class="reference external" href="http://lighthouseapp.com/">Lighthouse</a> ticket tracker.</p>
+<p>I thought this was a really good idea when they rolled it out, so I did a bit of
+searching and found out that there is a larger body of work surrounding this
+idea, and that body of work is called <a class="reference external" href="http://webhooks.pbwiki.com/">Web Hooks</a>.  The central idea behind
+web hooks is that a user supplies a service that they use with a URL.  Then,
+when that user performs an action on that service, the service agrees to send an
+HTTP POST request to the user&#8217;s specified URL, with some information about the
+action that the user took on the service.</p>
+<p>SlideShare has an excellent <a class="reference external" href="http://www.slideshare.net/progrium/web-hooks">presentation</a> deck about this idea, which likens it
+to Unix pipes.  That analogy makes a lot of sense if you think about it.  With
+the standard model that most websites follow today, a client can only send
+requests.  This means repeated polling until the client receives the information
+that it is interested in.  With web hooks, however, the service is responsible
+for passing that action along to the next service.  This simple yet powerful
+mechanism can allow for very advanced systems which interoperate very simply
+through chaining.</p>
+<p>Let&#8217;s expore a concrete example of what this might look like.  A few months back
+I signed up for a pro account on <a class="reference external" href="http://flickr.com/">Flickr</a>, so that I could upload some of the
+pictures that I had stored on my computer.  What I did was to upload some
+pictures with descriptions, and then I went and posted on Twitter some of the
+links to those pictures.  I also went and added that new Flickr account to
+<a class="reference external" href="http://friendfeed.com/">FriendFeed</a> so that others could see my pictures as well.</p>
+<p>This was all a manual process.  If both Flickr and Twitter supported web hooks,
+I could have simply set up their respective URLs and uploaded my pictures.  The
+process might have happened like this:  First, the pictures are uploaded.  Then
+Flickr sends a POST request to Twitter, with the description of the picture and
+a link to the picture.  Twitter sends a POST request to FriendFeed, adding the
+new item to my FriendFeed lifestream.</p>
+<p>You could even write custom scripts to handle the web hooks. For example let&#8217;s
+say that I want any tweet with the name &#8216;Kevin&#8217; to be sent to my brother&#8217;s email
+address.  I could add a URL to Twitter linking to a script on my computer which
+scans the contents of the tweet.  If the tweet has the name &#8216;Kevin&#8217; in it, it
+would send an email.  If not, it might do nothing.</p>
+<p>I think that this concept is very powerful not only in terms of rendering
+trivial the interoperability between disparate services, but also in terms of
+simply saving on bandwidth and computing power.  Technologies which constantly
+poll resources hoping for updated content seem silly in comparison to the
+powerful simplicity that web hooks provide.</p>
+<p>There are definitely some drawbacks to a system like this.  Firstly, the name: I
+actually can&#8217;t think of a worse name for this concept.  Web hooks?!  Let&#8217;s come
+up with something better.  All joking aside though, this type of system does
+face a serious problem when it comes to the question of reliability.  If a
+script receives no POST, it could mean that either no event happened, or that
+the internet connection went down for a bit, or that the service is down, or any
+number of other possible things.  I think the solution for this is a hybrid
+model of sparse polling in conjunction with web hooks.</p>
+<p>Most of all, this technology just seems so underused.  There are ridiculously
+few people who implement something like this, yet it seems like an undeniably
+useful service&#8211;especially given its relative simplicity to implement.  Let&#8217;s
+all try to encourage the services that we use on a daily basis to support web
+hooks, because by doing just that, we can make the web a lot better.</p></div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/11/25/screencast-competition-pinaxdjango/">Screencast Competition for Pinax/Django</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-11-25T20:47:04-08:00" pubdate data-updated="true">Nov 25<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I love screencasts.  I love them at least enough to create 16 of them this year.
+That&#8217;s why when <a class="reference external" href="http://jtauber.com/">James Tauber</a> <a class="reference external" href="http://jtauber.com/blog/2008/11/24/first_pinax_screencast_competition/">announced</a> that the <a class="reference external" href="http://pinaxproject.com/">Pinax Project</a> would be
+having a <a class="reference external" href="http://contests.pinaxproject.com/contest/3/">screencast competition</a>, it made me very very happy!</p>
+<p><a class="reference external" href="http://pinaxproject.com/">Pinax</a> is already a great aide for those who want to build a website with a
+great deal of functionality in a short period of time.  If you haven&#8217;t checked
+it out yet, I really hope that you do.  It tries to take the best of breed
+Django applications and glues them together with minimal configurable code and
+a set of common templates and conventions.</p>
+<p>One area that Pinax could be better about, however, is documentation.  We&#8217;re
+working on it, but it still has a bit to go.  That&#8217;s one of the reasons why this
+contest is so great.  By entering a screencast into the contest, you are really
+helping the Pinax community out a lot.</p>
+<p>The best part about this contest, however, is that there are prizes!  One prize,
+$100 at Amazon, will go to the very best screencast.  A second prize, $40 at
+Amazon, will go to the second best screencast.  As of this writing, there are no
+entries.  So what are you waiting for?  Head on over to the
+<a class="reference external" href="http://contests.pinaxproject.com/contest/3/">contest details page</a> and enter your screencast today!</p></div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/11/24/trying-start-programming-meme/">Trying to Start a Programming Meme</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-11-24T21:13:18-08:00" pubdate data-updated="true">Nov 24<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I&#8217;ve never tried to start a meme before, but since I don&#8217;t really have anything
+great to post about, I&#8217;d like to try to start one.  I think this one could be
+particularly fun because it encourages implementation of a basic program in many
+different languages.</p>
+<p>Rules:</p>
+<ol class="arabic simple">
+<li>Implement a program that takes in a user&#8217;s name and their age, and prints
+hello to them once for every year that they have been alive.</li>
+<li>Post these rules, the source code for your solution, and the following list
+(with you included) on your blog.</li>
+<li>Bonus points if you implement it in a language not yet seen on the following
+list!</li>
+</ol>
+<p>The List:</p>
+<ol class="arabic simple">
+<li>[Python] <a class="reference external" href="http://www.eflorenzano.com/blog/post/trying-start-programming-meme">http://www.eflorenzano.com/blog/post/trying-start-programming-meme</a></li>
+<li>[Bash] <a class="reference external" href="http://aartemenko.com/texts/bash-meme/">http://aartemenko.com/texts/bash-meme/</a></li>
+<li>[C] <a class="reference external" href="http://dakrauth.com/media/site/text/hello.c">http://dakrauth.com/media/site/text/hello.c</a></li>
+<li>[Java] <a class="reference external" href="http://adoleo.com/blog/2008/nov/25/programming-meme/">http://adoleo.com/blog/2008/nov/25/programming-meme/</a></li>
+<li>[Python 3] <a class="reference external" href="http://mikewatkins.ca/2008/11/25/hello-meme/">http://mikewatkins.ca/2008/11/25/hello-meme/</a></li>
+<li>[Ruby] <a class="reference external" href="http://stroky.l.googlepages.com/gem">http://stroky.l.googlepages.com/gem</a></li>
+<li>[Ruby] <a class="reference external" href="http://im.camronflanders.com/archive/meme/">http://im.camronflanders.com/archive/meme/</a></li>
+<li>[Lisp] <a class="reference external" href="http://justinlilly.com/blog/2008/nov/25/back-on-the-horse/">http://justinlilly.com/blog/2008/nov/25/back-on-the-horse/</a></li>
+<li>[Lua] <a class="reference external" href="http://aartemenko.com/texts/lua-hello-meme/">http://aartemenko.com/texts/lua-hello-meme/</a></li>
+<li>[Functional Python] <a class="reference external" href="http://aartemenko.com/texts/python-functional-hello-meme/">http://aartemenko.com/texts/python-functional-hello-meme/</a></li>
+<li>[Erlang] <a class="reference external" href="http://surfacedepth.blogspot.com/2008/11/erics-programming-meme-in-erlang.html">http://surfacedepth.blogspot.com/2008/11/erics-programming-meme-in-erlang.html</a></li>
+<li>[Haskell] <a class="reference external" href="http://jasonwalsh.us/meme.html">http://jasonwalsh.us/meme.html</a></li>
+<li>[PHP] <a class="reference external" href="http://fitzgeraldsteele.wordpress.com/2008/11/25/memeing-in-php-2/">http://fitzgeraldsteele.wordpress.com/2008/11/25/memeing-in-php-2/</a></li>
+<li>[Javascript] <a class="reference external" href="http://www.taylanpince.com/blog/posts/responding-to-a-programming-meme/">http://www.taylanpince.com/blog/posts/responding-to-a-programming-meme/</a></li>
+<li>[Single-File Django] <a class="reference external" href="http://www.pocketuniverse.ca/archive/2008/november/27/florenzano-factor/">http://www.pocketuniverse.ca/archive/2008/november/27/florenzano-factor/</a></li>
+</ol>
+<p>(&#8230;and make sure to check out the comments on this post for some other fun implementations!)</p>
+<p>And here&#8217;s my implementation:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="n">name</span> <span class="o">=</span> <span class="nb">raw_input</span><span class="p">(</span><span class="s">&#39;Please enter your name: &#39;</span><span class="p">)</span>
+</span><span class="line"><span class="n">age</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">raw_input</span><span class="p">(</span><span class="s">&#39;Please enter your age: &#39;</span><span class="p">))</span>
+</span><span class="line">
+</span><span class="line"><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">age</span><span class="p">):</span>
+</span><span class="line">    <span class="k">print</span> <span class="s">&quot;</span><span class="si">%2d</span><span class="s">) Hello, </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure><p>And its output:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line">Please enter your name: Eric Florenzano
+</span><span class="line">Please enter your age: 22
+</span><span class="line"> 0<span class="o">)</span> Hello, Eric Florenzano
+</span><span class="line"> 1<span class="o">)</span> Hello, Eric Florenzano
+</span><span class="line"> 2<span class="o">)</span> Hello, Eric Florenzano
+</span><span class="line"> 3<span class="o">)</span> Hello, Eric Florenzano
+</span><span class="line"> 4<span class="o">)</span> Hello, Eric Florenzano
+</span><span class="line"> 5<span class="o">)</span> Hello, Eric Florenzano
+</span><span class="line"> 6<span class="o">)</span> Hello, Eric Florenzano
+</span><span class="line"> 7<span class="o">)</span> Hello, Eric Florenzano
+</span><span class="line"> 8<span class="o">)</span> Hello, Eric Florenzano
+</span><span class="line"> 9<span class="o">)</span> Hello, Eric Florenzano
+</span><span class="line">10<span class="o">)</span> Hello, Eric Florenzano
+</span><span class="line">11<span class="o">)</span> Hello, Eric Florenzano
+</span><span class="line">12<span class="o">)</span> Hello, Eric Florenzano
+</span><span class="line">13<span class="o">)</span> Hello, Eric Florenzano
+</span><span class="line">14<span class="o">)</span> Hello, Eric Florenzano
+</span><span class="line">15<span class="o">)</span> Hello, Eric Florenzano
+</span><span class="line">16<span class="o">)</span> Hello, Eric Florenzano
+</span><span class="line">17<span class="o">)</span> Hello, Eric Florenzano
+</span><span class="line">18<span class="o">)</span> Hello, Eric Florenzano
+</span><span class="line">19<span class="o">)</span> Hello, Eric Florenzano
+</span><span class="line">20<span class="o">)</span> Hello, Eric Florenzano
+</span><span class="line">21<span class="o">)</span> Hello, Eric Florenzano
+</span></code></pre></td></tr></table></div></figure><p>Well there you have it, my attempt at a programming meme.  I hope someone enjoys it!</p></div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/11/23/why-couchdb-sucks/">Why CouchDB Sucks</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-11-23T11:14:12-08:00" pubdate data-updated="true">Nov 23<span>rd</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a class="reference external" href="http://couchdb.org/">CouchDB</a> really sucks at doing some things.  That should come as no surprise, as
+every technology has its advantages and its drawbacks.  The thing is, when a new
+technology comes out that looks really promising and cool, everyone writes about
+all of its advantages, and none of its drawbacks.  Then, people start to use it
+for things it isn&#8217;t very good at, and they are disappointed.  In that spirit, I
+would like to talk about some of the things that (in my experience) CouchDB is
+absolutely not good at, and that you shouldn&#8217;t try to use it for.</p>
+<p>First, it doesn&#8217;t support transactions in the way that most people typically
+think about them.  That means, enforcing uniqueness of one field across all
+documents is not safe.  A classic example of this would be enforcing that a
+username is unique.  You can check whether a username exists, and if not, create
+a new one.  There is no guarantee, however, that between the time that your app
+has checked for its existence, and the time that you write the new user to the
+database, that some other instance of your app hasn&#8217;t beat you to that write.</p>
+<p>Another consequence of CouchDB&#8217;s inability to support the typical notion of a
+transaction is that things like inc/decrementing a value and saving it back are
+also dangerous.  Fortunately there aren&#8217;t many instances that you would want to
+simply inc/decrement some value where you couldn&#8217;t just store the individual
+documents separately and aggregate them with a view.</p>
+<p>Secondly, CouchDB sucks at dealing with relational data.  If your data makes a
+lot of sense to be in <a class="reference external" href="http://en.wikipedia.org/wiki/Third_normal_form">3rd normal form</a>, and you try to follow that form in
+CouchDB, you&#8217;re going to run into a lot of trouble.  Yes, it&#8217;s probably possible
+with tricks with view collations, but you&#8217;re constantly going to be fighting
+with the system.  If your data can be reformatted to be much more denormalized,
+then CouchDB will work fine.</p>
+<p>Thirdly, CouchDB sucks at being a data warehouse.  In every data warehouse that
+I&#8217;ve ever run into, people have all kinds of different requests for how to slice
+the data.  And they all want it to be done, yesterday.  The problem with this is
+that temporary views in CouchDB on large datasets are really slow, because it
+can&#8217;t use any of its normal indexing tricks.  If you by some chance have a very
+rigid way of looking at your data, using CouchDB and permanent views could work
+quite well.  But in 99% of cases, a <a class="reference external" href="http://en.wikipedia.org/wiki/Column-oriented_DBMS">Column-Oriented Database</a> of some sort is
+a much better tool for the data warehousing job.</p>
+<p>So does CouchDB suck?  No, it&#8217;s by far my favorite new database technology on
+the block.  What it&#8217;s good at doing, it&#8217;s <em>great</em> at doing, but that doesn&#8217;t
+mean that it should be used for everything.  With the kinds of scaling issues
+that we&#8217;re seeing with today&#8217;s highly-interactive web applications, we need to
+make use of a broad range of technologies, and use each one for its greatest
+strengths.  That&#8217;s called using the right tool for the job, and that&#8217;s never
+gone out of style.</p></div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/blog/page/3/">&larr; Older</a>
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2011/02/16/technology-behind-convore/">The Technology Behind Convore</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/10/10/object-lesson-how-respond-criticism/">An Object Lesson in How to Respond to Criticism</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/09/27/why-node-disappoints-me/">Why node.js disappoints me</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/05/20/we-need-new-word-open/">We need a new word for &#8220;Open&#8221;</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/02/08/how-do-we-kick-our-synchronous-addiction/">How do we kick our synchronous addiction?</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("ericflo", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/ericflo" class="twitter-follow-button" data-show-count="false">Follow @ericflo</a>
+  
+</section>
+
+
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/109591387819364984777?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2011 - Eric Florenzano -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

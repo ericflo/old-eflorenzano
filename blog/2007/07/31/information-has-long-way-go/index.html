@@ -1,0 +1,293 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Information has a Long Way to Go - Eric Florenzano's Blog</title>
+  <meta name="author" content="Eric Florenzano">
+
+  
+  <meta name="description" content="I don&#8217;t know how Google manages to do it! They&#8217;ve linked music track/artist/album to online music vendors, a deceivingly simple-sounding &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://ericflo.github.com/blog/2007/07/31/information-has-long-way-go">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Eric Florenzano's Blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-1959803-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Eric Florenzano's Blog</a></h1>
+  
+    <h2>I am me.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:ericflo.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Information Has a Long Way to Go</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-07-31T20:29:33-07:00" pubdate data-updated="true">Jul 31<span>st</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I don&#8217;t know how <a class="reference external" href="http://www.google.com/musica?aid=CthfGxkPMTB">Google</a> manages to <a class="reference external" href="http://www.google.com/musicl?lid=1SpDWykV7NL&amp;aid=CthfGxkPMTB">do it</a>!  They&#8217;ve linked music track/artist/album to online music vendors, a deceivingly simple-sounding task which has been the bane of my existence for the last two weeks.</p>
+<p>Let&#8217;s start with two of the big players:</p>
+<div class="section" id="itunes">
+<h2>iTunes</h2>
+<p>iTunes has a terrible API: You go to <a class="reference external" href="http://ax.phobos.apple.com.edgesuite.net/WebObjects/MZStoreServices.woa/wa/itmsLinkMaker">iTunes Link Maker</a> and type in the keywords of your choice.  You can come up with a programmatic way to access this but it involves parsing invalid HTML.</p>
+</div>
+<div class="section" id="amazon">
+<h2>Amazon</h2>
+<p>Amazon&#8217;s API is a good programmatic interface to its own internal service, but unfortunately that service is TERRIBLE.  Take <a class="reference external" href="http://www.amazon.com/Rodrigo-y-Gabriela-Bonus-DVD/dp/B000HKDEE2/ref=pd_bbs_sr_1/102-5025068-6051344?ie=UTF8&amp;s=music&amp;qid=1185941115&amp;sr=8-1">this</a>, for example: a CD from a wonderful band called Rodrigo y Gabriela.  One of the songs on it is named &quot;Ixtapa&quot;, so let&#8217;s do a search for &quot;Ixtapa Rodrigo y Gabriela.&quot;  Makes sense, right?  Apparently not to Amazon&#8217;s search.  In fact, amazon&#8217;s search really has no concept of the song.  It&#8217;s not something that they sell. Amazon knows all about album titles and artists, but not about the song itself.  This renders it useless for linking song to vendor!</p>
+<p>But what about open source?</p>
+</div>
+<div class="section" id="musicbrainz">
+<h2>MusicBrainz</h2>
+<p>So the next thing that I try is using <a class="reference external" href="http://musicbrainz.org/">MusicBrainz</a>, an open source database of music metadata, which seems to have Amazon.com linking information built right in.  However, reading through the wiki, for hours, and hours, and hours, is not fun.  They have bits and pieces from all different times of the project&#8217;s lifecycle, most of which is irrelevant.  But after a while I find out that to get access to the web services, you either need to limit your requests to 1 per second (unacceptable in my case), or you have to set up your own MusicBrainz server.  OK, let&#8217;s do that!</p>
+<p>Oh wait, they forgot to mention that it&#8217;s the most rediculous dependency-ridden piece of bloatware ever.  It&#8217;s so bad that they don&#8217;t even really have a guide on how to set it up&#8211;they&#8217;ve given up and just created a virtual machine for people to download.  OK, well fine, let&#8217;s download that and go from there.  What&#8217;s this?  There&#8217;s more setup?  Apparently so, because I had to leave my computer to import data and compute indexes for 3 days straight.</p>
+<p>Finally, finally, I am ready to start accessing that music -&gt; amazon.com data, when I notice something: Non-Commercial license.  After all of this, the AMAZON SPECIFIC PORTION ONLY is licensed differently, and I cannot use it.  I am disappointed with this service, to say the least.  MusicBrainz needs a major overhaul in its software dependencies (Hint: Use Python, it&#8217;s got batteries included.)  It also needs to take a serious look at its licensing scheme.  If it can address these two things, it will be much further along in its goal to make a great community database.</p>
+<p>Information has a long way to go.  Music metadata and the ability to link to different music vendors should be ubiquitous and available in a standard way.  Nobody is benefiting by putting a <a class="reference external" href="http://www.gracenote.com/">lock and key</a> on this sort of data.  The people who really lose, in the end, is the music vendors who get ultimately less sales.  Hopefully someday soon they see the light, and fight to make this information accessible.</p>
+</div></div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Eric Florenzano</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-07-31T20:29:33-07:00" pubdate data-updated="true">Jul 31<span>st</span>, 2007</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/musicbrainz/'>Musicbrainz</a>, <a class='category' href='/blog/categories/python/'>Python</a>, <a class='category' href='/blog/categories/secret-project/'>Secret Project</a>, <a class='category' href='/blog/categories/amazon/'>amazon</a>, <a class='category' href='/blog/categories/itunes/'>iTunes</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://ericflo.github.com/blog/2007/07/31/information-has-long-way-go/" data-via="ericflo" data-counturl="http://ericflo.github.com/blog/2007/07/31/information-has-long-way-go/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2007/07/30/iphone-says-hello-world/" title="Previous Post: iPhone Says: "Hello, World"">&laquo; iPhone Says: "Hello, World"</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2007/08/01/35w-bridge/" title="next Post: 35W Bridge">35W Bridge &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2011/02/16/technology-behind-convore/">The Technology Behind Convore</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/10/10/object-lesson-how-respond-criticism/">An Object Lesson in How to Respond to Criticism</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/09/27/why-node-disappoints-me/">Why node.js disappoints me</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/05/20/we-need-new-word-open/">We need a new word for "Open"</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/02/08/how-do-we-kick-our-synchronous-addiction/">How do we kick our synchronous addiction?</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("ericflo", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/ericflo" class="twitter-follow-button" data-show-count="false">Follow @ericflo</a>
+  
+</section>
+
+
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/109591387819364984777?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2011 - Eric Florenzano -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

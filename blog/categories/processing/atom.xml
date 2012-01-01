@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Processing | Eric Florenzano's Blog]]></title>
+  <link href="http://ericflo.github.com/blog/categories/processing/atom.xml" rel="self"/>
+  <link href="http://ericflo.github.com/"/>
+  <updated>2011-12-31T23:14:37-08:00</updated>
+  <id>http://ericflo.github.com/</id>
+  <author>
+    <name><![CDATA[Eric Florenzano]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Revolutionary Ideas]]></title>
+    <link href="http://ericflo.github.com/blog/2008/05/15/revolutionary-ideas/"/>
+    <updated>2008-05-15T09:18:44-07:00</updated>
+    <id>http://ericflo.github.com/blog/2008/05/15/revolutionary-ideas</id>
+    <content type="html"><![CDATA[<p>
+Everyone has had the experience of hearing about something new and thinking: "That makes so much sense!  Why didn't I think of that?"  For programmers that keep up on open source software, new projects that fit the previous description attract not only our admiration, but we want to be a part of this new idea.  We become involved and contribute and try to push that new software into any new direction that we can; learning from it and evolving it along the way.</p>
+
+<p>One such idea that fits my description perfectly is Processing.js<em>.  Not to belittle <code>John Resig</code></em>'s hard work in actually developing the initial codebase, but the <strong>idea</strong> is what is so much more important.  Thousands of developers knew of both the <code>Processing language</code><em> and about the <code>canvas tag</code></em> which is coming to prevalence, but it was a revolutionary idea to notice that the pairing of the two was "both possible and desirable to do in the first place", as Reddit<em> commenter MarshallBanana</em> <code>pointed out</code>_.</p>
+
+<p>As a community we need both the revolutionary ideas and the evolutionary changes so that we get great software that solves problems in new and innovative ways, but also that doesn't have bugs and provides a polished experience.  But I think that we've become too bogged down in the evolutionary.  We get so wrapped up in others' ideas--so interested in polish and shine--that seldom few think outside the boundary of the incremental.  I won't claim to be the exception here, and rightly can't claim to be, but it's something that's worrisome nonetheless.</p>
+
+<p>I think that a big part of it is that the open source community has gotten so wary of experimentation with well-established applications.  Why can't a development version of Firefox include a Python or Ruby interpreter alongside a JavaScript interpreter?  Why can't CSS directives for reflections be explored, or animations be built into the rendering engine?  I think that a big part of it is because we've spent so long talking about validation and standards that we forgot about that sense of wonder; that feeling of anything being possible with a bit of code and enthusiasm.</p>
+
+<p>Processing.js_, and projects like it, give me hope that revolutionary ideas are still out there.  They rekindle that sense of wonder in me.  They make me think about other things that are possible.  They make me excited about open source again.  Let's foster more and greater and better ideas, and just once in a while, eschew the incremental.</p>
+
+<p>.. <em>Processing.js: http://ejohn.org/blog/processingjs/
+.. </em><code>John Resig</code>: http://ejohn.org/
+.. <em><code>Processing language</code>: http://processing.org/
+.. </em><code>canvas tag</code>: http://en.wikipedia.org/wiki/Canvas<em>(HTML_element)
+.. </em>Reddit: http://reddit.com/
+.. <em>MarshallBanana: http://reddit.com/user/MarshallBanana/
+.. </em><code>pointed out</code>: http://reddit.com/info/6ipvz/comments/c03ygkq
+</p>
+]]></content>
+  </entry>
+  
+</feed>

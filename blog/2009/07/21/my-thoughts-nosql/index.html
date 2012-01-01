@@ -1,0 +1,422 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>My Thoughts on NoSQL - Eric Florenzano's Blog</title>
+  <meta name="author" content="Eric Florenzano">
+
+  
+  <meta name="description" content="Over the past few years, relational databases have fallen out of favor for a
+number of influential people in our industry. I&#8217;d like to weigh in &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://ericflo.github.com/blog/2009/07/21/my-thoughts-nosql">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Eric Florenzano's Blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-1959803-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Eric Florenzano's Blog</a></h1>
+  
+    <h2>I am me.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:ericflo.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">My Thoughts on NoSQL</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-07-21T06:44:17-07:00" pubdate data-updated="true">Jul 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Over the past few years, relational databases have fallen out of favor for a
+number of influential people in our industry.  I&#8217;d like to weigh in on that,
+but before doing so, I&#8217;d like to give my executive summary of the events leading up to
+this movement:</p>
+<p>In the late nineties and early thousands, websites were mostly read-only&#8211;a
+publisher would create some content and users would consume that content.
+The data access patterns for these types of applications became very
+well-understood, and as a result many tools were created and much research and
+development was done to further develop these technologies.</p>
+<p>As the web has grown more social, however, more and more it&#8217;s the people
+themselves who have become the publishers.  And with that fundamental shift
+away from read-heavy architectures to read/write and write-heavy
+architectures, a lot of the way that we think about storing and retrieving
+data needed to change.</p>
+<p>Most people have done this by relying less on the features provided by
+traditional relational databases and engineering more database logic in their
+application code.  Essentially, they stop using relational databases the way
+they were intended to be used, and they instead use them as dumb data stores.</p>
+<p>Other people have engineered new database systems from the ground up, each
+with a different set of tradeoffs and differences from their relational
+database brethren.  It&#8217;s these new databases that have some in our industry
+excited, and it&#8217;s these databases that I&#8217;m going to focus on primarily in this
+post.</p>
+<p>(By the way, there&#8217;s a whole lot more theory behind the movement away from
+SQL.  Primarily of interest is the CAP theorem and the Dynamo paper.  Both of
+these illustrate the necessary tradeoffs of between different approaches to
+designing databases.)</p>
+<div class="section" id="let-s-get-this-out-of-the-way">
+<h2>Let&#8217;s get this out of the way</h2>
+<p>I love SQL.  More than even that, I love my precious ORM and being able to
+query for whatever information I want whenever I want it.  For the vast
+majority of sites out there (we&#8217;re talking 99.9% of the sites out there,
+folks) it suits their needs very well, providing a good balance of ease of use
+and performance.</p>
+<p>There&#8217;s no reason for them to switch away from SQL, and there&#8217;s no way they
+will.  If there&#8217;s one thing I <em>don&#8217;t</em> like about this whole NoSQL movement,
+it&#8217;s the presumption that everyone who&#8217;s interested in alternative databases
+hates the status quo.  That&#8217;s simply not true.</p>
+<p>But we&#8217;re not talking about most sites out there, we&#8217;re not talking about the
+status quo, we&#8217;re talking about the few applications that need something
+totally different.</p>
+</div>
+<div class="section" id="tokyo-cabinet-tokyo-tyrant">
+<h2>Tokyo Cabinet / Tokyo Tyrant</h2>
+<p>Tokyo Cabinet (and its network interface, Tokyo Tyrant) is the logical
+successor to Berkeley DB&#8211;a blazing fast, open-source, embeddable key-value
+store that does just about what you would expect from its description.  It
+supports 3 modes of operation: hashtable mode, b-tree mode, and table mode.</p>
+<p>(Table mode still pretty much sucks, and I&#8217;m not convinced it&#8217;s a good idea
+for the project since it&#8217;s added bloat and other systems like RDBMs are
+probably better for storing tabular data, so I&#8217;m going to skip it.)</p>
+<p>Essentially, the API into Tokyo Cabinet is that of a gigantic associative
+array.  You give it a key and a value, and then later, given a key, it will
+give you back the value you put in.  Its largest assets are that it&#8217;s fast and
+straightforward.</p>
+<p>If your problem is such that you have a small to medium-sized amount of data,
+which needs to be updated rapidly, and can be easily modeled in
+terms of keys and values (almost all scenarios can be rewritten in terms of
+keys and values, but some problems are easier to convert than others), then
+Tokyo Cabinet and Tokyo Tyrant are the way to go.</p>
+</div>
+<div class="section" id="couchdb">
+<h2>CouchDB</h2>
+<p>CouchDB is similar to Tokyo Cabinet in that it essentially maps keys to data,
+but CouchDB&#8217;s philosophy is completely different. Instead of arbitrary data,
+its data has structure&#8211;it&#8217;s a JSON object.  Instead of only being able to
+query by keys, you can upload functions that index your data for you and then
+you can call those functions.  All of this is done over a very simple REST
+interface.</p>
+<p>But none of this really matters.  None of these really set CouchDB apart,
+because you could just encode JSON data and store it in Tokyo Cabinet, you can
+maintain your own indexes of data fairly easily, and you can build a simple
+REST API in a matter of days, if not hours.</p>
+<p>What really sets CouchDB apart from the pack is it&#8217;s innovative replication
+strategy.  It was written in such a way that nodes which are disconnected for
+long periods of time can reconnect, sync with each other, and reconcile their
+differences in a way that no other database (since Lotus Notes?) could do.</p>
+<p>It&#8217;s functionality that allows for interesting and new distributed types of
+applications and data that I think could possibly change the way we take our
+applications offline.  I imagine that some day every computer will come with
+CouchDB pre-installed and it&#8217;ll be a data store that we use without even
+knowing that we&#8217;re using it.</p>
+<p>However, I wouldn&#8217;t choose it for a super high scalability site with lots of
+data and sharding and replication and high availability and all those
+buzzwords, because I&#8217;m not convinced it&#8217;s the right tool for that job, but I
+am convinced that its replication strategy will keep it relevant for years to
+come.</p>
+</div>
+<div class="section" id="redis">
+<h2>Redis</h2>
+<p>Wow, looking at the bullet points this database seems to do just about
+everything, perfectly!  Yeah, it&#8217;s a bit prone to hyperbole and there are some
+great things about it, but a lot of it is hot air.  For example, it claims to
+support sharding but really all it does is have the client run a hash function
+on its key and use that to determine which server to send its value to.  This
+is something that any database can do.</p>
+<p>When you get down to it, Redis is a key-value store which provides a richer
+API than something like Tokyo Cabinet.  It does more operations in memory,
+only periodically flushing to disk, so there&#8217;s more of a risk that you could
+lose data on a crash.  The tradeoff is that it&#8217;s extremely fast, and it does
+some neat things like allow you to append a value to the end of a list of
+items already stored for a given key.</p>
+<p>It also has atomic operations.  This is honestly the only reason I find this
+project interesting, because the atomic operation support that it has means
+that it can be turned into a best-of-breed tally server.  If you are building
+a server to keep real-time counts of various things, you would be remiss to
+overlook Redis as a very viable option.</p>
+</div>
+<div class="section" id="cassandra">
+<h2>Cassandra</h2>
+<p>It&#8217;s good to save the best for last, and that&#8217;s exactly what I&#8217;ve done as I
+find Cassandra to be easily the most interesting non-relational database out
+there today.  Originally developed by Facebook, it was developed by some of
+the key engineers behind Amazon&#8217;s famous Dynamo database.</p>
+<p>Cassandra can be thought of as a huge 4-or-5-level associative array, where
+each dimension of the array gets a free index based on the keys in that level.
+The real power comes from that optional 5th level in the associative array,
+which can turn a simple key-value architecture into an architecture where you
+can now deal with sorted lists, based on an index of your own specification.
+That 5th level is called a SuperColumn, and it&#8217;s one of the reasons that
+Cassandra stands out from the crowd.</p>
+<p>Cassandra has no single points of failure, and can scale from one machine to
+several thousands of machines clustered in different data centers.  It has no
+central master, so any data can be written to any of the nodes in the cluster,
+and can be read likewise from any other node in the cluster.</p>
+<p>It provides knobs that can be tweaked to slide the scale between consistency
+and availability, depending on your particular application and problem domain.
+And it provides a high availability guarantee, that if one node goes down,
+another node will step in to replace it smoothly.</p>
+<p>Writing about all the features of Cassandra is a whole different post, but I
+am convinced that its data model is rich enough to support a wide variety of
+applications while providing the kind of extreme scalability and high
+availability features that few other databases can achieve&#8211;all while
+maintaining a lower latency than other solutions out there.</p>
+</div>
+<div class="section" id="conclusion">
+<h2>Conclusion</h2>
+<p>There are many other non-relational databases out there: HBase and Hypertable,
+which are replicating Google&#8217;s BigTable despite its complexity and problems
+with single points of failure.  MongoDB is another database that has been
+getting some traction, but it seems to be a jack of all trades, master of
+none.  In short, the above databases are the ones that I find interesting
+right now, and I would use each of them for different use cases.</p>
+<p>What do you all think about this whole non-relational database thing?  Do you
+agree with my thoughts or do you think I&#8217;m full of it?</p>
+</div></div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Eric Florenzano</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-07-21T06:44:17-07:00" pubdate data-updated="true">Jul 21<span>st</span>, 2009</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/databases/'>Databases</a>, <a class='category' href='/blog/categories/editorial/'>Editorial</a>, <a class='category' href='/blog/categories/nosql/'>NoSQL</a>, <a class='category' href='/blog/categories/programming/'>Programming</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://ericflo.github.com/blog/2009/07/21/my-thoughts-nosql/" data-via="ericflo" data-counturl="http://ericflo.github.com/blog/2009/07/21/my-thoughts-nosql/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2009/04/02/flojax-unobtrusive-and-easy-strategy-creating-ajax/" title="Previous Post: Flojax: A unobtrusive and easy strategy for creating AJAX-style web applications">&laquo; Flojax: A unobtrusive and easy strategy for creating AJAX-style web applications</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2009/11/10/you-care-about-facebook-you-just-might-not-know-it/" title="next Post: You care about Facebook, you just might not know it yet">You care about Facebook, you just might not know it yet &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2011/02/16/technology-behind-convore/">The Technology Behind Convore</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/10/10/object-lesson-how-respond-criticism/">An Object Lesson in How to Respond to Criticism</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/09/27/why-node-disappoints-me/">Why node.js disappoints me</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/05/20/we-need-new-word-open/">We need a new word for "Open"</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/02/08/how-do-we-kick-our-synchronous-addiction/">How do we kick our synchronous addiction?</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("ericflo", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/ericflo" class="twitter-follow-button" data-show-count="false">Follow @ericflo</a>
+  
+</section>
+
+
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/109591387819364984777?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2011 - Eric Florenzano -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

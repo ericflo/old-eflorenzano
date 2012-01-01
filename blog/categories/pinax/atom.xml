@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Pinax | Eric Florenzano's Blog]]></title>
+  <link href="http://ericflo.github.com/blog/categories/pinax/atom.xml" rel="self"/>
+  <link href="http://ericflo.github.com/"/>
+  <updated>2011-12-31T23:14:37-08:00</updated>
+  <id>http://ericflo.github.com/</id>
+  <author>
+    <name><![CDATA[Eric Florenzano]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Screencast Competition for Pinax/Django]]></title>
+    <link href="http://ericflo.github.com/blog/2008/11/25/screencast-competition-pinaxdjango/"/>
+    <updated>2008-11-25T20:47:04-08:00</updated>
+    <id>http://ericflo.github.com/blog/2008/11/25/screencast-competition-pinaxdjango</id>
+    <content type="html"><![CDATA[<p>
+I love screencasts.  I love them at least enough to create 16 of them this year.
+That's why when <code>James Tauber</code><em> announced</em> that the <code>Pinax Project</code><em> would be
+having a <code>screencast competition</code></em>, it made me very very happy!</p>
+
+<p>Pinax_ is already a great aide for those who want to build a website with a
+great deal of functionality in a short period of time.  If you haven't checked
+it out yet, I really hope that you do.  It tries to take the best of breed
+Django applications and glues them together with minimal configurable code and
+a set of common templates and conventions.</p>
+
+<p>One area that Pinax could be better about, however, is documentation.  We're
+working on it, but it still has a bit to go.  That's one of the reasons why this
+contest is so great.  By entering a screencast into the contest, you are really
+helping the Pinax community out a lot.</p>
+
+<p>The best part about this contest, however, is that there are prizes!  One prize,
+$100 at Amazon, will go to the very best screencast.  A second prize, $40 at
+Amazon, will go to the second best screencast.  As of this writing, there are no
+entries.  So what are you waiting for?  Head on over to the
+<code>contest details page</code>_ and enter your screencast today!</p>
+
+<p>.. <em><code>James Tauber</code>: http://jtauber.com/
+.. </em>announced: http://jtauber.com/blog/2008/11/24/first_pinax_screencast_competition/
+.. <em><code>Pinax Project</code>: http://pinaxproject.com/
+.. </em><code>screencast competition</code>: http://contests.pinaxproject.com/contest/3/
+.. <em>Pinax: http://pinaxproject.com/
+.. </em><code>contest details page</code>: http://contests.pinaxproject.com/contest/3/
+</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[DjangoCon: Great conference, or greatest conference ever?]]></title>
+    <link href="http://ericflo.github.com/blog/2008/09/08/djangocon-great-conference-or-greatest-conference/"/>
+    <updated>2008-09-08T00:58:30-07:00</updated>
+    <id>http://ericflo.github.com/blog/2008/09/08/djangocon-great-conference-or-greatest-conference</id>
+    <content type="html"><![CDATA[<p>
+The internet is such a strange place.  It allows us to collaborate on projects without ever seeing each other in person.  It allows us to meet new people, discover interests that we never knew we had, and keep in touch with friends.  However much the internet allows us to connect, though, there's simply no replacement for face-to-face contact.  Who would have thought that a piece of software whose main goal is to ease the pain of creating websites could bring people together from Prague, London, Germany, and even Lawrence, Kansas?  To me, it's nearly inconceivable.  But inconceivable or not, Django now has its <code>very own conference</code>_.</p>
+
+<p>What I noticed about this first DjangoCon was a strange and exciting dichotomy of sorts, best exemplified by the opening and closing keynotes.  On the one hand, it's difficult to believe just how far Django has come since it was first released in 2005.  On the other hand, there are so many great ideas for Django and Django-related projects that it's nearly impossible to fight the urge to pop open your favorite text editor and start coding right now.</p>
+
+<p>For <code>some people</code><em>, it was great to <code>meet them</code></em> for the <code>first time</code><em>, and for others</em>, it was great<em> to simply reconnect</em>.  (Apologies to those that I couldn't fit into those links, by the way.)  Below is what I find to be a hilarious image, courtesy of <code>Sebastian Hillig</code><em>--whose <code>Flickr page</code></em> has some really well-shot photos of the conference.</p>
+
+<p>.. image:: http://media.eflorenzano.com/img/djangocon.jpg</p>
+
+<p>For those of us involved in the Pinax<em> project, DjangoCon was a bit of a coming out party.  Firstly, in a literal sense--as cloud27</em>, the flagship website built on Pinax_, was launched (real men launch during presentations).  But also in a figurative sense--as most of us sported our Pinax-branded shirts and trumpeted the features that Pinax provides out of the box.  James Tauber's talk that kicked it all off couldn't have gone better, and I'm certain that when the video comes out on YouTube, it will enjoy a second and third life while people discover and become interested in the platform.</p>
+
+<p>Another thing that surprised me about the conference was the amount of healthy criticism that went around in the conference.  Only a select few presentations escaped the <code>constructive criticism</code><em> of <code>James Bennett</code></em>, the wrath<em> of <code>Cal Henderson</code></em>, or the <code>healthy reminders</code><em> by <code>Mark Ramm</code></em>.  Instead of people getting upset, though, I heard all sorts of conversations throughout the conference discussing ideas and strategies for how to overcome the shortcomings that were pointed out.</p>
+
+<p>But in the end, what would DjangoCon be without a good old fashioned group hug?  Thanks to everyone who made it possible, and here's to another year of friendship and achievement for everyone in Django-land!</p>
+
+<p>.. image:: http://farm4.static.flickr.com/3185/2838728852_9c6a460602.jpg?v=0</p>
+
+<p>(Picture by 704race_, whose pictures are also really fun!)</p>
+
+<p>.. <em><code>very own conference</code>: http://djangocon.org/
+.. </em><code>Sebastian Hillig</code>: http://devdojo.de/stream/
+.. <em><code>Flickr page</code>: http://www.flickr.com/photos/bastispicks/sets/72157607140512491/
+.. </em><code>some people</code>: http://avalonstar.com/
+.. <em><code>meet them</code>: http://blog.howiworkdaily.com/
+.. </em><code>first time</code>: http://rob.cogit8.org/
+.. <em>others: http://jtauber.com/
+.. </em>great: http://justinlilly.com/
+.. <em>reconnect: http://thisweekindjango.com/
+.. </em>Pinax: http://pinaxproject.com/
+.. <em>cloud27: http://cloud27.com/
+.. </em><code>constructive criticism</code>: http://flickr.com/photos/postneo/2836990032/
+.. <em><code>James Bennett</code>: http://www.b-list.org/
+.. </em>wrath: http://www.flickr.com/photos/704race/2835013556/in/set-72157607147999891/
+.. <em><code>Cal Henderson</code>: http://www.iamcal.com/
+.. </em><code>healthy reminders</code>: http://www.flickr.com/photos/704race/2837100896/
+.. <em><code>Mark Ramm</code>: http://compoundthinking.com/blog/
+.. </em>704race: http://flickr.com/photos/704race/
+</p>
+]]></content>
+  </entry>
+  
+</feed>

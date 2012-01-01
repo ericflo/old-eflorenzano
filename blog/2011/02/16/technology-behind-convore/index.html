@@ -1,0 +1,420 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>The Technology Behind Convore - Eric Florenzano's Blog</title>
+  <meta name="author" content="Eric Florenzano">
+
+  
+  <meta name="description" content="We launched Convore last week, and the first question developers tend to ask
+when they find Convore is &quot;what technology powers this site?&quot; &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://ericflo.github.com/blog/2011/02/16/technology-behind-convore">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Eric Florenzano's Blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-1959803-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Eric Florenzano's Blog</a></h1>
+  
+    <h2>I am me.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:ericflo.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">The Technology Behind Convore</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-02-16T12:29:35-08:00" pubdate data-updated="true">Feb 16<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>We launched <a class="reference external" href="https://convore.com/">Convore</a> last week, and the first question developers tend to ask
+when they find <a class="reference external" href="https://convore.com/">Convore</a> is &quot;what technology powers this site?&quot;  It is asked so
+often, in fact, that we have started to copy and paste the same short response
+again and again.  That response was good enough to satisfy people who simply
+wanted to know if we were Rails or Django, or whether we were using node.js for
+the real-time stuff, but this article will expand upon that&#8211;  not only giving
+more details for the curious, but also giving us a link to point people at when
+they ask the question in the future.  I always wish other people were totally
+open about their architectures, so that I can learn from their good choices and
+their bad, so I&#8217;d like to be as open as possible about ours.  Let&#8217;s dive in!</p>
+<div class="section" id="the-basics">
+<h2>The basics</h2>
+<p>All of our application code is powered by Python.  Our front-end html page
+generation is done by Django, which we use in a surprisingly traditional way
+given the real-time nature of Convore as a product.  Everything is assembled
+at once: all messages, the sidebar, and the header are all rendered on the
+server instead of being pulled in after-the-fact with JavaScript.  All of the
+important data is canonically stored in PostgreSQL, including messages, topics,
+groups, unread counts, and user profiles.  Search functionality is provided by
+Solr, which is interfaced into our application by way of the handy Haystack
+Django application.</p>
+</div>
+<div class="section" id="the-message-lifecycle">
+<h2>The message lifecycle</h2>
+<p>When a new message comes into the system, first it&#8217;s parsed by a series of
+regular expressions designed to pull out interesting bits of information from
+the message.  Right now all we&#8217;re looking for is username references and
+links (and further, whether those links point at images which should be
+rendered in-line.)  At the end of this parsing stage, we have a structured
+message parse list, which is converted into JSON.</p>
+<p>So, for example if someone posted the message:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="text"><span class="line">@ericflo @simonw Here&#39;s how we connect/disconnect from Redis in production: http://dpaste.com/406797/
+</span></code></pre></td></tr></table></div></figure><p>The resulting JSON parse list would look like this:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+</pre></td><td class="code"><pre><code class="text"><span class="line">[
+</span><span class="line">    {
+</span><span class="line">        &quot;type&quot;: &quot;username&quot;,
+</span><span class="line">        &quot;user_id&quot;: 1,
+</span><span class="line">        &quot;username&quot;: &quot;ericflo&quot;,
+</span><span class="line">        &quot;markup&quot;: &quot;&lt;a href=\&quot;/users/ericflo/\&quot;&gt;@ericflo&lt;/a&gt;&quot;
+</span><span class="line">    },
+</span><span class="line">    {
+</span><span class="line">        &quot;type&quot;: &quot;username&quot;,
+</span><span class="line">        &quot;user_id&quot;: 56,
+</span><span class="line">        &quot;username&quot;: &quot;simonw&quot;,
+</span><span class="line">        &quot;markup&quot;: &quot; &lt;a href=\&quot;/users/simonw/\&quot;&gt;@simonw&lt;/a&gt;&quot;
+</span><span class="line">    },
+</span><span class="line">    {
+</span><span class="line">        &quot;type&quot;: &quot;text&quot;,
+</span><span class="line">        &quot;markup&quot;: &quot; Here&amp;#39;s how we connect/disconnect from Redis in production: &quot;
+</span><span class="line">    },
+</span><span class="line">    {
+</span><span class="line">        &quot;type&quot;: &quot;url&quot;,
+</span><span class="line">        &quot;url&quot;: &quot;http://dpaste.com/406797/&quot;,
+</span><span class="line">        &quot;markup&quot;: &quot;&lt;a href=\&quot;http://dpaste.com/406797/\&quot; target=\&quot;_blank\&quot;&gt;http://dpaste.com/406797/&lt;/a&gt;&quot;
+</span><span class="line">    }
+</span><span class="line">]
+</span></code></pre></td></tr></table></div></figure><p>After this is constructed, we log all our available information about this
+message, and then save to the database&#8211;  both the raw message as it was received,
+and the JSON-encoded parsed node list.</p>
+<p>Now a task is sent to Celery (by way of Redis) notifying it that this new
+message has been received.  This Celery task now increments the unread count
+for everyone who has access to the topic that the message was posted in, and
+then it publishes to a Redis pub/sub for the group that the message was posted
+to.  Finally, the task scans through the message, looking for any users that
+were mentioned in the message, and writes entries to the database for every
+mention.</p>
+<p>On the other end of that pub/sub are the many open http requests that our users
+have initiated, which are waiting for any new messages or information.  Those
+all simultaneously return the new message information, at which point they
+reconnect again, waiting for the next message to arrive.</p>
+</div>
+<div class="section" id="the-real-time-endpoint">
+<h2>The real-time endpoint</h2>
+<p>Our live updates endpoint is actually a very simple and lightweight pure-WSGI
+Python application, hosted using Eventlet.  It spawns off a coroutine for each
+request, and in that coroutine, it looks up all the groups that a user is a
+member of, and then opens a connection to Redis subscribing to all of those
+channels.  Each of these Eventlet-hosted Python applications has the ability to
+host hundreds-to-thousands of open connections, and we run several instances
+on each of our front-end machines.  It has a few more responsibilities, like
+marking a topic as read before it returns a response, but the most important
+thing is to be a bridge between the user and Redis pub/sub.</p>
+</div>
+<div class="section" id="future-improvements">
+<h2>Future improvements</h2>
+<p>There are so many places where our architecture can be improved.  This is our
+first version, and now that real users are using the system, already some of
+our initial assumptions are being challenged.  For instance, we thought that
+pub/sub to a channel per group would be enough, but what that means is that
+everyone in a group sees the exact same events as everyone else in that group.</p>
+<p>This means we don&#8217;t have the ability to customize each user&#8217;s experience based
+on their preferences&#8211;no way to put a user on ignore, filter certain messages,
+etc.  It also means that we aren&#8217;t able to sync up a user&#8217;s experience across
+tabs or browsers, since we don&#8217;t really want to broadcast to everyone in the
+group that one user has visited a topic, thereby removing any unread messages
+in that topic.  So going forward we&#8217;re going to have to break up that per-group
+pub/sub into per-user pub/sub.</p>
+<p>Another area that could be improved is our unread counts.  Right now they&#8217;re
+stored as rows in our PostgreSQL database, which makes it extremely easy to
+batch update them and do aggregate queries on them, but the number of these
+rows is increasing rapidly, and without some kind of sharding scheme, it will
+at some point become more difficult to work with such a large amount of rows.
+My feeling is that this will eventually need to be moved into a non-relational
+data store, and we&#8217;ll need to write a service layer in front of it to deal with
+pre-aggregating and distributing updates, but nothing is set in stone just yet.</p>
+<p>Finally, Python may not be the best language for this real-time endpoint.
+Eventlet is a fantastic Python library and it allowed us to build something
+extremely fast that has scaled to several thousand concurrent connections
+without breaking a sweat on launch day, but it has its limits.  There is a
+large body of work out there on handling a large number of open connections,
+using Java&#8217;s NIO framework, Erlang&#8217;s mochiweb, or node.js.</p>
+</div>
+<div class="section" id="that-s-all-folks">
+<h2>That&#8217;s all folks</h2>
+<p>We&#8217;re pretty proud of what we&#8217;ve built in a very short time, and we&#8217;re glad
+it has held up as well as it has on our launch day and afterwards.  We&#8217;re
+excited about the problems we&#8217;re now being faced with, both scaling the
+technology, and scaling the product.  I hope this article has quenched any
+curiosity out there about how Convore works.  If there are any questions,
+feel free to join <a class="reference external" href="https://convore.com/">Convore</a> and ask away!</p>
+<p>(Or discuss it <a class="reference external" href="http://news.ycombinator.com/item?id=2228137">on Hacker News</a>)</p>
+</div></div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Eric Florenzano</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-02-16T12:29:35-08:00" pubdate data-updated="true">Feb 16<span>th</span>, 2011</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/convore/'>Convore</a>, <a class='category' href='/blog/categories/django/'>Django</a>, <a class='category' href='/blog/categories/eventlet/'>Eventlet</a>, <a class='category' href='/blog/categories/haystack/'>Haystack</a>, <a class='category' href='/blog/categories/postgresql/'>PostgreSQL</a>, <a class='category' href='/blog/categories/python/'>Python</a>, <a class='category' href='/blog/categories/realtime/'>Realtime</a>, <a class='category' href='/blog/categories/redis/'>Redis</a>, <a class='category' href='/blog/categories/solr/'>Solr</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://ericflo.github.com/blog/2011/02/16/technology-behind-convore/" data-via="ericflo" data-counturl="http://ericflo.github.com/blog/2011/02/16/technology-behind-convore/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2010/10/10/object-lesson-how-respond-criticism/" title="Previous Post: An Object Lesson in How to Respond to Criticism">&laquo; An Object Lesson in How to Respond to Criticism</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2011/02/16/technology-behind-convore/">The Technology Behind Convore</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/10/10/object-lesson-how-respond-criticism/">An Object Lesson in How to Respond to Criticism</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/09/27/why-node-disappoints-me/">Why node.js disappoints me</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/05/20/we-need-new-word-open/">We need a new word for "Open"</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/02/08/how-do-we-kick-our-synchronous-addiction/">How do we kick our synchronous addiction?</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("ericflo", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/ericflo" class="twitter-follow-button" data-show-count="false">Follow @ericflo</a>
+  
+</section>
+
+
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/109591387819364984777?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2011 - Eric Florenzano -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

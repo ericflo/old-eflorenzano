@@ -1,0 +1,344 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Secrets of the Django ORM - Eric Florenzano's Blog</title>
+  <meta name="author" content="Eric Florenzano">
+
+  
+  <meta name="description" content="You won&#8217;t see this in the Django documentation, you won&#8217;t see it mentioned on
+other blogs, and you certainly won&#8217;t hear the core &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://ericflo.github.com/blog/2008/11/06/secrets-django-orm">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Eric Florenzano's Blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-1959803-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Eric Florenzano's Blog</a></h1>
+  
+    <h2>I am me.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:ericflo.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Secrets of the Django ORM</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-11-06T09:14:54-08:00" pubdate data-updated="true">Nov 6<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>You won&#8217;t see this in the Django documentation, you won&#8217;t see it mentioned on
+other blogs, and you certainly won&#8217;t hear the core developers of Django boasting
+about it, but Django&#8217;s ORM has a secret weapon: it supports SQL <em>group_by</em> and
+<em>having</em> clauses, and it has for quite some time.</p>
+<p>It&#8217;s not part of the public <tt class="docutils literal">QuerySet</tt> API, but rather a part of the private
+<tt class="docutils literal">Query</tt> API.  But just because it&#8217;s not part of the public API doesn&#8217;t mean
+that it&#8217;s not easy to use&#8211;it just means that it might change in the future.
+So it&#8217;s really a &quot;use at your own risk&quot; type of deal now.  If you&#8217;re up for
+keeping on top of things so that you know what to change when the next version
+of Django comes out, then read on.  First, let&#8217;s start with some model
+definition:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="k">class</span> <span class="nc">TumbleItem</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+</span><span class="line">    <span class="n">title</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">255</span><span class="p">)</span>
+</span><span class="line">    <span class="n">item_type</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+</span><span class="line">
+</span><span class="line">    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span class="line">        <span class="k">return</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">: &quot;</span><span class="si">%s</span><span class="s">&quot;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">item_type</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure><p>A simple tumblog item.  Very simple, as in, not really useful at all.  But
+that&#8217;s OK since this is just a demonstration.  To demonstrate, let&#8217;s create
+some data:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="pycon"><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">ti1</span> <span class="o">=</span> <span class="n">TumbleItem</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s">&#39;Blog Post 1&#39;</span><span class="p">,</span> <span class="n">item_type</span><span class="o">=</span><span class="s">&#39;blog&#39;</span><span class="p">)</span>
+</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">ti2</span> <span class="o">=</span> <span class="n">TumbleItem</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s">&#39;Blog Post 2&#39;</span><span class="p">,</span> <span class="n">item_type</span><span class="o">=</span><span class="s">&#39;blog&#39;</span><span class="p">)</span>
+</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">ti3</span> <span class="o">=</span> <span class="n">TumbleItem</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s">&#39;Blog Post 3&#39;</span><span class="p">,</span> <span class="n">item_type</span><span class="o">=</span><span class="s">&#39;blog&#39;</span><span class="p">)</span>
+</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">ti4</span> <span class="o">=</span> <span class="n">TumbleItem</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s">&#39;Article Dugg 1&#39;</span><span class="p">,</span> <span class="n">item_type</span><span class="o">=</span><span class="s">&#39;digg&#39;</span><span class="p">)</span>
+</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">ti5</span> <span class="o">=</span> <span class="n">TumbleItem</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s">&#39;Article Dugg 2&#39;</span><span class="p">,</span> <span class="n">item_type</span><span class="o">=</span><span class="s">&#39;digg&#39;</span><span class="p">)</span>
+</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">ti6</span> <span class="o">=</span> <span class="n">TumbleItem</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s">&#39;Link Saved 1&#39;</span><span class="p">,</span> <span class="n">item_type</span><span class="o">=</span><span class="s">&#39;link&#39;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure><p>OK now that we&#8217;ve loaded some data, let&#8217;s use the group_by functionality!</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="pycon"><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">qs</span> <span class="o">=</span> <span class="n">TumbleItem</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">qs</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">group_by</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;item_type&#39;</span><span class="p">]</span>
+</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">item_types</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">item_type</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">qs</span><span class="p">]</span>
+</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">item_types</span>
+</span><span class="line"><span class="go">[u&#39;blog&#39;, u&#39;digg&#39;, u&#39;link&#39;]</span>
+</span></code></pre></td></tr></table></div></figure><p>There we go, it&#8217;s quick, easy, and it seems to Just Work. But let&#8217;s try to grab
+only the item_types which have more than one item:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="pycon"><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">qs</span> <span class="o">=</span> <span class="n">TumbleItem</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">qs</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">group_by</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;item_type&#39;</span><span class="p">]</span>
+</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">qs</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">having</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;COUNT(item_type) &gt; 1&#39;</span><span class="p">]</span>
+</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">item_types</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">item_type</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">qs</span><span class="p">]</span>
+</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">item_types</span>
+</span><span class="line"><span class="go">[u&#39;blog&#39;, u&#39;digg&#39;]</span>
+</span></code></pre></td></tr></table></div></figure><p>And now we&#8217;ve successfully used the group_by and having functionality in the
+Django ORM.  I&#8217;m excited for some aggregation functionality to start being
+exposed as a public API, as I&#8217;m sure it will be more elegant than this solution,
+but at the same time this is a neat hidden secret in the Django ORM.  Well now
+you have the knowledge, so you have the power, and it&#8217;s up to you to use it wisely!</p></div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Eric Florenzano</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-11-06T09:14:54-08:00" pubdate data-updated="true">Nov 6<span>th</span>, 2008</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/databases/'>Databases</a>, <a class='category' href='/blog/categories/django/'>Django</a>, <a class='category' href='/blog/categories/programming/'>Programming</a>, <a class='category' href='/blog/categories/python/'>Python</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://ericflo.github.com/blog/2008/11/06/secrets-django-orm/" data-via="ericflo" data-counturl="http://ericflo.github.com/blog/2008/11/06/secrets-django-orm/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2008/11/05/internet-immediate-danger-collapse/" title="Previous Post: The internet is in immediate danger of collapse">&laquo; The internet is in immediate danger of collapse</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2008/11/07/its-caches-all-way-down/" title="next Post: It's Caches All the Way Down">It's Caches All the Way Down &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2011/02/16/technology-behind-convore/">The Technology Behind Convore</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/10/10/object-lesson-how-respond-criticism/">An Object Lesson in How to Respond to Criticism</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/09/27/why-node-disappoints-me/">Why node.js disappoints me</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/05/20/we-need-new-word-open/">We need a new word for "Open"</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/02/08/how-do-we-kick-our-synchronous-addiction/">How do we kick our synchronous addiction?</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("ericflo", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/ericflo" class="twitter-follow-button" data-show-count="false">Follow @ericflo</a>
+  
+</section>
+
+
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/109591387819364984777?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2011 - Eric Florenzano -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

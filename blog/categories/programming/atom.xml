@@ -1,0 +1,687 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Programming | Eric Florenzano's Blog]]></title>
+  <link href="http://ericflo.github.com/blog/categories/programming/atom.xml" rel="self"/>
+  <link href="http://ericflo.github.com/"/>
+  <updated>2011-12-31T23:14:37-08:00</updated>
+  <id>http://ericflo.github.com/</id>
+  <author>
+    <name><![CDATA[Eric Florenzano]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Why node.js disappoints me]]></title>
+    <link href="http://ericflo.github.com/blog/2010/09/27/why-node-disappoints-me/"/>
+    <updated>2010-09-27T01:23:47-07:00</updated>
+    <id>http://ericflo.github.com/blog/2010/09/27/why-node-disappoints-me</id>
+    <content type="html"><![CDATA[<p>
+<code>Node.js</code>_ is currently at the center of a huge cyclone of hype.  At this point it's clear that Node is going to be a major player in the next few years of web development.  It's no wonder, either!  It represents a fresh start, one with no legacy synchronous baggage in our increasingly asynchronous, increasingly real-time web. And it's accessible to anyone who's written JavaScript (read: all web developers.)</p>
+
+<p>Oh, and those benchmarks!  Compared trivially to the currently popular web technologies, it seems an obvious leap forward.</p>
+
+<p>Yet one of Node's advantages that you'll hear repeated again and again by its proponents is that you can now code in One Language, and you won't have to deal with the cognitive load of context switching between different languages.  Especially as ORMs and NoSQL continue to rise in popularity, there's no need to even deal with SQL. At the end of the day you're writing JavaScript, HTML, and CSS, and that's it.</p>
+
+<p>Seeing this happen with all of these pieces falling into place--a fresh start with a unified language--I started to get excited.  This would change the way we thought about our web code.  The frontend is the backend is the query language is the storage layer is JavaScript!  It's a revolution.</p>
+
+<p>And then I saw what people did with this opportunity.  They effectively ported Sinatra/Django/Rails to JavaScript--and did it in such a way that it would only run on the server, with a specific feature set of JavaScript that only Node can reasonably understand.</p>
+
+<p>Not exactly the revolution I was hoping for.</p>
+
+<p>Instead of coding in one language, we're actually coding in two. One is the subset JavaScript that can be run in all browsers, and another is the set of JavaScript that can be run by Node.  Knowing the difference between the two languages and context switching between them is simply a required skill.</p>
+
+<p>You know what would be awesome? If we wrote our libraries so that they could run either on the server or on the client, and they did so in a transparent way.  Maybe it would help to give a concrete example of how this could be awesome.  Let's talk about HTML templating.</p>
+
+<p>Imagine a framework where the first page-load was always rendered server-side, meaning the client gets a single fully-rendered page.  Then for desktop browsers, browsing around the site just made calls to API endpoints returning JSON or XML, and the client rendered the templates for the changed portions of the page.  For mobile browsers with less power or for search engines, the rendering would always be done on the server.  Imagine that the templating library could record some key metrics to determine how long things were taking to render, and dynamically switch between rendering on the server and client based on server load or client speed.</p>
+
+<p>Imagine a case where a back-end service fails temporarily.  In this case the rendering of that particular component could be deferred, the browser could be told to poll a resource.  When the back-end service is recovered, it could send the data for the client to render on its own.</p>
+
+<p>How awesome would that be?</p>
+
+<p>It's not just HTML templating, either.  This same principle could be applied to any number of things: URL routing, form validation, hell even most application logic could be done using this style.</p>
+
+<p>But it's going to take discipline.  Instead of reaching for those fancy V8 features, code will need to be written in a strict subset of the JavaScript that's available.  Maybe Node could detect incompatible code and throw warnings, that would be cool.</p>
+
+<p>I just really hope that someday we stop re-inventing the same exact wheel, and instead build something substantially different and better.</p>
+
+<p>.. _<code>Node.js</code>: http://nodejs.org/
+</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[My Thoughts on NoSQL]]></title>
+    <link href="http://ericflo.github.com/blog/2009/07/21/my-thoughts-nosql/"/>
+    <updated>2009-07-21T06:44:17-07:00</updated>
+    <id>http://ericflo.github.com/blog/2009/07/21/my-thoughts-nosql</id>
+    <content type="html"><![CDATA[<p>
+Over the past few years, relational databases have fallen out of favor for a
+number of influential people in our industry.  I'd like to weigh in on that,
+but before doing so, I'd like to give my executive summary of the events leading up to
+this movement:</p>
+
+<p>In the late nineties and early thousands, websites were mostly read-only--a
+publisher would create some content and users would consume that content.
+The data access patterns for these types of applications became very
+well-understood, and as a result many tools were created and much research and
+development was done to further develop these technologies.</p>
+
+<p>As the web has grown more social, however, more and more it's the people
+themselves who have become the publishers.  And with that fundamental shift
+away from read-heavy architectures to read/write and write-heavy
+architectures, a lot of the way that we think about storing and retrieving
+data needed to change.</p>
+
+<p>Most people have done this by relying less on the features provided by
+traditional relational databases and engineering more database logic in their
+application code.  Essentially, they stop using relational databases the way
+they were intended to be used, and they instead use them as dumb data stores.</p>
+
+<p>Other people have engineered new database systems from the ground up, each
+with a different set of tradeoffs and differences from their relational
+database brethren.  It's these new databases that have some in our industry
+excited, and it's these databases that I'm going to focus on primarily in this
+post.</p>
+
+<p>(By the way, there's a whole lot more theory behind the movement away from
+SQL.  Primarily of interest is the CAP theorem and the Dynamo paper.  Both of
+these illustrate the necessary tradeoffs of between different approaches to
+designing databases.)</p>
+
+<h2>Let's get this out of the way</h2>
+
+<p>I love SQL.  More than even that, I love my precious ORM and being able to
+query for whatever information I want whenever I want it.  For the vast
+majority of sites out there (we're talking 99.9% of the sites out there,
+folks) it suits their needs very well, providing a good balance of ease of use
+and performance.</p>
+
+<p>There's no reason for them to switch away from SQL, and there's no way they
+will.  If there's one thing I <em>don't</em> like about this whole NoSQL movement,
+it's the presumption that everyone who's interested in alternative databases
+hates the status quo.  That's simply not true.</p>
+
+<p>But we're not talking about most sites out there, we're not talking about the
+status quo, we're talking about the few applications that need something
+totally different.</p>
+
+<h2>Tokyo Cabinet / Tokyo Tyrant</h2>
+
+<p>Tokyo Cabinet (and its network interface, Tokyo Tyrant) is the logical
+successor to Berkeley DB--a blazing fast, open-source, embeddable key-value
+store that does just about what you would expect from its description.  It
+supports 3 modes of operation: hashtable mode, b-tree mode, and table mode.</p>
+
+<p>(Table mode still pretty much sucks, and I'm not convinced it's a good idea
+for the project since it's added bloat and other systems like RDBMs are
+probably better for storing tabular data, so I'm going to skip it.)</p>
+
+<p>Essentially, the API into Tokyo Cabinet is that of a gigantic associative
+array.  You give it a key and a value, and then later, given a key, it will
+give you back the value you put in.  Its largest assets are that it's fast and
+straightforward.</p>
+
+<p>If your problem is such that you have a small to medium-sized amount of data,
+which needs to be updated rapidly, and can be easily modeled in
+terms of keys and values (almost all scenarios can be rewritten in terms of
+keys and values, but some problems are easier to convert than others), then
+Tokyo Cabinet and Tokyo Tyrant are the way to go.</p>
+
+<h2>CouchDB</h2>
+
+<p>CouchDB is similar to Tokyo Cabinet in that it essentially maps keys to data,
+but CouchDB's philosophy is completely different. Instead of arbitrary data,
+its data has structure--it's a JSON object.  Instead of only being able to
+query by keys, you can upload functions that index your data for you and then
+you can call those functions.  All of this is done over a very simple REST
+interface.</p>
+
+<p>But none of this really matters.  None of these really set CouchDB apart,
+because you could just encode JSON data and store it in Tokyo Cabinet, you can
+maintain your own indexes of data fairly easily, and you can build a simple
+REST API in a matter of days, if not hours.</p>
+
+<p>What really sets CouchDB apart from the pack is it's innovative replication
+strategy.  It was written in such a way that nodes which are disconnected for
+long periods of time can reconnect, sync with each other, and reconcile their
+differences in a way that no other database (since Lotus Notes?) could do.</p>
+
+<p>It's functionality that allows for interesting and new distributed types of
+applications and data that I think could possibly change the way we take our
+applications offline.  I imagine that some day every computer will come with
+CouchDB pre-installed and it'll be a data store that we use without even
+knowing that we're using it.</p>
+
+<p>However, I wouldn't choose it for a super high scalability site with lots of
+data and sharding and replication and high availability and all those
+buzzwords, because I'm not convinced it's the right tool for that job, but I
+am convinced that its replication strategy will keep it relevant for years to
+come.</p>
+
+<h2>Redis</h2>
+
+<p>Wow, looking at the bullet points this database seems to do just about
+everything, perfectly!  Yeah, it's a bit prone to hyperbole and there are some
+great things about it, but a lot of it is hot air.  For example, it claims to
+support sharding but really all it does is have the client run a hash function
+on its key and use that to determine which server to send its value to.  This
+is something that any database can do.</p>
+
+<p>When you get down to it, Redis is a key-value store which provides a richer
+API than something like Tokyo Cabinet.  It does more operations in memory,
+only periodically flushing to disk, so there's more of a risk that you could
+lose data on a crash.  The tradeoff is that it's extremely fast, and it does
+some neat things like allow you to append a value to the end of a list of
+items already stored for a given key.</p>
+
+<p>It also has atomic operations.  This is honestly the only reason I find this
+project interesting, because the atomic operation support that it has means
+that it can be turned into a best-of-breed tally server.  If you are building
+a server to keep real-time counts of various things, you would be remiss to
+overlook Redis as a very viable option.</p>
+
+<h2>Cassandra</h2>
+
+<p>It's good to save the best for last, and that's exactly what I've done as I
+find Cassandra to be easily the most interesting non-relational database out
+there today.  Originally developed by Facebook, it was developed by some of
+the key engineers behind Amazon's famous Dynamo database.</p>
+
+<p>Cassandra can be thought of as a huge 4-or-5-level associative array, where
+each dimension of the array gets a free index based on the keys in that level.
+The real power comes from that optional 5th level in the associative array,
+which can turn a simple key-value architecture into an architecture where you
+can now deal with sorted lists, based on an index of your own specification.
+That 5th level is called a SuperColumn, and it's one of the reasons that
+Cassandra stands out from the crowd.</p>
+
+<p>Cassandra has no single points of failure, and can scale from one machine to
+several thousands of machines clustered in different data centers.  It has no
+central master, so any data can be written to any of the nodes in the cluster,
+and can be read likewise from any other node in the cluster.</p>
+
+<p>It provides knobs that can be tweaked to slide the scale between consistency
+and availability, depending on your particular application and problem domain.
+And it provides a high availability guarantee, that if one node goes down,
+another node will step in to replace it smoothly.</p>
+
+<p>Writing about all the features of Cassandra is a whole different post, but I
+am convinced that its data model is rich enough to support a wide variety of
+applications while providing the kind of extreme scalability and high
+availability features that few other databases can achieve--all while
+maintaining a lower latency than other solutions out there.</p>
+
+<h2>Conclusion</h2>
+
+<p>There are many other non-relational databases out there: HBase and Hypertable,
+which are replicating Google's BigTable despite its complexity and problems
+with single points of failure.  MongoDB is another database that has been
+getting some traction, but it seems to be a jack of all trades, master of
+none.  In short, the above databases are the ones that I find interesting
+right now, and I would use each of them for different use cases.</p>
+
+<p>What do you all think about this whole non-relational database thing?  Do you
+agree with my thoughts or do you think I'm full of it?
+</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Flojax: A unobtrusive and easy strategy for creating AJAX-style web applications]]></title>
+    <link href="http://ericflo.github.com/blog/2009/04/02/flojax-unobtrusive-and-easy-strategy-creating-ajax/"/>
+    <updated>2009-04-02T19:05:18-07:00</updated>
+    <id>http://ericflo.github.com/blog/2009/04/02/flojax-unobtrusive-and-easy-strategy-creating-ajax</id>
+    <content type="html"><![CDATA[<p>
+Writing AJAX-style web applications can be very tedious.  If you're using XML
+as your transport layer, you have to parse the XML before you can work with it.
+It's a bit easier if you're using JSON, but once you have parsed the data, the
+data still needs to be turned into HTML markup that matches the current markup
+on the page.  Finally, the newly created markup needs to be inserted into the
+correct place in the DOM, and any event handlers need to be attached to the
+appropriate newly-inserted markup.</p>
+
+<p>So there's the parsing, the markup assembly, the DOM insertion, and finally the
+event handler attachment.  Most of the time, people tend to write custom code
+for each element that needs asynchronous updating.  There are several drawbacks
+with this scenario, but the most frustrating part is probably that the
+presentation logic is implemented twice--once in a templating language on the
+server which is designed specifically for outputting markup, and again on the
+client with inline Javascript.  This leads to problems both in the agility and
+in the maintainability of this type of application.</p>
+
+<p>With flojax, this can all be  accomplished with one generalized implementation.
+The same server-side logic that generates the data for the first synchronous
+request can be used to respond to subsequent asynchronous requests, and
+unobtrusive attributes specify what to do for the rest.</p>
+
+<h2>The Basics</h2>
+
+<p>The first component for creating an application using the flojax strategy is to
+break up the content that you would like to reload asynchronously into smaller
+fragments.  As a basic example of this, let's examine the case where there is a
+panel of buttons that you would like to turn into asynchronous requests instead
+of full page reloads.</p>
+
+<p>The rendered markup for a fragment of buttons could look something like this:</p>
+
+<p>.. code-block:: html</p>
+
+<pre><code>&lt;div class="buttons"&gt;
+    &lt;a href="http://ericflo.github.com/vote/up/item1/"&gt;Vote up&lt;/a&gt;
+    &lt;a href="http://ericflo.github.com/vote/down/item1/"&gt;Vote down&lt;/a&gt;
+    &lt;a href="http://ericflo.github.com/favorite/item1/"&gt;Add to your favorites&lt;/a&gt;
+&lt;/div&gt;
+</code></pre>
+
+<p>In a templating language, the logic might look something like this:</p>
+
+<p>.. code-block:: html</p>
+
+<pre><code>&lt;div class="buttons"&gt;
+    {% if voted %}
+        &lt;a href="http://ericflo.github.com/vote/clear/{{ item.id }}/"&gt;Clear your vote&lt;/a&gt;
+    {% else %}
+        &lt;a href="http://ericflo.github.com/vote/up/{{ item.id }}/"&gt;Vote up&lt;/a&gt;
+        &lt;a href="http://ericflo.github.com/vote/down/{{ item.id }}/"&gt;Vote down&lt;/a&gt;
+    {% endif %}
+    {% if favorited %}
+        &lt;a href="http://ericflo.github.com/favorite/{{ item.id }}/"&gt;Add to your favorites&lt;/a&gt;
+    {% else %}
+        &lt;a href="http://ericflo.github.com/unfavorite/{{ item.id }}/"&gt;Remove from your favorites&lt;/a&gt;
+    {% endif %}
+&lt;/div&gt;
+</code></pre>
+
+<p>(Typically you wouldn't use anchors to do operations that can change state on
+the server, so you can imagine this would be accomplished using forms.  However,
+for demonstration and clarity purposes I'm going to leave these as links.)</p>
+
+<p>Now that we have written a fragment, we can start using it in our larger
+templates by way of an include, which might look something like this:</p>
+
+<p>.. code-block:: html</p>
+
+<pre><code>...
+&lt;p&gt;If you like this item, consider favoriting or voting on it:&lt;/p&gt;
+{% include "fragments/buttons.html" %}
+...
+</code></pre>
+
+<p>To change this from being standard links to being asynchronously updated, we
+just need to annotate a small amount of data onto the relevant links in the
+fragment.</p>
+
+<p>.. code-block:: html</p>
+
+<pre><code>&lt;div class="buttons"&gt;
+    {% if voted %}
+        &lt;a href="http://ericflo.github.com/vote/clear/{{ item.id }}/" class="flojax" rel="buttons"&gt;Clear your vote&lt;/a&gt;
+    {% else %}
+        &lt;a href="http://ericflo.github.com/vote/up/{{ item.id }}/" class="flojax" rel="buttons"&gt;Vote up&lt;/a&gt;
+        &lt;a href="http://ericflo.github.com/vote/down/{{ item.id }}/" class="flojax" rel="buttons"&gt;Vote down&lt;/a&gt;
+    {% endif %}
+    {% if favorited %}
+        &lt;a href="http://ericflo.github.com/favorite/{{ item.id }}/" class="flojax" rel="buttons"&gt;Add to your favorites&lt;/a&gt;
+    {% else %}
+        &lt;a href="http://ericflo.github.com/unfavorite/{{ item.id }}/" class="flojax" rel="buttons"&gt;Remove from your favorites&lt;/a&gt;
+    {% endif %}
+&lt;/div&gt;
+</code></pre>
+
+<p>That's it!  At this point, all of the click events that happen on these links
+will be changed into POST requests, and the response from the server will be
+inserted into the DOM in place of this div with the class of "buttons".  If you
+didn't catch it, all that was done was to add the "flojax" class onto each of
+the links, and add a rel attribute that refers to the class of the parent node
+in the DOM to be replaced--in this case, "buttons".</p>
+
+<p>Of course, there needs to be a server side component to this strategy, so that
+instead of rendering the whole page, the server just renders the fragment.  Most
+modern Javascript frameworks add a header to the request to let the server know
+that the request was made asynchronously from Javascript.  Here's how the code
+on the server to handle the flojax-style request might look (in a kind of
+non-web-framework-specific Python code):</p>
+
+<p>.. code-block:: python</p>
+
+<pre><code>def vote(request, direction, item_id):
+    item = get_item(item_id)
+
+    if direction == 'clear':
+        clear_vote(request.user, item)
+    elif direction == 'up':
+        vote_up(request.user, item)
+    elif direction == 'down':
+        vote_down(request.user, item)
+
+    context = {'voted': direction != 'clear', 'item': item}
+
+    if request.is_ajax():
+        return render_to_response('fragments/buttons.html', context)
+
+    # ... the non-ajax implementation details go here
+
+    return render_to_response('items/item_detail.html', context)
+</code></pre>
+
+<p>There are several advantages to writing your request handlers in this way.
+First, note that we were able to totally reuse the same templating logic from
+before--we just render out the fragment instead of including it in a larger
+template.  Second, we have provided a graceful degradation path where users
+without javascript are able to interact with the site as well, albeit with a
+worse user experience.</p>
+
+<p>That's really all there is to writing web applications using the flojax
+strategy.</p>
+
+<h2>Implementation Details</h2>
+
+<p>I don't believe that the Javascript code for this method can be easily reused,
+because each web application tends to have a different way of showing errors and
+other such things to the user.  In this post, I'm going to provide a reference
+implementation (using jQuery) that can be used as a starting point for writing
+your own versions.  The bulk of the work is done in a function that is called on
+every page load, called <code>flojax_init</code>.</p>
+
+<p>.. code-block:: javascript</p>
+
+<pre><code>function flojax_clicked() {
+    var link = $(this);
+    var parent = link.parents('.' + link.attr('rel'));
+
+    function successCallback(data, textStatus) {
+        parent.replaceWith(data);
+        flojax_init();
+    }
+    function errorCallback(request, textStatus, errorThrown) {
+        alert('There was an error in performing the requested operation');
+    }
+
+    $.ajax({
+        'url': link.attr('href'),
+        'type': 'POST',
+        'data': '',
+        'success': successCallback,
+        'error': errorCallback
+    });
+
+    return false;
+}
+
+function flojax_init() {
+    $('a.flojax').live('click', flojax_clicked);
+}
+</code></pre>
+
+<p>There's really not a lot of code there.  It POSTS to the given URL and replaces
+the specified parent class with the content of the response, and then
+re-initializes the flojax handler.  The re-initialization could even be done in
+a smarter way, as well, by targeting only the newly inserted content.  Also, you
+might imagine that an alert message probably wouldn't be such a great user
+experience, so you could integrate error messages into some sort of Javascript
+messaging or growl-style system.</p>
+
+<h2>Extending Flojax</h2>
+
+<p>Often times you'll want to do other things on the page when the asynchronous
+request happens.  For our example, maybe there is some kind of vote counter that
+needs to be updated or some other messages that need to be displayed.</p>
+
+<p>In these cases, I have found that using hidden input elements in the fragments
+can be useful for transferring that information from the server to the client.
+As long as the value in the hidden elements adheres to some predefined structure
+that your client knows about (it could even be something like JSON if you need
+to go that route).</p>
+
+<p>If what you want can't be done by extending the fragments in this way, then
+flojax isn't the right strategy for that particular feature.</p>
+
+<h2>Limitations</h2>
+
+<p>This technique cannot solve all of the world's problems.  It can't even solve
+all of the problems involved in writing an AJAX-style web application.  It can,
+however, handle a fair amount of simple cases where all you want to do is
+quickly set up a way for a user's action to replace content on a page.</p>
+
+<p>Some specific examples of things that flojax can't help with are if a user
+action can possibly update many items on a page, or if something needs to happen
+without a user clicking on a link.  In these situations, you are better off
+coding a custom solution instead of trying to shoehorn it into the flojax
+workflow.</p>
+
+<h2>Conclusion</h2>
+
+<p>Writing AJAX-style web applications is usually tedious, but using the techniques
+that I've described, a large majority of the tedious work can be reduced.  By
+using the same template code for rendering the page initially as with subsequent
+asynchronous requests, you ensure that code is not duplicated.  By rendering HTML
+fragments, the client doesn't have to go through the effort of parsing the
+output and converting the result into correct DOM objects.  Finally, by using a
+few unobtrusive conventions (like the <code>rel</code> attribute and the <code>flojax</code>
+class), the Javascript code that a web application developer writes is able to
+be reused again and again.</p>
+
+<p>I don't believe that any of the details that I'm describing are new.  In fact,
+people have been doing most of these things for years.  What I think may in fact
+be new is the generalization of the sum of these techniques in this way.  It's
+still very much a work in progress, though.  As I use flojax more and more, I
+hope to find not only places where it can be extended to cover more use cases,
+but also its limitations and places where it makes more sense to use another
+approach.</p>
+
+<p>What do you think about this technique?  Are you using any techniques like this
+for your web applications?  If so, how do they differ from what I've described?
+</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Tagging cache keys for O(1) batch invalidation]]></title>
+    <link href="http://ericflo.github.com/blog/2009/03/01/tagging-cache-keys-o1-batch-invalidation/"/>
+    <updated>2009-03-01T20:46:37-08:00</updated>
+    <id>http://ericflo.github.com/blog/2009/03/01/tagging-cache-keys-o1-batch-invalidation</id>
+    <content type="html"><![CDATA[<p>
+Recently I've been spending some quality time trying to decrease page load times and decrease the number of database accesses on a site I'm working on.    As you would probably suspect, that means dealing with caching.  One common thing that I need to do, however, is invalidate a large group of cache keys when some action takes place.  I've devised a pattern for doing this, and while I'm sure it's not novel, I haven't seen any recent write-ups of this technique.  The base idea is that we're going to add another thin cache layer, and use the value from that first layer in the key to the second layer.</p>
+
+<p>First, let me give a concrete example of the problem that I'm trying to solve.  I'm going to use Django/Python from here on in, but you could substitute anything else, as this pattern should work across other frameworks and even other languages.</p>
+
+<p>.. code-block:: python</p>
+
+<pre><code>import datetime
+from django.db import models
+
+class Favorite(models.Model):
+    user = models.ForeignKey(User)
+    item = models.ForeignKey(Item)
+    date_added = models.DateTimeField(default=datetime.datetime.now)
+
+    def __unicode__(self):
+        return u'%s has favorited %s' % (self.user, self.item)
+</code></pre>
+
+<p>Given this model, now let's say that we have a function that gets the Favorite instances for a given user, which might look like this:</p>
+
+<p>.. code-block:: python</p>
+
+<pre><code>def get_favorites(user, start=None, end=None):
+    faves = Favorite.objects.filter(user=user)
+    return list(faves[start:end])
+</code></pre>
+
+<p>There's not much here yet--we're simply filtering to only include the Favorite instances for the given user, slicing it based on the given start and end numbers, and forcing evaluation before returning a list.  Now let's start thinking about how we will cache this.  We'll start by just implementing a naive cache strategy, which in this case simply means that the cache is never invalidated:</p>
+
+<p>.. code-block:: python</p>
+
+<pre><code>from django.core.cache import cache
+
+def get_favorites(user, start=None, end=None):
+    key = 'get_favorites-%s-%s-%s' % (user.id, start, end)
+    faves = cache.get(key)
+    if faves is not None:
+        return faves
+    faves = Favorite.objects.filter(user=user)[start:end]
+    cache.set(key, list(faves), 86400 * 7)
+    return faves
+</code></pre>
+
+<p>Now we come to the hard part: how do we invalidate those cache keys?  It's especially tricky because we don't know exactly what keys have been created.  What combinations of start/end have been given? We could invalidate all combinations of start/end up to some number, but that's horribly inefficient and wasteful.  So what do we do?  My solution is to introduce another layer.  Let me explain with code:</p>
+
+<p>.. code-block:: python</p>
+
+<pre><code>import uuid
+from django.core.cache import cache
+
+def favorite_list_hash(user):
+    key = 'favorite-list-hash-%s' % (user.id,)
+    cached_key_hash = cache.get(key)
+    if cached_key_hash:
+        key_hash = cached_key_hash
+    else:
+        key_hash = str(uuid.uuid4())
+        cache.set(key, key_hash, 86400 * 7)
+    return (key_hash, not cached_key_hash)
+</code></pre>
+
+<p>Essentially what this gives us is a temporary unique identifier for each user, that's either stored in cache or generated and stuffed into the cache.  How does this help?  We can use this identifier in the <em>keys</em> to the <code>get_favorites</code> function:</p>
+
+<p>.. code-block:: python</p>
+
+<pre><code>from django.core.cache import cache
+
+def get_favorites(user, start=None, end=None):
+    key_hash, created = favorite_list_hash(user)
+    key = 'get_favorites-%s-%s-%s-%s' % (user.id, start, end, key_hash)
+    if not created:
+        faves = cache.get(key)
+        if faves is not None:
+            return faves
+    faves = Favorite.objects.filter(user=user)[start:end]
+    cache.set(key, list(faves), 86400 * 7)
+    return faves
+</code></pre>
+
+<p>As you can see, the first thing we do is grab that hash for the user, then we use it as the last part of the key for the function.  The whole <code>if not created</code> thing is just an optimization that helps to avoid cache fetches when we know they will fail.  Here's the great thing now: invalidating all of the different cached versions of <code>get_favorite</code> for a given user is a single function call:</p>
+
+<p>.. code-block:: python</p>
+
+<pre><code>from django.core.cache import cache
+
+def clear_favorite_cache(user):
+    cache.delete('favorite-list-hash-%s' % (user.id,))
+</code></pre>
+
+<p>By deleting that single key, the next time <code>get_favorites</code> is called, it will call <code>favorite_list_hash</code> which will result in a cache miss, which will mean it will generate a new unique identifier and stuff it in cache, meaning that all of the keys for <code>get_favorites</code> are instantly different.  I think that this is a powerful pattern that allows for coarser-grained caching without really sacrificing much of anything.</p>
+
+<p>There is one aspect of this technique that some people will not like: it leaves old cache keys around taking up memory.  I don't consider this a problem because memory is cheap these days and Memcached is generally smart about evicting the least recently used data.</p>
+
+<p>I'm interested though, since I don't see people posting much about nontrivial cache key generation and invalidation.  How are you doing this type of thing?  Are most people just doing naive caching and calling that good enough?
+</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[2008 in Review & 2009 Goals]]></title>
+    <link href="http://ericflo.github.com/blog/2009/01/02/2008-review-2009-goals/"/>
+    <updated>2009-01-02T19:19:17-08:00</updated>
+    <id>http://ericflo.github.com/blog/2009/01/02/2008-review-2009-goals</id>
+    <content type="html"><![CDATA[<p>
+Yesterday was the day of "2008 in review" posts.  I really enjoyed reading over
+what people had accomplished during the year, and what they planned on doing in
+the new year.  I hadn't planned on writing this post, but for some reason I'm
+doing it anyway.  So here goes, not much technical stuff ahead, so if personal
+stuff bores you then click away now.</p>
+
+<h2>2008 in Review</h2>
+
+<p>What a fantastic year.  What a crazy year.  I don't think there's ever been a
+year in my life so filled with change.  For starters, I...</p>
+
+<ul>
+<li>Learned Erlang</li>
+<li>Joined Twitter<em> and FriendFeed</em></li>
+<li>Drove 3 hours to caucus in Iowa (what a strange ritual that is!)</li>
+<li>Met some<em> really</em> cool<em> people</em> at <code>PyCon 2008</code>_</li>
+<li>Became involved in the Pinax_ project</li>
+<li>Wrote and released my first 7 open source Django applications</li>
+<li>Guest hosted <code>a podcast</code>_</li>
+<li>Learned how to use Git_</li>
+<li>Graduated from college with bachelor's degree in Computer Science</li>
+<li>Accepted a job offer with <code>Mochi Media</code>_</li>
+<li>Moved to San Francisco</li>
+<li>Released a series of <code>14 screencasts</code>_ building a project from the ground up</li>
+<li>Wrote <code>one blog post every day</code>_ in the month of November</li>
+<li>Quit drinking soda</li>
+<li>Participated in the most notable election of my lifetime</li>
+<li>Started a <code>Django San Francisco local user group</code>_</li>
+</ul>
+
+
+<p>...but those are just the highlights.  It's been really interesting
+transitioning from college student to the real world.  Somehow I thought that
+not having homework would mean that I would have more free time to do other
+things, but it turns out that you actually have less time if you have a job to
+go to every day.</p>
+
+<p>But I don't think that being a student ever stopped.  I've learned so much from
+my coworkers: different ways of thinking about problems, theoretical problems,
+real world challenges, prioritizing work, RESTful principles of the web, and
+a whole lot about databases.  This is what I like about this industry.  However
+much you know, there's more to learn, and people are generally willing to share
+their expertise with you.</p>
+
+<p>I've learned a lot about what it means to be part of a community; part of a
+company.  I've learned a lot about life, this year.</p>
+
+<p>But the learning's not over.</p>
+
+<h2>Goals for 2009</h2>
+
+<p>While I'm weary of posting my goals for all the world to see, I think it's
+important to codify them and make them public.  That way, maybe it'll compel me
+to actually follow through on these goals.  I've tried to keep them realistic
+and with a few exceptions, specific enough to be testable.  Without further ado,
+here are my goals for 2009 (in no particular order):</p>
+
+<ul>
+<li>Learn a concatenative/stack-based language</li>
+<li>Meet new people, especially those that I wouldn't normally meet</li>
+<li>Write a virtual machine</li>
+<li>Double both my blog and Twitter followership</li>
+<li>Be more consistent in my contributions to the Pinax project, instead of helping in fits and spurts like I currently am</li>
+<li>Post at least twice a month to this blog</li>
+<li>Release some non-open source software, and maybe even charge for it</li>
+<li>Work out an average of 2 times a week or more over the whole year</li>
+<li>Learn Processing_</li>
+<li>Learn about investments, and invest 10% of my earnings each month</li>
+<li>Give a talk at a conference</li>
+</ul>
+
+
+<p>I think that all of these goals are achievable.  In fact, I'd like to do more
+than just what I listed here, but these are the ones I'm willing to commit to.
+Frankly, I can't wait to see how this year shapes up.  If it turns out to be
+anything like last year, I'm in for quite a ride.</p>
+
+<p>.. <em>Twitter: http://twitter.com/ericflo
+.. </em>FriendFeed: http://friendfeed.com/ericflo
+.. <em>some: http://lazypython.blogspot.com/
+.. </em>really: http://oebfare.com/
+.. <em>cool: http://blog.michaeltrier.com/
+.. </em>people: http://jtauber.com/
+.. <em><code>PyCon 2008</code>: http://us.pycon.org/2008/about/
+.. </em>Pinax: http://pinaxproject.com/
+.. <em><code>a podcast</code>: http://thisweekindjango.com/
+.. </em>Git: http://git.or.cz/
+.. <em><code>Mochi Media</code>: http://www.mochimedia.com/
+.. </em><code>14 screencasts</code>: http://thisweekindjango.com/screencasts/
+.. <em><code>one blog post every day</code>: http://www.eflorenzano.com/blog/archive/2008/11/
+.. </em><code>Django San Francisco local user group</code>: http://www.meetup.com/The-San-Francisco-Django-Meetup-Group/
+.. _Processing: http://processing.org/
+</p>
+]]></content>
+  </entry>
+  
+</feed>

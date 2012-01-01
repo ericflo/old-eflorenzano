@@ -1,0 +1,479 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: CouchDB | Eric Florenzano's Blog]]></title>
+  <link href="http://ericflo.github.com/blog/categories/couchdb/atom.xml" rel="self"/>
+  <link href="http://ericflo.github.com/"/>
+  <updated>2011-12-31T23:14:37-08:00</updated>
+  <id>http://ericflo.github.com/</id>
+  <author>
+    <name><![CDATA[Eric Florenzano]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Why CouchDB Rocks]]></title>
+    <link href="http://ericflo.github.com/blog/2008/11/29/why-couchdb-rocks/"/>
+    <updated>2008-11-29T14:31:31-08:00</updated>
+    <id>http://ericflo.github.com/blog/2008/11/29/why-couchdb-rocks</id>
+    <content type="html"><![CDATA[<p>
+Last week I wrote an article called <code>Why CouchDB Sucks</code>_, which many people
+correctly said should have been called "What CouchDB Sucks at Doing".  Nearly
+everyone pointed out that it was not designed to do the things that I was
+mentioning in the article.  This time around, I'd like to focus on some of the
+features about CouchDB that I think absolutely rock.</p>
+
+<h2>CouchDB is schema-free</h2>
+
+<p>One of the most annoying parts of dealing with a traditional SQL database is
+that you invariably need to change your schemata. This can be done usually with
+some <code>ALTER TABLE</code> statements, but other times it requires scripts and careful
+use of transactions, etc.  In CouchDB, the solution is to just start using your
+new schema.  No migration needed.  If it's a significant change, then you might
+need to change your views slightly, but nothing as annoying as what would be
+needed with SQL.</p>
+
+<p>The other advantage of having no schema is that some types of data just aren't
+well suited to having a strict schema enforced upon them.  My CouchDB-based
+<code>lifestreaming application</code>_ is a perfect example of the inherent flexibility of
+CouchDB's schemaless design is that all kinds of disparate information can be
+stored alongside each other and sorted and aggregated.  There's also no reason
+that you need to use its schema-free nature this way.  You could, for example,
+manually enforce a schema for certain databases, if needed.</p>
+
+<h2>CouchDB is RESTFUL HTTP</h2>
+
+<p>When is the last time you tried to install MySQL or PostgreSQL drivers for your
+web development platform of choice?  If you're using <code>apt-get</code> it's not so
+bad, but for just about every other platform, it's a total pain to get these
+drivers up and running.  With CouchDB, there's no need.  It speaks HTTP.  Want
+to create a new database?  Send an HTTP PUT request.  Want to retrieve a
+document from the database?  Send an HTTP GET.  Want to delete a database?  Send
+an HTTP DELETE.  As you can see, the API is quite straightforward and if a
+client library doesn't already exist for your language of choice (hint:
+<code>it does</code>_), then it will take you only a few minutes to write one.</p>
+
+<p>But the best part about this is that we already have so many amazing and
+well-tested tools to deal with HTTP.  For example, let's say you want to store
+one database on one server and another database on another server?  It's as
+simple as setting up nginx<em> or perlbal</em> or varnish<em> as a reverse proxy and
+having each URL go to a different machine.  The same thing goes for transparent
+caching, etc.  Oh, and also, web browsers know how to speak HTTP, too.  You
+could easily write <code>whole web apps served only from CouchDB</code></em>.</p>
+
+<h2>Map/Reduce</h2>
+
+<pre><code>Map/Reduce will kill every traditional data warehousing vendor in the
+market.  Those who adapt to it as a design/deployment pattern will survive,
+the rest won't.
+</code></pre>
+
+<p>Sounds like someone from Google must have said this, or some Hadoop evangelist,
+or maybe someone who works on CouchDB.  In fact, this comes from <code>Brian Aker</code><em>,
+a MySQL hacker who was Director of Architecture at MySQL AB and is now
+developing the open source fork of MySQL named Drizzle</em> (also a very exciting
+project in its own right).  He's right, too.  Google was on to something in a
+big way when they unveiled their whitepaper on <code>Map/Reduce</code>_.  It's not the
+be-all end-all for processing and generating large data sets, but it certainly
+is a proven technology for that task.</p>
+
+<p>Brian_ talks about massively multi-core machines which seem the inevitability
+these days, and we will need to start writing logic that is massively
+parallelizable to take advantage of these masses of CPUs.  Map/Reduce is one
+way to force ourselves to write logic that can be parallelized.  It is a good
+choice for any new database system to adopt for this reason, and that's why
+it's great to see that CouchDB has adopted it.  It's just one more reason why
+CouchDB rocks.</p>
+
+<h2>So much more</h2>
+
+<p>I could talk about how it can handle 2,500 concurrent requests in 10mb of
+resident memory usage.  I could talk about its pluggable view server backends,
+so that instead of writing views in JavaScript you can write them in Python or
+any other language (given the correct bindings).  I could talk about CouchDBX_,
+which makes installing it on the Mac, quite literally, one click.  I could even
+talk about how it's written in Erlang, with an eye towards scalability.  Or
+maybe about how its database store is append-only.</p>
+
+<p>I could talk about any of those things, and more.  It just comes down to this:
+CouchDB rocks.  But don't take my word for it--try it out for yourself!</p>
+
+<p>.. <em><code>Why CouchDB Sucks</code>: http://www.eflorenzano.com/blog/post/why-couchdb-sucks/
+.. </em>CouchDB: http://incubator.apache.org/couchdb/
+.. <em><code>lifestreaming application</code>: http://github.com/ericflo/django-couch-lifestream/tree/master
+.. </em><code>it does</code>: http://wiki.apache.org/couchdb/Basics
+.. <em>nginx: http://wiki.codemongers.com/Main
+.. </em>perlbal: http://www.danga.com/perlbal/
+.. <em>varnish: http://varnish.projects.linpro.no/
+.. </em><code>whole web apps served only from CouchDB</code>: http://jchris.mfdz.com/code/2008/11/my_couch_or_yours<em><em>shareable_ap
+.. </em><code>Brian Aker</code>: http://krow.livejournal.com/622006.html
+.. </em>Drizzle: http://drizzle.org/wiki/Main_Page
+.. <em><code>Map/Reduce</code>: http://labs.google.com/papers/mapreduce.html
+.. </em>Brian: http://krow.livejournal.com/622006.html
+.. _CouchDBX: http://jan.prima.de/~jan/plok/archives/142-CouchDBX-Revival.html
+</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Why CouchDB Sucks]]></title>
+    <link href="http://ericflo.github.com/blog/2008/11/23/why-couchdb-sucks/"/>
+    <updated>2008-11-23T11:14:12-08:00</updated>
+    <id>http://ericflo.github.com/blog/2008/11/23/why-couchdb-sucks</id>
+    <content type="html"><![CDATA[<p>
+CouchDB_ really sucks at doing some things.  That should come as no surprise, as
+every technology has its advantages and its drawbacks.  The thing is, when a new
+technology comes out that looks really promising and cool, everyone writes about
+all of its advantages, and none of its drawbacks.  Then, people start to use it
+for things it isn't very good at, and they are disappointed.  In that spirit, I
+would like to talk about some of the things that (in my experience) CouchDB is
+absolutely not good at, and that you shouldn't try to use it for.</p>
+
+<p>First, it doesn't support transactions in the way that most people typically
+think about them.  That means, enforcing uniqueness of one field across all
+documents is not safe.  A classic example of this would be enforcing that a
+username is unique.  You can check whether a username exists, and if not, create
+a new one.  There is no guarantee, however, that between the time that your app
+has checked for its existence, and the time that you write the new user to the
+database, that some other instance of your app hasn't beat you to that write.</p>
+
+<p>Another consequence of CouchDB's inability to support the typical notion of a
+transaction is that things like inc/decrementing a value and saving it back are
+also dangerous.  Fortunately there aren't many instances that you would want to
+simply inc/decrement some value where you couldn't just store the individual
+documents separately and aggregate them with a view.</p>
+
+<p>Secondly, CouchDB sucks at dealing with relational data.  If your data makes a
+lot of sense to be in <code>3rd normal form</code>_, and you try to follow that form in
+CouchDB, you're going to run into a lot of trouble.  Yes, it's probably possible
+with tricks with view collations, but you're constantly going to be fighting
+with the system.  If your data can be reformatted to be much more denormalized,
+then CouchDB will work fine.</p>
+
+<p>Thirdly, CouchDB sucks at being a data warehouse.  In every data warehouse that
+I've ever run into, people have all kinds of different requests for how to slice
+the data.  And they all want it to be done, yesterday.  The problem with this is
+that temporary views in CouchDB on large datasets are really slow, because it
+can't use any of its normal indexing tricks.  If you by some chance have a very
+rigid way of looking at your data, using CouchDB and permanent views could work
+quite well.  But in 99% of cases, a <code>Column-Oriented Database</code>_ of some sort is
+a much better tool for the data warehousing job.</p>
+
+<p>So does CouchDB suck?  No, it's by far my favorite new database technology on
+the block.  What it's good at doing, it's <em>great</em> at doing, but that doesn't
+mean that it should be used for everything.  With the kinds of scaling issues
+that we're seeing with today's highly-interactive web applications, we need to
+make use of a broad range of technologies, and use each one for its greatest
+strengths.  That's called using the right tool for the job, and that's never
+gone out of style.</p>
+
+<p>.. <em>CouchDB: http://couchdb.org/
+.. </em><code>3rd normal form</code>: http://en.wikipedia.org/wiki/Third_normal_form
+.. _<code>Column-Oriented Database</code>: http://en.wikipedia.org/wiki/Column-oriented_DBMS
+</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Are pure client-side web apps the wave of the future?]]></title>
+    <link href="http://ericflo.github.com/blog/2008/11/21/are-pure-client-side-web-apps-wave-future/"/>
+    <updated>2008-11-21T19:11:49-08:00</updated>
+    <id>http://ericflo.github.com/blog/2008/11/21/are-pure-client-side-web-apps-wave-future</id>
+    <content type="html"><![CDATA[<p>
+It seems that the world of computing is always oscillating between offloading
+more work to the server, and offloading more work to the client.  In the very
+early days of dumb terminals, we had most of the actual computation being done
+on big mainframes.  Then personal computers became more powerful, allowing for
+much richer applications to be created.</p>
+
+<p>With the advent of the internet, the landscape of computing architectures
+shifted again to being done focused on the server.  Now, however, JavaScript has
+become more powerful.  Combined with things like SVG and the canvas tag, we can
+create extremely rich applications that take place solely in the browser.</p>
+
+<p>Projects like CouchDB<em> are even starting to open the door for
+<code>truly peer-to-peer web applications</code></em>.  With all of this taking place, it seems
+that client-side web applications are poised to see some fairly strong growth.
+This is especially evident now that companies as big as Google seem interested
+in the idea, with its <code>Google Gears</code>_ product that allows you to "work offline".
+But there are certain things that need to be satisfied first.</p>
+
+<p>We need a way of enforcing security across these apps.  It looks like some
+combination of OpenID and OAuth are going to be the winners in this space, but
+I've never seen a seamless implementation of either of these protocols, even by
+the companies most invested in the technology.  There is a lot of work to go on
+usability before authentication and authorization are ubiquitous through these
+open protocols.</p>
+
+<p>We also need to standardize more on the data interchange formats that we use to
+shuttle information back and forth between these different apps.  Atom_ goes a
+long way towards describing the data that we use, but its adoption is nowhere
+near ubiquitous, and some sites still rely on older, more outdated, RSS
+syndication formats that aren't quite up to the task.</p>
+
+<p>But even if we standardize on some application platform (be it Google Gears or
+CouchDB or some other container), security, and data interchange formats, there
+are certain things that need to be considered.  For one, there are some
+applications that just aren't practical to be implemented on the client.  Video
+editing comes to mind (and I would know, considering I interned for eyespot_, a
+company which was attempting to do just that).</p>
+
+<p>Another concern is that, as we've seen with the emergence of standards for CSS
+and HTML, a certain amount of rigidness is good, but a strict conformist
+attitude leads to significantly stifled innovation.  If you were to write an app
+that doesn't fall within the boundaries of what's possible given the agreed-upon
+standards, would you still be able to go forward with the development of the
+app, or would you run into resistance from those who have a stake in those
+standards?</p>
+
+<p>In all, I have a feeling that we are going to move more and more to a hybrid
+approach, with much more logic being computed on the side of the client
+(especially in terms of visual components and interactivity), and that much more
+of the server side is going to be involved in slicing and serving up just the
+raw data.  We can see this happening today with technologies like AJAX being
+touted as the centerpiece of some "Web Two Point Oh" sites.  I'm excited to see
+where this will all go, and more than excited that, being a developer during
+this time, get to help shape that direction.</p>
+
+<p>.. <em>CouchDB: http://incubator.apache.org/couchdb/
+.. </em><code>truly peer-to-peer web applications</code>: http://jchris.mfdz.com/code/2008/11/my_couch_or_yours<em><em>shareable_ap
+.. </em><code>Google Gears</code>: http://gears.google.com/
+.. </em>Atom: http://en.wikipedia.org/wiki/Atom<em>(standard)
+.. </em>eyespot: http://eyespot.com/
+</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Using CouchDB with Django]]></title>
+    <link href="http://ericflo.github.com/blog/2008/11/09/using-couchdb-django/"/>
+    <updated>2008-11-09T21:59:59-08:00</updated>
+    <id>http://ericflo.github.com/blog/2008/11/09/using-couchdb-django</id>
+    <content type="html"><![CDATA[<p>
+Ahhh, Django<em>: my favorite web framework.  And CouchDB</em>: my favorite new
+database technology.  How can I pair these two awesomes together to make an
+awesome-er?</p>
+
+<p>One of the features that I would like to add to this site when it's time for an
+upgrade is a lifestream.  It seems like everyone is doing it these days (isn't
+this great logic!), so I probably should too.  Originally this was going to be
+written in the standard Django way--write some models, fill it with data, and
+slice and dice that data to make it pretty.</p>
+
+<p>After thinking about it, I decided not to go that route.  Why?  Well, let's go
+over it: There needs to be a Twitter<em> model, that's for sure.  I also want a
+Pownce</em> model, and a Flickr_ model.  Already this is becoming tedious!  At this
+point we have two options: continue creating these individual models and fill
+them with data, or try to find the common bits and group them into Ubermodels
+of some sort, with some type of field to use as a discriminator.  Ugh.</p>
+
+<p>This is the perfect use case for a schemaless database, and CouchDB<em> fits that
+bill just perfectly.  Plus its <code>python support</code></em> is actually quite mature, and
+running it on a mac is, quite literally, <code>one click</code><em>.  So now that we've all
+agreed (we all agree, right?) that we want to use CouchDB</em> with Django_, how
+can we make it happen?</p>
+
+<p>First let's set some database settings:</p>
+
+<p>.. code-block:: python</p>
+
+<pre><code>COUCHDB_HOST = 'http://localhost:5984/'
+TWITTER_USERNAME = 'ericflo'
+</code></pre>
+
+<p>So far, so good.  Now let's write some initialization code and put it in to an
+application in the <code>__init__.py</code>:</p>
+
+<p>.. code-block:: python</p>
+
+<pre><code>from couchdb import client
+from django.conf import settings
+
+class CouchDBImproperlyConfigured(Exception):
+    pass
+
+try:
+    HOST = settings.COUCHDB_HOST
+except AttributeError:
+    raise CouchDBImproperlyConfigured("Please ensure that COUCHDB_HOST is " + \
+        "set in your settings file.")
+
+DATABASE_NAME = getattr(settings, 'COUCHDB_DATABASE_NAME', 'couch_lifestream')
+COUCHDB_DESIGN_DOCNAME = getattr(settings, 'COUCHDB_DESIGN_DOCNAME',
+    'couch_lifestream-design')
+
+if not hasattr(settings, 'couchdb_server'):
+    server = client.Server(HOST)
+    settings.couchdb_server = server
+
+if not hasattr(settings, 'couchdb_db'):
+    try:
+        db = server.create(DATABASE_NAME)
+    except client.ResourceConflict:
+        db = server[DATABASE_NAME]
+    settings.couchdb_db = db
+</code></pre>
+
+<p>In this code, we're loading the CouchDB client and either creating or
+connecting to a database.  We do a bit of error checking to ensure that if we
+forgot to add <code>COUCHDB_HOST</code> in our settings file, it will yell at us. So how
+do we use this?  Let's write some data importing stuff!</p>
+
+<p>.. code-block:: python</p>
+
+<pre><code>try:
+    import simplejson as json
+except ImportError:
+    import json
+
+TWITTER_USERNAME = getattr(settings, 'TWITTER_USERNAME', None)
+
+fetched = urlopen('http://twitter.com/statuses/user_timeline.json?id=%s' % (
+    TWITTER_USERNAME,)).read()
+data = json.loads(fetched)
+map_fun = 'function(doc) { emit(doc.id, null); }'
+for item in data:
+    item['item_type'] = 'twitter'
+    if len(db.query(map_fun, key=item['id'])) == 0:
+        db.create(item)
+</code></pre>
+
+<p>This can go inside a Django management command or in a standalone script.
+Essentially what we're doing is loading the timeline for a user, and then for
+each item in that response we're setting the <code>item_type</code> to 'twitter'.  Then
+we're checking to see if an item with that current twitter id already exists,
+and if not, we're creating it.</p>
+
+<p>Now we need a way to query this data.  In CouchDB<em>, the way to query for data is
+using views</em>.  Views are stored in the database, so they can be entered
+manually, but I much prefer to manage views programmatically.  Thankfully,
+Python's CouchDB library and Django give us all we need to make this very, very
+easy:</p>
+
+<p>.. code-block:: python</p>
+
+<pre><code>from django.db.models import signals
+from couch_lifestream import models, db, COUCHDB_DESIGN_DOCNAME
+from couchdb.design import ViewDefinition
+from textwrap import dedent
+
+by_date = ViewDefinition(COUCHDB_DESIGN_DOCNAME, 'by_date',
+    dedent("""
+    function(doc) {
+        emit(doc.couch_lifestream_date, null);
+    }
+"""))
+
+def create_couchdb_views(app, created_models, verbosity, **kwargs):
+    ViewDefinition.sync_many(db, [by_date])
+signals.post_syncdb.connect(create_couchdb_views, sender=models)
+</code></pre>
+
+<p>Make sure that this is placed somewhere that will be loaded when Django's
+<code>manage.py</code> is called.  In this case, I put it in the <code>__init__.py</code> file
+under <code>management/</code>.  What we're doing is creating two views--one which is
+keyed by the <code>item_type</code> (we set this earlier to be 'twitter'), and another
+which is keyed simply by date.  When we run <code>python manage.py syncdb</code>, these
+views will automatically be re-synced with the database.  Using this method, we
+are able to manage these views quickly and easily, and distribute them in a
+reusable way.</p>
+
+<p>Now let's create some Django views so that we can visualize this data:</p>
+
+<p>.. code-block:: python</p>
+
+<pre><code>from couch_lifestream import db, COUCHDB_DESIGN_DOCNAME
+from django.shortcuts import render_to_response
+from django.template import RequestContext
+from django.http import Http404
+from couchdb import client
+
+def item(request, id):
+    try:
+        obj = db[id]
+    except client.ResourceNotFound:
+        raise Http404
+    context = {
+        'item': obj,
+    }
+    return render_to_response(
+        'couch_lifestream/item.html',
+        context,
+        context_instance=RequestContext(request)
+    )
+
+def items(request):
+    item_type_viewname = '%s/by_date' % (COUCHDB_DESIGN_DOCNAME,)
+    lifestream_items = db.view(item_type_viewname, descending=True)
+    context = {
+        'items': list(lifestream_items),
+    }
+    return render_to_response(
+        'couch_lifestream/list.html',
+        context,
+        context_instance=RequestContext(request)
+    )
+</code></pre>
+
+<p>The <code>item</code> view is fairly self-explanatory.  We query the db for the object of
+the specified id, and if it doesn't exist, we throw a 404.  If it does exist, we
+throw it into the context and let the template render the page.  The <code>items</code>
+view is slightly more interesting.  In this case, we're using that CouchDB view
+that we created to query the database by date, and passing that list into the
+context.</p>
+
+<p>Obviously there's a ton more that we could cover, but these basic building
+blocks that I've demonstrated are enough to get you started.  After this it's
+mostly all presentational work.  I've open sourced all of the code that has been
+written so far for the upcoming lifestream portion of this site, even though
+right now it only supports Twitter<em> and Pownce</em>.  I plan on continuing work
+on it to support all of the services that I use.  You can track my progress
+at the <code>project's page</code>_.</p>
+
+<p>I'll make sure to blog about this again once the project is more mature, but for
+now it should be fun to play around with.  Are you using CouchDB with Django?
+If yes, then how are you dealing with that interaction?</p>
+
+<p>.. <em>Django: http://www.djangoproject.com/
+.. </em>CouchDB: http://incubator.apache.org/couchdb/
+.. <em>Twitter: http://twitter.com/
+.. </em>Pownce: http://pownce.com/
+.. <em>Flickr: http://flickr.com/
+.. </em><code>python support</code>: http://code.google.com/p/couchdb-python/
+.. <em><code>one click</code>: http://jan.prima.de/~jan/plok/archives/142-CouchDBX-Revival.html
+.. </em>views: http://wiki.apache.org/couchdb/Views
+.. _<code>project's page</code>: http://github.com/ericflo/django-couch-lifestream/tree/master
+</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Revolutionary Ideas]]></title>
+    <link href="http://ericflo.github.com/blog/2008/05/15/revolutionary-ideas/"/>
+    <updated>2008-05-15T09:18:44-07:00</updated>
+    <id>http://ericflo.github.com/blog/2008/05/15/revolutionary-ideas</id>
+    <content type="html"><![CDATA[<p>
+Everyone has had the experience of hearing about something new and thinking: "That makes so much sense!  Why didn't I think of that?"  For programmers that keep up on open source software, new projects that fit the previous description attract not only our admiration, but we want to be a part of this new idea.  We become involved and contribute and try to push that new software into any new direction that we can; learning from it and evolving it along the way.</p>
+
+<p>One such idea that fits my description perfectly is Processing.js<em>.  Not to belittle <code>John Resig</code></em>'s hard work in actually developing the initial codebase, but the <strong>idea</strong> is what is so much more important.  Thousands of developers knew of both the <code>Processing language</code><em> and about the <code>canvas tag</code></em> which is coming to prevalence, but it was a revolutionary idea to notice that the pairing of the two was "both possible and desirable to do in the first place", as Reddit<em> commenter MarshallBanana</em> <code>pointed out</code>_.</p>
+
+<p>As a community we need both the revolutionary ideas and the evolutionary changes so that we get great software that solves problems in new and innovative ways, but also that doesn't have bugs and provides a polished experience.  But I think that we've become too bogged down in the evolutionary.  We get so wrapped up in others' ideas--so interested in polish and shine--that seldom few think outside the boundary of the incremental.  I won't claim to be the exception here, and rightly can't claim to be, but it's something that's worrisome nonetheless.</p>
+
+<p>I think that a big part of it is that the open source community has gotten so wary of experimentation with well-established applications.  Why can't a development version of Firefox include a Python or Ruby interpreter alongside a JavaScript interpreter?  Why can't CSS directives for reflections be explored, or animations be built into the rendering engine?  I think that a big part of it is because we've spent so long talking about validation and standards that we forgot about that sense of wonder; that feeling of anything being possible with a bit of code and enthusiasm.</p>
+
+<p>Processing.js_, and projects like it, give me hope that revolutionary ideas are still out there.  They rekindle that sense of wonder in me.  They make me think about other things that are possible.  They make me excited about open source again.  Let's foster more and greater and better ideas, and just once in a while, eschew the incremental.</p>
+
+<p>.. <em>Processing.js: http://ejohn.org/blog/processingjs/
+.. </em><code>John Resig</code>: http://ejohn.org/
+.. <em><code>Processing language</code>: http://processing.org/
+.. </em><code>canvas tag</code>: http://en.wikipedia.org/wiki/Canvas<em>(HTML_element)
+.. </em>Reddit: http://reddit.com/
+.. <em>MarshallBanana: http://reddit.com/user/MarshallBanana/
+.. </em><code>pointed out</code>: http://reddit.com/info/6ipvz/comments/c03ygkq
+</p>
+]]></content>
+  </entry>
+  
+</feed>

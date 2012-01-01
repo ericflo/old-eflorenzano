@@ -1,0 +1,323 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>It's Caches All the Way Down - Eric Florenzano's Blog</title>
+  <meta name="author" content="Eric Florenzano">
+
+  
+  <meta name="description" content="A few years back a non-technical person asked me to explain what, exactly, the
+operating system did. I first started out by speaking in broad &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://ericflo.github.com/blog/2008/11/07/its-caches-all-way-down">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Eric Florenzano's Blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-1959803-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Eric Florenzano's Blog</a></h1>
+  
+    <h2>I am me.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:ericflo.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">It's Caches All the Way Down</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-11-07T21:52:53-08:00" pubdate data-updated="true">Nov 7<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>A few years back a non-technical person asked me to explain what, exactly, the
+operating system did.  I first started out by speaking in broad generalities,
+saying that it takes care of the basic needs of the computer and that it helps
+one thing talk to another.  But that answer wasn&#8217;t good enough.  This person
+wanted me to go into more detail.  What happens when I&#8217;m in the calculator
+application and I type 1+1 and hit enter?  What things need to happen?</p>
+<p>That really tripped me up.  It&#8217;s hard to even know where to start when someone
+who&#8217;s curious like that asks a relatively innocent question like that.  So I
+decided to just start from the basics.  &quot;A processor has these things called
+registers&quot;, I said.  &quot;And they store a tiny little amount of information, which
+they can do things with, like add and subtract.&quot;  That seemed to basically
+satisfy them, but not me.</p>
+<p>I made sure to say that, &quot;You can&#8217;t just keep everything in registers, because
+there are only a few of those.  So you have to keep some data stored
+in this place with more space for data but it&#8217;s slower.&quot;  To which they
+responded, &quot;Oh, so is that why when I add more RAM my computer gets faster?&quot;
+&quot;No,&quot; I said, &quot;this is all still on the processor.&quot;  &quot;OK, so what&#8217;s RAM then
+and why is it supposed to help?&quot; they asked.  &quot;Because we can&#8217;t store everything
+on the processor itself, because there&#8217;s not enough space for data, so we have
+to store it in this place with much more space for data, but which is slower.&quot;</p>
+<p>At this point I realized how redundant this conversation was going to get.  It&#8217;s
+the same thing for the hard drive, and (if you&#8217;re old-school) tape drive or (if
+you&#8217;re new-school) the internet.  At the same point that person seemed to get
+bored&#8211;that moment of curiosity had passed.  Computers just do their thing
+and we really didn&#8217;t have to do anything special for all of that data movement
+to take place.</p>
+<p>That&#8217;s what struck me.  When you come down to it, computers are just a waterfall
+of different caches, with systems that determine what piece of data goes where
+and when.  For the most part, in user space, we don&#8217;t care about much of that
+either.  When writing a web application or even a desktop application, we don&#8217;t
+much care whether a bit is in the register, the L1 or L2 cache, RAM, or if it&#8217;s
+being swapped to disk.  We just care that whatever system is managing that data,
+it&#8217;s doing the best it can to make our application fast.</p>
+<p>But then another thing struck me.  Most web developers <em>DO</em> have to worry about
+the cache.  We do it every day.  Whether you&#8217;re using memcached or velocity or
+some other caching system, everyone&#8217;s manually moving data from the database
+to a cache layer, and back again.  Sometimes we do clever things to make sure
+this cached data is correct, but sometimes we do some braindead things.  We
+certainly manage the cache keys ourselves and we come up with systems again and
+again to do the same thing.</p>
+<p>Does this strike anyone else as inconsistent?  For practically every cache layer
+down the chain, a system (whose algorithms are usually the result of years and
+years of work and testing) automatically determines how to best utilize that
+cache, yet we do not yet have a <strong>good</strong> system for doing that with databases.
+Why do you think that is?  Is it truly one of the two hard problems of
+computer science?  Is it impossible to do this automatically?  I honestly don&#8217;t
+have the answers, but I&#8217;m interested if you do.</p></div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Eric Florenzano</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-11-07T21:52:53-08:00" pubdate data-updated="true">Nov 7<span>th</span>, 2008</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/caching/'>Caching</a>, <a class='category' href='/blog/categories/memcached/'>Memcached</a>, <a class='category' href='/blog/categories/programming/'>Programming</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://ericflo.github.com/blog/2008/11/07/its-caches-all-way-down/" data-via="ericflo" data-counturl="http://ericflo.github.com/blog/2008/11/07/its-caches-all-way-down/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2008/11/06/secrets-django-orm/" title="Previous Post: Secrets of the Django ORM">&laquo; Secrets of the Django ORM</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2008/11/08/legacy-code/" title="next Post: Legacy Code">Legacy Code &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2011/02/16/technology-behind-convore/">The Technology Behind Convore</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/10/10/object-lesson-how-respond-criticism/">An Object Lesson in How to Respond to Criticism</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/09/27/why-node-disappoints-me/">Why node.js disappoints me</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/05/20/we-need-new-word-open/">We need a new word for "Open"</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/02/08/how-do-we-kick-our-synchronous-addiction/">How do we kick our synchronous addiction?</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("ericflo", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/ericflo" class="twitter-follow-button" data-show-count="false">Follow @ericflo</a>
+  
+</section>
+
+
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/109591387819364984777?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2011 - Eric Florenzano -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Secret Project | Eric Florenzano's Blog]]></title>
+  <link href="http://ericflo.github.com/blog/categories/secret-project/atom.xml" rel="self"/>
+  <link href="http://ericflo.github.com/"/>
+  <updated>2011-12-31T23:14:37-08:00</updated>
+  <id>http://ericflo.github.com/</id>
+  <author>
+    <name><![CDATA[Eric Florenzano]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Sphinx Search, Totally Rad Website]]></title>
+    <link href="http://ericflo.github.com/blog/2007/08/06/sphinx-search-totally-rad-website/"/>
+    <updated>2007-08-06T22:00:36-07:00</updated>
+    <id>http://ericflo.github.com/blog/2007/08/06/sphinx-search-totally-rad-website</id>
+    <content type="html"><![CDATA[<p>
+<code>Sphinx Search ROCKS!</code><em>  I'm pretty sure it'll be the solution to my MusicBrainz problems for my secret project.  I'm going to set up a simple postgres server holding the MusicBrainz database, with Sphinx Search installed, and have it index on a cron.  It'll be awesome!  After trying out Lucene</em> and its derivatives and being so underwhelmed, it's exciting to discover an app that truly seems to rock.  I'll report back on it later, but right now the indexer is 4 million queries into a 60 million query index.  Yeah, it's going to be a while.</p>
+
+<p>I've been wanting to test drive two new technologies this past week, the first is <code>Blueprint, the CSS Framework</code><em> which I saw on Digg</em> a few days ago.  I also really wanted to try some new stuff with FreeComments, including saving people's login information in the session.  I'm messing with both of those things in a side-side project related to <code>The Totally Rad Show</code>_ which I think promises to be really fun.  I've spent only a couple of hours on it, but I think it's going to be probably my first project that people end up using.</p>
+
+<p>So, <code>Stick Tuned</code>_ for a fun announcement from me in the next week or 2 weeks at the latest.  (The problem with this project is there's lots of data to enter which will take time.)</p>
+
+<p>That's it for today, a short and sweet entry into this blog-o-rama.</p>
+
+<p>.. <em><code>Sphinx Search ROCKS!</code>: http://www.sphinxsearch.com/
+.. </em>Lucene: http://lucene.apache.org/java/docs/
+.. <em><code>Blueprint, the CSS Framework</code>: http://bjorkoy.com/blueprint/index.html
+.. </em>Digg: http://www.digg.com
+.. <em><code>The Totally Rad Show</code>: http://revision3.com/trs
+.. </em><code>Stick Tuned</code>: http://revision3.com/trs/tuned
+</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Information has a Long Way to Go]]></title>
+    <link href="http://ericflo.github.com/blog/2007/07/31/information-has-long-way-go/"/>
+    <updated>2007-07-31T20:29:33-07:00</updated>
+    <id>http://ericflo.github.com/blog/2007/07/31/information-has-long-way-go</id>
+    <content type="html"><![CDATA[<p>
+I don't know how Google<em> manages to <code>do it</code></em>!  They've linked music track/artist/album to online music vendors, a deceivingly simple-sounding task which has been the bane of my existence for the last two weeks.</p>
+
+<p>Let's start with two of the big players:</p>
+
+<h2>iTunes</h2>
+
+<p>iTunes has a terrible API: You go to <code>iTunes Link Maker</code>_ and type in the keywords of your choice.  You can come up with a programmatic way to access this but it involves parsing invalid HTML.</p>
+
+<h2>Amazon</h2>
+
+<p>Amazon's API is a good programmatic interface to its own internal service, but unfortunately that service is TERRIBLE.  Take this_, for example: a CD from a wonderful band called Rodrigo y Gabriela.  One of the songs on it is named "Ixtapa", so let's do a search for "Ixtapa Rodrigo y Gabriela."  Makes sense, right?  Apparently not to Amazon's search.  In fact, amazon's search really has no concept of the song.  It's not something that they sell. Amazon knows all about album titles and artists, but not about the song itself.  This renders it useless for linking song to vendor!</p>
+
+<p>But what about open source?</p>
+
+<h2>MusicBrainz</h2>
+
+<p>So the next thing that I try is using MusicBrainz_, an open source database of music metadata, which seems to have Amazon.com linking information built right in.  However, reading through the wiki, for hours, and hours, and hours, is not fun.  They have bits and pieces from all different times of the project's lifecycle, most of which is irrelevant.  But after a while I find out that to get access to the web services, you either need to limit your requests to 1 per second (unacceptable in my case), or you have to set up your own MusicBrainz server.  OK, let's do that!</p>
+
+<p>Oh wait, they forgot to mention that it's the most rediculous dependency-ridden piece of bloatware ever.  It's so bad that they don't even really have a guide on how to set it up--they've given up and just created a virtual machine for people to download.  OK, well fine, let's download that and go from there.  What's this?  There's more setup?  Apparently so, because I had to leave my computer to import data and compute indexes for 3 days straight.</p>
+
+<p>Finally, finally, I am ready to start accessing that music -> amazon.com data, when I notice something: Non-Commercial license.  After all of this, the AMAZON SPECIFIC PORTION ONLY is licensed differently, and I cannot use it.  I am disappointed with this service, to say the least.  MusicBrainz needs a major overhaul in its software dependencies (Hint: Use Python, it's got batteries included.)  It also needs to take a serious look at its licensing scheme.  If it can address these two things, it will be much further along in its goal to make a great community database.</p>
+
+<p>Information has a long way to go.  Music metadata and the ability to link to different music vendors should be ubiquitous and available in a standard way.  Nobody is benefiting by putting a <code>lock and key</code>_ on this sort of data.  The people who really lose, in the end, is the music vendors who get ultimately less sales.  Hopefully someday soon they see the light, and fight to make this information accessible.</p>
+
+<p>.. <em>Google: http://www.google.com/musica?aid=CthfGxkPMTB
+.. </em><code>do it</code>: http://www.google.com/musicl?lid=1SpDWykV7NL&amp;aid=CthfGxkPMTB
+.. <em><code>iTunes Link Maker</code>: http://ax.phobos.apple.com.edgesuite.net/WebObjects/MZStoreServices.woa/wa/itmsLinkMaker
+.. </em>this: http://www.amazon.com/Rodrigo-y-Gabriela-Bonus-DVD/dp/B000HKDEE2/ref=pd_bbs_sr_1/102-5025068-6051344?ie=UTF8&amp;s=music&amp;qid=1185941115&amp;sr=8-1
+.. <em>MusicBrainz: http://musicbrainz.org/
+.. </em><code>lock and key</code>: http://www.gracenote.com/
+</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[iPhone Says: "Hello, World"]]></title>
+    <link href="http://ericflo.github.com/blog/2007/07/30/iphone-says-hello-world/"/>
+    <updated>2007-07-30T22:45:48-07:00</updated>
+    <id>http://ericflo.github.com/blog/2007/07/30/iphone-says-hello-world</id>
+    <content type="html"><![CDATA[<p>
+It was only a matter of time before the iPhone private SDK was cracked, and it looks as if that matter of time is Up_.  This news is exciting to me as an iPhone user, but also as a programmer.  Assuming Apple doesn't patch this, which is a fairly large assumption, the UIKit will just continue to get more and more community documentation, and get easier and easier to work with.  There are so many little apps that I want to see, (...for example, a voice record app!) that no bad can come out of this development.</p>
+
+<p>About django_simpleaggregation:  Well, one person responded on the mailing list, but that's it.  I guess I hoped to get more of a response, given all of the work that went into the documentation and tutorial for it.  In hindsight, I should have posted it to both the django-users and the django-developers mailing lists, instead of just the one for developers.  But that's not really an option either, as you look like a jerk for crossposting.  In any case, I'm sure people will stumble upon it and find it useful.</p>
+
+<p>Google analytics rocks, by the way.  I installed it for this site just a few days ago and am amazed by how polished and easy to use it is for a free site.  It would be nice to get more frequent updates on the metrics, but hey, it's free!  Not only is it good for figuring out where your traffic is coming from (mine is coming from Europe, mostly), but its good for finding out what people are looking at.  In my case, embarrassingly enough,  people are looking at that old unfinished django gallery app tutorial.</p>
+
+<p>Besides all of this geeky stuff that this blog is usually about, I've recently started watching the BBC-produced TV show Jekyll.  It sounds like a terrible idea for a series, and maybe it is, but it's got me hooked.  There's something intrinsically great about a story where one is constantly learning/discovering.</p>
+
+<p>Think about the first time you saw the first Matrix movie, and they started explaining what the Matrix was, or in Memento when you finally started getting the necessary information to piece everything together, or even in The Usual Suspects, when you find out about Kaiser Sose.  It's the same thing with every episode of Jekyll.  The first episode, you know just a tiny sliver of information about the overall story, and as they reveal more information, what you automatically assumed ended up being wrong.</p>
+
+<p>.. _Up: http://iphone.fiveforty.net/wiki/index.php/UIKit_Hello_World
+</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,400 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Lambda Calculus - Eric Florenzano's Blog</title>
+  <meta name="author" content="Eric Florenzano">
+
+  
+  <meta name="description" content="It seems that people either love things like lambda calculus and eat it up,
+or their eyes gloss over and they don&#8217;t care or want to learn about &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://ericflo.github.com/blog/2008/11/19/lambda-calculus">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Eric Florenzano's Blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-1959803-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Eric Florenzano's Blog</a></h1>
+  
+    <h2>I am me.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:ericflo.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Lambda Calculus</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-11-19T21:00:09-08:00" pubdate data-updated="true">Nov 19<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>It seems that people either love things like <a class="reference external" href="http://en.wikipedia.org/wiki/Lambda_calculus">lambda calculus</a> and eat it up,
+or their eyes gloss over and they don&#8217;t care or want to learn about it.  I was
+firmly part of the latter group, until I took a class in college that forced
+me to learn about it.  The thing is, once you learn more about a subject like
+this, the less you&#8217;ll understand why you were so averse to learning about it.</p>
+<p>In the spirit of broadening our horizons, let&#8217;s explore the lambda calculus and
+see if it&#8217;s as hard as it&#8217;s cracked up to be.  I don&#8217;t claim to be a wizard at
+this stuff, and by no means am I a theoretical computer scientist, but that&#8217;s
+not the goal.  The goal is to cut down on the formality and see if we can expore
+this stuff a bit.  First, let&#8217;s look at a very basic function: addition.  In
+lambda calculus it looks like this:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="text"><span class="line">&gt;&gt; x. x + 1
+</span></code></pre></td></tr></table></div></figure><p>That is, a function whose argument is named <tt class="docutils literal">x</tt>, returns the value <tt class="docutils literal">x + 1</tt>.
+This looks really similar to some syntax that we have in Python.  Let&#8217;s see
+if we can find a corollary to help make things easier:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>
+</span></code></pre></td></tr></table></div></figure><p>Surprisingly, the syntax is almost the same!  It&#8217;s an anonymous function which
+takes <tt class="docutils literal">x</tt> as its one argument and returns <tt class="docutils literal">x + 1</tt>.  Lambda calculus doesn&#8217;t
+have powerful enough syntax for talking about functions with multiple arguments,
+though, so you may think that it&#8217;s not very powerful.  Thanks to a technique
+called <a class="reference external" href="http://en.wikipedia.org/wiki/Currying">currying</a>, however, we can express functions with infinite numbers of
+arguments.  This is how that might look:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="text"><span class="line">&gt;&gt; x. &gt;&gt; y. x + y
+</span></code></pre></td></tr></table></div></figure><p>This is where I think the syntax starts to get in the way of readability.  Let&#8217;s
+see what this would look like in Python:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">y</span><span class="p">:</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+</span></code></pre></td></tr></table></div></figure><p>Hmmm&#8230;it&#8217;s not much more readable, but at least we can open up an interactive
+interpreter to see what we&#8217;re doing.  Basically what we&#8217;re doing is creating a
+function which returns another function.  That inner function then has access
+not only to its single argument, but to its parent&#8217;s argument as well.  Let&#8217;s
+demonstrate that this works:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="pycon"><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">add</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">y</span><span class="p">:</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="p">(</span><span class="mi">5</span><span class="p">)(</span><span class="mi">4</span><span class="p">)</span>
+</span><span class="line"><span class="go">9</span>
+</span></code></pre></td></tr></table></div></figure><p>Now does this work if we start to change the variable names?  What if I just
+decide that I can&#8217;t stand the letter <tt class="docutils literal">x</tt> and don&#8217;t want it inside any more of
+my functions.  Well I can simply change the variable name, as long as I change
+any uses of that variable.  It would work just the same:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="pycon"><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">add</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">z</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">y</span><span class="p">:</span> <span class="n">z</span> <span class="o">+</span> <span class="n">y</span>
+</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">add</span><span class="p">(</span><span class="mi">5</span><span class="p">)(</span><span class="mi">4</span><span class="p">)</span>
+</span><span class="line"><span class="go">9</span>
+</span></code></pre></td></tr></table></div></figure><p>In this instance, we have changed all of our instances of <tt class="docutils literal">x</tt> with <tt class="docutils literal">z</tt>.
+This ability to change the names of bound variables is the first rule of lambda
+calculus, and it&#8217;s called ?-conversion.</p>
+<p>As developers, we intuitively understand the idea of function application.  We
+understand that a function which takes in an argument replaces all references
+to that argument with the given value, and returns a result.  For example, in
+the addition function, lets go through the steps for function application:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class="pycon"><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">add</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">y</span><span class="p">:</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">add5</span> <span class="o">=</span> <span class="n">add</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+</span><span class="line"><span class="go"># We can envision what&#39;s happening here by replacing x with 5</span>
+</span><span class="line"><span class="go"># add5 = lambda 5: lambda y: 5 + y</span>
+</span><span class="line"><span class="go"># add5 = lambda y: 5 + y</span>
+</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">add5</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+</span><span class="line"><span class="go"># And now the final function application, resulting in a value</span>
+</span><span class="line"><span class="go"># lambda 4: 5 + 4</span>
+</span><span class="line"><span class="go">9</span>
+</span></code></pre></td></tr></table></div></figure><p>This idea of function application, in lambda calculus is given the name
+2-reduction.  To review, in lambda calculus syntax that process would look like
+so:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="text"><span class="line">(&gt;&gt; x. &gt;&gt; y. x + y) 5
+</span><span class="line">(&gt;&gt; y. 5 + y) 4
+</span><span class="line">5 + 4
+</span><span class="line">9
+</span></code></pre></td></tr></table></div></figure><p>Something that we also intuitively know as developers is that functions can do
+the exact thing, but have very different implementations.  For example this
+function:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="o">&gt;&gt;</span> <span class="n">x</span><span class="o">.</span> <span class="n">x</span> <span class="o">+</span> <span class="n">x</span>
+</span></code></pre></td></tr></table></div></figure><p>&#8230;will give the same results for all values as this function:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="o">&gt;&gt;</span> <span class="n">x</span><span class="o">.</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">2</span>
+</span></code></pre></td></tr></table></div></figure><p>We understand that code which uses the former function can easily swap out the
+latter and expect the program the function correctly.  This idea is called
+.-conversion in lambda calculus.</p>
+<p>See, this is pretty simple stuff!  Obviously there are subtleties that I didn&#8217;t
+go into, and it gets a bit more confusing when we start to try to figure out
+formally which variables occur bound and which occur free, and as we attempt to
+preserve that status while doing ?-conversion, 2-reduction, and .-conversion.</p>
+<p>Here&#8217;s some really mind bending food for thought:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="text"><span class="line">(&gt;&gt; x. x x) (&gt;&gt; x. x x)
+</span></code></pre></td></tr></table></div></figure><p>Think about how this would reduce:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="text"><span class="line">(&gt;&gt; x. x x) (&gt;&gt; x. x x)
+</span><span class="line">(&gt;&gt; (&gt;&gt; x. x x). (&gt;&gt; x. x x) (&gt;&gt; x. x x))
+</span><span class="line">(&gt;&gt; x. x x) (&gt;&gt; x. x x)
+</span></code></pre></td></tr></table></div></figure><p>As you can see, we could do this forever.  This is called the ? combinator,
+and it lets us do some really cool things with recursion. Maybe more on that in
+a later blog post.</p>
+<p>What is all of this good for?  Well, with only this very simple, rigidly
+defined ruleset, we can express every possible computer program.  That makes it
+very good for doing mathematical proofs and other various scholarly things
+when we want to explore algorithms.  It also forms the basis of all programming
+languages, and especially functional programming languages.</p>
+<p>Of particular interest to me is that we can actually represent numbers, truth,
+and logic using only these very basic primitives.  I&#8217;ll explore that in another
+post.  To me, all of this is fascinating, and it&#8217;s hard to believe that before
+my teacher forced me to learn it, I actively didn&#8217;t want to know about it.</p></div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Eric Florenzano</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-11-19T21:00:09-08:00" pubdate data-updated="true">Nov 19<span>th</span>, 2008</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/lambda-calculus/'>Lambda Calculus</a>, <a class='category' href='/blog/categories/programming/'>Programming</a>, <a class='category' href='/blog/categories/python/'>Python</a>, <a class='category' href='/blog/categories/theory/'>Theory</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://ericflo.github.com/blog/2008/11/19/lambda-calculus/" data-via="ericflo" data-counturl="http://ericflo.github.com/blog/2008/11/19/lambda-calculus/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2008/11/18/why-you-should-blog/" title="Previous Post: Why you should blog">&laquo; Why you should blog</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2008/11/20/blog-updated-now-more-couchdb/" title="next Post: Blog Updated (now with more CouchDB)">Blog Updated (now with more CouchDB) &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2011/02/16/technology-behind-convore/">The Technology Behind Convore</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/10/10/object-lesson-how-respond-criticism/">An Object Lesson in How to Respond to Criticism</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/09/27/why-node-disappoints-me/">Why node.js disappoints me</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/05/20/we-need-new-word-open/">We need a new word for "Open"</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/02/08/how-do-we-kick-our-synchronous-addiction/">How do we kick our synchronous addiction?</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("ericflo", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/ericflo" class="twitter-follow-button" data-show-count="false">Follow @ericflo</a>
+  
+</section>
+
+
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/109591387819364984777?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2011 - Eric Florenzano -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

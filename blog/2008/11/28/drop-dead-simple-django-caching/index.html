@@ -1,0 +1,419 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Drop-dead simple Django caching - Eric Florenzano's Blog</title>
+  <meta name="author" content="Eric Florenzano">
+
+  
+  <meta name="description" content="Caching is easy to screw up. Usually it&#8217;s a manual process which is error-prone
+and tedious. It&#8217;s actually quite easy to cache, but &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://ericflo.github.com/blog/2008/11/28/drop-dead-simple-django-caching">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Eric Florenzano's Blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-1959803-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Eric Florenzano's Blog</a></h1>
+  
+    <h2>I am me.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:ericflo.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Drop-dead Simple Django Caching</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-11-28T21:30:13-08:00" pubdate data-updated="true">Nov 28<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Caching is easy to screw up.  Usually it&#8217;s a manual process which is error-prone
+and tedious.  It&#8217;s actually quite easy to cache, but knowing when to invalidate
+which caches becomes a lot harder.  There is a subset of caching the caching
+problem that, with Django, can be done quite easily.  The underlying idea is
+that every Django model has a primary key, which makes for an excellent key to
+a cache.  Using this basic idea, we can cover a fairly large use case for
+caching, automatically, in a much more deterministic way.  Let&#8217;s begin.</p>
+<p>First, we need to decide upon a setting for how long each individual item should
+be saved in the cache.  I&#8217;m going to call that <tt class="docutils literal">SIMPLE_CACHE_SECONDS</tt> and
+grab it like so:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
+</span><span class="line">
+</span><span class="line"><span class="n">SIMPLE_CACHE_SECONDS</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s">&#39;SIMPLE_CACHE_SECONDS&#39;</span><span class="p">,</span> <span class="mi">2592000</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure><p>The next thing we need to do is be able to generate a cache key from an instance
+of a model.  Thanks to Django&#8217;s <tt class="docutils literal">_meta</tt> information, we can get the app label
+and model name, plus the primary key, and we&#8217;re all set.</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="k">def</span> <span class="nf">key_from_instance</span><span class="p">(</span><span class="n">instance</span><span class="p">):</span>
+</span><span class="line">    <span class="n">opts</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">_meta</span>
+</span><span class="line">    <span class="k">return</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">.</span><span class="si">%s</span><span class="s">:</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">opts</span><span class="o">.</span><span class="n">app_label</span><span class="p">,</span> <span class="n">opts</span><span class="o">.</span><span class="n">module_name</span><span class="p">,</span> <span class="n">instance</span><span class="o">.</span><span class="n">pk</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure><p>So now let&#8217;s start setting the cache!  My preferred way to do it is via a
+signal, but you could do it in a less generic way by overriding <tt class="docutils literal">save</tt> on a
+model.  My signal looks like this:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="kn">from</span> <span class="nn">django.core.cache</span> <span class="kn">import</span> <span class="n">cache</span>
+</span><span class="line"><span class="kn">from</span> <span class="nn">django.db.models.signals</span> <span class="kn">import</span> <span class="n">post_save</span>
+</span><span class="line">
+</span><span class="line"><span class="k">def</span> <span class="nf">post_save_cache</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span class="line">    <span class="n">cache</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">key_from_instance</span><span class="p">(</span><span class="n">instance</span><span class="p">),</span> <span class="n">instance</span><span class="p">,</span> <span class="n">SIMPLE_CACHE_SECONDS</span><span class="p">)</span>
+</span><span class="line"><span class="n">post_save</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">post_save_cache</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure><p>Now that we&#8217;re putting items in the cache, we should probably delete them from
+the cache when the model instance is deleted:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="kn">from</span> <span class="nn">django.db.models.signals</span> <span class="kn">import</span> <span class="n">pre_delete</span>
+</span><span class="line">
+</span><span class="line"><span class="k">def</span> <span class="nf">pre_delete_uncache</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span class="line">    <span class="n">cache</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">key_from_instance</span><span class="p">(</span><span class="n">instance</span><span class="p">))</span>
+</span><span class="line"><span class="n">pre_delete</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">pre_delete_uncache</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure><p>This is all good and well, but right now we don&#8217;t really have a way to get at
+that information.  Cache is pretty useless if we never use it!  Our interface to
+the database is through the model&#8217;s <tt class="docutils literal">QuerySet</tt>, so let&#8217;s make sure that our
+QuerySet is making good use of our newly-populated cache.  To do so, we&#8217;ll
+subclass <tt class="docutils literal">QuerySet</tt>:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="kn">from</span> <span class="nn">django.db.models.query</span> <span class="kn">import</span> <span class="n">QuerySet</span>
+</span><span class="line">
+</span><span class="line"><span class="k">class</span> <span class="nc">SimpleCacheQuerySet</span><span class="p">(</span><span class="n">QuerySet</span><span class="p">):</span>
+</span><span class="line">    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span class="line">        <span class="n">pk</span> <span class="o">=</span> <span class="bp">None</span>
+</span><span class="line">        <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;pk&#39;</span><span class="p">,</span> <span class="s">&#39;pk__exact&#39;</span><span class="p">,</span> <span class="s">&#39;id&#39;</span><span class="p">,</span> <span class="s">&#39;id__exact&#39;</span><span class="p">):</span>
+</span><span class="line">            <span class="k">if</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+</span><span class="line">                <span class="n">pk</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">val</span><span class="p">]</span>
+</span><span class="line">                <span class="k">break</span>
+</span><span class="line">        <span class="k">if</span> <span class="n">pk</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+</span><span class="line">            <span class="n">opts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_meta</span>
+</span><span class="line">            <span class="n">key</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">.</span><span class="si">%s</span><span class="s">:</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">opts</span><span class="o">.</span><span class="n">app_label</span><span class="p">,</span> <span class="n">opts</span><span class="o">.</span><span class="n">module_name</span><span class="p">,</span> <span class="n">pk</span><span class="p">)</span>
+</span><span class="line">            <span class="n">obj</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+</span><span class="line">            <span class="k">if</span> <span class="n">obj</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+</span><span class="line">                <span class="bp">self</span><span class="o">.</span><span class="n">_result_cache</span> <span class="o">=</span> <span class="p">[</span><span class="n">obj</span><span class="p">]</span>
+</span><span class="line">        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">SimpleCacheQuerySet</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure><p>The only method that we really need to overwrite is <tt class="docutils literal">filter</tt>, since <tt class="docutils literal">get</tt>
+and <tt class="docutils literal">get_or_create</tt> both just rely on filter anyway.  The first <tt class="docutils literal">for</tt> loop
+in the filter method just checks to see if there is a query by <tt class="docutils literal">id</tt> or <tt class="docutils literal">pk</tt>,
+and if so, then we construct a key and try to fetch it from the cache.  If we
+found the item in the cache, then we place it into Django&#8217;s internal result
+cache.  At that point we&#8217;re as good as done.  Then we just let Django do the
+rest!</p>
+<p>This <tt class="docutils literal">SimpleCacheQuerySet</tt> won&#8217;t be used all on its own though, we need to
+actually force a model to use it.  How do we do that?  We create a manager:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+</span><span class="line">
+</span><span class="line"><span class="k">class</span> <span class="nc">SimpleCacheManager</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Manager</span><span class="p">):</span>
+</span><span class="line">    <span class="k">def</span> <span class="nf">get_query_set</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span class="line">        <span class="k">return</span> <span class="n">SimpleCacheQuerySet</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure><p>Now that we have this transparent caching library set up, we can go around to
+all of our models and import it and attach it as needed.  Here&#8217;s how that might
+look:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+</span><span class="line"><span class="kn">from</span> <span class="nn">django_simplecache</span> <span class="kn">import</span> <span class="n">SimpleCacheManager</span>
+</span><span class="line">
+</span><span class="line"><span class="k">class</span> <span class="nc">BlogPost</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+</span><span class="line">    <span class="n">title</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+</span><span class="line">    <span class="n">body</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+</span><span class="line">
+</span><span class="line">    <span class="n">objects</span> <span class="o">=</span> <span class="n">SimpleCacheManager</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure><p>That&#8217;s it!  Just by attaching this manager to our model we&#8217;re getting all the
+benefits of per-object caching right away. Of course, this isn&#8217;t comprehensive.
+It does hit the vast majority of use cases, though.  If you were to use this for
+a real site, however, then you wouldn&#8217;t be able to use <tt class="docutils literal">update</tt> method.  It&#8217;s
+a little bit trickier since there&#8217;s no <tt class="docutils literal">post_update</tt> signal, but it&#8217;s nowhere
+near impossible. Let&#8217;s just say that, for now, it&#8217;s being left unimplemented as
+an exercise for the reader. <tt class="docutils literal">in_bulk</tt> would be actually quite fun to
+implement, too, because you could get all of the results possible from cache,
+and all the rest could be gotten from the database, then merge those two
+dictionaries before returning.</p>
+<p>I think this would be a really good reusable Django application.  Essentially,
+we&#8217;ve grown a library from the ground up that really isn&#8217;t all that much code.
+I think it took me 20 minutes to write the actual code, but with some serious
+polish and love, this library could evolve into something that I think many
+reusable apps would use to great benefit.  What do you think?  What should a
+good, simple, Django caching library have?</p></div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Eric Florenzano</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-11-28T21:30:13-08:00" pubdate data-updated="true">Nov 28<span>th</span>, 2008</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/caching/'>Caching</a>, <a class='category' href='/blog/categories/django/'>Django</a>, <a class='category' href='/blog/categories/programming/'>Programming</a>, <a class='category' href='/blog/categories/python/'>Python</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://ericflo.github.com/blog/2008/11/28/drop-dead-simple-django-caching/" data-via="ericflo" data-counturl="http://ericflo.github.com/blog/2008/11/28/drop-dead-simple-django-caching/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2008/11/27/reverse-http/" title="Previous Post: Reverse HTTP">&laquo; Reverse HTTP</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2008/11/29/why-couchdb-rocks/" title="next Post: Why CouchDB Rocks">Why CouchDB Rocks &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2011/02/16/technology-behind-convore/">The Technology Behind Convore</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/10/10/object-lesson-how-respond-criticism/">An Object Lesson in How to Respond to Criticism</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/09/27/why-node-disappoints-me/">Why node.js disappoints me</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/05/20/we-need-new-word-open/">We need a new word for "Open"</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/02/08/how-do-we-kick-our-synchronous-addiction/">How do we kick our synchronous addiction?</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("ericflo", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/ericflo" class="twitter-follow-button" data-show-count="false">Follow @ericflo</a>
+  
+</section>
+
+
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/109591387819364984777?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2011 - Eric Florenzano -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

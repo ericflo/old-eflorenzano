@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Sphinx | Eric Florenzano's Blog]]></title>
+  <link href="http://ericflo.github.com/blog/categories/sphinx/atom.xml" rel="self"/>
+  <link href="http://ericflo.github.com/"/>
+  <updated>2011-12-31T23:14:37-08:00</updated>
+  <id>http://ericflo.github.com/</id>
+  <author>
+    <name><![CDATA[Eric Florenzano]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Sphinx Search, Totally Rad Website]]></title>
+    <link href="http://ericflo.github.com/blog/2007/08/06/sphinx-search-totally-rad-website/"/>
+    <updated>2007-08-06T22:00:36-07:00</updated>
+    <id>http://ericflo.github.com/blog/2007/08/06/sphinx-search-totally-rad-website</id>
+    <content type="html"><![CDATA[<p>
+<code>Sphinx Search ROCKS!</code><em>  I'm pretty sure it'll be the solution to my MusicBrainz problems for my secret project.  I'm going to set up a simple postgres server holding the MusicBrainz database, with Sphinx Search installed, and have it index on a cron.  It'll be awesome!  After trying out Lucene</em> and its derivatives and being so underwhelmed, it's exciting to discover an app that truly seems to rock.  I'll report back on it later, but right now the indexer is 4 million queries into a 60 million query index.  Yeah, it's going to be a while.</p>
+
+<p>I've been wanting to test drive two new technologies this past week, the first is <code>Blueprint, the CSS Framework</code><em> which I saw on Digg</em> a few days ago.  I also really wanted to try some new stuff with FreeComments, including saving people's login information in the session.  I'm messing with both of those things in a side-side project related to <code>The Totally Rad Show</code>_ which I think promises to be really fun.  I've spent only a couple of hours on it, but I think it's going to be probably my first project that people end up using.</p>
+
+<p>So, <code>Stick Tuned</code>_ for a fun announcement from me in the next week or 2 weeks at the latest.  (The problem with this project is there's lots of data to enter which will take time.)</p>
+
+<p>That's it for today, a short and sweet entry into this blog-o-rama.</p>
+
+<p>.. <em><code>Sphinx Search ROCKS!</code>: http://www.sphinxsearch.com/
+.. </em>Lucene: http://lucene.apache.org/java/docs/
+.. <em><code>Blueprint, the CSS Framework</code>: http://bjorkoy.com/blueprint/index.html
+.. </em>Digg: http://www.digg.com
+.. <em><code>The Totally Rad Show</code>: http://revision3.com/trs
+.. </em><code>Stick Tuned</code>: http://revision3.com/trs/tuned
+</p>
+]]></content>
+  </entry>
+  
+</feed>

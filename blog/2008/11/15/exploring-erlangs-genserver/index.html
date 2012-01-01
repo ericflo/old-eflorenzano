@@ -1,0 +1,574 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Exploring Erlang's gen_server - Eric Florenzano's Blog</title>
+  <meta name="author" content="Eric Florenzano">
+
+  
+  <meta name="description" content="Today I found myself at Super Happy Dev House, amongst a whole house full
+of geeks (I say this in the most friendly way possible). I thought for a &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://ericflo.github.com/blog/2008/11/15/exploring-erlangs-genserver">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Eric Florenzano's Blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-1959803-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Eric Florenzano's Blog</a></h1>
+  
+    <h2>I am me.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:ericflo.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Exploring Erlang's Gen_server</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-11-15T20:20:40-08:00" pubdate data-updated="true">Nov 15<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Today I found myself at <a class="reference external" href="http://superhappydevhouse.org/">Super Happy Dev House</a>, amongst a whole house full
+of geeks (I say this in the most friendly way possible).  I thought for a while
+about working on <a class="reference external" href="http://pinaxproject.com/">Pinax</a> project, which is what I really wanted to do.  However,
+it didn&#8217;t seem geeky enough for the occasion.</p>
+<p>No, today the call of the geek was too strong.  There was only one place to turn
+to achieve maximal geekiness: functional programming.  Not only functional
+programming, but I thought this occasion called for a concurrency-oriented
+programming language. Yes, today was the perfect day for some Erlang.</p>
+<p>I&#8217;ve done a few small projects with Erlang, but never before have I used <a class="reference external" href="http://www.erlang.org/doc/design_principles/part_frame.html">OTP</a>.
+So the goal is to write an OTP <tt class="docutils literal">gen_server</tt> which would store a user&#8217;s
+&quot;presence&quot; (think <a class="reference external" href="http://twitter.com/">Twitter</a>, <a class="reference external" href="http://pownce.com/">Pownce</a>, etc.) in memory.  No, it&#8217;s not a good idea.
+Yes, it&#8217;s kind of fun.  So here we go!</p>
+<p>First we need to decide on an API:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+</pre></td><td class="code"><pre><code class="erlang"><span class="line"><span class="nf">start_link</span><span class="p">()</span> <span class="o">-&gt;</span>
+</span><span class="line">    <span class="nn">gen_server</span><span class="p">:</span><span class="n">start_link</span><span class="p">({</span><span class="n">local</span><span class="p">,</span> <span class="no">?SERVER</span><span class="p">},</span> <span class="no">?MODULE</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[]).</span>
+</span><span class="line">
+</span><span class="line"><span class="nf">post_presence</span><span class="p">(</span><span class="nv">UserID</span><span class="p">,</span> <span class="nv">Presence</span><span class="p">)</span> <span class="o">-&gt;</span>
+</span><span class="line">    <span class="nn">gen_server</span><span class="p">:</span><span class="n">cast</span><span class="p">(</span><span class="no">?SERVER</span><span class="p">,</span> <span class="p">{</span><span class="n">post_presence</span><span class="p">,</span> <span class="nv">UserID</span><span class="p">,</span> <span class="nv">Presence</span><span class="p">}).</span>
+</span><span class="line">
+</span><span class="line"><span class="nf">list_presence</span><span class="p">(</span><span class="nv">UserID</span><span class="p">)</span> <span class="o">-&gt;</span>
+</span><span class="line">    <span class="nn">gen_server</span><span class="p">:</span><span class="n">call</span><span class="p">(</span><span class="no">?SERVER</span><span class="p">,</span> <span class="p">{</span><span class="n">list_presence</span><span class="p">,</span> <span class="nv">UserID</span><span class="p">}).</span>
+</span><span class="line">
+</span><span class="line"><span class="nf">list_presence</span><span class="p">(</span><span class="nv">UserID</span><span class="p">,</span> <span class="nv">Limit</span><span class="p">)</span> <span class="o">-&gt;</span>
+</span><span class="line">    <span class="nn">gen_server</span><span class="p">:</span><span class="n">call</span><span class="p">(</span><span class="no">?SERVER</span><span class="p">,</span> <span class="p">{</span><span class="n">list_presence</span><span class="p">,</span> <span class="nv">UserID</span><span class="p">,</span> <span class="nv">Limit</span><span class="p">}).</span>
+</span><span class="line">
+</span><span class="line"><span class="nf">public_list</span><span class="p">(</span><span class="nv">Limit</span><span class="p">)</span> <span class="o">-&gt;</span>
+</span><span class="line">    <span class="nn">gen_server</span><span class="p">:</span><span class="n">call</span><span class="p">(</span><span class="no">?SERVER</span><span class="p">,</span> <span class="p">{</span><span class="n">public_list</span><span class="p">,</span> <span class="nv">Limit</span><span class="p">}).</span>
+</span></code></pre></td></tr></table></div></figure><p><tt class="docutils literal">start_link</tt> will start the server.  <tt class="docutils literal">post_presence</tt> will post a user&#8217;s
+current presence to the server.  <tt class="docutils literal">list_presence</tt> with one argument gets all
+of the specified user&#8217;s presence information.  With a second argument, it limits
+the amount of returned presence information to the specified number. Calling
+<tt class="docutils literal">public_list</tt> means that you&#8217;re getting the latest posts from anyone.</p>
+<p>Before that, though, let&#8217;s get some of the <tt class="docutils literal">gen_server</tt> cruft out of the way:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+</pre></td><td class="code"><pre><code class="erlang"><span class="line"><span class="p">-</span><span class="ni">module</span><span class="p">(</span><span class="n">presence_database</span><span class="p">).</span>
+</span><span class="line"><span class="p">-</span><span class="ni">behavior</span><span class="p">(</span><span class="n">gen_server</span><span class="p">).</span>
+</span><span class="line">
+</span><span class="line"><span class="p">-</span><span class="ni">define</span><span class="p">(</span><span class="no">SERVER</span><span class="p">,</span> <span class="no">?MODULE</span><span class="p">).</span>
+</span><span class="line">
+</span><span class="line"><span class="c">%% gen_server API</span>
+</span><span class="line"><span class="p">-</span><span class="ni">export</span><span class="p">([</span><span class="n">init</span><span class="o">/</span><span class="mi">1</span><span class="p">,</span> <span class="n">handle_call</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="n">handle_cast</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">handle_info</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">terminate</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span>
+</span><span class="line">    <span class="n">code_change</span><span class="o">/</span><span class="mi">3</span><span class="p">]).</span>
+</span><span class="line">
+</span><span class="line"><span class="c">%% presence API</span>
+</span><span class="line"><span class="p">-</span><span class="ni">export</span><span class="p">([</span><span class="n">start_link</span><span class="o">/</span><span class="mi">0</span><span class="p">,</span> <span class="n">post_presence</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">list_presence</span><span class="o">/</span><span class="mi">1</span><span class="p">,</span> <span class="n">list_presence</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span>
+</span><span class="line">    <span class="n">public_list</span><span class="o">/</span><span class="mi">1</span><span class="p">]).</span>
+</span><span class="line">
+</span><span class="line"><span class="nf">handle_info</span><span class="p">(_</span><span class="nv">Info</span><span class="p">,</span> <span class="nv">State</span><span class="p">)</span> <span class="o">-&gt;</span>
+</span><span class="line">    <span class="p">{</span><span class="n">noreply</span><span class="p">,</span> <span class="nv">State</span><span class="p">}.</span>
+</span><span class="line">
+</span><span class="line"><span class="nf">terminate</span><span class="p">(_</span><span class="nv">Reason</span><span class="p">,</span> <span class="p">_</span><span class="nv">State</span><span class="p">)</span> <span class="o">-&gt;</span>
+</span><span class="line">    <span class="n">ok</span><span class="p">.</span>
+</span><span class="line">
+</span><span class="line"><span class="nf">code_change</span><span class="p">(_</span><span class="nv">OldVersion</span><span class="p">,</span> <span class="nv">State</span><span class="p">,</span> <span class="p">_</span><span class="nv">Extra</span><span class="p">)</span> <span class="o">-&gt;</span>
+</span><span class="line">    <span class="p">{</span><span class="n">ok</span><span class="p">,</span> <span class="nv">State</span><span class="p">}.</span>
+</span><span class="line">
+</span><span class="line"><span class="nf">init</span><span class="p">([])</span> <span class="o">-&gt;</span>
+</span><span class="line">    <span class="p">{</span><span class="n">ok</span><span class="p">,</span> <span class="nn">dict</span><span class="p">:</span><span class="n">new</span><span class="p">()}.</span>
+</span></code></pre></td></tr></table></div></figure><p>These are mostly things that we need to have in order for things to work.  We
+define our module name, the behavior that this module mimics, and define a
+constant.  Then, we export the required functions for gen_server and export
+our public presence api functions.  Finally we implement really simple functions
+for those gen_server functions that we don&#8217;t care much about.</p>
+<p>Now since I couldn&#8217;t figure out how to slice a list in Erlang, I wrote my own
+slice function.  Make sure to flame me for this.</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+</pre></td><td class="code"><pre><code class="erlang"><span class="line"><span class="nf">slice</span><span class="p">(</span><span class="nv">List</span><span class="p">,</span> <span class="nv">Start</span><span class="p">,</span> <span class="nv">End</span><span class="p">)</span> <span class="o">-&gt;</span>
+</span><span class="line">    <span class="n">slice</span><span class="p">(</span><span class="nv">List</span><span class="p">,</span> <span class="nv">Start</span><span class="p">,</span> <span class="nv">End</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">[]).</span>
+</span><span class="line">
+</span><span class="line"><span class="nf">slice</span><span class="p">([],</span> <span class="p">_</span><span class="nv">Start</span><span class="p">,</span> <span class="p">_</span><span class="nv">End</span><span class="p">,</span> <span class="p">_</span><span class="nv">Index</span><span class="p">,</span> <span class="nv">Acc</span><span class="p">)</span> <span class="o">-&gt;</span>
+</span><span class="line">    <span class="nn">lists</span><span class="p">:</span><span class="n">reverse</span><span class="p">(</span><span class="nv">Acc</span><span class="p">);</span>
+</span><span class="line"><span class="nf">slice</span><span class="p">([</span><span class="nv">Item</span> <span class="p">|</span> <span class="nv">Rest</span><span class="p">],</span> <span class="nv">Start</span><span class="p">,</span> <span class="nv">End</span><span class="p">,</span> <span class="nv">Index</span><span class="p">,</span> <span class="nv">Acc</span><span class="p">)</span> <span class="o">-&gt;</span>
+</span><span class="line">    <span class="k">case</span> <span class="nv">Index</span> <span class="o">&gt;=</span> <span class="nv">Start</span> <span class="k">of</span>
+</span><span class="line">        <span class="n">true</span> <span class="o">-&gt;</span>
+</span><span class="line">            <span class="k">case</span> <span class="nv">Index</span> <span class="o">&lt;</span> <span class="nv">End</span> <span class="k">of</span>
+</span><span class="line">                <span class="n">true</span> <span class="o">-&gt;</span>
+</span><span class="line">                    <span class="n">slice</span><span class="p">(</span><span class="nv">Rest</span><span class="p">,</span> <span class="nv">Start</span><span class="p">,</span> <span class="nv">End</span><span class="p">,</span> <span class="nv">Index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="nv">Item</span> <span class="p">|</span> <span class="nv">Acc</span><span class="p">]);</span>
+</span><span class="line">                <span class="n">false</span> <span class="o">-&gt;</span>
+</span><span class="line">                    <span class="n">slice</span><span class="p">(</span><span class="nv">Rest</span><span class="p">,</span> <span class="nv">Start</span><span class="p">,</span> <span class="nv">End</span><span class="p">,</span> <span class="nv">Index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nv">Acc</span><span class="p">)</span>
+</span><span class="line">            <span class="k">end</span><span class="p">;</span>
+</span><span class="line">        <span class="p">_</span> <span class="o">-&gt;</span>
+</span><span class="line">            <span class="n">slice</span><span class="p">(</span><span class="nv">Rest</span><span class="p">,</span> <span class="nv">Start</span><span class="p">,</span> <span class="nv">End</span><span class="p">,</span> <span class="nv">Index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nv">Acc</span><span class="p">)</span>
+</span><span class="line">    <span class="k">end</span><span class="p">.</span>
+</span></code></pre></td></tr></table></div></figure><p>&#8230;and I&#8217;m pretty sure that using <a class="reference external" href="http://www.erlang.org/doc/reference_manual/expressions.html#guards">guard expressions</a> this could be done in one
+case statement.  Or maybe it could be done in a single list comprehension.  I
+don&#8217;t know.  This works for our purposes.</p>
+<p>Now we have to write functions called <tt class="docutils literal">handle_cast</tt> and <tt class="docutils literal">handle_call</tt>.
+<tt class="docutils literal">handle_cast</tt> is essentially a server function which you don&#8217;t expect a
+response from.  Messages can queue up to this function and they will be handled
+sequentially but never return any value to the caller.  <tt class="docutils literal">handle_call</tt> is
+exactly the opposite.  The caller is expecting a response, so this is a blocking
+operation.</p>
+<p>Let&#8217;s use <tt class="docutils literal">handle_cast</tt> to accept new presence notifications:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class="erlang"><span class="line"><span class="nf">handle_cast</span><span class="p">({</span><span class="n">post_presence</span><span class="p">,</span> <span class="nv">UserID</span><span class="p">,</span> <span class="nv">Presence</span><span class="p">},</span> <span class="nv">State</span><span class="p">)</span> <span class="o">-&gt;</span>
+</span><span class="line">    <span class="k">case</span> <span class="nn">dict</span><span class="p">:</span><span class="n">is_key</span><span class="p">(</span><span class="nv">UserID</span><span class="p">,</span> <span class="nv">State</span><span class="p">)</span> <span class="k">of</span>
+</span><span class="line">        <span class="n">true</span> <span class="o">-&gt;</span>
+</span><span class="line">            <span class="p">{</span><span class="n">noreply</span><span class="p">,</span> <span class="nn">dict</span><span class="p">:</span><span class="n">append</span><span class="p">(</span><span class="nv">UserID</span><span class="p">,</span> <span class="p">{</span><span class="nn">erlang</span><span class="p">:</span><span class="n">now</span><span class="p">(),</span> <span class="nv">Presence</span><span class="p">},</span> <span class="nv">State</span><span class="p">)};</span>
+</span><span class="line">        <span class="p">_</span> <span class="o">-&gt;</span>
+</span><span class="line">            <span class="p">{</span><span class="n">noreply</span><span class="p">,</span> <span class="nn">dict</span><span class="p">:</span><span class="n">store</span><span class="p">(</span><span class="nv">UserID</span><span class="p">,</span> <span class="p">[{</span><span class="nn">erlang</span><span class="p">:</span><span class="n">now</span><span class="p">(),</span> <span class="nv">Presence</span><span class="p">}],</span> <span class="nv">State</span><span class="p">)}</span>
+</span><span class="line">    <span class="k">end</span><span class="p">;</span>
+</span><span class="line"><span class="nf">handle_cast</span><span class="p">(_</span><span class="nv">Msg</span><span class="p">,</span> <span class="nv">State</span><span class="p">)</span> <span class="o">-&gt;</span>
+</span><span class="line">    <span class="p">{</span><span class="n">noreply</span><span class="p">,</span> <span class="nv">State</span><span class="p">}.</span>
+</span></code></pre></td></tr></table></div></figure><p>In essence, we check to see if the user has registered their presence, and if
+so, we add their presence to their presence list.  If they haven&#8217;t submitted
+their presence before, we create a new presence list for them and add their
+submitted presence to that list.  We have also generated a catchall version
+of the function for when the call doesn&#8217;t match the signature
+<tt class="docutils literal">{post_presence, UserID, Presence}</tt> for some reason.</p>
+<p>Now let&#8217;s do the harder one: the call to get various presence information from
+our server:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+</pre></td><td class="code"><pre><code class="erlang"><span class="line"><span class="nf">userfy_list</span><span class="p">(</span><span class="nv">User</span><span class="p">,</span> <span class="nv">List</span><span class="p">)</span> <span class="o">-&gt;</span>
+</span><span class="line">    <span class="nn">lists</span><span class="p">:</span><span class="n">map</span><span class="p">(</span><span class="k">fun</span><span class="p">({</span><span class="nv">Time</span><span class="p">,</span> <span class="nv">Msg</span><span class="p">})</span> <span class="o">-&gt;</span> <span class="p">{</span><span class="nv">User</span><span class="p">,</span> <span class="nv">Time</span><span class="p">,</span> <span class="nv">Msg</span><span class="p">}</span> <span class="k">end</span><span class="p">,</span> <span class="nv">List</span><span class="p">).</span>
+</span><span class="line">
+</span><span class="line"><span class="nf">handle_call</span><span class="p">({</span><span class="n">list_presence</span><span class="p">,</span> <span class="nv">UserID</span><span class="p">},</span> <span class="p">_</span><span class="nv">From</span><span class="p">,</span> <span class="nv">State</span><span class="p">)</span> <span class="o">-&gt;</span>
+</span><span class="line">    <span class="k">case</span> <span class="nn">dict</span><span class="p">:</span><span class="n">find</span><span class="p">(</span><span class="nv">UserID</span><span class="p">,</span> <span class="nv">State</span><span class="p">)</span> <span class="k">of</span>
+</span><span class="line">        <span class="p">{</span><span class="n">ok</span><span class="p">,</span> <span class="nv">Value</span><span class="p">}</span> <span class="o">-&gt;</span>
+</span><span class="line">            <span class="p">{</span><span class="n">reply</span><span class="p">,</span> <span class="nv">Value</span><span class="p">,</span> <span class="nv">State</span><span class="p">};</span>
+</span><span class="line">        <span class="n">error</span> <span class="o">-&gt;</span>
+</span><span class="line">            <span class="p">{</span><span class="n">reply</span><span class="p">,</span> <span class="p">{</span><span class="n">error</span><span class="p">,</span> <span class="n">user_does_not_exist</span><span class="p">},</span> <span class="nv">State</span><span class="p">}</span>
+</span><span class="line">    <span class="k">end</span><span class="p">;</span>
+</span><span class="line"><span class="nf">handle_call</span><span class="p">({</span><span class="n">list_presence</span><span class="p">,</span> <span class="nv">UserID</span><span class="p">,</span> <span class="nv">Limit</span><span class="p">},</span> <span class="p">_</span><span class="nv">From</span><span class="p">,</span> <span class="nv">State</span><span class="p">)</span> <span class="o">-&gt;</span>
+</span><span class="line">    <span class="k">case</span> <span class="nn">dict</span><span class="p">:</span><span class="n">find</span><span class="p">(</span><span class="nv">UserID</span><span class="p">,</span> <span class="nv">State</span><span class="p">)</span> <span class="k">of</span>
+</span><span class="line">        <span class="p">{</span><span class="n">ok</span><span class="p">,</span> <span class="nv">Value</span><span class="p">}</span> <span class="o">-&gt;</span>
+</span><span class="line">            <span class="p">{</span><span class="n">reply</span><span class="p">,</span> <span class="nn">lists</span><span class="p">:</span><span class="n">nthtail</span><span class="p">(</span><span class="nv">Limit</span><span class="p">,</span> <span class="nv">Value</span><span class="p">),</span> <span class="nv">State</span><span class="p">};</span>
+</span><span class="line">        <span class="n">error</span> <span class="o">-&gt;</span>
+</span><span class="line">            <span class="p">{</span><span class="n">reply</span><span class="p">,</span> <span class="p">{</span><span class="n">error</span><span class="p">,</span> <span class="n">user_does_not_exist</span><span class="p">},</span> <span class="nv">State</span><span class="p">}</span>
+</span><span class="line">    <span class="k">end</span><span class="p">;</span>
+</span><span class="line"><span class="nf">handle_call</span><span class="p">({</span><span class="n">public_list</span><span class="p">,</span> <span class="nv">Limit</span><span class="p">},</span> <span class="p">_</span><span class="nv">From</span><span class="p">,</span> <span class="nv">State</span><span class="p">)</span> <span class="o">-&gt;</span>
+</span><span class="line">    <span class="nv">LatestEntries</span> <span class="o">=</span> <span class="nn">lists</span><span class="p">:</span><span class="n">flatten</span><span class="p">([</span><span class="n">userfy_list</span><span class="p">(</span><span class="nv">User</span><span class="p">,</span> <span class="nv">List</span><span class="p">)</span> <span class="p">||</span> <span class="p">{</span><span class="nv">User</span><span class="p">,</span> <span class="nv">List</span><span class="p">}</span> <span class="o">&lt;-</span> <span class="nn">dict</span><span class="p">:</span><span class="n">to_list</span><span class="p">(</span><span class="nv">State</span><span class="p">)]),</span>
+</span><span class="line">    <span class="nv">Sorted</span> <span class="o">=</span> <span class="nn">lists</span><span class="p">:</span><span class="n">sort</span><span class="p">(</span><span class="k">fun</span><span class="p">({_,</span> <span class="nv">A</span><span class="p">,</span> <span class="p">_},</span> <span class="p">{_,</span> <span class="nv">B</span><span class="p">,</span> <span class="p">_})</span> <span class="o">-&gt;</span> <span class="nv">A</span> <span class="o">&gt;</span> <span class="nv">B</span> <span class="k">end</span><span class="p">,</span> <span class="nv">LatestEntries</span><span class="p">),</span>
+</span><span class="line">    <span class="p">{</span><span class="n">reply</span><span class="p">,</span> <span class="n">slice</span><span class="p">(</span><span class="nv">Sorted</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nv">Limit</span><span class="p">),</span> <span class="nv">State</span><span class="p">};</span>
+</span><span class="line"><span class="nf">handle_call</span><span class="p">(_</span><span class="nv">Request</span><span class="p">,</span> <span class="p">_</span><span class="nv">From</span><span class="p">,</span> <span class="nv">State</span><span class="p">)</span> <span class="o">-&gt;</span>
+</span><span class="line">    <span class="p">{</span><span class="n">reply</span><span class="p">,</span> <span class="n">ok</span><span class="p">,</span> <span class="nv">State</span><span class="p">}.</span>
+</span></code></pre></td></tr></table></div></figure><p>The first version of <tt class="docutils literal">handle_call</tt> is very straightforward.  It simply looks
+up the list of presence information for a given user and returns that in
+the reply.  The second version does a similar thing, but calls <tt class="docutils literal">lists:nthtail</tt>
+on the value to limit the number of presence data that is included in that list.</p>
+<p>The final version of <tt class="docutils literal">handle_call</tt> is the most complicated, because we want to
+get information about everyone, order it by the date that it was posted, and
+limit the number of returned results by the specified limit.  An added
+complexity is that we have to change the data format to include the name of the
+user who posted it.</p>
+<p>First it uses a list comprehension to take the state dictionary and run our
+<tt class="docutils literal">userfy_list</tt> function on every User/List pair.  This will add the user to the
+presence tuple.  Then we flatten that list to be just a single list of userfied
+tuples.  Then, we sort that by the middle value (the timestamp of the presence).
+Finally, we use our newly-created slice function to take just the slice of
+information that we care about and return it to the user.  Again, there is a
+catchall <tt class="docutils literal">handle_call</tt> which discards incorrectly-formatted messages.</p>
+<div class="section" id="demo">
+<h2>Demo</h2>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+</pre></td><td class="code"><pre><code class="erlang"><span class="line"><span class="mi">1</span><span class="o">&gt;</span> <span class="n">c</span><span class="p">(</span><span class="n">presence_database</span><span class="p">).</span>
+</span><span class="line"><span class="p">{</span><span class="n">ok</span><span class="p">,</span><span class="n">presence_database</span><span class="p">}</span>
+</span><span class="line"><span class="mi">2</span><span class="o">&gt;</span> <span class="nn">presence_database</span><span class="p">:</span><span class="n">start_link</span><span class="p">().</span>
+</span><span class="line"><span class="p">{</span><span class="n">ok</span><span class="p">,</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">.</span><span class="mi">37</span><span class="p">.</span><span class="mi">0</span><span class="o">&gt;</span><span class="p">}</span>
+</span><span class="line"><span class="mi">3</span><span class="o">&gt;</span> <span class="nn">presence_database</span><span class="p">:</span><span class="n">post_presence</span><span class="p">(</span><span class="s">&quot;ericflo&quot;</span><span class="p">,</span> <span class="s">&quot;I am at Super Happy Dev House&quot;</span><span class="p">).</span>
+</span><span class="line"><span class="n">ok</span>
+</span><span class="line"><span class="mi">4</span><span class="o">&gt;</span> <span class="nn">presence_database</span><span class="p">:</span><span class="n">post_presence</span><span class="p">(</span><span class="s">&quot;ericflo&quot;</span><span class="p">,</span> <span class="s">&quot;I am writing erlang code&quot;</span><span class="p">).</span>
+</span><span class="line"><span class="n">ok</span>
+</span><span class="line"><span class="mi">5</span><span class="o">&gt;</span> <span class="nn">presence_database</span><span class="p">:</span><span class="n">post_presence</span><span class="p">(</span><span class="s">&quot;dreid&quot;</span><span class="p">,</span> <span class="s">&quot;I am having fun at SHDH&quot;</span><span class="p">).</span>
+</span><span class="line"><span class="n">ok</span>
+</span><span class="line"><span class="mi">6</span><span class="o">&gt;</span> <span class="nn">presence_database</span><span class="p">:</span><span class="n">list_presence</span><span class="p">(</span><span class="s">&quot;ericflo&quot;</span><span class="p">).</span>
+</span><span class="line"><span class="p">[{{</span><span class="mi">1226</span><span class="p">,</span><span class="mi">816100</span><span class="p">,</span><span class="mi">955</span><span class="p">},</span><span class="s">&quot;I am at Super Happy Dev House&quot;</span><span class="p">},</span>
+</span><span class="line"> <span class="p">{{</span><span class="mi">1226</span><span class="p">,</span><span class="mi">816113</span><span class="p">,</span><span class="mi">249498</span><span class="p">},</span><span class="s">&quot;I am writing erlang code&quot;</span><span class="p">}]</span>
+</span><span class="line"><span class="mi">7</span><span class="o">&gt;</span> <span class="nn">presence_database</span><span class="p">:</span><span class="n">list_presence</span><span class="p">(</span><span class="s">&quot;dreid&quot;</span><span class="p">).</span>
+</span><span class="line"><span class="p">[{{</span><span class="mi">1226</span><span class="p">,</span><span class="mi">816135</span><span class="p">,</span><span class="mi">937300</span><span class="p">},</span><span class="s">&quot;I am having fun at SHDH&quot;</span><span class="p">}]</span>
+</span><span class="line"><span class="mi">8</span><span class="o">&gt;</span> <span class="nn">presence_database</span><span class="p">:</span><span class="n">public_list</span><span class="p">(</span><span class="mi">5</span><span class="p">).</span>
+</span><span class="line"><span class="p">[{</span><span class="s">&quot;dreid&quot;</span><span class="p">,{</span><span class="mi">1226</span><span class="p">,</span><span class="mi">816135</span><span class="p">,</span><span class="mi">937300</span><span class="p">},</span><span class="s">&quot;I am having fun at SHDH&quot;</span><span class="p">},</span>
+</span><span class="line"> <span class="p">{</span><span class="s">&quot;ericflo&quot;</span><span class="p">,{</span><span class="mi">1226</span><span class="p">,</span><span class="mi">816113</span><span class="p">,</span><span class="mi">249498</span><span class="p">},</span><span class="s">&quot;I am writing erlang code&quot;</span><span class="p">},</span>
+</span><span class="line"> <span class="p">{</span><span class="s">&quot;ericflo&quot;</span><span class="p">,</span>
+</span><span class="line">  <span class="p">{</span><span class="mi">1226</span><span class="p">,</span><span class="mi">816100</span><span class="p">,</span><span class="mi">955</span><span class="p">},</span>
+</span><span class="line">  <span class="s">&quot;I am at Super Happy Dev House&quot;</span><span class="p">}]</span>
+</span><span class="line"><span class="mi">9</span><span class="o">&gt;</span> <span class="nn">presence_database</span><span class="p">:</span><span class="n">public_list</span><span class="p">(</span><span class="mi">2</span><span class="p">).</span>
+</span><span class="line"><span class="p">[{</span><span class="s">&quot;dreid&quot;</span><span class="p">,{</span><span class="mi">1226</span><span class="p">,</span><span class="mi">816135</span><span class="p">,</span><span class="mi">937300</span><span class="p">},</span><span class="s">&quot;I am having fun at SHDH&quot;</span><span class="p">},</span>
+</span><span class="line"> <span class="p">{</span><span class="s">&quot;ericflo&quot;</span><span class="p">,{</span><span class="mi">1226</span><span class="p">,</span><span class="mi">816113</span><span class="p">,</span><span class="mi">249498</span><span class="p">},</span><span class="s">&quot;I am writing erlang code&quot;</span><span class="p">}]</span>
+</span></code></pre></td></tr></table></div></figure></div>
+<div class="section" id="conclusions">
+<h2>Conclusions</h2>
+<p>This really isn&#8217;t robust.  If we wanted it to be more robust, we should use
+some sort of persistent storage, we should use more than one process and do some
+sort of consistent hashing to distribute the load, and we should have a
+supervisor process to ensure that crashed processes restart correctly and reload
+their data.</p>
+<p>All of that is the case, but yet through this simple exercise I&#8217;ve learned a ton
+about Erlang&#8217;s <tt class="docutils literal">gen_server</tt> module.  I don&#8217;t know if my explanations will do
+people any good, but hopefully they give a glimpse into the world of Erlang.  So
+now that all of that is said, show me how to slice in Erlang!</p>
+<p><strong>EDIT:</strong> Commenter <em>Mihai</em> has made me aware of the <tt class="docutils literal">lists:sublist</tt> function, which does exactly what I want.  I can now discard my crappy slice function.</p>
+</div></div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Eric Florenzano</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-11-15T20:20:40-08:00" pubdate data-updated="true">Nov 15<span>th</span>, 2008</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/erlang/'>Erlang</a>, <a class='category' href='/blog/categories/presence/'>Presence</a>, <a class='category' href='/blog/categories/programming/'>Programming</a>, <a class='category' href='/blog/categories/gen-server/'>gen_server</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://ericflo.github.com/blog/2008/11/15/exploring-erlangs-genserver/" data-via="ericflo" data-counturl="http://ericflo.github.com/blog/2008/11/15/exploring-erlangs-genserver/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2008/11/14/easy-multi-database-support-django/" title="Previous Post: Easy Multi-Database Support for Django">&laquo; Easy Multi-Database Support for Django</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2008/11/16/writing-markov-chain-irc-bot-twisted-and-python/" title="next Post: Writing an Markov-Chain IRC Bot with Twisted and Python">Writing an Markov-Chain IRC Bot with Twisted and Python &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2011/02/16/technology-behind-convore/">The Technology Behind Convore</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/10/10/object-lesson-how-respond-criticism/">An Object Lesson in How to Respond to Criticism</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/09/27/why-node-disappoints-me/">Why node.js disappoints me</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/05/20/we-need-new-word-open/">We need a new word for "Open"</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/02/08/how-do-we-kick-our-synchronous-addiction/">How do we kick our synchronous addiction?</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("ericflo", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/ericflo" class="twitter-follow-button" data-show-count="false">Follow @ericflo</a>
+  
+</section>
+
+
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/109591387819364984777?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2011 - Eric Florenzano -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

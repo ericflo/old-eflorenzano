@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: PyMag | Eric Florenzano's Blog]]></title>
+  <link href="http://ericflo.github.com/blog/categories/pymag/atom.xml" rel="self"/>
+  <link href="http://ericflo.github.com/"/>
+  <updated>2011-12-31T23:14:37-08:00</updated>
+  <id>http://ericflo.github.com/</id>
+  <author>
+    <name><![CDATA[Eric Florenzano]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Intermediary Models and PyMag]]></title>
+    <link href="http://ericflo.github.com/blog/2008/07/29/intermediary-models-and-pymag/"/>
+    <updated>2008-07-29T23:11:17-07:00</updated>
+    <id>http://ericflo.github.com/blog/2008/07/29/intermediary-models-and-pymag</id>
+    <content type="html"><![CDATA[<p></p>
+
+<h2>Journey to Intermediary Models</h2>
+
+<p>It's been around an 8 month journey in adding intermediary model support to Django, starting with <code>a ticket</code><em> opened during a sprint by <code>Jacob Kaplan-Moss</code></em>.  Earlier that month I had been wrestling with several pretty nasty models, each with two foreign keys and many extra properties on that relation.  I kept thinking that Django makes everything else so easy, but that in at least this one aspect, it doesn't make things easy enough.  When Jacob posted his API idea, I was hooked.</p>
+
+<p>I quickly posted some thoughts and asked for a bit of clarification, and volunteered to write the patch.  Jacob responded saying he was glad to help me out.  It was only then that I actually delved into the code to see how it could be done.  It was only then that I realized that I had absolutely no knowledge or familiarity with that portion of the codebase--a portion that is nontrivial, to say the least.  But that's the good thing about committing to something: you feel pressure to follow through.</p>
+
+<p>Despite my incredible NaA-vitA, the patch got to a rudimentary usable state very quickly, and then started to flounder.  It was then that <code>Russell Keith-Magee</code>_ came into the picture, continually prodding me to add more tests, and thinking up many different test cases that I would have never come up with on my own.  I'm 100% certain that if Russ had not lent his expertise and guidance on this patch, it would have gotten lost and forgotten for a long time until someone more capable came along to take a look at it.</p>
+
+<p>A few hours ago, Russ <code>committed the patch to trunk</code><em>.  It's interesting to see the <code>reactions</code></em> that <code>some people have</code><em>, but on any project like this you'll always be scrutinized.  In any case, check out the <code>two</code></em> new bits of <code>documentation</code>_, and see if intermediary models are right for your project.  After having this great experience with working on a patch for Django, I'll definitely be looking to help out in other places as well.  My advice for anyone looking to get involved with the project is to, well, get involved!  Jump in over your head.  It's more fun that way.</p>
+
+<h2>PyMag</h2>
+
+<p>For around as long as I have been working on intermediary model support, I've been supporting another Django project of mine: django-threadedcomments<em>.  One of the things that I noticed a few months into maintaining the project is that outside of a few people who were actively using it, not many people really knew about its existence.  So when <code>Doug Hellmann</code> (of the famously excellent PyMOTW</em> series) contacted me about writing an article for PyMag_, it was immediately apparent what I would love to write about.  Over 4000 words later, between finals and school projects and moving across state boundaries, the article was written.</p>
+
+<p>To be honest, I had almost completely forgotten about having written it, aside from one short e-mail conversation with the technical editor.  It turns out that the July 2008 edition of PyMag<em> has arrived and my article is listed under "featured articles".  How cool is that!?  I'm quite proud of the article, and really hope that it helps some people out with their Django websites.  If you aren't a PyMag</em> subscriber, then what are you waiting for?</p>
+
+<p>This post seems to be doing a lot of self-promotion--sorry for that.  But these two things really made my day, and to me, blogging is about sharing those awesome days with others.</p>
+
+<p>.. <em><code>a ticket</code>: http://code.djangoproject.com/ticket/6095
+.. </em><code>Jacob Kaplan-Moss</code>: http://www.jacobian.org/
+.. <em><code>Russell Keith-Magee</code>: http://djangopeople.net/freakboy3742/
+.. </em><code>committed the patch to trunk</code>: http://code.djangoproject.com/changeset/8136
+.. <em><code>reactions</code>: http://www.reddit.com/comments/6tzig/django_gets_intermediate_models/
+.. </em><code>some people have</code>: http://www.reddit.com/comments/6ty8n/extra_fields_on_m2m_relationships_has_landed_in/
+.. <em><code>two</code>: http://www.djangoproject.com/documentation/model-api/#extra-fields-on-many-to-many-relationships
+.. </em>PyMag: http://pymag.phparch.com/
+.. <em><code>documentation</code>: http://www.djangoproject.com/documentation/admin/#working-with-many-to-many-intermediary-models
+.. </em>django-threadedcomments: http://code.google.com/p/django-threadedcomments/
+.. _PyMOTW: http://blog.doughellmann.com/search/label/PyMOTW
+</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: news | Eric Florenzano's Blog]]></title>
+  <link href="http://ericflo.github.com/blog/categories/news/atom.xml" rel="self"/>
+  <link href="http://ericflo.github.com/"/>
+  <updated>2011-12-31T23:14:37-08:00</updated>
+  <id>http://ericflo.github.com/</id>
+  <author>
+    <name><![CDATA[Eric Florenzano]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[35W Bridge]]></title>
+    <link href="http://ericflo.github.com/blog/2007/08/01/35w-bridge/"/>
+    <updated>2007-08-01T18:35:42-07:00</updated>
+    <id>http://ericflo.github.com/blog/2007/08/01/35w-bridge</id>
+    <content type="html"><![CDATA[<p>
+My thoughts go out to everyone affected in the tragedy of the fallen 35W bridge today in Minnesota.</p>
+
+<p>This is such a terrible event, but I hope that it ends up looking worse than it actually is.
+</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Eventlet | Eric Florenzano's Blog]]></title>
+  <link href="http://ericflo.github.com/blog/categories/eventlet/atom.xml" rel="self"/>
+  <link href="http://ericflo.github.com/"/>
+  <updated>2011-12-31T23:14:37-08:00</updated>
+  <id>http://ericflo.github.com/</id>
+  <author>
+    <name><![CDATA[Eric Florenzano]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[The Technology Behind Convore]]></title>
+    <link href="http://ericflo.github.com/blog/2011/02/16/technology-behind-convore/"/>
+    <updated>2011-02-16T12:29:35-08:00</updated>
+    <id>http://ericflo.github.com/blog/2011/02/16/technology-behind-convore</id>
+    <content type="html"><![CDATA[<p>
+We launched Convore<em> last week, and the first question developers tend to ask
+when they find Convore</em> is "what technology powers this site?"  It is asked so
+often, in fact, that we have started to copy and paste the same short response
+again and again.  That response was good enough to satisfy people who simply
+wanted to know if we were Rails or Django, or whether we were using node.js for
+the real-time stuff, but this article will expand upon that--  not only giving
+more details for the curious, but also giving us a link to point people at when
+they ask the question in the future.  I always wish other people were totally
+open about their architectures, so that I can learn from their good choices and
+their bad, so I'd like to be as open as possible about ours.  Let's dive in!</p>
+
+<h2>The basics</h2>
+
+<p>All of our application code is powered by Python.  Our front-end html page
+generation is done by Django, which we use in a surprisingly traditional way
+given the real-time nature of Convore as a product.  Everything is assembled
+at once: all messages, the sidebar, and the header are all rendered on the
+server instead of being pulled in after-the-fact with JavaScript.  All of the
+important data is canonically stored in PostgreSQL, including messages, topics,
+groups, unread counts, and user profiles.  Search functionality is provided by
+Solr, which is interfaced into our application by way of the handy Haystack
+Django application.</p>
+
+<h2>The message lifecycle</h2>
+
+<p>When a new message comes into the system, first it's parsed by a series of
+regular expressions designed to pull out interesting bits of information from
+the message.  Right now all we're looking for is username references and
+links (and further, whether those links point at images which should be
+rendered in-line.)  At the end of this parsing stage, we have a structured
+message parse list, which is converted into JSON.</p>
+
+<p>So, for example if someone posted the message:</p>
+
+<p>.. code-block:: text</p>
+
+<pre><code>@ericflo @simonw Here's how we connect/disconnect from Redis in production: http://dpaste.com/406797/
+</code></pre>
+
+<p>The resulting JSON parse list would look like this:</p>
+
+<p>.. code-block:: text</p>
+
+<pre><code>[
+    {
+        "type": "username",
+        "user_id": 1, 
+        "username": "ericflo",
+        "markup": "&lt;a href=\"/users/ericflo/\"&gt;@ericflo&lt;/a&gt;"
+    }, 
+    {
+        "type": "username", 
+        "user_id": 56, 
+        "username": "simonw",
+        "markup": " &lt;a href=\"/users/simonw/\"&gt;@simonw&lt;/a&gt;"
+    }, 
+    {
+        "type": "text",
+        "markup": " Here&amp;#39;s how we connect/disconnect from Redis in production: "
+    }, 
+    {
+        "type": "url", 
+        "url": "http://dpaste.com/406797/",
+        "markup": "&lt;a href=\"http://dpaste.com/406797/\" target=\"_blank\"&gt;http://dpaste.com/406797/&lt;/a&gt;"
+    }
+]
+</code></pre>
+
+<p>After this is constructed, we log all our available information about this
+message, and then save to the database--  both the raw message as it was received,
+and the JSON-encoded parsed node list.</p>
+
+<p>Now a task is sent to Celery (by way of Redis) notifying it that this new
+message has been received.  This Celery task now increments the unread count
+for everyone who has access to the topic that the message was posted in, and
+then it publishes to a Redis pub/sub for the group that the message was posted
+to.  Finally, the task scans through the message, looking for any users that
+were mentioned in the message, and writes entries to the database for every
+mention.</p>
+
+<p>On the other end of that pub/sub are the many open http requests that our users
+have initiated, which are waiting for any new messages or information.  Those
+all simultaneously return the new message information, at which point they
+reconnect again, waiting for the next message to arrive.</p>
+
+<h2>The real-time endpoint</h2>
+
+<p>Our live updates endpoint is actually a very simple and lightweight pure-WSGI
+Python application, hosted using Eventlet.  It spawns off a coroutine for each
+request, and in that coroutine, it looks up all the groups that a user is a
+member of, and then opens a connection to Redis subscribing to all of those
+channels.  Each of these Eventlet-hosted Python applications has the ability to
+host hundreds-to-thousands of open connections, and we run several instances
+on each of our front-end machines.  It has a few more responsibilities, like
+marking a topic as read before it returns a response, but the most important
+thing is to be a bridge between the user and Redis pub/sub.</p>
+
+<h2>Future improvements</h2>
+
+<p>There are so many places where our architecture can be improved.  This is our
+first version, and now that real users are using the system, already some of
+our initial assumptions are being challenged.  For instance, we thought that
+pub/sub to a channel per group would be enough, but what that means is that
+everyone in a group sees the exact same events as everyone else in that group.</p>
+
+<p>This means we don't have the ability to customize each user's experience based
+on their preferences--no way to put a user on ignore, filter certain messages,
+etc.  It also means that we aren't able to sync up a user's experience across
+tabs or browsers, since we don't really want to broadcast to everyone in the
+group that one user has visited a topic, thereby removing any unread messages
+in that topic.  So going forward we're going to have to break up that per-group
+pub/sub into per-user pub/sub.</p>
+
+<p>Another area that could be improved is our unread counts.  Right now they're
+stored as rows in our PostgreSQL database, which makes it extremely easy to
+batch update them and do aggregate queries on them, but the number of these
+rows is increasing rapidly, and without some kind of sharding scheme, it will
+at some point become more difficult to work with such a large amount of rows.
+My feeling is that this will eventually need to be moved into a non-relational
+data store, and we'll need to write a service layer in front of it to deal with
+pre-aggregating and distributing updates, but nothing is set in stone just yet.</p>
+
+<p>Finally, Python may not be the best language for this real-time endpoint.
+Eventlet is a fantastic Python library and it allowed us to build something
+extremely fast that has scaled to several thousand concurrent connections
+without breaking a sweat on launch day, but it has its limits.  There is a
+large body of work out there on handling a large number of open connections,
+using Java's NIO framework, Erlang's mochiweb, or node.js.</p>
+
+<h2>That's all folks</h2>
+
+<p>We're pretty proud of what we've built in a very short time, and we're glad
+it has held up as well as it has on our launch day and afterwards.  We're
+excited about the problems we're now being faced with, both scaling the
+technology, and scaling the product.  I hope this article has quenched any
+curiosity out there about how Convore works.  If there are any questions,
+feel free to join Convore_ and ask away!</p>
+
+<p>(Or discuss it <code>on Hacker News</code>_)</p>
+
+<p>.. <em>Convore: https://convore.com/
+.. </em><code>on Hacker News</code>: http://news.ycombinator.com/item?id=2228137
+</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Spawning + Django]]></title>
+    <link href="http://ericflo.github.com/blog/2008/07/30/spawning-django/"/>
+    <updated>2008-07-30T21:51:17-07:00</updated>
+    <id>http://ericflo.github.com/blog/2008/07/30/spawning-django</id>
+    <content type="html"><![CDATA[<p>
+Yesterday <code>Donovan Preston</code><em> released new versions of both eventlet</em> and Spawning<em>.  What are those, you ask?  Eventlet</em> is a networking library written using coroutines instead of normal subroutes, which makes writing networked non-blocking IO applications much much simpler.  Spawning is a WSGI<em> server, written using eventlet</em>, which supports all of the things you'd expect of a good WSGI_ server: multiple processes, multiple threads, etc.</p>
+
+<p>Considering that I sit next to Donovan at work all day, I've overheard him extolling the numerous advantages to using a server such as Spawning<em>--the most obvious of which is completely graceful code reloading.  Donovan has given a presentation explaining how all of this works, the <code>slides of which</code></em> probably explain it better than I could.  When he told me that he'd added the ability to easily run Django apps with Spawning, I decided to check it out.</p>
+
+<p>First, I installed spawning:</p>
+
+<p>.. code-block:: bash</p>
+
+<pre><code>sudo easy_install Spawning
+</code></pre>
+
+<p>And away setuptools went and installed all of the prerequisites and the package itself.  (I have had problems with this in the past, but grabbing greenlet, eventlet, simplejson, PasteDeploy, and Spawning and installing them individually does the trick).</p>
+
+<p>The next thing to do is go to the directory which holds your settings.py, or at least make setup.py available on the Python path.  I tend to find it easier to just go to the directory.  Then type the following:</p>
+
+<p>.. code-block:: bash</p>
+
+<pre><code>spawn --factory=spawning.django_factory.config_factory settings --port 9090 -s 4 -t 100
+</code></pre>
+
+<p>This starts up a Spawning server with 4 processes and 100 threads.  I chose those numbers almost completely arbitrarily.  (Well, that's not entirely true, my Apache setup previously had 4 processes and 100 requests per child.  I know that requests per child doesn't map at all to threads, but that's where I got the number.)  The next thing to do is visit your site, but instead of visiting the normal port 80 or 8000, visit port 9090.  If you're running it on your own box, that should be http://127.0.0.1:9090/.</p>
+
+<p>For me, it worked like a charm.  It felt like my server was responding faster than ever, but at that point it was just a feeling.  To get some quantitative analysis, I ran apachebench<em> with 20 concurrent requests for a total of 10000 requests.  On my Apache + mod_wsgi</em> setup, I got <strong>235.65</strong> requests per second.  That was really good, I thought!  However, with the Spawning setup, I got <strong>347.20</strong> requests per second.  I would need to test this much more in-depth if I were a statistician, but it's good enough for me as it did confirm my qualitative analysis.</p>
+
+<p>If you're viewing this on my website directly, then you've already used Spawning, as I've switched over this blog to use the new server.  Let me know what you think!  Has my site slowed to a crawl?  Is it going faster than ever (because I know everyone remembers the speed at which eflorenzano.com loads)?</p>
+
+<p>In all, it was an extremely easy upgrade.  I would recommend that everyone who has an interest in these types of things at least try it--especially if you're looking into other pure-python WSGI servers like CherryPy_.</p>
+
+<p><strong>UPDATE</strong>: If you were having troubles reaching the site before, it's because I was having problems with my database due to another app on the same server, not due to anything that Spawning was doing wrong.</p>
+
+<p>.. <em><code>Donovan Preston</code>: http://ulaluma.com/pyx/
+.. </em>eventlet: http://pypi.python.org/pypi/eventlet/0.7
+.. <em>Spawning: http://pypi.python.org/pypi/Spawning/0.7
+.. </em>Eventlet: http://pypi.python.org/pypi/eventlet/0.7
+.. <em>WSGI: http://www.wsgi.org/wsgi/
+.. </em><code>slides of which</code>: http://soundfarmer.com/content/slides/coroutines-nonblocking-io-eventlet-spawning/coros,%20nonblocking%20i:o,%20eventlet,%20spawning.pdf
+.. <em>apachebench: http://en.wikipedia.org/wiki/ApacheBench
+.. </em>mod_wsgi: http://code.google.com/p/modwsgi/
+.. _CherryPy: http://www.cherrypy.org/
+</p>
+]]></content>
+  </entry>
+  
+</feed>

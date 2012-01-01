@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Digg | Eric Florenzano's Blog]]></title>
+  <link href="http://ericflo.github.com/blog/categories/digg/atom.xml" rel="self"/>
+  <link href="http://ericflo.github.com/"/>
+  <updated>2011-12-31T23:14:37-08:00</updated>
+  <id>http://ericflo.github.com/</id>
+  <author>
+    <name><![CDATA[Eric Florenzano]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Announcing django-threadedcomments]]></title>
+    <link href="http://ericflo.github.com/blog/2008/01/23/announcing-django-threadedcomments/"/>
+    <updated>2008-01-23T09:26:04-08:00</updated>
+    <id>http://ericflo.github.com/blog/2008/01/23/announcing-django-threadedcomments</id>
+    <content type="html"><![CDATA[<p>
+Django-threadedcomments_ is a simple yet flexible threaded commenting system for Django.  What I mean when I say threaded is that commenters can reply not only to the original item, but to other comments as well.  It is very similar to what Reddit or Digg have in their comments sections.</p>
+
+<p>The idea for this application started about a month and a half ago, when my good friend Tony Hauber asked if I would work with him on a project idea that he had (more info on this in the future).  One of the major components of the project would need to be threaded comments.  Naturally, the first thing that I did was attempt to make <code>django.contrib.comments</code> work for this purpose.  In the end, however, I kept running into problems which all basically boiled down to the fact that <code>django.contrib.comments</code> was never meant for this purpose.</p>
+
+<p>So I used <code>django.contrib.comments</code> as a starting point, brought in some of the best features of the excellent django-comment-utils<em> (In fact, django-threadedcomments</em> actually provides a fair amount of compatiblity with the Managers from django-comment-utils), and added a bit of my own alchemy.  This is the result of those things.</p>
+
+<p>A lot of effort has gone into documentation on this project: inline documentation, <code>a tutorial on setting it up with a blog</code><em>, and <code>complete API documentation</code></em>.  In fact, to see what you'll get after completing <code>the tutorial</code><em>, head on over to <code>this page</code></em>.  Please excuse my color scheme there--It's the comments that I'm trying to show off, not my design skills (or lack thereof).</p>
+
+<p>If you're worried about the hassle of writing a script to migrate all of your <code>django.contrib.comments</code> comments to this new system, then fear not: there's an included migration script and you'll only need to run <code>python manage.py migratecomments</code> and the migration is automatically taken care of for you.</p>
+
+<p>I really hope that this can be a useful tool for people looking to add a threaded commenting system to a project of theirs.  <code>Check it out</code>_ and see if it's right for you!</p>
+
+<p>.. <em>Django-threadedcomments: http://code.google.com/p/django-threadedcomments/
+.. </em>django-comment-utils: http://code.google.com/p/django-comment-utils/
+.. <em>django-threadedcomments: http://code.google.com/p/django-threadedcomments/
+.. </em><code>a tutorial on setting it up with a blog</code>: http://api.rst2a.com/1.0/rst2/html?uri=http%3A//django-threadedcomments.googlecode.com/svn/trunk/docs/tutorial.txt&amp;style=zope
+.. <em><code>complete API documentation</code>: http://api.rst2a.com/1.0/rst2/html?uri=http%3A//django-threadedcomments.googlecode.com/svn/trunk/docs/api.txt&amp;style=zope
+.. </em><code>the tutorial</code>: http://api.rst2a.com/1.0/rst2/html?uri=http%3A//django-threadedcomments.googlecode.com/svn/trunk/docs/tutorial.txt&amp;style=zope
+.. <em><code>this page</code>: http://www.eflorenzano.com/threadedcomments/example/
+.. </em><code>Check it out</code>: http://code.google.com/p/django-threadedcomments/
+</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Sphinx Search, Totally Rad Website]]></title>
+    <link href="http://ericflo.github.com/blog/2007/08/06/sphinx-search-totally-rad-website/"/>
+    <updated>2007-08-06T22:00:36-07:00</updated>
+    <id>http://ericflo.github.com/blog/2007/08/06/sphinx-search-totally-rad-website</id>
+    <content type="html"><![CDATA[<p>
+<code>Sphinx Search ROCKS!</code><em>  I'm pretty sure it'll be the solution to my MusicBrainz problems for my secret project.  I'm going to set up a simple postgres server holding the MusicBrainz database, with Sphinx Search installed, and have it index on a cron.  It'll be awesome!  After trying out Lucene</em> and its derivatives and being so underwhelmed, it's exciting to discover an app that truly seems to rock.  I'll report back on it later, but right now the indexer is 4 million queries into a 60 million query index.  Yeah, it's going to be a while.</p>
+
+<p>I've been wanting to test drive two new technologies this past week, the first is <code>Blueprint, the CSS Framework</code><em> which I saw on Digg</em> a few days ago.  I also really wanted to try some new stuff with FreeComments, including saving people's login information in the session.  I'm messing with both of those things in a side-side project related to <code>The Totally Rad Show</code>_ which I think promises to be really fun.  I've spent only a couple of hours on it, but I think it's going to be probably my first project that people end up using.</p>
+
+<p>So, <code>Stick Tuned</code>_ for a fun announcement from me in the next week or 2 weeks at the latest.  (The problem with this project is there's lots of data to enter which will take time.)</p>
+
+<p>That's it for today, a short and sweet entry into this blog-o-rama.</p>
+
+<p>.. <em><code>Sphinx Search ROCKS!</code>: http://www.sphinxsearch.com/
+.. </em>Lucene: http://lucene.apache.org/java/docs/
+.. <em><code>Blueprint, the CSS Framework</code>: http://bjorkoy.com/blueprint/index.html
+.. </em>Digg: http://www.digg.com
+.. <em><code>The Totally Rad Show</code>: http://revision3.com/trs
+.. </em><code>Stick Tuned</code>: http://revision3.com/trs/tuned
+</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[New Site Live!]]></title>
+    <link href="http://ericflo.github.com/blog/2006/12/03/new-site-live/"/>
+    <updated>2006-12-03T14:23:54-08:00</updated>
+    <id>http://ericflo.github.com/blog/2006/12/03/new-site-live</id>
+    <content type="html"><![CDATA[<p>
+Hello all!  I have finally put my new website up for the world to see!  I'm still not much for designing the look and feel of websites, but after learning all about Django, I felt like I just had to update my website to use Django.</p>
+
+<p>Under the hood, there is low-level caching being done on both the Digg RSS feed and the Yahoo Flickr feed.  There are two RSS feeds available for the site: new blog posts, and new run information.  To show the graph under runs, I've used some AJAX to get the running data dynamically and create the graph with javascript.  Finally, I've created a custom Django template tag to allow me to post syntax-highlighted code using Pygments.</p>
+
+<p>Example of pygmentized code (the one from this site, actually, that gets my latest digg articles):</p>
+
+<p>.. code-block:: python</p>
+
+<pre><code>def get_digg_rss():
+    d = feedparser.parse('http://www.digg.com/rss/floguy/index2.xml')
+    dugg_dicts = cache.get('dugg_dicts')
+    if dugg_dicts == None:
+        print "Had to re-fetch digg links"
+        dugg_dicts = []
+        for entry in d.entries:
+            dugg_dicts.append({'title':entry.title, 'link':entry.link})
+        cache.set('dugg_dicts', dugg_dicts, 60*60)
+    return dugg_dicts
+</code></pre>
+
+<p>I hope that you all enjoy the website, and I also hope that you'll begin to frequent it, because I'll be keeping it up-to-date with the goings-on of my professional life.
+</p>
+]]></content>
+  </entry>
+  
+</feed>

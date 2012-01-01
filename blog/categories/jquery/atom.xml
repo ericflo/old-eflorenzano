@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: jquery | Eric Florenzano's Blog]]></title>
+  <link href="http://ericflo.github.com/blog/categories/jquery/atom.xml" rel="self"/>
+  <link href="http://ericflo.github.com/"/>
+  <updated>2011-12-31T23:14:37-08:00</updated>
+  <id>http://ericflo.github.com/</id>
+  <author>
+    <name><![CDATA[Eric Florenzano]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[FriendFeed Comment Expand Bookmarklet]]></title>
+    <link href="http://ericflo.github.com/blog/2008/05/27/friendfeed-comment-expand-bookmarklet/"/>
+    <updated>2008-05-27T00:47:57-07:00</updated>
+    <id>http://ericflo.github.com/blog/2008/05/27/friendfeed-comment-expand-bookmarklet</id>
+    <content type="html"><![CDATA[<p>
+Recently I've been using a lot of FriendFeed_ lately, and found it a bit annoying to expand comments one-by-one, so I wrote a quick bookmarklet to automatically expand all comments out.</p>
+
+<p>Drag this bookmarklet to your bookmarks toolbar to get in on the action:</p>
+
+<p><code>Show All Comments</code>_</p>
+
+<p>By the way, feel free to <code>follow me</code>_ on FriendFeed as well to see my various online activities.  I'm in the habit of following people who follow me.</p>
+
+<p>.. <em>FriendFeed: http://friendfeed.com/
+.. </em><code>Show All Comments</code>: javascript: (function(A){A.parents(".commentexpander").hide();A.parents(".comments").show().find(".hiddencomments").show(100)})(jQuery('.l_showcomments'))
+.. _<code>follow me</code>: http://friendfeed.com/ericflo
+</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[AJAX, Voting, and Some Nicer CSS: Putting django-threadedcomments to the Test]]></title>
+    <link href="http://ericflo.github.com/blog/2008/01/30/ajax-voting-nicer-css-threadedcomments-test/"/>
+    <updated>2008-01-30T10:02:13-08:00</updated>
+    <id>http://ericflo.github.com/blog/2008/01/30/ajax-voting-nicer-css-threadedcomments-test</id>
+    <content type="html"><![CDATA[<p>
+It's an interesting feeling open-sourcing an application that you've developed for your own purposes.  Will people use it?  Will people find major design flaws?  Is it just a big waste of time?  These were the questions that were going through my mind before open-sourcing django-threadedcomments_.  Fortunately, my worries were quelled almost instantly as a people reacted quite positively to the application.  There was one recurring comment, however, that almost everyone who tried the sample implementation said: <strong>those colors are hideous</strong>.</p>
+
+<p>Beyond even that though, it seems that people saw the sample implementation and got the impression that django-threadedcomments = that sample implementation.  To me, that's an underestimation of the power of the modular django app.  I think that <code>James Bennett</code>_ hits the nail on the head when he says that:</p>
+
+<pre><code>"Rather than a single definitive 'Django blog' application, for example, I think it--  s much more likely 
+we--  ll see a collection of applications which, taken together, provide all the key 
+functionality..."
+</code></pre>
+
+<p>It was this sentiment that pervaded nearly all of the design decisions behind django-threadedcomments: it should be flexible, modular, and reusable so that, taken together with other similarly-designed apps, it can provide some compelling functionality at a fraction of the effort.  Now we most assuredly didn't achieve all of those design goals fully, but I believe we're headed in at least the right direction with its development.</p>
+
+<p>To prove my point, I decided to create an improved Digg/Reddit comment system clone using <code>Jonathan Buchanan</code><em>'s wonderful django-voting</em> application, alongside django-threadedcomments<em>, and a fair bit of jQuery</em>.  Being almost completely new to Javascript, I was pleasantly surprised by how easy it was to not only integrate all of these technologies and use extensive client- and server-side scripting, but also to achieve a compelling commenting system in well under a week of spare time.  Oh, and this time there was actually some effort in making the look and feel of the commenting system acceptable!  As with the first example, this one is completely open sourced and available in the django-threadedcomments SVN repository.</p>
+
+<p>Without further ado, the <code>Example Digg/Reddit Comment Clone Plus Focus</code>_.</p>
+
+<p>.. <em>django-threadedcomments: http://code.google.com/p/django-threadedcomments/
+.. </em><code>James Bennett</code>: http://www.b-list.org/weblog/2007/nov/29/django-blog/
+.. <em><code>Jonathan Buchanan</code>: http://insin.webfactional.com/weblog/
+.. </em>django-voting: http://code.google.com/p/django-voting/
+.. <em>jQuery: http://jquery.com/
+.. </em><code>Example Digg/Reddit Comment Clone Plus Focus</code>: http://www.eflorenzano.com/threadexample/blog/
+</p>
+]]></content>
+  </entry>
+  
+</feed>

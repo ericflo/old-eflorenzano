@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Screencast | Eric Florenzano's Blog]]></title>
+  <link href="http://ericflo.github.com/blog/categories/screencast/atom.xml" rel="self"/>
+  <link href="http://ericflo.github.com/"/>
+  <updated>2011-12-31T23:14:37-08:00</updated>
+  <id>http://ericflo.github.com/</id>
+  <author>
+    <name><![CDATA[Eric Florenzano]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA["Django From the Ground Up" Screencast Series Launched]]></title>
+    <link href="http://ericflo.github.com/blog/2008/09/18/django-ground-screencast-series-launched/"/>
+    <updated>2008-09-18T21:33:09-07:00</updated>
+    <id>http://ericflo.github.com/blog/2008/09/18/django-ground-screencast-series-launched</id>
+    <content type="html"><![CDATA[<p>
+Over the past few weeks I've been busy coding, planning, and recording a series of screencasts which walk through the complete process of building a web application, from the ground up, with Django.  First I actually needed to code the site, deploy the site, and release the source code for the site.  Then, I had to go back and decide what in that whole process was worth talking about.  Finally, I had to re-code the site, but this time in front of the camera.  It's been a long process so far and I'm not finished yet, but tonight is the night that I am finally able to unveil the first two episodes.</p>
+
+<p>If you haven't checked them out yet, head over to <code>their spot on thisweekindjango.com</code>_.</p>
+
+<p>One thing that I'm a little bit worried about is that, by the very nature of going every step along the way, there are going to be some times where a topic I cover is on the more advanced side of things, and there are going to be topics that I cover which are on the more beginner side of things.  That can be fine, but there's a risk that in targeting such a broad audience, nobody ends up enjoying it.  As long as at least one person gets something out of the screencasts, I'll be happy.</p>
+
+<p>So please, I only have 7 screencasts recorded so far, which means there is still time to turn this boat around!  If you have any suggestions or comments or questions, please leave a comment either here or on the <code>episode's page at thisweekindjango.com</code>_.</p>
+
+<p>.. <em><code>their spot on thisweekindjango.com</code>: http://thisweekindjango.com/screencasts/episode/10/django-ground-episodes-1-and-2/
+.. </em><code>episode's page at thisweekindjango.com</code>: http://thisweekindjango.com/screencasts/episode/10/django-ground-episodes-1-and-2/
+</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[First Two Django Screencasts]]></title>
+    <link href="http://ericflo.github.com/blog/2008/07/12/first-two-django-screencasts/"/>
+    <updated>2008-07-12T20:09:49-07:00</updated>
+    <id>http://ericflo.github.com/blog/2008/07/12/first-two-django-screencasts</id>
+    <content type="html"><![CDATA[<p>
+It's always been a goal of mine to post screencasts here on my blog, but for whatever reason I never ended up getting around to it.  Today, that all changes as I have created two new screencasts.  Of course, this space is already very well-covered by both <code>Michael Trier</code><em> and <code>Brian Rosner</code></em>, so hopefully this adds something new to the conversation.</p>
+
+<h2>Setting up a Django Development Environment</h2>
+
+<p>In this screencast I show how I typically set up my Django development environment.  It goes through installing Django by checking out the latest development version and linking it to the correct places on your system.  It also talks about how to install reusable applications.  Finally, it covers how to update all of those projects and keep a toolbox of snippets for your personal use.</p>
+
+<p>.. raw:: html</p>
+
+<pre><code>&lt;embed src="http://blip.tv/play/AcH7agA" type="application/x-shockwave-flash" width="720" height="510" allowscriptaccess="always" allowfullscreen="true"&gt;&lt;/embed&gt;
+</code></pre>
+
+<p>The simple pylink command that I use in the screencast is this:</p>
+
+<p>.. code-block:: python</p>
+
+<pre><code>#!/bin/bash
+ln -s `pwd`/$1 `python -c "from distutils.sysconfig import get_python_lib; print get_python_lib()"`/$1
+</code></pre>
+
+<p><strong>UPDATE:</strong> <code>Joshua Uziel</code>_ has sent me a much more robust version of this script, which handles the edge cases much better.  I highly recommend using this version instead of my one-liner.</p>
+
+<p>.. code-block:: bash</p>
+
+<pre><code>#!/bin/bash
+
+SITE_PACKAGES="$HOME/prog/python/site-packages"
+
+if [ ! $SITE_PACKAGES ]
+then
+    SITE_PACKAGES=`python -c "from distutils.sysconfig import get_python_lib; print get_python_lib()"`
+fi
+
+BASE=`basename $1`
+DIR=`dirname $1`
+
+cd $DIR
+ln -sfnv `pwd`/$BASE $SITE_PACKAGES/$BASE
+</code></pre>
+
+<p><strong>UPDATE2:</strong> <code>Zachary Voase</code><em> has updated this new version, and it seems to be even more improved.  I'm loving this!  He has also written a "pyunlink" script, which can be found here</em>.</p>
+
+<p>Please let me know in the comments if you have any other tips and tricks for setting up a development environment for Django.</p>
+
+<h2>Using Django-Pagination</h2>
+
+<p>Django-pagination<em> is an application that I wrote and released a while ago, which I use <em>all the time</em>, but that hasn't really seen much attention.  In this screencast, I show how to take an existing project with too much data on one page, and use django-pagination</em> to quickly and easily paginate the items on the page.  There is a bit more documentation for the project that's available in the project directory if you do a subversion checkout, and docstrings throughout the source code, if you're interested in how it works.</p>
+
+<p>.. raw:: html</p>
+
+<pre><code>&lt;embed src="http://blip.tv/play/AcH4UAA" type="application/x-shockwave-flash" width="720" height="510" allowscriptaccess="always" allowfullscreen="true"&gt;&lt;/embed&gt;
+</code></pre>
+
+<h2>Keep in Mind</h2>
+
+<p>These are my very first screencasts, ever.  I'm not entirely sure what I'm doing yet, and the only way I can improve is by your feedback.  If you have any advice and/or criticisms of these screencasts, please don't keep your mouth shut--speak up, and let me know in the comments.  Hopefully someone finds these useful, and thanks for watching!</p>
+
+<p>.. <em><code>Michael Trier</code>: http://blog.michaeltrier.com/screencasts
+.. </em><code>Brian Rosner</code>: http://oebfare.com/blog/2008/jan/23/using-git-django-screencast/
+.. <em>Django-pagination: http://code.google.com/p/django-pagination/
+.. </em>django-pagination: http://code.google.com/p/django-pagination/
+.. <em><code>Joshua Uziel</code>: http://www.uzix.org/
+.. </em><code>Zachary Voase</code>: http://gist.github.com/21649
+.. _here: http://gist.github.com/21650
+</p>
+]]></content>
+  </entry>
+  
+</feed>

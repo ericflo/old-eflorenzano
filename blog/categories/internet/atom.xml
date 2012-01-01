@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: internet | Eric Florenzano's Blog]]></title>
+  <link href="http://ericflo.github.com/blog/categories/internet/atom.xml" rel="self"/>
+  <link href="http://ericflo.github.com/"/>
+  <updated>2011-12-31T23:14:37-08:00</updated>
+  <id>http://ericflo.github.com/</id>
+  <author>
+    <name><![CDATA[Eric Florenzano]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[The internet is in immediate danger of collapse]]></title>
+    <link href="http://ericflo.github.com/blog/2008/11/05/internet-immediate-danger-collapse/"/>
+    <updated>2008-11-05T21:38:48-08:00</updated>
+    <id>http://ericflo.github.com/blog/2008/11/05/internet-immediate-danger-collapse</id>
+    <content type="html"><![CDATA[<p>
+Wow, that's quite a title!  You're already probably queuing up all of your
+counterpoints and your rebuttals.  In fact it's not quite that serious, but a
+seriously worrying trend is emerging that I'd like to address.</p>
+
+<h2>The Problem</h2>
+
+<p>Today many sites are so totally dependent on 3rd-party services that when
+certain services go down, a chain of outages end up knocking out many of the
+sites that we use on a daily basis--some for critical business applications.
+But I'm being too abstract, so let's take a concrete example of this: Google
+Analytics.</p>
+
+<p>Back in late 2007, <code>Google's analytics and monitoring service</code>_ went
+down with no explanation.  Most sites at that time had installed a line of
+Javascript in their HTML <code>head</code> element which made a call to
+<code>document.write</code>.  This causes the <strong>rest of the site to stop and wait for
+Google's servers</strong>.  Normally this is not a bad thing, because Google has some
+pretty fast and reliable web servers.  But in this 24 hour period, anyone who
+had this code in their <code>head</code> element had an absolutely broken site.  Users
+could not see their site at all.  And was no fault of either the site developers
+or of the users--just Google's fault.</p>
+
+<p>Another example: Earlier this year, Amazon had an outage in their popular S3_
+file storage service for several hours.  At the time, you didn't need to be very
+tech savvy or know much about computers to know that something was seroiusly
+wrong with the internet.  Sites from across the net were throwing 500 errors,
+looking completely awful without their media files, and the internet simply
+became a pretty awful place to get things done.  From one company.  Having a
+problem with one service.</p>
+
+<p>And since then we have become even more dependent on 3rd party services for
+even more widgets, "cloud computing", and more.  Frankly this "cloud computing"
+craze scares the hell out of me.  The more interconnected our various bits of
+HTML and HTTP are, the more chances there are for massive catastrophe.  Just
+look at the credit default swaps problem we're having in the USA for another
+concrete example of how this type of interdependence can fail in catastrophic
+ways.</p>
+
+<h2>The Solution</h2>
+
+<p>Services like S3, Google Analytics, and even Twitter are great services.  They
+add lots of value for larger businesses and even more for a startup, so there's
+a large incentive to use them.  I think that's absolutely fine and is actually
+a good idea.  That being said, we need to manage our use of these services in a
+responsible way.  Instead of storing data directly to S3, store it on a server
+and asynchronously upload it to S3.  That way, you can set up an S3-pinger and
+if it goes down you can have the server automatically switch to serving the
+media itself.</p>
+
+<p>We need to build standardized tools that fetch data from webservices locally,
+from which they are served to the user.  We need to build systems that
+asynchronously sync data bidirectionally from all of these different webservers
+and ensure that the integrity of our data on the web is sound.  Right now this
+is a tedious, and error-prone task, but we can do better.  We can build
+cross-platform tools and libraries that will solve this problem, allow us to
+use 3rd-party services, and rest sound knowing that tomorrow no matter what
+happens to Amazon, the internet will still be around.</p>
+
+<p>DISCLAIMER: This is almost entirely a ripoff of a talk given by <code>Timothy Fitz</code><em>
+at <code>Super Happy Dev House</code></em> last month in San Francisco.  While I think it's a
+really good point I can't take credit for having been the first to worry about
+it.</p>
+
+<p>.. <em><code>Google's analytics and monitoring service</code>: http://www.google.com/analytics
+.. </em>S3: http://aws.amazon.com/s3/
+.. <em><code>Timothy Fitz</code>: Timothy Fitz
+.. </em><code>Super Happy Dev House</code>: http://superhappydevhouse.org/
+</p>
+]]></content>
+  </entry>
+  
+</feed>

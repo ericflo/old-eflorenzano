@@ -1,0 +1,289 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Intermediary Models and PyMag - Eric Florenzano's Blog</title>
+  <meta name="author" content="Eric Florenzano">
+
+  
+  <meta name="description" content="Journey to Intermediary Models
+It&#8217;s been around an 8 month journey in adding intermediary model support to Django, starting with a ticket &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://ericflo.github.com/blog/2008/07/29/intermediary-models-and-pymag">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Eric Florenzano's Blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-1959803-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Eric Florenzano's Blog</a></h1>
+  
+    <h2>I am me.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:ericflo.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Intermediary Models and PyMag</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-07-29T23:11:17-07:00" pubdate data-updated="true">Jul 29<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><div class="section" id="journey-to-intermediary-models">
+<h2>Journey to Intermediary Models</h2>
+<p>It&#8217;s been around an 8 month journey in adding intermediary model support to Django, starting with <a class="reference external" href="http://code.djangoproject.com/ticket/6095">a ticket</a> opened during a sprint by <a class="reference external" href="http://www.jacobian.org/">Jacob Kaplan-Moss</a>.  Earlier that month I had been wrestling with several pretty nasty models, each with two foreign keys and many extra properties on that relation.  I kept thinking that Django makes everything else so easy, but that in at least this one aspect, it doesn&#8217;t make things easy enough.  When Jacob posted his API idea, I was hooked.</p>
+<p>I quickly posted some thoughts and asked for a bit of clarification, and volunteered to write the patch.  Jacob responded saying he was glad to help me out.  It was only then that I actually delved into the code to see how it could be done.  It was only then that I realized that I had absolutely no knowledge or familiarity with that portion of the codebase&#8211;a portion that is nontrivial, to say the least.  But that&#8217;s the good thing about committing to something: you feel pressure to follow through.</p>
+<p>Despite my incredible NaA-vitA, the patch got to a rudimentary usable state very quickly, and then started to flounder.  It was then that <a class="reference external" href="http://djangopeople.net/freakboy3742/">Russell Keith-Magee</a> came into the picture, continually prodding me to add more tests, and thinking up many different test cases that I would have never come up with on my own.  I&#8217;m 100% certain that if Russ had not lent his expertise and guidance on this patch, it would have gotten lost and forgotten for a long time until someone more capable came along to take a look at it.</p>
+<p>A few hours ago, Russ <a class="reference external" href="http://code.djangoproject.com/changeset/8136">committed the patch to trunk</a>.  It&#8217;s interesting to see the <a class="reference external" href="http://www.reddit.com/comments/6tzig/django_gets_intermediate_models/">reactions</a> that <a class="reference external" href="http://www.reddit.com/comments/6ty8n/extra_fields_on_m2m_relationships_has_landed_in/">some people have</a>, but on any project like this you&#8217;ll always be scrutinized.  In any case, check out the <a class="reference external" href="http://www.djangoproject.com/documentation/model-api/#extra-fields-on-many-to-many-relationships">two</a> new bits of <a class="reference external" href="http://www.djangoproject.com/documentation/admin/#working-with-many-to-many-intermediary-models">documentation</a>, and see if intermediary models are right for your project.  After having this great experience with working on a patch for Django, I&#8217;ll definitely be looking to help out in other places as well.  My advice for anyone looking to get involved with the project is to, well, get involved!  Jump in over your head.  It&#8217;s more fun that way.</p>
+</div>
+<div class="section" id="pymag">
+<h2>PyMag</h2>
+<p>For around as long as I have been working on intermediary model support, I&#8217;ve been supporting another Django project of mine: <a class="reference external" href="http://code.google.com/p/django-threadedcomments/">django-threadedcomments</a>.  One of the things that I noticed a few months into maintaining the project is that outside of a few people who were actively using it, not many people really knew about its existence.  So when <cite>Doug Hellmann</cite> (of the famously excellent <a class="reference external" href="http://blog.doughellmann.com/search/label/PyMOTW">PyMOTW</a> series) contacted me about writing an article for <a class="reference external" href="http://pymag.phparch.com/">PyMag</a>, it was immediately apparent what I would love to write about.  Over 4000 words later, between finals and school projects and moving across state boundaries, the article was written.</p>
+<p>To be honest, I had almost completely forgotten about having written it, aside from one short e-mail conversation with the technical editor.  It turns out that the July 2008 edition of <a class="reference external" href="http://pymag.phparch.com/">PyMag</a> has arrived and my article is listed under &quot;featured articles&quot;.  How cool is that!?  I&#8217;m quite proud of the article, and really hope that it helps some people out with their Django websites.  If you aren&#8217;t a <a class="reference external" href="http://pymag.phparch.com/">PyMag</a> subscriber, then what are you waiting for?</p>
+<p>This post seems to be doing a lot of self-promotion&#8211;sorry for that.  But these two things really made my day, and to me, blogging is about sharing those awesome days with others.</p>
+</div></div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Eric Florenzano</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-07-29T23:11:17-07:00" pubdate data-updated="true">Jul 29<span>th</span>, 2008</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/awesome/'>Awesome</a>, <a class='category' href='/blog/categories/django/'>Django</a>, <a class='category' href='/blog/categories/pymag/'>PyMag</a>, <a class='category' href='/blog/categories/python/'>Python</a>, <a class='category' href='/blog/categories/django-threadedcomments/'>django-threadedcomments</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://ericflo.github.com/blog/2008/07/29/intermediary-models-and-pymag/" data-via="ericflo" data-counturl="http://ericflo.github.com/blog/2008/07/29/intermediary-models-and-pymag/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2008/07/12/first-two-django-screencasts/" title="Previous Post: First Two Django Screencasts">&laquo; First Two Django Screencasts</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2008/07/30/spawning-django/" title="next Post: Spawning + Django">Spawning + Django &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2011/02/16/technology-behind-convore/">The Technology Behind Convore</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/10/10/object-lesson-how-respond-criticism/">An Object Lesson in How to Respond to Criticism</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/09/27/why-node-disappoints-me/">Why node.js disappoints me</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/05/20/we-need-new-word-open/">We need a new word for "Open"</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/02/08/how-do-we-kick-our-synchronous-addiction/">How do we kick our synchronous addiction?</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("ericflo", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/ericflo" class="twitter-follow-button" data-show-count="false">Follow @ericflo</a>
+  
+</section>
+
+
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/109591387819364984777?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2011 - Eric Florenzano -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,723 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Django | Eric Florenzano's Blog]]></title>
+  <link href="http://ericflo.github.com/blog/categories/django/atom.xml" rel="self"/>
+  <link href="http://ericflo.github.com/"/>
+  <updated>2011-12-31T23:14:37-08:00</updated>
+  <id>http://ericflo.github.com/</id>
+  <author>
+    <name><![CDATA[Eric Florenzano]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[The Technology Behind Convore]]></title>
+    <link href="http://ericflo.github.com/blog/2011/02/16/technology-behind-convore/"/>
+    <updated>2011-02-16T12:29:35-08:00</updated>
+    <id>http://ericflo.github.com/blog/2011/02/16/technology-behind-convore</id>
+    <content type="html"><![CDATA[<p>
+We launched Convore<em> last week, and the first question developers tend to ask
+when they find Convore</em> is "what technology powers this site?"  It is asked so
+often, in fact, that we have started to copy and paste the same short response
+again and again.  That response was good enough to satisfy people who simply
+wanted to know if we were Rails or Django, or whether we were using node.js for
+the real-time stuff, but this article will expand upon that--  not only giving
+more details for the curious, but also giving us a link to point people at when
+they ask the question in the future.  I always wish other people were totally
+open about their architectures, so that I can learn from their good choices and
+their bad, so I'd like to be as open as possible about ours.  Let's dive in!</p>
+
+<h2>The basics</h2>
+
+<p>All of our application code is powered by Python.  Our front-end html page
+generation is done by Django, which we use in a surprisingly traditional way
+given the real-time nature of Convore as a product.  Everything is assembled
+at once: all messages, the sidebar, and the header are all rendered on the
+server instead of being pulled in after-the-fact with JavaScript.  All of the
+important data is canonically stored in PostgreSQL, including messages, topics,
+groups, unread counts, and user profiles.  Search functionality is provided by
+Solr, which is interfaced into our application by way of the handy Haystack
+Django application.</p>
+
+<h2>The message lifecycle</h2>
+
+<p>When a new message comes into the system, first it's parsed by a series of
+regular expressions designed to pull out interesting bits of information from
+the message.  Right now all we're looking for is username references and
+links (and further, whether those links point at images which should be
+rendered in-line.)  At the end of this parsing stage, we have a structured
+message parse list, which is converted into JSON.</p>
+
+<p>So, for example if someone posted the message:</p>
+
+<p>.. code-block:: text</p>
+
+<pre><code>@ericflo @simonw Here's how we connect/disconnect from Redis in production: http://dpaste.com/406797/
+</code></pre>
+
+<p>The resulting JSON parse list would look like this:</p>
+
+<p>.. code-block:: text</p>
+
+<pre><code>[
+    {
+        "type": "username",
+        "user_id": 1, 
+        "username": "ericflo",
+        "markup": "&lt;a href=\"/users/ericflo/\"&gt;@ericflo&lt;/a&gt;"
+    }, 
+    {
+        "type": "username", 
+        "user_id": 56, 
+        "username": "simonw",
+        "markup": " &lt;a href=\"/users/simonw/\"&gt;@simonw&lt;/a&gt;"
+    }, 
+    {
+        "type": "text",
+        "markup": " Here&amp;#39;s how we connect/disconnect from Redis in production: "
+    }, 
+    {
+        "type": "url", 
+        "url": "http://dpaste.com/406797/",
+        "markup": "&lt;a href=\"http://dpaste.com/406797/\" target=\"_blank\"&gt;http://dpaste.com/406797/&lt;/a&gt;"
+    }
+]
+</code></pre>
+
+<p>After this is constructed, we log all our available information about this
+message, and then save to the database--  both the raw message as it was received,
+and the JSON-encoded parsed node list.</p>
+
+<p>Now a task is sent to Celery (by way of Redis) notifying it that this new
+message has been received.  This Celery task now increments the unread count
+for everyone who has access to the topic that the message was posted in, and
+then it publishes to a Redis pub/sub for the group that the message was posted
+to.  Finally, the task scans through the message, looking for any users that
+were mentioned in the message, and writes entries to the database for every
+mention.</p>
+
+<p>On the other end of that pub/sub are the many open http requests that our users
+have initiated, which are waiting for any new messages or information.  Those
+all simultaneously return the new message information, at which point they
+reconnect again, waiting for the next message to arrive.</p>
+
+<h2>The real-time endpoint</h2>
+
+<p>Our live updates endpoint is actually a very simple and lightweight pure-WSGI
+Python application, hosted using Eventlet.  It spawns off a coroutine for each
+request, and in that coroutine, it looks up all the groups that a user is a
+member of, and then opens a connection to Redis subscribing to all of those
+channels.  Each of these Eventlet-hosted Python applications has the ability to
+host hundreds-to-thousands of open connections, and we run several instances
+on each of our front-end machines.  It has a few more responsibilities, like
+marking a topic as read before it returns a response, but the most important
+thing is to be a bridge between the user and Redis pub/sub.</p>
+
+<h2>Future improvements</h2>
+
+<p>There are so many places where our architecture can be improved.  This is our
+first version, and now that real users are using the system, already some of
+our initial assumptions are being challenged.  For instance, we thought that
+pub/sub to a channel per group would be enough, but what that means is that
+everyone in a group sees the exact same events as everyone else in that group.</p>
+
+<p>This means we don't have the ability to customize each user's experience based
+on their preferences--no way to put a user on ignore, filter certain messages,
+etc.  It also means that we aren't able to sync up a user's experience across
+tabs or browsers, since we don't really want to broadcast to everyone in the
+group that one user has visited a topic, thereby removing any unread messages
+in that topic.  So going forward we're going to have to break up that per-group
+pub/sub into per-user pub/sub.</p>
+
+<p>Another area that could be improved is our unread counts.  Right now they're
+stored as rows in our PostgreSQL database, which makes it extremely easy to
+batch update them and do aggregate queries on them, but the number of these
+rows is increasing rapidly, and without some kind of sharding scheme, it will
+at some point become more difficult to work with such a large amount of rows.
+My feeling is that this will eventually need to be moved into a non-relational
+data store, and we'll need to write a service layer in front of it to deal with
+pre-aggregating and distributing updates, but nothing is set in stone just yet.</p>
+
+<p>Finally, Python may not be the best language for this real-time endpoint.
+Eventlet is a fantastic Python library and it allowed us to build something
+extremely fast that has scaled to several thousand concurrent connections
+without breaking a sweat on launch day, but it has its limits.  There is a
+large body of work out there on handling a large number of open connections,
+using Java's NIO framework, Erlang's mochiweb, or node.js.</p>
+
+<h2>That's all folks</h2>
+
+<p>We're pretty proud of what we've built in a very short time, and we're glad
+it has held up as well as it has on our launch day and afterwards.  We're
+excited about the problems we're now being faced with, both scaling the
+technology, and scaling the product.  I hope this article has quenched any
+curiosity out there about how Convore works.  If there are any questions,
+feel free to join Convore_ and ask away!</p>
+
+<p>(Or discuss it <code>on Hacker News</code>_)</p>
+
+<p>.. <em>Convore: https://convore.com/
+.. </em><code>on Hacker News</code>: http://news.ycombinator.com/item?id=2228137
+</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[An Object Lesson in How to Respond to Criticism]]></title>
+    <link href="http://ericflo.github.com/blog/2010/10/10/object-lesson-how-respond-criticism/"/>
+    <updated>2010-10-10T09:56:12-07:00</updated>
+    <id>http://ericflo.github.com/blog/2010/10/10/object-lesson-how-respond-criticism</id>
+    <content type="html"><![CDATA[<p>
+In the moments leading up to my DjangoCon keynote this year (called
+<code>Why Django Sucks, and How We Can Fix It</code>_), I pictured the room an hour in the
+future and imagined what things would be like.  I envisioned all kinds of
+scenarios: one where people were literally booing, or another where I needed to
+sneak back to my hotel room to avoid embarassment.  I imagined all of these
+scenarios because I was about to level some harsh criticism at a technology
+that everyone in the room was enthusiastic about.</p>
+
+<p>And then I went on stage and gave the talk.</p>
+
+<p>When it was finished, I braced myself for one of these scenarios to unfold.
+Instead, what happened in the following moments, the following days, and indeed
+the following month since then has been what I consider to be the most gracious
+and useful response to criticism that I've ever seen.  And I think it deserves
+to be highlighted, because I believe that reacting well to criticism is vital
+for any successful community.</p>
+
+<p>So what happened in the moments directly following the talk?
+<code>Russell Keith-Magee</code>_, arguably the most active core developer at the time,
+made a special point to march up to the front of the stage and publicly shake
+my hand. This gesture not only legitimized some of the things that I said (some
+of which were quite extreme), but it also set the tone for the discourse around
+my talk; civility.</p>
+
+<p>Afterwards, privately, I apologized to several of the Django core developers.
+These are people I respect and admire, and I wanted to make sure that they knew
+that, at least on my end, it wasn't personal.  I was expecting forgiveness, but
+instead I received thanks.  Thanking me for criticising their project?  Not
+what I was expecting.</p>
+
+<p>One of the things that I suggested was to make <code>Alex Gaynor</code>_ a core developer.
+A few people at the conference made comments wondering how many days it would
+take before that would happen.  Days went by, and the conference ended without
+this happening.  A week went by.  A few more.  But I knew better, because the
+Django core committers don't do anything brashly.  They took their time, let
+all dust and emotions settle down, and listened to the discussion.</p>
+
+<p>And then <code>Jacob Kaplan-Moss</code><em> issued <code>an official announcement</code></em>.  I
+particularly agreed with one of the <code>top comments on hackernews</code>_::</p>
+
+<pre><code>"I don't know enough about the specifics of the case to
+assess the new policy on the merits, but I will say that
+as a piece of writing this is a model of how to change
+policy gracefully: clear, forthright, and non-defensive."
+</code></pre>
+
+<p>Clear.  Forthright.  Non-defensive.</p>
+
+<p>Some people saw this as an opening to change even more about Django, and even
+when some of the discussion was phrased rudely or accusatory, the Django team's
+responses were thoughtful and calm.  Now, over a week later (again
+demonstrating that things aren't done brashly), we see that a half-dozen new
+people have been added to the core team.  Yes, that includes <code>Alex Gaynor</code>_.
+So not only was the new policy clear, forthright, and non-defensive, but there
+was concrete follow-through so that everyone can see that it wasn't just words.</p>
+
+<p>And even in that short time since the new committers were added, Django's code
+is already reaping the benefits--we've seen a flurry of bugs fixed and tickets
+closed.  Django's future has never looked so promising!</p>
+
+<p>Why do I think this is so important?  Because a community which welcomes
+constructive criticism is one in which people feel they can make a difference.
+And it's because they <em>can</em> make a difference.  It's a community that's never
+satisfied with the status quo.  It's a community that can grow and change and
+adapt, when the world around it changes.  It's a community that we can be proud
+of.</p>
+
+<p>NB: I was not the only one to criticize Django at DjangoCon.  I was merely one
+voice.  This is just written from my perspective.</p>
+
+<p>.. <em><code>Why Django Sucks, and How We Can Fix It</code>: http://djangocon.blip.tv/file/4112452/
+.. </em><code>Russell Keith-Magee</code>: http://cecinestpasun.com/
+.. <em><code>Alex Gaynor</code>: http://alexgaynor.net/
+.. </em><code>Jacob Kaplan-Moss</code>: http://jacobian.org/
+.. <em><code>an official announcement</code>: http://groups.google.com/group/django-developers/browse_thread/thread/9ebc3e57d539d1ff
+.. </em><code>top comments on hackernews</code>: http://news.ycombinator.com/item?id=1740675
+</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[How do we kick our synchronous addiction?]]></title>
+    <link href="http://ericflo.github.com/blog/2010/02/08/how-do-we-kick-our-synchronous-addiction/"/>
+    <updated>2010-02-08T22:15:31-08:00</updated>
+    <id>http://ericflo.github.com/blog/2010/02/08/how-do-we-kick-our-synchronous-addiction</id>
+    <content type="html"><![CDATA[<p>
+Asynchronous programming is superior <code>both in memory usage and in overall throughput</code><em> when compared to synchronous programming .  We've <code>known this fact for years</code></em>.  If we look at Django or Ruby on Rails, arguably the two most promising new web application frameworks to emerge in the past few years, both of them are written in such a way that synchronous programming  is assumed. Why is it that even in 2010 we're still writing programs that rely on synchronous programming ?</p>
+
+<p>The reason that we're stuck on synchronous programming  is twofold.  Firstly, the programming model required for straightforward asynchronous implementations is inconvenient.  Secondly, popular and/or mainstream languages lack the built-in language constructs that are needed to implement a less-straightforward approach to asynchronous programming.</p>
+
+<h2>Asynchronous programming is too hard</h2>
+
+<p>Let's first examine the straightforward implementation: an event loop.  In this programming model, we have a single process with a single loop that runs continuously.  Functionality is achieved by writing functions to execute small tasks quickly, and inserting those functions into that event loop.  One of those functions might read some bytes from a socket, while another function might write a few bytes to a file, and yet another function might do something computational like calculating an XOR on the data that's been buffered from that first socket.</p>
+
+<p>The most important part about this event loop is that only one thing is ever happening at a time.  That means that you really have to break your logic up into small chunks that can be performed incrementally.  If any one of our functions blocks, it hogs the event loop and nothing else can execute during that time.</p>
+
+<p>We have some really great frameworks geared towards making this event loop model easier to work with.  In Python, there's Twisted<em> and, more recently, Tornado</em>.  In Ruby there's EventMachine<em>.  In PERL there's POE</em>.  What these frameworks do is twofold: provide constructs for more easily working with an event loop (e.g. Deferreds<em> or Promises</em>), and provide asynchronous implementations of common tasks (e.g. HTTP clients and DNS resolution).</p>
+
+<p>But these frameworks stop very short of making asynchronous programming easy for two reasons.  The first reason is that we really do have to completely change our coding style.  Consider what it would take to render a simple blog web page with comments.  Here's some JavaScript code to demonstrate how this might work in a synchronous framework:</p>
+
+<p>.. code-block:: javascript</p>
+
+<pre><code>function handleBlogPostRequest(request, response, postSlug) {
+    var db = new DBClient();
+    var post = db.getBlogPost(postSlug);
+    var comments = db.getComments(post.id);
+    var html = template.render('blog/post.html',
+        {'post': post, 'comments': comments});
+    response.write(html);
+    response.close();
+}
+</code></pre>
+
+<p>Now here's some JavaScript code to demonstrate how this might look in an asynchronous framework.  Note several things here: We've specifically written this in such a way that it doesn't become nested four levels deep.  We've also written these callback functions inside of the <code>handleBlogPostRequest</code> function to take advantage of closure so as to retain access to the request and response objects, the template context, and the database client. Both the desire to avoid nesting and the closure are things that we need to think about as we write this code, that were not even considerations in the synchronous version:</p>
+
+<p>.. code-block:: javascript</p>
+
+<pre><code>function handleBlogPostRequest(request, response, postSlug) {
+    var context = {};
+    var db = new DBClient();
+    function pageRendered(html) {
+        response.write(html);
+        response.close();
+    }
+    function gotComments(comments) {
+        context['comments'] = comments;
+        template.render('blog/post.html', context).addCallback(pageRendered);
+    }
+    function gotBlogPost(post) {
+        context['post'] = post;
+        db.getComments(post.id).addCallback(gotComments);
+    }
+    db.getBlogPost(postSlug).addCallback(gotBlogPost);
+}
+</code></pre>
+
+<p>I've chosen JavaScript here to prove a point, by the way.  People are very excited about <code>node.js</code>_ right now, and it's a very cool framework, but it doesn't hide all of the complexities involved in doing things asynchronously.  It only hides some of the implementation details of the event loop.</p>
+
+<p>The second reason why these frameworks fall short is because not all IO can be handled properly by a framework, and in these cases we have to resort to bad hacks.  For example, MySQL does not offer an asynchronous database driver, so most of the major frameworks end up using threads to ensure that this communication happens out of band.</p>
+
+<p>Given the inconvenient API, the added complexity, and the simple fact that most developers haven't switched to using this style of programming, leads us to the conclusion that this type of framework is not a desirable final solution to the problem (even though I do concede that you can get Real Work done today using these techniques, and many people do).  That being the case, what other options do we have for asynchronous programming? Coroutines and lightweight processes, which brings us to our next major problem.</p>
+
+<h2>Languages don't support easier asynchronous paradigms</h2>
+
+<p>There are a few language constructs that, if implemented properly in modern programming languages, could pave the way for alternative methods of doing asynchronous programming that don't have the drawbacks of the event loop.  These constructs are coroutines and lightweight processes.</p>
+
+<p>A coroutine is a function that can suspend and resume its execution at certain, programmatically specified, locations.  This simple concept can serve to transform blocking-looking code to be non-blocking.  At certain critical points in your IO library code, the low-level functions that are doing IO can choose to "cooperate".  That is, it can choose to suspend execution in order for another function to resume execution and continue on.</p>
+
+<p>Here's an example (it's Python, but fairly understandable for all I hope):</p>
+
+<p>.. code-block:: python</p>
+
+<pre><code>def download_pages():
+    google = urlopen('http://www.google.com/').read()
+    yahoo = urlopen('http://www.yahoo.com/').read()
+</code></pre>
+
+<p>Normally the way this would work is that a socket would be opened, connected to Google, an HTTP request sent, and the full response would be read, buffered, and assigned to the <code>google</code> variable, and then in turn the same series of steps would be taken for the <code>yahoo</code> variable.</p>
+
+<p>Ok, now imagine that the underlying socket implementation were built using coroutines that cooperated with each other.  This time, just like before, the socket would be opened and a connection would be made to Google, and then a request would be fired off.  This time, however, after sending the request, the socket implementation suspends its own execution.</p>
+
+<p>Having suspended its execution (but not yet having returned a value), execution continues on to the next line.  The same thing happens on the Yahoo line: once its request has been fired off, the Yahoo line suspends its execution.  But now there's something else to cooperate with--there's actually some data ready to be read on the Google socket--so it resumes execution at that point.  It reads some data from the Gooogle socket, and then suspends its execution again.</p>
+
+<p>It jumps back and forth between the two coroutines until one has finished.  Let's say that the Yahoo socket has finished, but the Google one has not.  In this case, the Google socket just continues to read from its socket until it has completed, because there are no other coroutines to cooperate with.  Once the Google socket is finally finished, the function returns with all of the buffered data.</p>
+
+<p>Then the Yahoo line returns with all of its buffered data.</p>
+
+<p>We've preserved the style of our blocking code, but we've used asynchronous programming to do it.  Best of all, we've preserved our original program flow--the <code>google</code> variable is assigned first, and then the <code>yahoo</code> variable is assigned.  In truth, we've got a smart event loop going on underneath the covers to control who gets to execute, but it's hidden from us due to the fact that coroutines are in play.</p>
+
+<p>Languages like PHP, Python, Ruby, and Perl simply don't have built-in coroutines that are robust enough to implement this kind of behind-the-scenes transformation.  So what about these lightweight processes?</p>
+
+<p>Lightweight processes are what Erlang uses as its main concurrency primitive.  Essentially these are processes that are mostly implemented in the Erlang VM itself.  Each process has approximately 300 words of overhead and its execution is scheduled primarily by the Erlang VM, sharing no state at all amongst processes.  Essentially, we don't have to think twice about spawning a process, as it's essentially free.  The catch is that these processes can only communicate via message passing.</p>
+
+<p>Implementing these lightweight processes at the VM level gets rid of the memory overhead, the context switching, and the relative sluggishness of interprocess communication provided by the operating system.  Since the VM also has insight into the memory stack of each process, it can freely move or resize those processes and their stacks.  That's something that the OS simply cannot do.</p>
+
+<p>With this model of lightweight processes, it's possible to again revert back to the convenient model of using a separate process for all of our asynchronous programming needs.  The question becomes this: can this notion of lightweight processes be implemented in languages other than Erlang?  The answer to that is "I don't know."  To my knowledge, Erlang takes advantage of some features of the language itself (such as having no mutable data structures) in its lightweight process implementation.</p>
+
+<h2>Where do we go from here?</h2>
+
+<p>The key to moving forward is to drop the notion that developers need to learn to think about all of their code in terms of callbacks and asynchrony, as the asynchronous event loop frameworks require them to do.  Over the past ten years, we can see that most developers, when faced with that decision, simply choose to ignore it.  They continue to use the inferior blocking methodologies of yesteryear.</p>
+
+<p>We need to look at these alternative implementations like coroutines and lightweight processes, so that we can make asynchronous programming as easy as synchronous programming.  Only then will we be able to kick this synchronous addiction.</p>
+
+<p>.. <em><code>both in memory usage and in overall throughput</code>: http://blog.webfaction.com/a-little-holiday-present
+.. </em><code>known this fact for years</code>: http://www.kegel.com/c10k.html
+.. <em>Twisted: http://twistedmatrix.com/trac/
+.. </em>Tornado: http://www.tornadoweb.org/
+.. <em>EventMachine: http://rubyeventmachine.com/
+.. </em>Deferreds: http://twistedmatrix.com/documents/current/core/howto/defer.html
+.. <em>Promises: http://en.wikipedia.org/wiki/Futures_and_promises
+.. </em>POE: http://poe.perl.org/
+.. _<code>node.js</code>: http://nodejs.org/
+</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Flojax: A unobtrusive and easy strategy for creating AJAX-style web applications]]></title>
+    <link href="http://ericflo.github.com/blog/2009/04/02/flojax-unobtrusive-and-easy-strategy-creating-ajax/"/>
+    <updated>2009-04-02T19:05:18-07:00</updated>
+    <id>http://ericflo.github.com/blog/2009/04/02/flojax-unobtrusive-and-easy-strategy-creating-ajax</id>
+    <content type="html"><![CDATA[<p>
+Writing AJAX-style web applications can be very tedious.  If you're using XML
+as your transport layer, you have to parse the XML before you can work with it.
+It's a bit easier if you're using JSON, but once you have parsed the data, the
+data still needs to be turned into HTML markup that matches the current markup
+on the page.  Finally, the newly created markup needs to be inserted into the
+correct place in the DOM, and any event handlers need to be attached to the
+appropriate newly-inserted markup.</p>
+
+<p>So there's the parsing, the markup assembly, the DOM insertion, and finally the
+event handler attachment.  Most of the time, people tend to write custom code
+for each element that needs asynchronous updating.  There are several drawbacks
+with this scenario, but the most frustrating part is probably that the
+presentation logic is implemented twice--once in a templating language on the
+server which is designed specifically for outputting markup, and again on the
+client with inline Javascript.  This leads to problems both in the agility and
+in the maintainability of this type of application.</p>
+
+<p>With flojax, this can all be  accomplished with one generalized implementation.
+The same server-side logic that generates the data for the first synchronous
+request can be used to respond to subsequent asynchronous requests, and
+unobtrusive attributes specify what to do for the rest.</p>
+
+<h2>The Basics</h2>
+
+<p>The first component for creating an application using the flojax strategy is to
+break up the content that you would like to reload asynchronously into smaller
+fragments.  As a basic example of this, let's examine the case where there is a
+panel of buttons that you would like to turn into asynchronous requests instead
+of full page reloads.</p>
+
+<p>The rendered markup for a fragment of buttons could look something like this:</p>
+
+<p>.. code-block:: html</p>
+
+<pre><code>&lt;div class="buttons"&gt;
+    &lt;a href="http://ericflo.github.com/vote/up/item1/"&gt;Vote up&lt;/a&gt;
+    &lt;a href="http://ericflo.github.com/vote/down/item1/"&gt;Vote down&lt;/a&gt;
+    &lt;a href="http://ericflo.github.com/favorite/item1/"&gt;Add to your favorites&lt;/a&gt;
+&lt;/div&gt;
+</code></pre>
+
+<p>In a templating language, the logic might look something like this:</p>
+
+<p>.. code-block:: html</p>
+
+<pre><code>&lt;div class="buttons"&gt;
+    {% if voted %}
+        &lt;a href="http://ericflo.github.com/vote/clear/{{ item.id }}/"&gt;Clear your vote&lt;/a&gt;
+    {% else %}
+        &lt;a href="http://ericflo.github.com/vote/up/{{ item.id }}/"&gt;Vote up&lt;/a&gt;
+        &lt;a href="http://ericflo.github.com/vote/down/{{ item.id }}/"&gt;Vote down&lt;/a&gt;
+    {% endif %}
+    {% if favorited %}
+        &lt;a href="http://ericflo.github.com/favorite/{{ item.id }}/"&gt;Add to your favorites&lt;/a&gt;
+    {% else %}
+        &lt;a href="http://ericflo.github.com/unfavorite/{{ item.id }}/"&gt;Remove from your favorites&lt;/a&gt;
+    {% endif %}
+&lt;/div&gt;
+</code></pre>
+
+<p>(Typically you wouldn't use anchors to do operations that can change state on
+the server, so you can imagine this would be accomplished using forms.  However,
+for demonstration and clarity purposes I'm going to leave these as links.)</p>
+
+<p>Now that we have written a fragment, we can start using it in our larger
+templates by way of an include, which might look something like this:</p>
+
+<p>.. code-block:: html</p>
+
+<pre><code>...
+&lt;p&gt;If you like this item, consider favoriting or voting on it:&lt;/p&gt;
+{% include "fragments/buttons.html" %}
+...
+</code></pre>
+
+<p>To change this from being standard links to being asynchronously updated, we
+just need to annotate a small amount of data onto the relevant links in the
+fragment.</p>
+
+<p>.. code-block:: html</p>
+
+<pre><code>&lt;div class="buttons"&gt;
+    {% if voted %}
+        &lt;a href="http://ericflo.github.com/vote/clear/{{ item.id }}/" class="flojax" rel="buttons"&gt;Clear your vote&lt;/a&gt;
+    {% else %}
+        &lt;a href="http://ericflo.github.com/vote/up/{{ item.id }}/" class="flojax" rel="buttons"&gt;Vote up&lt;/a&gt;
+        &lt;a href="http://ericflo.github.com/vote/down/{{ item.id }}/" class="flojax" rel="buttons"&gt;Vote down&lt;/a&gt;
+    {% endif %}
+    {% if favorited %}
+        &lt;a href="http://ericflo.github.com/favorite/{{ item.id }}/" class="flojax" rel="buttons"&gt;Add to your favorites&lt;/a&gt;
+    {% else %}
+        &lt;a href="http://ericflo.github.com/unfavorite/{{ item.id }}/" class="flojax" rel="buttons"&gt;Remove from your favorites&lt;/a&gt;
+    {% endif %}
+&lt;/div&gt;
+</code></pre>
+
+<p>That's it!  At this point, all of the click events that happen on these links
+will be changed into POST requests, and the response from the server will be
+inserted into the DOM in place of this div with the class of "buttons".  If you
+didn't catch it, all that was done was to add the "flojax" class onto each of
+the links, and add a rel attribute that refers to the class of the parent node
+in the DOM to be replaced--in this case, "buttons".</p>
+
+<p>Of course, there needs to be a server side component to this strategy, so that
+instead of rendering the whole page, the server just renders the fragment.  Most
+modern Javascript frameworks add a header to the request to let the server know
+that the request was made asynchronously from Javascript.  Here's how the code
+on the server to handle the flojax-style request might look (in a kind of
+non-web-framework-specific Python code):</p>
+
+<p>.. code-block:: python</p>
+
+<pre><code>def vote(request, direction, item_id):
+    item = get_item(item_id)
+
+    if direction == 'clear':
+        clear_vote(request.user, item)
+    elif direction == 'up':
+        vote_up(request.user, item)
+    elif direction == 'down':
+        vote_down(request.user, item)
+
+    context = {'voted': direction != 'clear', 'item': item}
+
+    if request.is_ajax():
+        return render_to_response('fragments/buttons.html', context)
+
+    # ... the non-ajax implementation details go here
+
+    return render_to_response('items/item_detail.html', context)
+</code></pre>
+
+<p>There are several advantages to writing your request handlers in this way.
+First, note that we were able to totally reuse the same templating logic from
+before--we just render out the fragment instead of including it in a larger
+template.  Second, we have provided a graceful degradation path where users
+without javascript are able to interact with the site as well, albeit with a
+worse user experience.</p>
+
+<p>That's really all there is to writing web applications using the flojax
+strategy.</p>
+
+<h2>Implementation Details</h2>
+
+<p>I don't believe that the Javascript code for this method can be easily reused,
+because each web application tends to have a different way of showing errors and
+other such things to the user.  In this post, I'm going to provide a reference
+implementation (using jQuery) that can be used as a starting point for writing
+your own versions.  The bulk of the work is done in a function that is called on
+every page load, called <code>flojax_init</code>.</p>
+
+<p>.. code-block:: javascript</p>
+
+<pre><code>function flojax_clicked() {
+    var link = $(this);
+    var parent = link.parents('.' + link.attr('rel'));
+
+    function successCallback(data, textStatus) {
+        parent.replaceWith(data);
+        flojax_init();
+    }
+    function errorCallback(request, textStatus, errorThrown) {
+        alert('There was an error in performing the requested operation');
+    }
+
+    $.ajax({
+        'url': link.attr('href'),
+        'type': 'POST',
+        'data': '',
+        'success': successCallback,
+        'error': errorCallback
+    });
+
+    return false;
+}
+
+function flojax_init() {
+    $('a.flojax').live('click', flojax_clicked);
+}
+</code></pre>
+
+<p>There's really not a lot of code there.  It POSTS to the given URL and replaces
+the specified parent class with the content of the response, and then
+re-initializes the flojax handler.  The re-initialization could even be done in
+a smarter way, as well, by targeting only the newly inserted content.  Also, you
+might imagine that an alert message probably wouldn't be such a great user
+experience, so you could integrate error messages into some sort of Javascript
+messaging or growl-style system.</p>
+
+<h2>Extending Flojax</h2>
+
+<p>Often times you'll want to do other things on the page when the asynchronous
+request happens.  For our example, maybe there is some kind of vote counter that
+needs to be updated or some other messages that need to be displayed.</p>
+
+<p>In these cases, I have found that using hidden input elements in the fragments
+can be useful for transferring that information from the server to the client.
+As long as the value in the hidden elements adheres to some predefined structure
+that your client knows about (it could even be something like JSON if you need
+to go that route).</p>
+
+<p>If what you want can't be done by extending the fragments in this way, then
+flojax isn't the right strategy for that particular feature.</p>
+
+<h2>Limitations</h2>
+
+<p>This technique cannot solve all of the world's problems.  It can't even solve
+all of the problems involved in writing an AJAX-style web application.  It can,
+however, handle a fair amount of simple cases where all you want to do is
+quickly set up a way for a user's action to replace content on a page.</p>
+
+<p>Some specific examples of things that flojax can't help with are if a user
+action can possibly update many items on a page, or if something needs to happen
+without a user clicking on a link.  In these situations, you are better off
+coding a custom solution instead of trying to shoehorn it into the flojax
+workflow.</p>
+
+<h2>Conclusion</h2>
+
+<p>Writing AJAX-style web applications is usually tedious, but using the techniques
+that I've described, a large majority of the tedious work can be reduced.  By
+using the same template code for rendering the page initially as with subsequent
+asynchronous requests, you ensure that code is not duplicated.  By rendering HTML
+fragments, the client doesn't have to go through the effort of parsing the
+output and converting the result into correct DOM objects.  Finally, by using a
+few unobtrusive conventions (like the <code>rel</code> attribute and the <code>flojax</code>
+class), the Javascript code that a web application developer writes is able to
+be reused again and again.</p>
+
+<p>I don't believe that any of the details that I'm describing are new.  In fact,
+people have been doing most of these things for years.  What I think may in fact
+be new is the generalization of the sum of these techniques in this way.  It's
+still very much a work in progress, though.  As I use flojax more and more, I
+hope to find not only places where it can be extended to cover more use cases,
+but also its limitations and places where it makes more sense to use another
+approach.</p>
+
+<p>What do you think about this technique?  Are you using any techniques like this
+for your web applications?  If so, how do they differ from what I've described?
+</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Tagging cache keys for O(1) batch invalidation]]></title>
+    <link href="http://ericflo.github.com/blog/2009/03/01/tagging-cache-keys-o1-batch-invalidation/"/>
+    <updated>2009-03-01T20:46:37-08:00</updated>
+    <id>http://ericflo.github.com/blog/2009/03/01/tagging-cache-keys-o1-batch-invalidation</id>
+    <content type="html"><![CDATA[<p>
+Recently I've been spending some quality time trying to decrease page load times and decrease the number of database accesses on a site I'm working on.    As you would probably suspect, that means dealing with caching.  One common thing that I need to do, however, is invalidate a large group of cache keys when some action takes place.  I've devised a pattern for doing this, and while I'm sure it's not novel, I haven't seen any recent write-ups of this technique.  The base idea is that we're going to add another thin cache layer, and use the value from that first layer in the key to the second layer.</p>
+
+<p>First, let me give a concrete example of the problem that I'm trying to solve.  I'm going to use Django/Python from here on in, but you could substitute anything else, as this pattern should work across other frameworks and even other languages.</p>
+
+<p>.. code-block:: python</p>
+
+<pre><code>import datetime
+from django.db import models
+
+class Favorite(models.Model):
+    user = models.ForeignKey(User)
+    item = models.ForeignKey(Item)
+    date_added = models.DateTimeField(default=datetime.datetime.now)
+
+    def __unicode__(self):
+        return u'%s has favorited %s' % (self.user, self.item)
+</code></pre>
+
+<p>Given this model, now let's say that we have a function that gets the Favorite instances for a given user, which might look like this:</p>
+
+<p>.. code-block:: python</p>
+
+<pre><code>def get_favorites(user, start=None, end=None):
+    faves = Favorite.objects.filter(user=user)
+    return list(faves[start:end])
+</code></pre>
+
+<p>There's not much here yet--we're simply filtering to only include the Favorite instances for the given user, slicing it based on the given start and end numbers, and forcing evaluation before returning a list.  Now let's start thinking about how we will cache this.  We'll start by just implementing a naive cache strategy, which in this case simply means that the cache is never invalidated:</p>
+
+<p>.. code-block:: python</p>
+
+<pre><code>from django.core.cache import cache
+
+def get_favorites(user, start=None, end=None):
+    key = 'get_favorites-%s-%s-%s' % (user.id, start, end)
+    faves = cache.get(key)
+    if faves is not None:
+        return faves
+    faves = Favorite.objects.filter(user=user)[start:end]
+    cache.set(key, list(faves), 86400 * 7)
+    return faves
+</code></pre>
+
+<p>Now we come to the hard part: how do we invalidate those cache keys?  It's especially tricky because we don't know exactly what keys have been created.  What combinations of start/end have been given? We could invalidate all combinations of start/end up to some number, but that's horribly inefficient and wasteful.  So what do we do?  My solution is to introduce another layer.  Let me explain with code:</p>
+
+<p>.. code-block:: python</p>
+
+<pre><code>import uuid
+from django.core.cache import cache
+
+def favorite_list_hash(user):
+    key = 'favorite-list-hash-%s' % (user.id,)
+    cached_key_hash = cache.get(key)
+    if cached_key_hash:
+        key_hash = cached_key_hash
+    else:
+        key_hash = str(uuid.uuid4())
+        cache.set(key, key_hash, 86400 * 7)
+    return (key_hash, not cached_key_hash)
+</code></pre>
+
+<p>Essentially what this gives us is a temporary unique identifier for each user, that's either stored in cache or generated and stuffed into the cache.  How does this help?  We can use this identifier in the <em>keys</em> to the <code>get_favorites</code> function:</p>
+
+<p>.. code-block:: python</p>
+
+<pre><code>from django.core.cache import cache
+
+def get_favorites(user, start=None, end=None):
+    key_hash, created = favorite_list_hash(user)
+    key = 'get_favorites-%s-%s-%s-%s' % (user.id, start, end, key_hash)
+    if not created:
+        faves = cache.get(key)
+        if faves is not None:
+            return faves
+    faves = Favorite.objects.filter(user=user)[start:end]
+    cache.set(key, list(faves), 86400 * 7)
+    return faves
+</code></pre>
+
+<p>As you can see, the first thing we do is grab that hash for the user, then we use it as the last part of the key for the function.  The whole <code>if not created</code> thing is just an optimization that helps to avoid cache fetches when we know they will fail.  Here's the great thing now: invalidating all of the different cached versions of <code>get_favorite</code> for a given user is a single function call:</p>
+
+<p>.. code-block:: python</p>
+
+<pre><code>from django.core.cache import cache
+
+def clear_favorite_cache(user):
+    cache.delete('favorite-list-hash-%s' % (user.id,))
+</code></pre>
+
+<p>By deleting that single key, the next time <code>get_favorites</code> is called, it will call <code>favorite_list_hash</code> which will result in a cache miss, which will mean it will generate a new unique identifier and stuff it in cache, meaning that all of the keys for <code>get_favorites</code> are instantly different.  I think that this is a powerful pattern that allows for coarser-grained caching without really sacrificing much of anything.</p>
+
+<p>There is one aspect of this technique that some people will not like: it leaves old cache keys around taking up memory.  I don't consider this a problem because memory is cheap these days and Memcached is generally smart about evicting the least recently used data.</p>
+
+<p>I'm interested though, since I don't see people posting much about nontrivial cache key generation and invalidation.  How are you doing this type of thing?  Are most people just doing naive caching and calling that good enough?
+</p>
+]]></content>
+  </entry>
+  
+</feed>
