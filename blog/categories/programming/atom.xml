@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Programming | Eric Florenzano's Blog]]></title>
   <link href="http://ericflo.github.com/blog/categories/programming/atom.xml" rel="self"/>
   <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T18:16:12-08:00</updated>
+  <updated>2012-01-01T18:32:48-08:00</updated>
   <id>http://ericflo.github.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
@@ -288,6 +288,10 @@ In fact, nothing I've mentioned even changes the code's logic, but simply its
 implementation.  It's simply something to think about as you code, as you read
 other people's code.  Hopefully you agree with me that less nesting is an
 admirable goal, and you find more and more ways to achieve it.</p>
+
+<p>Discuss this post <code>on Hacker News</code>_.</p>
+
+<p>.. _<code>on Hacker News</code>: http://news.ycombinator.com/item?id=3414526</p>
 ]]></content>
   </entry>
   
