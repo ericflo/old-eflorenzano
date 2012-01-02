@@ -9,7 +9,7 @@
   <meta name="author" content="Eric Florenzano">
 
   
-  <meta name="description" content="So I&#8217;ve yet again redesigned the site. This was not a backend redesign, but rather an aesthetic redesign consisting of mostly changing the CSS &hellip;">
+  <meta name="description" content="I use this function all the time, most recently for some anti-spam techniques, and it&#8217;s worth posting somewhere. It&#8217;s modified from an &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -76,6 +76,57 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2007/04/15/simple-random-character-function/">Simple Random Character Function</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-04-15T22:27:22-07:00" pubdate data-updated="true">Apr 15<span>th</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I use this function all the time, most recently for some anti-spam techniques, and it&#8217;s worth posting somewhere.  It&#8217;s modified from an entry on the activestate cookbook.</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="k">def</span> <span class="nf">random_chars</span><span class="p">(</span><span class="n">length</span><span class="p">):</span>
+</span><span class="line">    <span class="kn">import</span> <span class="nn">random</span>
+</span><span class="line">    <span class="n">allowed_chars</span> <span class="o">=</span> <span class="s">&quot;abcdefghijklmnopqrstuvwzyzABCDEFGHIJKLMNOPQRSTUVWZYZ0123456789&quot;</span>
+</span><span class="line">    <span class="n">word</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+</span><span class="line">    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">length</span><span class="p">):</span>
+</span><span class="line">        <span class="n">word</span> <span class="o">=</span> <span class="n">word</span> <span class="o">+</span> <span class="n">allowed_chars</span><span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mh">0xffffff</span><span class="p">)</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">allowed_chars</span><span class="p">)]</span>
+</span><span class="line">    <span class="k">return</span> <span class="n">word</span>
+</span></code></pre></td></tr></table></div></figure><p>Also, for anyone who knows me and is interested: my surgery went well and I&#8217;m recovering faster than I would have expected.  Hopefully I&#8217;ll be back to 100% speed in the next few days!</p>
+<p>Anyways, hopefully this small code snippet is useful to someone else, as well!</p></div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -585,43 +636,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2006/12/04/memcached-and-openwebload/">Memcached and OpenWebLoad</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2006-12-04T13:46:58-08:00" pubdate data-updated="true">Dec 4<span>th</span>, 2006</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>There has been a somewhat minor update to the site.  Now almost all of the site is cached.  That is, there is a <a class="reference external" href="http://www.danga.com/memcached/">memcached</a> backend running on the server, and this website can take advantage of that.</p>
-<p>To test out the site&#8217;s load capabilities, I used an open source program called <a class="reference external" href="http://sourceforge.net/projects/openwebload/">OpenWebLoad</a>.  It&#8217;s quite impressive in its simplicity and utility.  With it, I was able to test a load of over 50 simultaneous users to the website.  Surprisingly, the site handled it with flying colors.</p>
-<p>On a side note, I went to <a class="reference external" href="http://wilwheaton.typepad.com/">Wil Wheaton&#8217;s site</a> after a long stint of not visiting it, and it&#8217;s still as good as it&#8217;s ever been.  There&#8217;s an almost tangible difference between a writer&#8217;s website and a blogger&#8217;s website.  I think that it boils down to the fact that using only words, Wil can make you feel the emotion that he wants you to feel.</p></div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/11/">&larr; Older</a>
@@ -639,6 +653,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/01/01/reducing-code-nesting/">Reducing Code Nesting</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2011/02/16/technology-behind-convore/">The Technology Behind Convore</a>
       </li>
     
@@ -652,10 +670,6 @@
     
       <li class="post">
         <a href="/blog/2010/05/20/we-need-new-word-open/">We need a new word for &#8220;Open&#8221;</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2010/02/08/how-do-we-kick-our-synchronous-addiction/">How do we kick our synchronous addiction?</a>
       </li>
     
   </ul>

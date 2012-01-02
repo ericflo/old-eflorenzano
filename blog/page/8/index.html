@@ -9,7 +9,7 @@
   <meta name="author" content="Eric Florenzano">
 
   
-  <meta name="description" content="Django-threadedcomments is a simple yet flexible threaded commenting system for Django. What I mean when I say threaded is that commenters can reply &hellip;">
+  <meta name="description" content="It&#8217;s an interesting feeling open-sourcing an application that you&#8217;ve developed for your own purposes. Will people use it? Will people &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -76,6 +76,49 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/01/30/ajax-voting-nicer-css-threadedcomments-test/">AJAX, Voting, and Some Nicer CSS: Putting Django-threadedcomments to the Test</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-01-30T10:02:13-08:00" pubdate data-updated="true">Jan 30<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>It&#8217;s an interesting feeling open-sourcing an application that you&#8217;ve developed for your own purposes.  Will people use it?  Will people find major design flaws?  Is it just a big waste of time?  These were the questions that were going through my mind before open-sourcing <a class="reference external" href="http://code.google.com/p/django-threadedcomments/">django-threadedcomments</a>.  Fortunately, my worries were quelled almost instantly as a people reacted quite positively to the application.  There was one recurring comment, however, that almost everyone who tried the sample implementation said: <strong>those colors are hideous</strong>.</p>
+<p>Beyond even that though, it seems that people saw the sample implementation and got the impression that django-threadedcomments = that sample implementation.  To me, that&#8217;s an underestimation of the power of the modular django app.  I think that <a class="reference external" href="http://www.b-list.org/weblog/2007/nov/29/django-blog/">James Bennett</a> hits the nail on the head when he says that:</p>
+<blockquote>
+&quot;Rather than a single definitive &#8216;Django blog&#8217; application, for example, I think it&#8211;  s much more likely
+we&#8211;  ll see a collection of applications which, taken together, provide all the key
+functionality&#8230;&quot;</blockquote>
+<p>It was this sentiment that pervaded nearly all of the design decisions behind django-threadedcomments: it should be flexible, modular, and reusable so that, taken together with other similarly-designed apps, it can provide some compelling functionality at a fraction of the effort.  Now we most assuredly didn&#8217;t achieve all of those design goals fully, but I believe we&#8217;re headed in at least the right direction with its development.</p>
+<p>To prove my point, I decided to create an improved Digg/Reddit comment system clone using <a class="reference external" href="http://insin.webfactional.com/weblog/">Jonathan Buchanan</a>&#8217;s wonderful <a class="reference external" href="http://code.google.com/p/django-voting/">django-voting</a> application, alongside <a class="reference external" href="http://code.google.com/p/django-threadedcomments/">django-threadedcomments</a>, and a fair bit of <a class="reference external" href="http://jquery.com/">jQuery</a>.  Being almost completely new to Javascript, I was pleasantly surprised by how easy it was to not only integrate all of these technologies and use extensive client- and server-side scripting, but also to achieve a compelling commenting system in well under a week of spare time.  Oh, and this time there was actually some effort in making the look and feel of the commenting system acceptable!  As with the first example, this one is completely open sourced and available in the django-threadedcomments SVN repository.</p>
+<p>Without further ado, the <a class="reference external" href="http://www.eflorenzano.com/threadexample/blog/">Example Digg/Reddit Comment Clone Plus Focus</a>.</p></div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -725,43 +768,6 @@ on the django-dev mailing list.</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2007/08/07/interesting-discussion-nginx/">Interesting Discussion, Nginx</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-08-07T22:09:21-07:00" pubdate data-updated="true">Aug 7<span>th</span>, 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><a class="reference external" href="http://groups.google.com/group/django-developers/browse_thread/thread/37801d8c2f46a313/a002ad9645e64e0a#a002ad9645e64e0a">Very interesting discussion</a> going on right now about Django&#8217;s templating language and whether to split it off into its own separate library.  One of the justifications is that it will &quot;feel&quot; easier to plug in other template languages into Django itself.  Funny how <a class="reference external" href="http://www.eflorenzano.com/blog/cheetah-and-django/">I just blogged about how easy this is already</a>.</p>
-<p>Also, previously this site was run with apache2 and perlbal.  Now it&#8217;s running apache2 and nginx.  At some point I&#8217;m going to make the switch to having all of the media pointing to an nginx-only server which short circuits the mod_python (also soon to be mod_wsgi, lol) handlers altogether.</p>
-<p>Sorry that this is another in a line of short posts, but I expect this trend will continue as I move twice in the next 2 weeks.  Crazy stuff happening in my life right now!</p></div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/9/">&larr; Older</a>
@@ -779,6 +785,10 @@ on the django-dev mailing list.</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/01/01/reducing-code-nesting/">Reducing Code Nesting</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2011/02/16/technology-behind-convore/">The Technology Behind Convore</a>
       </li>
     
@@ -792,10 +802,6 @@ on the django-dev mailing list.</p>
     
       <li class="post">
         <a href="/blog/2010/05/20/we-need-new-word-open/">We need a new word for &#8220;Open&#8221;</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2010/02/08/how-do-we-kick-our-synchronous-addiction/">How do we kick our synchronous addiction?</a>
       </li>
     
   </ul>

@@ -9,8 +9,7 @@
   <meta name="author" content="Eric Florenzano">
 
   
-  <meta name="description" content="PyCon 2008 has come to an end for me today, and while it was a highly different
-event for me this year than last year, it was more enoyable in many &hellip;">
+  <meta name="description" content="April Fool&#8217;s Day rocks! Maybe I enjoy it because it happens to share the same day as my birthday, but I think it&#8217;s more to do with the &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -77,6 +76,118 @@ event for me this year than last year, it was more enoyable in many &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/03/31/april-fools/">April Fools</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-03-31T23:14:03-07:00" pubdate data-updated="true">Mar 31<span>st</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>April Fool&#8217;s Day rocks!  Maybe I enjoy it because it happens to share the same day as my birthday, but I think it&#8217;s more to do with the fact that everyone&#8217;s having fun, being lighthearted, and simply not taking things too seriously.  Last year the blog wasn&#8217;t in any shape to do anything fun for the occasion, but this year it took me about 10 minutes to whip up some middleware fun.  That&#8217;s right, if you can read and understand this right now, the secret is out: a bit of Django middleware is all that&#8217;s needed to turn your blog into l33t-sp34k central.</p>
+<p>I&#8217;ll even go one step further than telling you how I did it, I&#8217;ll give you the code:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+<span class="line-number">34</span>
+<span class="line-number">35</span>
+<span class="line-number">36</span>
+<span class="line-number">37</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="kn">import</span> <span class="nn">re</span>
+</span><span class="line"><span class="kn">import</span> <span class="nn">lxml.html</span>
+</span><span class="line">
+</span><span class="line"><span class="n">trans</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class="line">    <span class="s">&#39;cks&#39;</span><span class="p">:</span> <span class="s">r&#39;xxors&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&#39;lol&#39;</span><span class="p">:</span> <span class="s">r&#39;r0flc0pt3r&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&#39;the&#39;</span><span class="p">:</span> <span class="s">r&#39;teh&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="s">r&#39;4&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&#39;e&#39;</span><span class="p">:</span> <span class="s">r&#39;3&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&#39;f&#39;</span><span class="p">:</span> <span class="s">r&#39;ph&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&#39;g&#39;</span><span class="p">:</span> <span class="s">r&#39;6&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&#39;h&#39;</span><span class="p">:</span> <span class="s">r&#39;|-|&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&#39;i&#39;</span><span class="p">:</span> <span class="s">r&#39;1&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&#39;o&#39;</span><span class="p">:</span> <span class="s">r&#39;0&#39;</span><span class="p">,</span>
+</span><span class="line">    <span class="s">&#39;s&#39;</span><span class="p">:</span> <span class="s">r&#39;5&#39;</span><span class="p">,</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line">
+</span><span class="line"><span class="k">def</span> <span class="nf">is_code_block</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
+</span><span class="line">    <span class="k">return</span> <span class="n">node</span><span class="o">.</span><span class="n">attrib</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;class&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span> <span class="o">==</span> <span class="s">&#39;highlight&#39;</span>
+</span><span class="line">
+</span><span class="line"><span class="k">def</span> <span class="nf">recursive_leetifier</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
+</span><span class="line">    <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">iterchildren</span><span class="p">():</span>
+</span><span class="line">        <span class="k">if</span> <span class="n">child</span><span class="o">.</span><span class="n">text</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">is_code_block</span><span class="p">(</span><span class="n">child</span><span class="p">):</span>
+</span><span class="line">            <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">trans</span><span class="o">.</span><span class="n">iterkeys</span><span class="p">():</span>
+</span><span class="line">                <span class="n">child</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">I</span><span class="p">)</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">trans</span><span class="p">[</span><span class="n">pattern</span><span class="p">],</span> <span class="n">child</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+</span><span class="line">        <span class="k">if</span> <span class="ow">not</span> <span class="n">is_code_block</span><span class="p">(</span><span class="n">child</span><span class="p">):</span>
+</span><span class="line">            <span class="n">recursive_leetifier</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
+</span><span class="line">
+</span><span class="line"><span class="k">class</span> <span class="nc">LeetSpeakMiddleware</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+</span><span class="line">    <span class="k">def</span> <span class="nf">process_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+</span><span class="line">        <span class="k">try</span><span class="p">:</span>
+</span><span class="line">            <span class="n">html</span> <span class="o">=</span> <span class="n">lxml</span><span class="o">.</span><span class="n">html</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+</span><span class="line">            <span class="n">recursive_leetifier</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
+</span><span class="line">            <span class="n">response</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="n">lxml</span><span class="o">.</span><span class="n">html</span><span class="o">.</span><span class="n">tostring</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
+</span><span class="line">        <span class="k">except</span><span class="p">:</span>
+</span><span class="line">            <span class="k">pass</span>
+</span><span class="line">        <span class="k">return</span> <span class="n">response</span>
+</span></code></pre></td></tr></table></div></figure><p>The idea behind it is simple: Let the request go completely through Django&#8217;s request/response cycle, and just before returning the correct response, parse the HTML and convert all of the actual content to l33t by doing some simple regular expression substitution.  I&#8217;m using <a class="reference external" href="http://codespeak.net/lxml/parsing.html#parsing-html">lxml.html</a> simply because I attended <a class="reference external" href="http://blog.ianbicking.org/2008/03/21/pycon-talks/">Ian Bicking&#8217;s talk at Pycon 2008</a> and was intrigued.  I must say that the familiar <a class="reference external" href="http://docs.python.org/lib/module-xml.etree.ElementTree.html">ElementTree</a> interface helped a lot in getting this code up and running in a short amount of time.</p>
+<p>Hopefully you all find this holiday to be as fun as I do, and maybe I&#8217;ll see some more l33t next year!</p></div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -644,49 +755,6 @@ environment is outside the scope of Django.)</blockquote>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2008/01/30/ajax-voting-nicer-css-threadedcomments-test/">AJAX, Voting, and Some Nicer CSS: Putting Django-threadedcomments to the Test</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-01-30T10:02:13-08:00" pubdate data-updated="true">Jan 30<span>th</span>, 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>It&#8217;s an interesting feeling open-sourcing an application that you&#8217;ve developed for your own purposes.  Will people use it?  Will people find major design flaws?  Is it just a big waste of time?  These were the questions that were going through my mind before open-sourcing <a class="reference external" href="http://code.google.com/p/django-threadedcomments/">django-threadedcomments</a>.  Fortunately, my worries were quelled almost instantly as a people reacted quite positively to the application.  There was one recurring comment, however, that almost everyone who tried the sample implementation said: <strong>those colors are hideous</strong>.</p>
-<p>Beyond even that though, it seems that people saw the sample implementation and got the impression that django-threadedcomments = that sample implementation.  To me, that&#8217;s an underestimation of the power of the modular django app.  I think that <a class="reference external" href="http://www.b-list.org/weblog/2007/nov/29/django-blog/">James Bennett</a> hits the nail on the head when he says that:</p>
-<blockquote>
-&quot;Rather than a single definitive &#8216;Django blog&#8217; application, for example, I think it&#8211;  s much more likely
-we&#8211;  ll see a collection of applications which, taken together, provide all the key
-functionality&#8230;&quot;</blockquote>
-<p>It was this sentiment that pervaded nearly all of the design decisions behind django-threadedcomments: it should be flexible, modular, and reusable so that, taken together with other similarly-designed apps, it can provide some compelling functionality at a fraction of the effort.  Now we most assuredly didn&#8217;t achieve all of those design goals fully, but I believe we&#8217;re headed in at least the right direction with its development.</p>
-<p>To prove my point, I decided to create an improved Digg/Reddit comment system clone using <a class="reference external" href="http://insin.webfactional.com/weblog/">Jonathan Buchanan</a>&#8217;s wonderful <a class="reference external" href="http://code.google.com/p/django-voting/">django-voting</a> application, alongside <a class="reference external" href="http://code.google.com/p/django-threadedcomments/">django-threadedcomments</a>, and a fair bit of <a class="reference external" href="http://jquery.com/">jQuery</a>.  Being almost completely new to Javascript, I was pleasantly surprised by how easy it was to not only integrate all of these technologies and use extensive client- and server-side scripting, but also to achieve a compelling commenting system in well under a week of spare time.  Oh, and this time there was actually some effort in making the look and feel of the commenting system acceptable!  As with the first example, this one is completely open sourced and available in the django-threadedcomments SVN repository.</p>
-<p>Without further ado, the <a class="reference external" href="http://www.eflorenzano.com/threadexample/blog/">Example Digg/Reddit Comment Clone Plus Focus</a>.</p></div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/8/">&larr; Older</a>
@@ -704,6 +772,10 @@ functionality&#8230;&quot;</blockquote>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/01/01/reducing-code-nesting/">Reducing Code Nesting</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2011/02/16/technology-behind-convore/">The Technology Behind Convore</a>
       </li>
     
@@ -717,10 +789,6 @@ functionality&#8230;&quot;</blockquote>
     
       <li class="post">
         <a href="/blog/2010/05/20/we-need-new-word-open/">We need a new word for &#8220;Open&#8221;</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2010/02/08/how-do-we-kick-our-synchronous-addiction/">How do we kick our synchronous addiction?</a>
       </li>
     
   </ul>

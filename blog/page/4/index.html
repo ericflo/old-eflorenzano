@@ -9,8 +9,8 @@
   <meta name="author" content="Eric Florenzano">
 
   
-  <meta name="description" content="&quot;Another feature that&#8217;s easy to add is a per-entry way to allow or disallow comments.&quot;
-From Practical Django Projects by James &hellip;">
+  <meta name="description" content="A few years ago, when I first started using Python, I spent an inordinate amount
+of time looking for &quot;a good Python IDE.&quot; The classic IDE &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -77,6 +77,69 @@ From Practical Django Projects by James &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/11/13/ide-or-not-ide-question/">&#8220;To IDE or Not to IDE?&#8221;, That Is the Question</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-11-13T20:24:18-08:00" pubdate data-updated="true">Nov 13<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>A few years ago, when I first started using Python, I spent an inordinate amount
+of time looking for &quot;a good Python IDE.&quot;  The classic <a class="reference external" href="http://wiki.python.org/moin/CategoryIntegratedDevelopmentEnvironment?highlight=((IntegratedDevelopmentEnvironments))">IDE links</a> page on the
+Python wiki was around back then, and looked fairly similar to the way it looks
+now.  I was used to Java and Eclipse.  Java, if you haven&#8217;t used it, is
+difficult at best to use without an IDE.</p>
+<p>Understandably, then, I wanted to see what was available (and free).  At the
+time, the two reigning free ones were Eric3, and SPE, and PyDev was quickly
+gaining popularity.  I found Eric3 to be extremely buggy, crashing every few
+minutes.  Everyone seemed to love it, but I couldn&#8217;t get it to work stably for
+me, which was a deal breaker.</p>
+<p>PyDev seemed too heavyweight.  After all, I was trying to switch <em>away</em> from
+Java!  Plus, the fact that it stored metadata in these strange .project files
+bugged me to no end.  SPE was one that I actually used for a while.  It was
+stable, seemed to be featureful, and had a good community around it.  But
+I found that the interface ended up getting in the way more than helping, and
+eventually I abandoned that as well.</p>
+<p>I tried trial versions of Wing and Komodo, and of course they were the best, but
+they sure didn&#8217;t seem like they were worth what their respective companies were
+asking for them.  Anyway, at this point several months had gone by, and I had
+gotten pretty comfortable with Python.  The search for an IDE ended up making me
+proficient enough that I found I didn&#8217;t need an IDE at all!</p>
+<p>Today, I code in TextMate.  But I have no strong preference over any other text
+editor (in fact, I think my preferred text editor is <a class="reference external" href="http://kate-editor.org/">Kate</a>), but the simplicity
+that it brings is pretty much unbeatable.</p>
+<p>All of this brings me to my question for anyone who&#8217;s willing to answer: should
+I take a second look at any of these IDEs?  A few years after I did this
+research and I&#8217;m willing to entertain the idea that it&#8217;s possible an IDE could
+make development easier.  Is there a new kid on the block that is sweeping people
+off their feet?</p></div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1015,214 +1078,6 @@ it.</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2008/11/03/database-triggers-arent-evil-and-they-actually-kin/">Database Triggers Aren&#8217;t Evil, and They Actually Kind of Rock</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-11-03T18:44:19-08:00" pubdate data-updated="true">Nov 3<span>rd</span>, 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><div class="section" id="who-says-they-suck">
-<h2>Who says they suck?</h2>
-<p>Nobody that I&#8217;ve seen has come out and actually said that they don&#8217;t like
-database triggers, but at the same time, Python (Django) programmers like to
-program in Python.  And PL/pgSQL certainly is not Python.  There&#8217;s a tendency to
-do everything in Python&#8211;especially with the use of Django&#8217;s dispatcher.</p>
-<p>But there&#8217;s some serious overhead with that approach, and roundtrips, and race
-conditions, etc.  If you&#8217;re using a good database, there&#8217;s an alternative:
-you guessed it, database triggers.</p>
-</div>
-<div class="section" id="let-s-set-up-some-models">
-<h2>Let&#8217;s set up some models</h2>
-<p>Here will be our models for the remainder of this post:</p>
-<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="k">class</span> <span class="nc">Bookmark</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-</span><span class="line">    <span class="n">title</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-</span><span class="line">    <span class="n">url</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">URLField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">255</span><span class="p">)</span>
-</span><span class="line">
-</span><span class="line">    <span class="n">num_votes</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">PositiveIntegerField</span><span class="p">(</span><span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-</span><span class="line">    <span class="n">score</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">(</span><span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-</span><span class="line">
-</span><span class="line"><span class="k">class</span> <span class="nc">Vote</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-</span><span class="line">    <span class="n">bookmark</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Bookmark</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s">&#39;votes&#39;</span><span class="p">)</span>
-</span><span class="line">    <span class="n">value</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
-</span></code></pre></td></tr></table></div></figure><p>As you can tell, we have a straightforward <tt class="docutils literal">Bookmark</tt> and <tt class="docutils literal">Vote</tt> models here.
-But there are also two denormalized fields: <tt class="docutils literal">num_votes</tt>, and <tt class="docutils literal">score</tt>.</p>
-</div>
-<div class="section" id="doing-it-in-python">
-<h2>Doing it in Python</h2>
-<p>The advantage of doing this in Python is that it&#8217;s simple and Django supports
-it out of the box.  Here&#8217;s how the code for that would look:</p>
-<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">signals</span>
-</span><span class="line">
-</span><span class="line"><span class="k">def</span> <span class="nf">update_bookmark_aggregate</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-</span><span class="line">    <span class="n">bmark</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">bookmark</span>
-</span><span class="line">    <span class="n">bmark</span><span class="o">.</span><span class="n">num_votes</span> <span class="o">=</span> <span class="n">bmark</span><span class="o">.</span><span class="n">votes</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
-</span><span class="line">    <span class="n">bmark</span><span class="o">.</span><span class="n">score</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">bmark</span><span class="o">.</span><span class="n">votes</span><span class="o">.</span><span class="n">values_list</span><span class="p">(</span><span class="s">&#39;value&#39;</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="bp">True</span><span class="p">))</span>
-</span><span class="line">    <span class="n">bmark</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">force_update</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-</span><span class="line"><span class="n">signals</span><span class="o">.</span><span class="n">post_save</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">update_bookmark_aggregate</span><span class="p">,</span> <span class="n">sender</span><span class="o">=</span><span class="n">Vote</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure><p>Very simply, every time a vote is saved, the <tt class="docutils literal">update_bookmark_aggregate</tt>
-function is called which updates the bookmark with its new score and num_votes.</p>
-</div>
-<div class="section" id="doing-it-in-pl-pgsql">
-<h2>Doing it in Pl/pgSQL</h2>
-<p>Create a new file, named <tt class="docutils literal">management.py</tt> under your bookmarks app directory.
-Its contents will be as follows:</p>
-<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-<span class="line-number">18</span>
-<span class="line-number">19</span>
-<span class="line-number">20</span>
-<span class="line-number">21</span>
-<span class="line-number">22</span>
-<span class="line-number">23</span>
-<span class="line-number">24</span>
-<span class="line-number">25</span>
-<span class="line-number">26</span>
-<span class="line-number">27</span>
-<span class="line-number">28</span>
-<span class="line-number">29</span>
-<span class="line-number">30</span>
-<span class="line-number">31</span>
-<span class="line-number">32</span>
-<span class="line-number">33</span>
-</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">signals</span>
-</span><span class="line"><span class="kn">from</span> <span class="nn">bookmarks</span> <span class="kn">import</span> <span class="n">models</span>
-</span><span class="line">
-</span><span class="line"><span class="n">sql</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;</span>
-</span><span class="line"><span class="s">CREATE LANGUAGE plpgsql;</span>
-</span><span class="line"><span class="s">CREATE OR REPLACE FUNCTION update_bookmark_aggregate_trigger()</span>
-</span><span class="line"><span class="s">    RETURNS &quot;trigger&quot; AS &#39;</span>
-</span><span class="line"><span class="s">    DECLARE</span>
-</span><span class="line"><span class="s">        new_score INTEGER;</span>
-</span><span class="line"><span class="s">        new_num_votes INTEGER;</span>
-</span><span class="line"><span class="s">    BEGIN</span>
-</span><span class="line"><span class="s">        SELECT COUNT(*) INTO STRICT new_num_votes FROM bookmarks_vote</span>
-</span><span class="line"><span class="s">            WHERE bookmark_id = NEW.bookmark_id;</span>
-</span><span class="line"><span class="s">        SELECT COALESCE(SUM(value), 0) INTO STRICT new_score FROM bookmarks_vote</span>
-</span><span class="line"><span class="s">            WHERE bookmark_id = NEW.bookmark_id;</span>
-</span><span class="line"><span class="s">    UPDATE bookmarks_bookmark</span>
-</span><span class="line"><span class="s">        SET</span>
-</span><span class="line"><span class="s">            score = new_score,</span>
-</span><span class="line"><span class="s">            num_votes = new_num_votes</span>
-</span><span class="line"><span class="s">        WHERE id = NEW.bookmark_id;</span>
-</span><span class="line"><span class="s">    RETURN NEW;</span>
-</span><span class="line"><span class="s">    END;&#39; LANGUAGE &#39;plpgsql&#39; VOLATILE;</span>
-</span><span class="line">
-</span><span class="line"><span class="s">CREATE TRIGGER update_bookmark_aggregate_trigger AFTER INSERT OR UPDATE</span>
-</span><span class="line"><span class="s">    ON bookmarks_vote FOR EACH ROW</span>
-</span><span class="line"><span class="s">    EXECUTE PROCEDURE update_bookmark_aggregate_trigger();</span>
-</span><span class="line"><span class="s">&quot;&quot;&quot;</span>
-</span><span class="line">
-</span><span class="line"><span class="k">def</span> <span class="nf">create_trigger</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">created_models</span><span class="p">,</span> <span class="n">verbosity</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-</span><span class="line">    <span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">connection</span>
-</span><span class="line">    <span class="n">cursor</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
-</span><span class="line">    <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">)</span>
-</span><span class="line"><span class="n">signals</span><span class="o">.</span><span class="n">post_syncdb</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">create_trigger</span><span class="p">,</span> <span class="n">sender</span><span class="o">=</span><span class="n">models</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure><p>In this file we have declared two variables, <tt class="docutils literal">new_score</tt>, and
-<tt class="docutils literal">new_num_votes</tt>.  We do two queries to get the aggregate data.  And then we
-update the bookmark to reflect the new aggregated values.  This script is
-executed once when the bookmarks models are first loaded into the database, and
-we&#8217;re all set!</p>
-</div>
-<div class="section" id="let-s-see-how-it-works">
-<h2>Let&#8217;s see how it works</h2>
-<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-</pre></td><td class="code"><pre><code class="pycon"><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">bookmarks.models</span> <span class="kn">import</span> <span class="n">Bookmark</span><span class="p">,</span> <span class="n">Vote</span>
-</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">Bookmark</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s">&quot;Blog&quot;</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="s">&#39;http://eflorenzano.com/&#39;</span><span class="p">)</span>
-</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="o">.</span><span class="n">num_votes</span>
-</span><span class="line"><span class="go">0</span>
-</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="o">.</span><span class="n">score</span>
-</span><span class="line"><span class="go">0</span>
-</span><span class="line"><span class="go"># There is no aggregate data yet</span>
-</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">Vote</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">bookmark</span><span class="o">=</span><span class="n">b</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-</span><span class="line"><span class="go">&lt;Vote: Vote object&gt;</span>
-</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">Vote</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">bookmark</span><span class="o">=</span><span class="n">b</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-</span><span class="line"><span class="go">&lt;Vote: Vote object&gt;</span>
-</span><span class="line"><span class="go"># We need to re-query for the bookmark, due to no identity map in Django.</span>
-</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">Bookmark</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
-</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="o">.</span><span class="n">num_votes</span>
-</span><span class="line"><span class="go">2</span>
-</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="o">.</span><span class="n">score</span>
-</span><span class="line"><span class="go">3</span>
-</span></code></pre></td></tr></table></div></figure><p>Voila!  This was all done in the database behind the scenes.  Very cool, very
-fast, and it kind of rocks.</p>
-</div></div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/5/">&larr; Older</a>
@@ -1240,6 +1095,10 @@ fast, and it kind of rocks.</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/01/01/reducing-code-nesting/">Reducing Code Nesting</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2011/02/16/technology-behind-convore/">The Technology Behind Convore</a>
       </li>
     
@@ -1253,10 +1112,6 @@ fast, and it kind of rocks.</p>
     
       <li class="post">
         <a href="/blog/2010/05/20/we-need-new-word-open/">We need a new word for &#8220;Open&#8221;</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2010/02/08/how-do-we-kick-our-synchronous-addiction/">How do we kick our synchronous addiction?</a>
       </li>
     
   </ul>

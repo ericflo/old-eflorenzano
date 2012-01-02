@@ -4,7 +4,7 @@
   <title><![CDATA[Eric Florenzano's Blog]]></title>
   <link href="http://ericflo.github.com/atom.xml" rel="self"/>
   <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T15:38:17-08:00</updated>
+  <updated>2012-01-01T18:16:12-08:00</updated>
   <id>http://ericflo.github.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
@@ -12,6 +12,381 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Reducing Code Nesting]]></title>
+    <link href="http://ericflo.github.com/blog/2012/01/01/reducing-code-nesting/"/>
+    <updated>2012-01-01T18:00:00-08:00</updated>
+    <id>http://ericflo.github.com/blog/2012/01/01/reducing-code-nesting</id>
+    <content type="html"><![CDATA[<p>&quot;This guy&#8217;s code sucks!&quot;  It&#8217;s something we&#8217;ve all said or thought when we run
+into code we don&#8217;t like.  Sometimes it&#8217;s because it&#8217;s buggy, sometimes it&#8217;s
+because it conforms to a style we don&#8217;t like, and sometimes it&#8217;s because it
+just feels wrong.  Recently I found myself thinking this, and automatically
+jumping to the conclusion that the developer who wrote it was a novice.  The
+code had a distinct property that I dislike: lots of nesting.  But the more I
+think about it, the more I realized that it&#8217;s not really something I&#8217;ve heard
+discussed much.</p>
+<p>So let&#8217;s talk about it.  I&#8217;m going to first talk about what I mean by nesting,
+why I think it&#8217;s a bad quality, and then I&#8217;m going to go over some tricks I&#8217;ve
+learned over the years to reduce it.</p>
+<div class="section" id="what-do-i-mean-by-code-nesting-and-why-is-it-bad">
+<h2>What do I mean by code nesting, and why is it bad?</h2>
+<p>It&#8217;s easier to demonstrate rather than talk about it.  This is what I mean by
+deep code nesting, with my apologies for the contrived example:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="k">def</span> <span class="nf">get_cached_user</span><span class="p">(</span><span class="n">user_id</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+</span><span class="line">    <span class="sd">&quot;&quot;&quot;</span>
+</span><span class="line"><span class="sd">    Returns a cached user object either by their user_id or by their username.</span>
+</span><span class="line"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span class="line">    <span class="n">user</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get_user_by_id</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
+</span><span class="line">    <span class="k">if</span> <span class="ow">not</span> <span class="n">user</span><span class="p">:</span>
+</span><span class="line">        <span class="n">user</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get_user_by_username</span><span class="p">(</span><span class="n">username</span><span class="p">)</span>
+</span><span class="line">        <span class="k">if</span> <span class="ow">not</span> <span class="n">user</span><span class="p">:</span>
+</span><span class="line">            <span class="n">user</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_user_by_id</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
+</span><span class="line">            <span class="k">if</span> <span class="ow">not</span> <span class="n">user</span><span class="p">:</span>
+</span><span class="line">                <span class="n">user</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_user_by_username</span><span class="p">(</span><span class="n">username</span><span class="p">)</span>
+</span><span class="line">                <span class="k">if</span> <span class="ow">not</span> <span class="n">user</span><span class="p">:</span>
+</span><span class="line">                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;User not found&#39;</span><span class="p">)</span>
+</span><span class="line">            <span class="n">cache</span><span class="o">.</span><span class="n">set_user</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">username</span><span class="p">)</span>
+</span><span class="line">    <span class="k">return</span> <span class="n">user</span>
+</span></code></pre></td></tr></table></div></figure><p>You can see in this Python code just by looking at the indentation level that
+there&#8217;s lots of nesting.  Before we can determine that the user was not found,
+we must pass through four conditionals, and each conditional is nested within
+the previous conditional.</p>
+<p>I argue that this is bad code.  Every added level of nesting is another piece
+of context that your brain has to keep track of.  Each nested block is one you
+have to line up by eye to see what conditional it lines up with (even if your
+editor helps at this with visuals, it doesn&#8217;t remove the issue entirely.)  And
+this is just a straightforward example where we just return the user at the
+end, let&#8217;s take a look at an example that does something more complicated:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="k">def</span> <span class="nf">get_media_details</span><span class="p">(</span><span class="n">media</span><span class="p">):</span>
+</span><span class="line">    <span class="sd">&quot;&quot;&quot;</span>
+</span><span class="line"><span class="sd">    Returns a dictionary of extra data about the given media object.</span>
+</span><span class="line"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span class="line">    <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
+</span><span class="line">    <span class="k">if</span> <span class="n">media</span><span class="o">.</span><span class="n">is_video</span><span class="p">:</span>
+</span><span class="line">        <span class="n">data</span><span class="p">[</span><span class="s">&#39;kind&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;video&#39;</span>
+</span><span class="line">        <span class="k">if</span> <span class="n">media</span><span class="o">.</span><span class="n">is_youtube</span><span class="p">:</span>
+</span><span class="line">            <span class="n">data</span><span class="p">[</span><span class="s">&#39;url&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;http://youtube.com/&#39;</span>
+</span><span class="line">        <span class="k">if</span> <span class="n">media</span><span class="o">.</span><span class="n">is_vimeo</span><span class="p">:</span>
+</span><span class="line">            <span class="n">data</span><span class="p">[</span><span class="s">&#39;vimeo&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+</span><span class="line">            <span class="k">if</span> <span class="n">media</span><span class="o">.</span><span class="n">vimeo_version</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+</span><span class="line">                <span class="n">data</span><span class="p">[</span><span class="s">&#39;url&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;http://vimeo.com/v2/&#39;</span>
+</span><span class="line">        <span class="k">if</span> <span class="s">&#39;url&#39;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+</span><span class="line">            <span class="n">data</span><span class="p">[</span><span class="s">&#39;secure_url&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;url&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;http:&#39;</span><span class="p">,</span> <span class="s">&#39;https:&#39;</span><span class="p">)</span>
+</span><span class="line">    <span class="k">elif</span> <span class="n">media</span><span class="o">.</span><span class="n">is_audio</span><span class="p">:</span>
+</span><span class="line">        <span class="n">data</span><span class="p">[</span><span class="s">&#39;kind&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;audio&#39;</span>
+</span><span class="line">    <span class="k">elif</span> <span class="n">media</span><span class="o">.</span><span class="n">is_text</span><span class="p">:</span>
+</span><span class="line">        <span class="n">data</span><span class="p">[</span><span class="s">&#39;kind&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;text&#39;</span>
+</span><span class="line">    <span class="k">if</span> <span class="s">&#39;kind&#39;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+</span><span class="line">        <span class="n">data</span><span class="p">[</span><span class="s">&#39;kind_verbose&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class="line">            <span class="s">&#39;video&#39;</span><span class="p">:</span> <span class="s">&#39;Video Stream&#39;</span><span class="p">,</span>
+</span><span class="line">            <span class="s">&#39;audio&#39;</span><span class="p">:</span> <span class="s">&#39;Audio File&#39;</span><span class="p">,</span>
+</span><span class="line">            <span class="s">&#39;text&#39;</span><span class="p">:</span> <span class="s">&#39;Text Content&#39;</span><span class="p">,</span>
+</span><span class="line">        <span class="p">}[</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;kind&#39;</span><span class="p">]]</span>
+</span><span class="line">    <span class="k">return</span> <span class="n">data</span>
+</span></code></pre></td></tr></table></div></figure><p>It was unbelievably hard for me to even write that last example.  It&#8217;s
+obviously contrived and such, but the point is that it&#8217;s so difficult to
+even understand what it&#8217;s doing.  Unlike the previous example, this doesn&#8217;t
+simply nest and then return; it nests and then un-nests, and then nests again,
+and then finally returns.</p>
+</div>
+<div class="section" id="how-to-avoid-nesting">
+<h2>How to Avoid Nesting</h2>
+<p>The best way that I&#8217;ve discovered to avoid nesting is to return early.  Caching
+is the perfect example of this.  Instead of testing for a cache failure and
+fetching from the database inside the conditional, check for cache success and
+return that early.</p>
+<p>So this code:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="k">def</span> <span class="nf">get_cached_user</span><span class="p">(</span><span class="n">user_id</span><span class="p">):</span>
+</span><span class="line">    <span class="n">user</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get_user_by_id</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
+</span><span class="line">    <span class="c"># The main logic all happens in this nested block</span>
+</span><span class="line">    <span class="k">if</span> <span class="ow">not</span> <span class="n">user</span><span class="p">:</span>
+</span><span class="line">        <span class="n">user</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_user_by_id</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
+</span><span class="line">        <span class="n">cache</span><span class="o">.</span><span class="n">set_user_for_id</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span> <span class="n">user</span><span class="p">)</span>
+</span><span class="line">    <span class="k">return</span> <span class="n">user</span>
+</span></code></pre></td></tr></table></div></figure><p>Becomes this:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="k">def</span> <span class="nf">get_cached_user</span><span class="p">(</span><span class="n">user_id</span><span class="p">):</span>
+</span><span class="line">    <span class="n">user</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get_user_by_id</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
+</span><span class="line">    <span class="k">if</span> <span class="n">user</span><span class="p">:</span>
+</span><span class="line">        <span class="k">return</span> <span class="n">user</span>
+</span><span class="line">    <span class="c"># The main logic happens outside of the nested block</span>
+</span><span class="line">    <span class="n">user</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_user_by_id</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
+</span><span class="line">    <span class="n">cache</span><span class="o">.</span><span class="n">set_user_for_id</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span> <span class="n">user</span><span class="p">)</span>
+</span><span class="line">    <span class="k">return</span> <span class="n">user</span>
+</span></code></pre></td></tr></table></div></figure><p>In the simple case, it doesn&#8217;t seem to improve much, but what happens if we
+apply this technique to our first example?  It&#8217;s dramatically improved:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="k">def</span> <span class="nf">get_cached_user</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span> <span class="n">username</span><span class="p">):</span>
+</span><span class="line">    <span class="c"># First check the cache by id</span>
+</span><span class="line">    <span class="n">user</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get_user_by_id</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
+</span><span class="line">    <span class="k">if</span> <span class="n">user</span><span class="p">:</span>
+</span><span class="line">        <span class="k">return</span> <span class="n">user</span>
+</span><span class="line">
+</span><span class="line">    <span class="c"># Now check the cache by username</span>
+</span><span class="line">    <span class="n">user</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get_user_by_username</span><span class="p">(</span><span class="n">username</span><span class="p">)</span>
+</span><span class="line">    <span class="k">if</span> <span class="n">user</span><span class="p">:</span>
+</span><span class="line">        <span class="k">return</span> <span class="n">user</span>
+</span><span class="line">
+</span><span class="line">    <span class="c"># Both caches failed, so try hitting the db for the id</span>
+</span><span class="line">    <span class="n">user</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_user_by_id</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
+</span><span class="line">    <span class="k">if</span> <span class="n">user</span><span class="p">:</span>
+</span><span class="line">        <span class="n">cache</span><span class="o">.</span><span class="n">set_user</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">username</span><span class="p">)</span>
+</span><span class="line">        <span class="k">return</span> <span class="n">user</span>
+</span><span class="line">
+</span><span class="line">    <span class="c"># Looks like that didn&#39;t exist, try the username</span>
+</span><span class="line">    <span class="n">user</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_user_by_username</span><span class="p">(</span><span class="n">username</span><span class="p">)</span>
+</span><span class="line">    <span class="k">if</span> <span class="ow">not</span> <span class="n">user</span><span class="p">:</span>
+</span><span class="line">        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;User not found&#39;</span><span class="p">)</span>
+</span><span class="line">
+</span><span class="line">    <span class="c"># Cache our final user value for future use</span>
+</span><span class="line">    <span class="n">cache</span><span class="o">.</span><span class="n">set_user</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">username</span><span class="p">)</span>
+</span><span class="line">    <span class="k">return</span> <span class="n">user</span>
+</span></code></pre></td></tr></table></div></figure><p>Not only does it make it easier to read top-to-bottom, and force us to keep
+track of way less context, and make our code editors do less line wrapping,
+but it also makes it easier to separate the blocks of code and more easily
+comment them.</p>
+<p>So what other techniques can we use?  It starts to depend more on the
+situation.  Are you nesting because you&#8217;re writing a bunch of callbacks?  If
+so, you can usually restructure your code to use named functions instead of
+anonymous functions.  Here&#8217;s how that would might look before refactoring:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="kd">function</span> <span class="nx">getCachedUser</span><span class="p">(</span><span class="nx">userId</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">    <span class="nx">cache</span><span class="p">.</span><span class="nx">getUser</span><span class="p">(</span><span class="nx">userId</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">        <span class="k">if</span><span class="p">(</span><span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">            <span class="k">return</span> <span class="nx">callback</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span>
+</span><span class="line">        <span class="p">}</span>
+</span><span class="line">        <span class="nx">db</span><span class="p">.</span><span class="nx">getUser</span><span class="p">(</span><span class="nx">userId</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">            <span class="nx">cache</span><span class="p">.</span><span class="nx">setUser</span><span class="p">(</span><span class="nx">userId</span><span class="p">,</span> <span class="nx">user</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class="line">                <span class="nx">callback</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span>
+</span><span class="line">            <span class="p">});</span>
+</span><span class="line">        <span class="p">});</span>
+</span><span class="line">    <span class="p">});</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure><p>Note that in this example we even applied the technique of returning early in
+the first callback function, but as you can see there&#8217;s still a bunch of
+nesting going on.  Now if we switch to using named functions?</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="kd">function</span> <span class="nx">curry</span><span class="p">(</span><span class="nx">fn</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">    <span class="kd">var</span> <span class="nx">slice</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">slice</span><span class="p">;</span>
+</span><span class="line">    <span class="kd">var</span> <span class="nx">args</span> <span class="o">=</span> <span class="nx">slice</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="nx">arguments</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+</span><span class="line">    <span class="k">return</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class="line">        <span class="k">return</span> <span class="nx">fn</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">args</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">slice</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="nx">arguments</span><span class="p">)));</span>
+</span><span class="line">    <span class="p">};</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line">
+</span><span class="line"><span class="kd">function</span> <span class="kr">final</span><span class="p">(</span><span class="nx">callback</span><span class="p">,</span> <span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">    <span class="nx">callback</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line">
+</span><span class="line"><span class="kd">function</span> <span class="nx">dbResult</span><span class="p">(</span><span class="nx">callback</span><span class="p">,</span> <span class="nx">userId</span><span class="p">,</span> <span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">    <span class="nx">cache</span><span class="p">.</span><span class="nx">setUser</span><span class="p">(</span><span class="nx">userId</span><span class="p">,</span> <span class="nx">user</span><span class="p">,</span> <span class="nx">curry</span><span class="p">(</span><span class="kr">final</span><span class="p">,</span> <span class="nx">callback</span><span class="p">,</span> <span class="nx">user</span><span class="p">));</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line">
+</span><span class="line"><span class="kd">function</span> <span class="nx">cacheResult</span><span class="p">(</span><span class="nx">callback</span><span class="p">,</span> <span class="nx">userId</span><span class="p">,</span> <span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">    <span class="k">if</span><span class="p">(</span><span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">        <span class="k">return</span> <span class="nx">callback</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span>
+</span><span class="line">    <span class="p">}</span>
+</span><span class="line">    <span class="nx">db</span><span class="p">.</span><span class="nx">getUser</span><span class="p">(</span><span class="nx">userId</span><span class="p">,</span> <span class="nx">curry</span><span class="p">(</span><span class="nx">dbResult</span><span class="p">,</span> <span class="nx">callback</span><span class="p">,</span> <span class="nx">userId</span><span class="p">));</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line">
+</span><span class="line"><span class="kd">function</span> <span class="nx">getCachedUser</span><span class="p">(</span><span class="nx">userId</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">    <span class="nx">cache</span><span class="p">.</span><span class="nx">getUser</span><span class="p">(</span><span class="nx">userId</span><span class="p">,</span> <span class="nx">curry</span><span class="p">(</span><span class="nx">cacheResult</span><span class="p">,</span> <span class="nx">callback</span><span class="p">,</span> <span class="nx">userId</span><span class="p">));</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure><p>This is a lot better in terms of nesting.  Unfortunately we had to write a
+helper function called curry, but that only has to be written once and can be
+re-used for all code written in this style.  Also unfortunately I still find
+this kind of code difficult to follow, which is why I avoid writing much
+callback-style code.  However, at least you can reduce the nesting.  In all
+honesty, there are probably better ways of reducing nesting that I&#8217;m not aware
+of.  If you can rewrite the <tt class="docutils literal">getCachedUser</tt> function in JS in a better way,
+please blog it!</p>
+<p>Another way to reduce nesting is to assign an intermediate variable.  Here&#8217;s
+an example in Erlang of some file function that nests a case statement within
+another case statement.</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+</pre></td><td class="code"><pre><code class="erlang"><span class="line"><span class="nf">do_some_file_thing</span><span class="p">(</span><span class="nv">File</span><span class="p">)</span> <span class="o">-&gt;</span>
+</span><span class="line">    <span class="k">case</span> <span class="nn">file</span><span class="p">:</span><span class="n">open</span><span class="p">(</span><span class="nv">File</span><span class="p">,</span> <span class="p">[</span><span class="n">raw</span><span class="p">,</span> <span class="n">binary</span><span class="p">,</span> <span class="n">read</span><span class="p">])</span> <span class="k">of</span>
+</span><span class="line">        <span class="p">{</span><span class="n">ok</span><span class="p">,</span> <span class="nv">Fd</span><span class="p">}</span> <span class="o">-&gt;</span>
+</span><span class="line">            <span class="nv">Start</span> <span class="o">=</span> <span class="n">now</span><span class="p">(),</span>
+</span><span class="line">            <span class="k">case</span> <span class="n">process_file_data</span><span class="p">(</span><span class="nv">Fd</span><span class="p">)</span> <span class="k">of</span>
+</span><span class="line">                <span class="p">{</span><span class="n">ok</span><span class="p">,</span> <span class="nv">Processed</span><span class="p">}</span> <span class="o">-&gt;</span>
+</span><span class="line">                    <span class="p">{</span><span class="n">ok</span><span class="p">,</span> <span class="nv">Start</span><span class="p">,</span> <span class="n">now</span><span class="p">(),</span> <span class="nv">Processed</span><span class="p">};</span>
+</span><span class="line">                <span class="nv">Error</span> <span class="o">-&gt;</span>
+</span><span class="line">                    <span class="nv">Error</span>
+</span><span class="line">            <span class="k">end</span><span class="p">;</span>
+</span><span class="line">        <span class="nv">Error</span> <span class="o">-&gt;</span>
+</span><span class="line">            <span class="nv">Error</span>
+</span><span class="line">    <span class="k">end</span><span class="p">.</span>
+</span></code></pre></td></tr></table></div></figure><p>We can assign to an intermediate &quot;Resp&quot; variable, and bring that second case
+statement out into the function&#8217;s main code block, like so:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+</pre></td><td class="code"><pre><code class="erlang"><span class="line"><span class="nf">do_some_file_thing</span><span class="p">(</span><span class="nv">File</span><span class="p">)</span> <span class="o">-&gt;</span>
+</span><span class="line">    <span class="nv">Resp</span> <span class="o">=</span> <span class="k">case</span> <span class="nn">file</span><span class="p">:</span><span class="n">open</span><span class="p">(</span><span class="nv">File</span><span class="p">,</span> <span class="p">[</span><span class="n">raw</span><span class="p">,</span> <span class="n">binary</span><span class="p">,</span> <span class="n">read</span><span class="p">])</span> <span class="k">of</span>
+</span><span class="line">        <span class="p">{</span><span class="n">ok</span><span class="p">,</span> <span class="nv">Fd</span><span class="p">}</span> <span class="o">-&gt;</span>
+</span><span class="line">            <span class="p">{</span><span class="n">timestamp</span><span class="p">,</span> <span class="n">now</span><span class="p">(),</span> <span class="n">process_file_data</span><span class="p">(</span><span class="nv">Fd</span><span class="p">)};</span>
+</span><span class="line">        <span class="nv">Error</span> <span class="o">-&gt;</span>
+</span><span class="line">            <span class="nv">Error</span>
+</span><span class="line">    <span class="k">end</span><span class="p">,</span>
+</span><span class="line">    <span class="k">case</span> <span class="nv">Resp</span> <span class="k">of</span>
+</span><span class="line">        <span class="p">{</span><span class="n">timestamp</span><span class="p">,</span> <span class="nv">Start</span><span class="p">,</span> <span class="p">{</span><span class="n">ok</span><span class="p">,</span> <span class="nv">Processed</span><span class="p">}}</span> <span class="o">-&gt;</span>
+</span><span class="line">            <span class="p">{</span><span class="n">ok</span><span class="p">,</span> <span class="nv">Start</span><span class="p">,</span> <span class="n">now</span><span class="p">(),</span> <span class="nv">Processed</span><span class="p">};</span>
+</span><span class="line">        <span class="p">{</span><span class="n">timestamp</span><span class="p">,</span> <span class="nv">Start</span><span class="p">,</span> <span class="nv">Error</span><span class="p">}</span> <span class="o">-&gt;</span>
+</span><span class="line">            <span class="nv">Error</span><span class="p">;</span>
+</span><span class="line">        <span class="nv">Error</span> <span class="o">-&gt;</span>
+</span><span class="line">            <span class="nv">Error</span>
+</span><span class="line">    <span class="k">end</span><span class="p">.</span>
+</span></code></pre></td></tr></table></div></figure></div>
+<div class="section" id="what-does-this-all-mean">
+<h2>What does this all mean?</h2>
+<p>At the end of the day, this isn&#8217;t going to make or break you as a programmer.
+In fact, nothing I&#8217;ve mentioned even changes the code&#8217;s logic, but simply its
+implementation.  It&#8217;s simply something to think about as you code, as you read
+other people&#8217;s code.  Hopefully you agree with me that less nesting is an
+admirable goal, and you find more and more ways to achieve it.</p>
+</div>]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[The Technology Behind Convore]]></title>
@@ -1903,53 +2278,6 @@ list!</li>
 </span><span class="line">20<span class="o">)</span> Hello, Eric Florenzano
 </span><span class="line">21<span class="o">)</span> Hello, Eric Florenzano
 </span></code></pre></td></tr></table></div></figure><p>Well there you have it, my attempt at a programming meme.  I hope someone enjoys it!</p>]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Why CouchDB Sucks]]></title>
-    <link href="http://ericflo.github.com/blog/2008/11/23/why-couchdb-sucks/"/>
-    <updated>2008-11-23T11:14:12-08:00</updated>
-    <id>http://ericflo.github.com/blog/2008/11/23/why-couchdb-sucks</id>
-    <content type="html"><![CDATA[<p><a class="reference external" href="http://couchdb.org/">CouchDB</a> really sucks at doing some things.  That should come as no surprise, as
-every technology has its advantages and its drawbacks.  The thing is, when a new
-technology comes out that looks really promising and cool, everyone writes about
-all of its advantages, and none of its drawbacks.  Then, people start to use it
-for things it isn&#8217;t very good at, and they are disappointed.  In that spirit, I
-would like to talk about some of the things that (in my experience) CouchDB is
-absolutely not good at, and that you shouldn&#8217;t try to use it for.</p>
-<p>First, it doesn&#8217;t support transactions in the way that most people typically
-think about them.  That means, enforcing uniqueness of one field across all
-documents is not safe.  A classic example of this would be enforcing that a
-username is unique.  You can check whether a username exists, and if not, create
-a new one.  There is no guarantee, however, that between the time that your app
-has checked for its existence, and the time that you write the new user to the
-database, that some other instance of your app hasn&#8217;t beat you to that write.</p>
-<p>Another consequence of CouchDB&#8217;s inability to support the typical notion of a
-transaction is that things like inc/decrementing a value and saving it back are
-also dangerous.  Fortunately there aren&#8217;t many instances that you would want to
-simply inc/decrement some value where you couldn&#8217;t just store the individual
-documents separately and aggregate them with a view.</p>
-<p>Secondly, CouchDB sucks at dealing with relational data.  If your data makes a
-lot of sense to be in <a class="reference external" href="http://en.wikipedia.org/wiki/Third_normal_form">3rd normal form</a>, and you try to follow that form in
-CouchDB, you&#8217;re going to run into a lot of trouble.  Yes, it&#8217;s probably possible
-with tricks with view collations, but you&#8217;re constantly going to be fighting
-with the system.  If your data can be reformatted to be much more denormalized,
-then CouchDB will work fine.</p>
-<p>Thirdly, CouchDB sucks at being a data warehouse.  In every data warehouse that
-I&#8217;ve ever run into, people have all kinds of different requests for how to slice
-the data.  And they all want it to be done, yesterday.  The problem with this is
-that temporary views in CouchDB on large datasets are really slow, because it
-can&#8217;t use any of its normal indexing tricks.  If you by some chance have a very
-rigid way of looking at your data, using CouchDB and permanent views could work
-quite well.  But in 99% of cases, a <a class="reference external" href="http://en.wikipedia.org/wiki/Column-oriented_DBMS">Column-Oriented Database</a> of some sort is
-a much better tool for the data warehousing job.</p>
-<p>So does CouchDB suck?  No, it&#8217;s by far my favorite new database technology on
-the block.  What it&#8217;s good at doing, it&#8217;s <em>great</em> at doing, but that doesn&#8217;t
-mean that it should be used for everything.  With the kinds of scaling issues
-that we&#8217;re seeing with today&#8217;s highly-interactive web applications, we need to
-make use of a broad range of technologies, and use each one for its greatest
-strengths.  That&#8217;s called using the right tool for the job, and that&#8217;s never
-gone out of style.</p>]]></content>
   </entry>
   
 </feed>

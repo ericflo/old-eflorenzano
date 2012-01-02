@@ -9,7 +9,7 @@
   <meta name="author" content="Eric Florenzano">
 
   
-  <meta name="description" content="Sphinx Search ROCKS! I&#8217;m pretty sure it&#8217;ll be the solution to my MusicBrainz problems for my secret project. I&#8217;m going to set up a &hellip;">
+  <meta name="description" content="Very interesting discussion going on right now about Django&#8217;s templating language and whether to split it off into its own separate library. &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -76,6 +76,43 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2007/08/07/interesting-discussion-nginx/">Interesting Discussion, Nginx</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-08-07T22:09:21-07:00" pubdate data-updated="true">Aug 7<span>th</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a class="reference external" href="http://groups.google.com/group/django-developers/browse_thread/thread/37801d8c2f46a313/a002ad9645e64e0a#a002ad9645e64e0a">Very interesting discussion</a> going on right now about Django&#8217;s templating language and whether to split it off into its own separate library.  One of the justifications is that it will &quot;feel&quot; easier to plug in other template languages into Django itself.  Funny how <a class="reference external" href="http://www.eflorenzano.com/blog/cheetah-and-django/">I just blogged about how easy this is already</a>.</p>
+<p>Also, previously this site was run with apache2 and perlbal.  Now it&#8217;s running apache2 and nginx.  At some point I&#8217;m going to make the switch to having all of the media pointing to an nginx-only server which short circuits the mod_python (also soon to be mod_wsgi, lol) handlers altogether.</p>
+<p>Sorry that this is another in a line of short posts, but I expect this trend will continue as I move twice in the next 2 weeks.  Crazy stuff happening in my life right now!</p></div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -548,57 +585,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2007/04/15/simple-random-character-function/">Simple Random Character Function</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2007-04-15T22:27:22-07:00" pubdate data-updated="true">Apr 15<span>th</span>, 2007</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I use this function all the time, most recently for some anti-spam techniques, and it&#8217;s worth posting somewhere.  It&#8217;s modified from an entry on the activestate cookbook.</p>
-<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="k">def</span> <span class="nf">random_chars</span><span class="p">(</span><span class="n">length</span><span class="p">):</span>
-</span><span class="line">    <span class="kn">import</span> <span class="nn">random</span>
-</span><span class="line">    <span class="n">allowed_chars</span> <span class="o">=</span> <span class="s">&quot;abcdefghijklmnopqrstuvwzyzABCDEFGHIJKLMNOPQRSTUVWZYZ0123456789&quot;</span>
-</span><span class="line">    <span class="n">word</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
-</span><span class="line">    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">length</span><span class="p">):</span>
-</span><span class="line">        <span class="n">word</span> <span class="o">=</span> <span class="n">word</span> <span class="o">+</span> <span class="n">allowed_chars</span><span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mh">0xffffff</span><span class="p">)</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">allowed_chars</span><span class="p">)]</span>
-</span><span class="line">    <span class="k">return</span> <span class="n">word</span>
-</span></code></pre></td></tr></table></div></figure><p>Also, for anyone who knows me and is interested: my surgery went well and I&#8217;m recovering faster than I would have expected.  Hopefully I&#8217;ll be back to 100% speed in the next few days!</p>
-<p>Anyways, hopefully this small code snippet is useful to someone else, as well!</p></div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/10/">&larr; Older</a>
@@ -616,6 +602,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/01/01/reducing-code-nesting/">Reducing Code Nesting</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2011/02/16/technology-behind-convore/">The Technology Behind Convore</a>
       </li>
     
@@ -629,10 +619,6 @@
     
       <li class="post">
         <a href="/blog/2010/05/20/we-need-new-word-open/">We need a new word for &#8220;Open&#8221;</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2010/02/08/how-do-we-kick-our-synchronous-addiction/">How do we kick our synchronous addiction?</a>
       </li>
     
   </ul>
