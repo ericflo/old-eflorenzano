@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Regex | Eric Florenzano's Blog]]></title>
-  <link href="http://ericflo.github.com/blog/categories/regex/atom.xml" rel="self"/>
-  <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T18:32:48-08:00</updated>
-  <id>http://ericflo.github.com/</id>
+  <link href="http://eflorenzano.com/blog/categories/regex/atom.xml" rel="self"/>
+  <link href="http://eflorenzano.com/"/>
+  <updated>2012-04-18T17:34:47-07:00</updated>
+  <id>http://eflorenzano.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[My Awesome Regex Snippet]]></title>
-    <link href="http://ericflo.github.com/blog/2008/05/06/my-awesome-regex-snippet/"/>
+    <link href="http://eflorenzano.com/blog/2008/05/06/my-awesome-regex-snippet/"/>
     <updated>2008-05-06T01:24:07-07:00</updated>
-    <id>http://ericflo.github.com/blog/2008/05/06/my-awesome-regex-snippet</id>
+    <id>http://eflorenzano.com/blog/2008/05/06/my-awesome-regex-snippet</id>
     <content type="html"><![CDATA[<p>
 There are many times when the programming task at hand is to iterate over some semi-structured text, transform parts of that text in some way, and reintegrate those transformed parts back into the original text.</p>
 

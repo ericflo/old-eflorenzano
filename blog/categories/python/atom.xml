@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Python | Eric Florenzano's Blog]]></title>
-  <link href="http://ericflo.github.com/blog/categories/python/atom.xml" rel="self"/>
-  <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T18:32:48-08:00</updated>
-  <id>http://ericflo.github.com/</id>
+  <link href="http://eflorenzano.com/blog/categories/python/atom.xml" rel="self"/>
+  <link href="http://eflorenzano.com/"/>
+  <updated>2012-04-18T17:34:47-07:00</updated>
+  <id>http://eflorenzano.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[The Technology Behind Convore]]></title>
-    <link href="http://ericflo.github.com/blog/2011/02/16/technology-behind-convore/"/>
+    <link href="http://eflorenzano.com/blog/2011/02/16/technology-behind-convore/"/>
     <updated>2011-02-16T12:29:35-08:00</updated>
-    <id>http://ericflo.github.com/blog/2011/02/16/technology-behind-convore</id>
+    <id>http://eflorenzano.com/blog/2011/02/16/technology-behind-convore</id>
     <content type="html"><![CDATA[<p>
 We launched Convore<em> last week, and the first question developers tend to ask
 when they find Convore</em> is "what technology powers this site?"  It is asked so
@@ -167,9 +167,9 @@ feel free to join Convore_ and ask away!</p>
   
   <entry>
     <title type="html"><![CDATA[How do we kick our synchronous addiction?]]></title>
-    <link href="http://ericflo.github.com/blog/2010/02/08/how-do-we-kick-our-synchronous-addiction/"/>
+    <link href="http://eflorenzano.com/blog/2010/02/08/how-do-we-kick-our-synchronous-addiction/"/>
     <updated>2010-02-08T22:15:31-08:00</updated>
-    <id>http://ericflo.github.com/blog/2010/02/08/how-do-we-kick-our-synchronous-addiction</id>
+    <id>http://eflorenzano.com/blog/2010/02/08/how-do-we-kick-our-synchronous-addiction</id>
     <content type="html"><![CDATA[<p>
 Asynchronous programming is superior <code>both in memory usage and in overall throughput</code><em> when compared to synchronous programming .  We've <code>known this fact for years</code></em>.  If we look at Django or Ruby on Rails, arguably the two most promising new web application frameworks to emerge in the past few years, both of them are written in such a way that synchronous programming  is assumed. Why is it that even in 2010 we're still writing programs that rely on synchronous programming ?</p>
 
@@ -283,9 +283,9 @@ Asynchronous programming is superior <code>both in memory usage and in overall t
   
   <entry>
     <title type="html"><![CDATA[You care about Facebook, you just might not know it yet]]></title>
-    <link href="http://ericflo.github.com/blog/2009/11/10/you-care-about-facebook-you-just-might-not-know-it/"/>
+    <link href="http://eflorenzano.com/blog/2009/11/10/you-care-about-facebook-you-just-might-not-know-it/"/>
     <updated>2009-11-10T22:25:12-08:00</updated>
-    <id>http://ericflo.github.com/blog/2009/11/10/you-care-about-facebook-you-just-might-not-know-it</id>
+    <id>http://eflorenzano.com/blog/2009/11/10/you-care-about-facebook-you-just-might-not-know-it</id>
     <content type="html"><![CDATA[<p>
 I recently had a conversation with a few friends that I know through the Python community. These are people who I respect a great deal, and look to for advice and insight when it comes to web development.  During the course of this conversation, the subject of Facebook came up.  What I wasn't expecting at all was that a large number of them said that they have no interest in Facebook, and quite a few of them proudly didn't even have accounts.</p>
 
@@ -319,9 +319,9 @@ I recently had a conversation with a few friends that I know through the Python 
   
   <entry>
     <title type="html"><![CDATA[Flojax: A unobtrusive and easy strategy for creating AJAX-style web applications]]></title>
-    <link href="http://ericflo.github.com/blog/2009/04/02/flojax-unobtrusive-and-easy-strategy-creating-ajax/"/>
+    <link href="http://eflorenzano.com/blog/2009/04/02/flojax-unobtrusive-and-easy-strategy-creating-ajax/"/>
     <updated>2009-04-02T19:05:18-07:00</updated>
-    <id>http://ericflo.github.com/blog/2009/04/02/flojax-unobtrusive-and-easy-strategy-creating-ajax</id>
+    <id>http://eflorenzano.com/blog/2009/04/02/flojax-unobtrusive-and-easy-strategy-creating-ajax</id>
     <content type="html"><![CDATA[<p>
 Writing AJAX-style web applications can be very tedious.  If you're using XML
 as your transport layer, you have to parse the XML before you can work with it.
@@ -358,9 +358,9 @@ of full page reloads.</p>
 <p>.. code-block:: html</p>
 
 <pre><code>&lt;div class="buttons"&gt;
-    &lt;a href="http://ericflo.github.com/vote/up/item1/"&gt;Vote up&lt;/a&gt;
-    &lt;a href="http://ericflo.github.com/vote/down/item1/"&gt;Vote down&lt;/a&gt;
-    &lt;a href="http://ericflo.github.com/favorite/item1/"&gt;Add to your favorites&lt;/a&gt;
+    &lt;a href="http://eflorenzano.com/vote/up/item1/"&gt;Vote up&lt;/a&gt;
+    &lt;a href="http://eflorenzano.com/vote/down/item1/"&gt;Vote down&lt;/a&gt;
+    &lt;a href="http://eflorenzano.com/favorite/item1/"&gt;Add to your favorites&lt;/a&gt;
 &lt;/div&gt;
 </code></pre>
 
@@ -370,15 +370,15 @@ of full page reloads.</p>
 
 <pre><code>&lt;div class="buttons"&gt;
     {% if voted %}
-        &lt;a href="http://ericflo.github.com/vote/clear/{{ item.id }}/"&gt;Clear your vote&lt;/a&gt;
+        &lt;a href="http://eflorenzano.com/vote/clear/{{ item.id }}/"&gt;Clear your vote&lt;/a&gt;
     {% else %}
-        &lt;a href="http://ericflo.github.com/vote/up/{{ item.id }}/"&gt;Vote up&lt;/a&gt;
-        &lt;a href="http://ericflo.github.com/vote/down/{{ item.id }}/"&gt;Vote down&lt;/a&gt;
+        &lt;a href="http://eflorenzano.com/vote/up/{{ item.id }}/"&gt;Vote up&lt;/a&gt;
+        &lt;a href="http://eflorenzano.com/vote/down/{{ item.id }}/"&gt;Vote down&lt;/a&gt;
     {% endif %}
     {% if favorited %}
-        &lt;a href="http://ericflo.github.com/favorite/{{ item.id }}/"&gt;Add to your favorites&lt;/a&gt;
+        &lt;a href="http://eflorenzano.com/favorite/{{ item.id }}/"&gt;Add to your favorites&lt;/a&gt;
     {% else %}
-        &lt;a href="http://ericflo.github.com/unfavorite/{{ item.id }}/"&gt;Remove from your favorites&lt;/a&gt;
+        &lt;a href="http://eflorenzano.com/unfavorite/{{ item.id }}/"&gt;Remove from your favorites&lt;/a&gt;
     {% endif %}
 &lt;/div&gt;
 </code></pre>
@@ -406,15 +406,15 @@ fragment.</p>
 
 <pre><code>&lt;div class="buttons"&gt;
     {% if voted %}
-        &lt;a href="http://ericflo.github.com/vote/clear/{{ item.id }}/" class="flojax" rel="buttons"&gt;Clear your vote&lt;/a&gt;
+        &lt;a href="http://eflorenzano.com/vote/clear/{{ item.id }}/" class="flojax" rel="buttons"&gt;Clear your vote&lt;/a&gt;
     {% else %}
-        &lt;a href="http://ericflo.github.com/vote/up/{{ item.id }}/" class="flojax" rel="buttons"&gt;Vote up&lt;/a&gt;
-        &lt;a href="http://ericflo.github.com/vote/down/{{ item.id }}/" class="flojax" rel="buttons"&gt;Vote down&lt;/a&gt;
+        &lt;a href="http://eflorenzano.com/vote/up/{{ item.id }}/" class="flojax" rel="buttons"&gt;Vote up&lt;/a&gt;
+        &lt;a href="http://eflorenzano.com/vote/down/{{ item.id }}/" class="flojax" rel="buttons"&gt;Vote down&lt;/a&gt;
     {% endif %}
     {% if favorited %}
-        &lt;a href="http://ericflo.github.com/favorite/{{ item.id }}/" class="flojax" rel="buttons"&gt;Add to your favorites&lt;/a&gt;
+        &lt;a href="http://eflorenzano.com/favorite/{{ item.id }}/" class="flojax" rel="buttons"&gt;Add to your favorites&lt;/a&gt;
     {% else %}
-        &lt;a href="http://ericflo.github.com/unfavorite/{{ item.id }}/" class="flojax" rel="buttons"&gt;Remove from your favorites&lt;/a&gt;
+        &lt;a href="http://eflorenzano.com/unfavorite/{{ item.id }}/" class="flojax" rel="buttons"&gt;Remove from your favorites&lt;/a&gt;
     {% endif %}
 &lt;/div&gt;
 </code></pre>
@@ -568,9 +568,9 @@ for your web applications?  If so, how do they differ from what I've described?
   
   <entry>
     <title type="html"><![CDATA[Tagging cache keys for O(1) batch invalidation]]></title>
-    <link href="http://ericflo.github.com/blog/2009/03/01/tagging-cache-keys-o1-batch-invalidation/"/>
+    <link href="http://eflorenzano.com/blog/2009/03/01/tagging-cache-keys-o1-batch-invalidation/"/>
     <updated>2009-03-01T20:46:37-08:00</updated>
-    <id>http://ericflo.github.com/blog/2009/03/01/tagging-cache-keys-o1-batch-invalidation</id>
+    <id>http://eflorenzano.com/blog/2009/03/01/tagging-cache-keys-o1-batch-invalidation</id>
     <content type="html"><![CDATA[<p>
 Recently I've been spending some quality time trying to decrease page load times and decrease the number of database accesses on a site I'm working on.    As you would probably suspect, that means dealing with caching.  One common thing that I need to do, however, is invalidate a large group of cache keys when some action takes place.  I've devised a pattern for doing this, and while I'm sure it's not novel, I haven't seen any recent write-ups of this technique.  The base idea is that we're going to add another thin cache layer, and use the value from that first layer in the key to the second layer.</p>
 

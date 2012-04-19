@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Google | Eric Florenzano's Blog]]></title>
-  <link href="http://ericflo.github.com/blog/categories/google/atom.xml" rel="self"/>
-  <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T18:32:48-08:00</updated>
-  <id>http://ericflo.github.com/</id>
+  <link href="http://eflorenzano.com/blog/categories/google/atom.xml" rel="self"/>
+  <link href="http://eflorenzano.com/"/>
+  <updated>2012-04-18T17:34:47-07:00</updated>
+  <id>http://eflorenzano.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[The internet is in immediate danger of collapse]]></title>
-    <link href="http://ericflo.github.com/blog/2008/11/05/internet-immediate-danger-collapse/"/>
+    <link href="http://eflorenzano.com/blog/2008/11/05/internet-immediate-danger-collapse/"/>
     <updated>2008-11-05T21:38:48-08:00</updated>
-    <id>http://ericflo.github.com/blog/2008/11/05/internet-immediate-danger-collapse</id>
+    <id>http://eflorenzano.com/blog/2008/11/05/internet-immediate-danger-collapse</id>
     <content type="html"><![CDATA[<p>
 Wow, that's quite a title!  You're already probably queuing up all of your
 counterpoints and your rebuttals.  In fact it's not quite that serious, but a
@@ -92,9 +92,9 @@ it.</p>
   
   <entry>
     <title type="html"><![CDATA[XFN Markup Enabled]]></title>
-    <link href="http://ericflo.github.com/blog/2008/02/05/xfn-markup-enabled/"/>
+    <link href="http://eflorenzano.com/blog/2008/02/05/xfn-markup-enabled/"/>
     <updated>2008-02-05T10:35:01-08:00</updated>
-    <id>http://ericflo.github.com/blog/2008/02/05/xfn-markup-enabled</id>
+    <id>http://eflorenzano.com/blog/2008/02/05/xfn-markup-enabled</id>
     <content type="html"><![CDATA[<p>
 The recently released <code>Google Social Graph API</code><em> was a bit of a wake-up call for me on the power and importance of microformats</em>.  So I've hacked together a quick implementation of XFN_ for the blogroll, and added a few <code>rel=me</code> links as well.</p>
 

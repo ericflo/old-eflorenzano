@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: nginx | Eric Florenzano's Blog]]></title>
-  <link href="http://ericflo.github.com/blog/categories/nginx/atom.xml" rel="self"/>
-  <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T18:32:48-08:00</updated>
-  <id>http://ericflo.github.com/</id>
+  <link href="http://eflorenzano.com/blog/categories/nginx/atom.xml" rel="self"/>
+  <link href="http://eflorenzano.com/"/>
+  <updated>2012-04-18T17:34:47-07:00</updated>
+  <id>http://eflorenzano.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Interesting Discussion, Nginx]]></title>
-    <link href="http://ericflo.github.com/blog/2007/08/07/interesting-discussion-nginx/"/>
+    <link href="http://eflorenzano.com/blog/2007/08/07/interesting-discussion-nginx/"/>
     <updated>2007-08-07T22:09:21-07:00</updated>
-    <id>http://ericflo.github.com/blog/2007/08/07/interesting-discussion-nginx</id>
+    <id>http://eflorenzano.com/blog/2007/08/07/interesting-discussion-nginx</id>
     <content type="html"><![CDATA[<p>
 <code>Very interesting discussion</code><em> going on right now about Django's templating language and whether to split it off into its own separate library.  One of the justifications is that it will "feel" easier to plug in other template languages into Django itself.  Funny how <code>I just blogged about how easy this is already</code></em>.</p>
 

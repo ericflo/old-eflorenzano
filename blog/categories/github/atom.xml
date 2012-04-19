@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: GitHub | Eric Florenzano's Blog]]></title>
-  <link href="http://ericflo.github.com/blog/categories/github/atom.xml" rel="self"/>
-  <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T18:32:48-08:00</updated>
-  <id>http://ericflo.github.com/</id>
+  <link href="http://eflorenzano.com/blog/categories/github/atom.xml" rel="self"/>
+  <link href="http://eflorenzano.com/"/>
+  <updated>2012-04-18T17:34:47-07:00</updated>
+  <id>http://eflorenzano.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA["Web Hooks"]]></title>
-    <link href="http://ericflo.github.com/blog/2008/11/26/web-hooks/"/>
+    <link href="http://eflorenzano.com/blog/2008/11/26/web-hooks/"/>
     <updated>2008-11-26T20:43:30-08:00</updated>
-    <id>http://ericflo.github.com/blog/2008/11/26/web-hooks</id>
+    <id>http://eflorenzano.com/blog/2008/11/26/web-hooks</id>
     <content type="html"><![CDATA[<p>
 A few months back GitHub<em> rolled out its implementation of something that they
 call "Service Hooks".  The idea behind these hooks is that when you commit

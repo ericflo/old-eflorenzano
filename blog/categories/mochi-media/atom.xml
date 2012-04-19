@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Mochi Media | Eric Florenzano's Blog]]></title>
-  <link href="http://ericflo.github.com/blog/categories/mochi-media/atom.xml" rel="self"/>
-  <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T18:32:48-08:00</updated>
-  <id>http://ericflo.github.com/</id>
+  <link href="http://eflorenzano.com/blog/categories/mochi-media/atom.xml" rel="self"/>
+  <link href="http://eflorenzano.com/"/>
+  <updated>2012-04-18T17:34:47-07:00</updated>
+  <id>http://eflorenzano.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Where I've Been, and Where I'm Going]]></title>
-    <link href="http://ericflo.github.com/blog/2008/06/06/where-ive-been-and-where-im-going/"/>
+    <link href="http://eflorenzano.com/blog/2008/06/06/where-ive-been-and-where-im-going/"/>
     <updated>2008-06-06T00:43:28-07:00</updated>
-    <id>http://ericflo.github.com/blog/2008/06/06/where-ive-been-and-where-im-going</id>
+    <id>http://eflorenzano.com/blog/2008/06/06/where-ive-been-and-where-im-going</id>
     <content type="html"><![CDATA[<p>
 Firstly, my apologies to any technical readers of this blog, as this post is mostly personal.</p>
 

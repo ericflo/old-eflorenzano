@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Meme | Eric Florenzano's Blog]]></title>
-  <link href="http://ericflo.github.com/blog/categories/meme/atom.xml" rel="self"/>
-  <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T18:32:48-08:00</updated>
-  <id>http://ericflo.github.com/</id>
+  <link href="http://eflorenzano.com/blog/categories/meme/atom.xml" rel="self"/>
+  <link href="http://eflorenzano.com/"/>
+  <updated>2012-04-18T17:34:47-07:00</updated>
+  <id>http://eflorenzano.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Trying to Start a Programming Meme]]></title>
-    <link href="http://ericflo.github.com/blog/2008/11/24/trying-start-programming-meme/"/>
+    <link href="http://eflorenzano.com/blog/2008/11/24/trying-start-programming-meme/"/>
     <updated>2008-11-24T21:13:18-08:00</updated>
-    <id>http://ericflo.github.com/blog/2008/11/24/trying-start-programming-meme</id>
+    <id>http://eflorenzano.com/blog/2008/11/24/trying-start-programming-meme</id>
     <content type="html"><![CDATA[<p>
 I've never tried to start a meme before, but since I don't really have anything
 great to post about, I'd like to try to start one.  I think this one could be
@@ -107,9 +107,9 @@ Please enter your age: 22
   
   <entry>
     <title type="html"><![CDATA[Book Meme]]></title>
-    <link href="http://ericflo.github.com/blog/2008/11/12/book-meme/"/>
+    <link href="http://eflorenzano.com/blog/2008/11/12/book-meme/"/>
     <updated>2008-11-12T21:19:41-08:00</updated>
-    <id>http://ericflo.github.com/blog/2008/11/12/book-meme</id>
+    <id>http://eflorenzano.com/blog/2008/11/12/book-meme</id>
     <content type="html"><![CDATA[<p>
 "Another feature that's easy to add is a per-entry way to allow or disallow comments."
 From <em>Practical Django Projects</em> by <code>James Bennett</code>_.</p>
@@ -141,9 +141,9 @@ From <em>Practical Django Projects</em> by <code>James Bennett</code>_.</p>
   
   <entry>
     <title type="html"><![CDATA[Programming Languages I've Learned (In Rough Order) Meme]]></title>
-    <link href="http://ericflo.github.com/blog/2008/09/28/programming-languages-ive-learned-rough-order/"/>
+    <link href="http://eflorenzano.com/blog/2008/09/28/programming-languages-ive-learned-rough-order/"/>
     <updated>2008-09-28T17:49:15-07:00</updated>
-    <id>http://ericflo.github.com/blog/2008/09/28/programming-languages-ive-learned-rough-order</id>
+    <id>http://eflorenzano.com/blog/2008/09/28/programming-languages-ive-learned-rough-order</id>
     <content type="html"><![CDATA[<p>
 Via <code>James Tauber</code><em> via <code>Dougal Matthews</code></em> and also <code>Steven Lott</code>_.</p>
 

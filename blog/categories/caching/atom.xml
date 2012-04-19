@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Caching | Eric Florenzano's Blog]]></title>
-  <link href="http://ericflo.github.com/blog/categories/caching/atom.xml" rel="self"/>
-  <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T18:32:48-08:00</updated>
-  <id>http://ericflo.github.com/</id>
+  <link href="http://eflorenzano.com/blog/categories/caching/atom.xml" rel="self"/>
+  <link href="http://eflorenzano.com/"/>
+  <updated>2012-04-18T17:34:47-07:00</updated>
+  <id>http://eflorenzano.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Drop-dead simple Django caching]]></title>
-    <link href="http://ericflo.github.com/blog/2008/11/28/drop-dead-simple-django-caching/"/>
+    <link href="http://eflorenzano.com/blog/2008/11/28/drop-dead-simple-django-caching/"/>
     <updated>2008-11-28T21:30:13-08:00</updated>
-    <id>http://ericflo.github.com/blog/2008/11/28/drop-dead-simple-django-caching</id>
+    <id>http://eflorenzano.com/blog/2008/11/28/drop-dead-simple-django-caching</id>
     <content type="html"><![CDATA[<p>
 Caching is easy to screw up.  Usually it's a manual process which is error-prone
 and tedious.  It's actually quite easy to cache, but knowing when to invalidate
@@ -160,9 +160,9 @@ good, simple, Django caching library have?
   
   <entry>
     <title type="html"><![CDATA[It's Caches All the Way Down]]></title>
-    <link href="http://ericflo.github.com/blog/2008/11/07/its-caches-all-way-down/"/>
+    <link href="http://eflorenzano.com/blog/2008/11/07/its-caches-all-way-down/"/>
     <updated>2008-11-07T21:52:53-08:00</updated>
-    <id>http://ericflo.github.com/blog/2008/11/07/its-caches-all-way-down</id>
+    <id>http://eflorenzano.com/blog/2008/11/07/its-caches-all-way-down</id>
     <content type="html"><![CDATA[<p>
 A few years back a non-technical person asked me to explain what, exactly, the
 operating system did.  I first started out by speaking in broad generalities,
@@ -223,9 +223,9 @@ have the answers, but I'm interested if you do.
   
   <entry>
     <title type="html"><![CDATA[Django Tip: A Denormalization Alternative]]></title>
-    <link href="http://ericflo.github.com/blog/2008/02/15/django-tip-denormalization-alternative/"/>
+    <link href="http://eflorenzano.com/blog/2008/02/15/django-tip-denormalization-alternative/"/>
     <updated>2008-02-15T13:28:06-08:00</updated>
-    <id>http://ericflo.github.com/blog/2008/02/15/django-tip-denormalization-alternative</id>
+    <id>http://eflorenzano.com/blog/2008/02/15/django-tip-denormalization-alternative</id>
     <content type="html"><![CDATA[<p>
 In creating an any website with textual content, you have the choice of either writing plaintext or writing in a markup language of some kind.  The immediately obvious choice for markup language is HTML (or XHTML), but HTML is not as human-readable as something like Textile<em>, Markdown</em>, or <code>Restructured Text</code>_.  The advantage of choosing one of those human-readable alternatives is that content encoded using one of them can be translated very easily into HTML.</p>
 

@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: John Resig | Eric Florenzano's Blog]]></title>
-  <link href="http://ericflo.github.com/blog/categories/john-resig/atom.xml" rel="self"/>
-  <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T18:32:48-08:00</updated>
-  <id>http://ericflo.github.com/</id>
+  <link href="http://eflorenzano.com/blog/categories/john-resig/atom.xml" rel="self"/>
+  <link href="http://eflorenzano.com/"/>
+  <updated>2012-04-18T17:34:47-07:00</updated>
+  <id>http://eflorenzano.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[The most widely available virtual machine]]></title>
-    <link href="http://ericflo.github.com/blog/2008/11/22/most-widely-available-virtual-machine/"/>
+    <link href="http://eflorenzano.com/blog/2008/11/22/most-widely-available-virtual-machine/"/>
     <updated>2008-11-22T21:37:57-08:00</updated>
-    <id>http://ericflo.github.com/blog/2008/11/22/most-widely-available-virtual-machine</id>
+    <id>http://eflorenzano.com/blog/2008/11/22/most-widely-available-virtual-machine</id>
     <content type="html"><![CDATA[<p>
 A few months back, I had a bit of an epiphany.  I suspect I was about 5 years
 too late with this epiphany, but nevertheless here it is: Microsoft,
@@ -59,9 +59,9 @@ targeting the most widely adopted virtual machine ever: JavaScript.</p>
   
   <entry>
     <title type="html"><![CDATA[Revolutionary Ideas]]></title>
-    <link href="http://ericflo.github.com/blog/2008/05/15/revolutionary-ideas/"/>
+    <link href="http://eflorenzano.com/blog/2008/05/15/revolutionary-ideas/"/>
     <updated>2008-05-15T09:18:44-07:00</updated>
-    <id>http://ericflo.github.com/blog/2008/05/15/revolutionary-ideas</id>
+    <id>http://eflorenzano.com/blog/2008/05/15/revolutionary-ideas</id>
     <content type="html"><![CDATA[<p>
 Everyone has had the experience of hearing about something new and thinking: "That makes so much sense!  Why didn't I think of that?"  For programmers that keep up on open source software, new projects that fit the previous description attract not only our admiration, but we want to be a part of this new idea.  We become involved and contribute and try to push that new software into any new direction that we can; learning from it and evolving it along the way.</p>
 

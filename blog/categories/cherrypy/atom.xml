@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: CherryPy | Eric Florenzano's Blog]]></title>
-  <link href="http://ericflo.github.com/blog/categories/cherrypy/atom.xml" rel="self"/>
-  <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T18:32:48-08:00</updated>
-  <id>http://ericflo.github.com/</id>
+  <link href="http://eflorenzano.com/blog/categories/cherrypy/atom.xml" rel="self"/>
+  <link href="http://eflorenzano.com/"/>
+  <updated>2012-04-18T17:34:47-07:00</updated>
+  <id>http://eflorenzano.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Hosting a Django Site with Pure Python]]></title>
-    <link href="http://ericflo.github.com/blog/2008/02/22/hosting-django-site-pure-python/"/>
+    <link href="http://eflorenzano.com/blog/2008/02/22/hosting-django-site-pure-python/"/>
     <updated>2008-02-22T12:47:48-08:00</updated>
-    <id>http://ericflo.github.com/blog/2008/02/22/hosting-django-site-pure-python</id>
+    <id>http://eflorenzano.com/blog/2008/02/22/hosting-django-site-pure-python</id>
     <content type="html"><![CDATA[<p>
 Developing a site with Django is usually a breeze.  You've set up your models, created some views and used some generic views, and you've even created some spiffy templates.  Now it's time to publish that site for everyone to see.  Now if you're not already familiar with Apache, Lighttpd, or Nginx, you're stuck trying to figure out complicated configuration files and settings directives.  "Why can't deployment be just as easy as running the development server?", you scream.</p>
 

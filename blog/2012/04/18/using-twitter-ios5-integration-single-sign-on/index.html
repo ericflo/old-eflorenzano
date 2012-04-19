@@ -1,0 +1,469 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Using Twitter's iOS5 Integration for Single Sign-On - Eric Florenzano's Blog</title>
+  <meta name="author" content="Eric Florenzano">
+
+  
+  <meta name="description" content="Apple has included integration with Twitter in iOS5, which can be really handy
+to allow your users to easily tweet or log in. The only problem is &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://eflorenzano.com/blog/2012/04/18/using-twitter-ios5-integration-single-sign-on">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Eric Florenzano's Blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-1959803-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Eric Florenzano's Blog</a></h1>
+  
+    <h2>I am me.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:eflorenzano.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Using Twitter's iOS5 Integration for Single Sign-On</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-04-18T19:00:00-07:00" pubdate data-updated="true">Apr 18<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Apple has included integration with Twitter in iOS5, which can be really handy
+to allow your users to easily tweet or log in.  The only problem is that, as
+far as documentation of this feature is concerned, you&#8217;re largely on your own.
+This blog post is an attempt to correct that, at least in the case of sign-on.</p>
+<div class="section" id="add-the-twitter-and-accounts-libraries-to-your-project">
+<h2>Add the Twitter and Accounts libraries to your project</h2>
+<p>Click on your project file, and then on your build target.  Make sure you&#8217;re on
+the &quot;build phases&quot; tab.  Under the &quot;Link Binary With Libraries&quot; section, click
+the plus symbol to the bottom left, and search for <tt class="docutils literal">Accounts.framework</tt> and
+add it.  Then do the same for <tt class="docutils literal">Twitter.framework</tt>.  This will link all of the
+necessary libraries into your project so that we can use the Twitter
+integration.</p>
+</div>
+<div class="section" id="requesting-access-to-a-user-s-twitter-account">
+<h2>Requesting access to a user&#8217;s twitter account</h2>
+<p>The first thing to do when you want to let a user sign-on with Twitter is to
+create a long-lived (save it as an instance variable, for example) instance of
+<tt class="docutils literal">ACAccountStore</tt> and request access to the Twitter accounts contained within:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class="obj-c"><span class="line"><span class="n">ACAccountStore</span> <span class="o">*</span><span class="n">store</span> <span class="o">=</span> <span class="p">[[</span><span class="n">ACAccountStore</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span> <span class="c1">// Long-lived</span>
+</span><span class="line"><span class="n">ACAccountType</span> <span class="o">*</span><span class="n">twitterType</span> <span class="o">=</span> <span class="p">[</span><span class="n">store</span> <span class="nl">accountTypeWithAccountTypeIdentifier:</span><span class="n">ACAccountTypeIdentifierTwitter</span><span class="p">];</span>
+</span><span class="line"><span class="p">[</span><span class="n">store</span> <span class="nl">requestAccessToAccountsWithType:</span><span class="n">twitterType</span> <span class="nl">withCompletionHandler:</span><span class="o">^</span><span class="p">(</span><span class="kt">BOOL</span> <span class="n">granted</span><span class="p">,</span> <span class="n">NSError</span> <span class="o">*</span><span class="n">error</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">    <span class="k">if</span><span class="p">(</span><span class="n">granted</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">        <span class="c1">// Access has been granted, now we can access the accounts</span>
+</span><span class="line">    <span class="p">}</span>
+</span><span class="line">    <span class="c1">// Handle any error state here as you wish</span>
+</span><span class="line"><span class="p">}];</span>
+</span></code></pre></td></tr></table></div></figure><p>What do we do once we have access to the accounts?  Well, we get a list of &#8216;em.
+If they don&#8217;t have any accounts, then we can show a dialog asking them to
+connect one in the iOS settings app:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+</pre></td><td class="code"><pre><code class="obj-c"><span class="line"><span class="c1">// Remember that twitterType was instantiated above</span>
+</span><span class="line"><span class="n">NSArray</span> <span class="o">*</span><span class="n">twitterAccounts</span> <span class="o">=</span> <span class="p">[</span><span class="n">store</span> <span class="nl">accountsWithType:</span><span class="n">twitterType</span><span class="p">];</span>
+</span><span class="line">
+</span><span class="line"><span class="c1">// If there are no accounts, we need to pop up an alert</span>
+</span><span class="line"><span class="k">if</span><span class="p">(</span><span class="n">twitterAccounts</span> <span class="o">!=</span> <span class="nb">nil</span> <span class="o">&amp;&amp;</span> <span class="p">[</span><span class="n">twitterAccounts</span> <span class="n">count</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">    <span class="n">UIAlertView</span> <span class="o">*</span><span class="n">alert</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UIAlertView</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithTitle:</span><span class="s">@&quot;No Twitter Accounts&quot;</span>
+</span><span class="line">                                                    <span class="nl">message:</span><span class="s">@&quot;There are no Twitter accounts configured. You can add or create a Twitter account in Settings.&quot;</span>
+</span><span class="line">                                                   <span class="nl">delegate:</span><span class="nb">nil</span>
+</span><span class="line">                                          <span class="nl">cancelButtonTitle:</span><span class="s">@&quot;OK&quot;</span>
+</span><span class="line">                                          <span class="nl">otherButtonTitles:</span><span class="nb">nil</span><span class="p">];</span>
+</span><span class="line">    <span class="p">[</span><span class="n">alert</span> <span class="n">show</span><span class="p">];</span>
+</span><span class="line">    <span class="p">[</span><span class="n">alert</span> <span class="n">release</span><span class="p">];</span>
+</span><span class="line"><span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class="line">    <span class="n">ACAccount</span> <span class="o">*</span><span class="n">account</span> <span class="o">=</span> <span class="p">[</span><span class="n">twitterAccounts</span> <span class="nl">objectAtIndex:</span><span class="mi">0</span><span class="p">];</span>
+</span><span class="line">    <span class="c1">// Do something with their Twitter account</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></div>
+<div class="section" id="now-what">
+<h2>Now what?</h2>
+<p>Well, now you have an access token to read some information about the user from
+their Twitter stream.  The vast majority of apps will just want to grab the
+user&#8217;s basic info to get things like a username, real name, and maybe their
+location.  Here&#8217;s how that would look:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+<span class="line-number">34</span>
+<span class="line-number">35</span>
+<span class="line-number">36</span>
+<span class="line-number">37</span>
+<span class="line-number">38</span>
+<span class="line-number">39</span>
+<span class="line-number">40</span>
+<span class="line-number">41</span>
+<span class="line-number">42</span>
+<span class="line-number">43</span>
+<span class="line-number">44</span>
+<span class="line-number">45</span>
+<span class="line-number">46</span>
+<span class="line-number">47</span>
+<span class="line-number">48</span>
+<span class="line-number">49</span>
+<span class="line-number">50</span>
+<span class="line-number">51</span>
+</pre></td><td class="code"><pre><code class="obj-c"><span class="line"><span class="n">NSURL</span> <span class="o">*</span><span class="n">url</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSURL</span> <span class="nl">URLWithString:</span><span class="s">@&quot;http://api.twitter.com/1/account/verify_credentials.json&quot;</span><span class="p">];</span>
+</span><span class="line"><span class="n">TWRequest</span> <span class="o">*</span><span class="n">req</span> <span class="o">=</span> <span class="p">[[</span><span class="n">TWRequest</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithURL:</span><span class="n">url</span>
+</span><span class="line">                                     <span class="nl">parameters:</span><span class="nb">nil</span>
+</span><span class="line">                                  <span class="nl">requestMethod:</span><span class="n">TWRequestMethodGET</span><span class="p">];</span>
+</span><span class="line">
+</span><span class="line"><span class="c1">// Important: attach the user&#39;s Twitter ACAccount object to the request</span>
+</span><span class="line"><span class="n">req</span><span class="p">.</span><span class="n">account</span> <span class="o">=</span> <span class="n">account</span><span class="p">;</span>
+</span><span class="line">
+</span><span class="line"><span class="p">[</span><span class="n">req</span> <span class="nl">performRequestWithHandler:</span><span class="o">^</span><span class="p">(</span><span class="n">NSData</span> <span class="o">*</span><span class="n">responseData</span><span class="p">,</span>
+</span><span class="line">                                 <span class="n">NSHTTPURLResponse</span> <span class="o">*</span><span class="n">urlResponse</span><span class="p">,</span>
+</span><span class="line">                                 <span class="n">NSError</span> <span class="o">*</span><span class="n">error</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">
+</span><span class="line">    <span class="c1">// If there was an error making the request, display a message to the user</span>
+</span><span class="line">    <span class="k">if</span><span class="p">(</span><span class="n">error</span> <span class="o">!=</span> <span class="nb">nil</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">        <span class="n">UIAlertView</span> <span class="o">*</span><span class="n">alert</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UIAlertView</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithTitle:</span><span class="s">@&quot;Twitter Error&quot;</span>
+</span><span class="line">                                                        <span class="nl">message:</span><span class="s">@&quot;There was an error talking to Twitter. Please try again later.&quot;</span>
+</span><span class="line">                                                       <span class="nl">delegate:</span><span class="nb">nil</span>
+</span><span class="line">                                              <span class="nl">cancelButtonTitle:</span><span class="s">@&quot;OK&quot;</span>
+</span><span class="line">                                              <span class="nl">otherButtonTitles:</span><span class="nb">nil</span><span class="p">];</span>
+</span><span class="line">        <span class="p">[</span><span class="n">alert</span> <span class="n">show</span><span class="p">];</span>
+</span><span class="line">        <span class="p">[</span><span class="n">alert</span> <span class="n">release</span><span class="p">];</span>
+</span><span class="line">        <span class="k">return</span><span class="p">;</span>
+</span><span class="line">    <span class="p">}</span>
+</span><span class="line">
+</span><span class="line">    <span class="c1">// Parse the JSON response</span>
+</span><span class="line">    <span class="n">NSError</span> <span class="o">*</span><span class="n">jsonError</span> <span class="o">=</span> <span class="nb">nil</span><span class="p">;</span>
+</span><span class="line">    <span class="kt">id</span> <span class="n">resp</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSJSONSerialization</span> <span class="nl">JSONObjectWithData:</span><span class="n">responseData</span>
+</span><span class="line">                                                      <span class="nl">options:</span><span class="mi">0</span>
+</span><span class="line">                                                        <span class="nl">error:</span><span class="o">&amp;</span><span class="n">jsonError</span><span class="p">];</span>
+</span><span class="line">
+</span><span class="line">    <span class="c1">// If there was an error decoding the JSON, display a message to the user</span>
+</span><span class="line">    <span class="k">if</span><span class="p">(</span><span class="n">jsonError</span> <span class="o">!=</span> <span class="nb">nil</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">        <span class="n">UIAlertView</span> <span class="o">*</span><span class="n">alert</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UIAlertView</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithTitle:</span><span class="s">@&quot;Twitter Error&quot;</span>
+</span><span class="line">                                                        <span class="nl">message:</span><span class="s">@&quot;Twitter is not acting properly right now. Please try again later.&quot;</span>
+</span><span class="line">                                                       <span class="nl">delegate:</span><span class="nb">nil</span>
+</span><span class="line">                                              <span class="nl">cancelButtonTitle:</span><span class="s">@&quot;OK&quot;</span>
+</span><span class="line">                                              <span class="nl">otherButtonTitles:</span><span class="nb">nil</span><span class="p">];</span>
+</span><span class="line">        <span class="p">[</span><span class="n">alert</span> <span class="n">show</span><span class="p">];</span>
+</span><span class="line">        <span class="p">[</span><span class="n">alert</span> <span class="n">release</span><span class="p">];</span>
+</span><span class="line">        <span class="k">return</span><span class="p">;</span>
+</span><span class="line">    <span class="p">}</span>
+</span><span class="line">
+</span><span class="line">    <span class="n">NSString</span> <span class="o">*</span><span class="n">screenName</span> <span class="o">=</span> <span class="p">[</span><span class="n">resp</span> <span class="nl">objectForKey:</span><span class="s">@&quot;screen_name&quot;</span><span class="p">];</span>
+</span><span class="line">    <span class="n">NSString</span> <span class="o">*</span><span class="n">fullName</span> <span class="o">=</span> <span class="p">[</span><span class="n">resp</span> <span class="nl">objectForKey:</span><span class="s">@&quot;name&quot;</span><span class="p">];</span>
+</span><span class="line">    <span class="n">NSString</span> <span class="o">*</span><span class="n">location</span> <span class="o">=</span> <span class="p">[</span><span class="n">resp</span> <span class="nl">objectForKey:</span><span class="s">@&quot;location&quot;</span><span class="p">];</span>
+</span><span class="line">
+</span><span class="line">    <span class="c1">// Make sure to perform our operation back on the main thread</span>
+</span><span class="line">    <span class="n">dispatch_async</span><span class="p">(</span><span class="n">dispatch_get_main_queue</span><span class="p">(),</span> <span class="o">^</span><span class="p">{</span>
+</span><span class="line">        <span class="c1">// Do something with the fetched data</span>
+</span><span class="line">    <span class="p">});</span>
+</span><span class="line"><span class="p">}];</span>
+</span></code></pre></td></tr></table></div></figure><p>Most of the code here is actually error handling code.  The meat of what we&#8217;re
+doing is simply fetching the user&#8217;s credentials from Twitter, parsing the JSON,
+and doing something with it. (What exactly you want to do with the username and
+name data is left as an excercise for the reader.)</p>
+</div>
+<div class="section" id="that-s-it">
+<h2>That&#8217;s it?</h2>
+<p>Yep, that&#8217;s it.  You should be able to implement Twitter sign-on for your app
+with the simple code I&#8217;ve shown here.  The only bummer is the case when the
+user doesn&#8217;t have a Twitter account registered.  We&#8217;re <a class="reference external" href="http://stackoverflow.com/questions/10055853/opening-ios-settings-preferences">not allowed</a> to help
+the user out by sending them to the Settings app.  All we can do is tell users
+to go there and hope they can figure it out.</p>
+<p>Any other tips or tricks you have for implementing sign-on with Twitter on iOS?
+Be sure to <a class="reference external" href="http://twitter.com/ericflo">tweet me</a> about it!</p>
+<p>P.S. If you&#8217;re building mobile apps, my startup <a class="reference external" href="https://clutch.io/">clutch.io</a> can help you build
+and iterate faster on them. Check us out :)</p>
+</div></div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Eric Florenzano</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-04-18T19:00:00-07:00" pubdate data-updated="true">Apr 18<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/login/'>Login</a>, <a class='category' href='/blog/categories/programming/'>Programming</a>, <a class='category' href='/blog/categories/registration/'>Registration</a>, <a class='category' href='/blog/categories/sign-on/'>Sign-On</a>, <a class='category' href='/blog/categories/twitter/'>Twitter</a>, <a class='category' href='/blog/categories/ios/'>iOS</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://eflorenzano.com/blog/2012/04/18/using-twitter-ios5-integration-single-sign-on/" data-via="ericflo" data-counturl="http://eflorenzano.com/blog/2012/04/18/using-twitter-ios5-integration-single-sign-on/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/01/01/reducing-code-nesting/" title="Previous Post: Reducing Code Nesting">&laquo; Reducing Code Nesting</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/04/18/using-twitter-ios5-integration-single-sign-on/">Using Twitter's iOS5 Integration for Single Sign-On</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/01/reducing-code-nesting/">Reducing Code Nesting</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/02/16/technology-behind-convore/">The Technology Behind Convore</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/10/10/object-lesson-how-respond-criticism/">An Object Lesson in How to Respond to Criticism</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/09/27/why-node-disappoints-me/">Why node.js disappoints me</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("ericflo", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/ericflo" class="twitter-follow-button" data-show-count="false">Follow @ericflo</a>
+  
+</section>
+
+
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/109591387819364984777?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Eric Florenzano -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

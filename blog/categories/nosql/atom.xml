@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: NoSQL | Eric Florenzano's Blog]]></title>
-  <link href="http://ericflo.github.com/blog/categories/nosql/atom.xml" rel="self"/>
-  <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T18:32:48-08:00</updated>
-  <id>http://ericflo.github.com/</id>
+  <link href="http://eflorenzano.com/blog/categories/nosql/atom.xml" rel="self"/>
+  <link href="http://eflorenzano.com/"/>
+  <updated>2012-04-18T17:34:47-07:00</updated>
+  <id>http://eflorenzano.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[My Thoughts on NoSQL]]></title>
-    <link href="http://ericflo.github.com/blog/2009/07/21/my-thoughts-nosql/"/>
+    <link href="http://eflorenzano.com/blog/2009/07/21/my-thoughts-nosql/"/>
     <updated>2009-07-21T06:44:17-07:00</updated>
-    <id>http://ericflo.github.com/blog/2009/07/21/my-thoughts-nosql</id>
+    <id>http://eflorenzano.com/blog/2009/07/21/my-thoughts-nosql</id>
     <content type="html"><![CDATA[<p>
 Over the past few years, relational databases have fallen out of favor for a
 number of influential people in our industry.  I'd like to weigh in on that,

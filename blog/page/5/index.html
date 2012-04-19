@@ -9,9 +9,7 @@
   <meta name="author" content="Eric Florenzano">
 
   
-  <meta name="description" content="Who says they suck?
-Nobody that I&#8217;ve seen has come out and actually said that they don&#8217;t like
-database triggers, but at the same time, &hellip;">
+  <meta name="description" content="SQLAlchemy started out with a bang. When it came out, there was really nothing else out there that even came close in terms of features, performance &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -20,7 +18,7 @@ database triggers, but at the same time, &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://ericflo.github.com/blog/page/5">
+  <link rel="canonical" href="http://eflorenzano.com/blog/page/5">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -63,7 +61,7 @@ database triggers, but at the same time, &hellip;">
   
 <form action="http://google.com/search" method="get">
   <fieldset role="search">
-    <input type="hidden" name="q" value="site:ericflo.github.com" />
+    <input type="hidden" name="q" value="site:eflorenzano.com" />
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
   </fieldset>
 </form>
@@ -78,6 +76,48 @@ database triggers, but at the same time, &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/11/04/why-sqlalchemy-best-orm-face-planet/">Why SQLAlchemy Is the Best ORM on the Face of the Planet</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-11-04T18:03:04-08:00" pubdate data-updated="true">Nov 4<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a class="reference external" href="http://www.sqlalchemy.org/">SQLAlchemy</a> started out with a bang.  When it came out, there was really nothing else out there that even came close in terms of features, performance, and ease of use.  <a class="reference external" href="http://www.sqlobject.org/">SQLObject</a> was the reigning champion of Python ORMs, and the Django ORM was around but much less powerful at that time.  So now it&#8217;s 3 years later.  Is SQLAlchemy still the best?  I think it is, and here&#8217;s why:</p>
+<ol class="arabic simple">
+<li>It has <em>no</em> preconception of how your database should be laid out.  If you haven&#8217;t created your database yet, you can choose to use the ActiveRecord-style layout of one object mapping to one table.  If that&#8217;s not the case for your application, you can even map arbitrary select statements onto objects, if that&#8217;s how much flexibility you want.  So already, SQLAlchemy is an option for thousands of people for which the other ORMs would not be.</li>
+<li>It&#8217;s tuned for performance.  Whether it&#8217;s the extremely slick connection pooling feature, or whether it&#8217;s the <a class="reference external" href="http://www.sqlalchemy.org/docs/05/session.html#unitofwork">Unit of Work</a> design pattern which will issue as few queries as possible.  Whether it&#8217;s the ability to specify lazily or eagerly loaded columns, or whether you note the identity map which keeps track of all of the objects that are in memory, SQLAlchemy has lots of performance-tuning abilities.  In my mind, SQLAlchemy gives you all the tools that you need to create a blazing fast application.</li>
+<li>It has a wonderful community which is building great tools on top of SQLAlchemy itself.  A clear example of this is the set of plugins that are shipped with SQLAlchemy, by default.  These include a simple <a class="reference external" href="http://www.sqlalchemy.org/docs/05/plugins.html#plugins_declarative">declarative</a> layer, an <a class="reference external" href="http://www.sqlalchemy.org/docs/05/plugins.html#plugins_associationproxy">association proxy</a>, and <a class="reference external" href="http://www.sqlalchemy.org/docs/05/plugins.html#plugins_sqlsoup">SqlSoup</a>, which uses introspection to map tables on the fly.  These are great examples of how the community is creating great libraries that sit on top of SQLAlchemy.  They also serve as proof of the configurability of the ORM itself.</li>
+<li>It supports your database.  According to its own website, &quot;SQLAlchemy includes dialects for SQLite, Postgres, MySQL, Oracle, MS-SQL, Firebird, MaxDB, MS Access, Sybase and Informix; IBM has also released a DB2 driver.&quot;  This is a pretty massive list and goes a long way in proving the power of the ORM.</li>
+</ol>
+<p>It comes down to this.  SQLAlchemy is a well-designed, performant, widely supported ORM which treats SQL with the respect it deserves.  I haven&#8217;t provided any code samples here because you should do that yourselves, with your own apps.  It&#8217;s just that good.  So what are you waiting for?</p></div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -847,56 +887,6 @@ fast, and it kind of rocks.</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2008/07/10/japan-and-san-francisco/">Japan and San Francisco</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-07-10T01:20:14-07:00" pubdate data-updated="true">Jul 10<span>th</span>, 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><div class="section" id="japan-what-a-trip">
-<h2>Japan: What a Trip</h2>
-<p>There comes a time towards the end of most vacations where you&#8217;ve had a good time, but you&#8217;re ready to head back home and sleep in your own bed and see your friends.  No offense to any of my friends, but that time never came for me in Japan.  I completely fell in love with Tokyo, and didn&#8217;t want to come home.</p>
-<p>I spent the vast majority of my time in Tokyo itself, but there was so much to do that there was never a dull moment.  Whether it was being completely and utterly lost in the red light district of Shinjuku, playing pachinko in Ueno, or people watching in Shibuya, I was always up to something.  Staying in hostels was probably the best choice that I could have made, because I met so many interesting and fun people!  Who else would I have done karaoke with, had it not been for the people I met at the hostel?</p>
-<p>Spending a night in a capsule hotel was really interesting, too.  There&#8217;s way more space in there than you would think!  You can sit up, or just watch crazy people pretending to time travel on Japanese TV (the best parts are the advertisements, though).  And Japanese people are stylish!  Some of the styles are very over-the-top, and some are very conservative (never before have I seen so many suits and ties), but almost everyone is trying their hardest to go for style.</p>
-<p>Good thing the German guys that I met had met Kazuya, or how would I have gotten in to that crazy hole-in-the-wall bar with only Japanese people and no tourists?</p>
-<p>I could really go on endlessly about the trip, but needless to say, I&#8217;ll have the memories that will last forever.  If anyone is thinking of going to Japan, then stop thinking, just do it!</p>
-</div>
-<div class="section" id="san-francisco">
-<h2>San Francisco</h2>
-<p>As of the 4th of July, I&#8217;m a resident of the state of California.  I&#8217;ve got an awesome apartment on Bush street between Powell and Stockton&#8211;near Union Square where there are a lot of tourists.  It&#8217;s interesting because whenever I walk outside, I hear a whole variety of different languages and accents.  It&#8217;s really neat, although I suspect after a year its novelty will have worn off and then some.</p>
-<p>It&#8217;s also the first time that I&#8217;ve lived without any roommates.  To me, this is refreshing and fun.  It&#8217;s nice to get together with friends whenever I want, but also to be able to relax and avoid all possible forms of human interaction when I feel so inclined.  This is helped by the fact that I&#8217;m connected to the fastest internet connection that I&#8217;ve ever owned.</p>
-<p>Also starting work at <a class="reference external" href="http://mochimedia.com/">Mochi Media</a> has been really good.  There&#8217;s a lot of new stuff to learn, though, so I&#8217;m not able to crank out as much code yet as I would like.  Their primary web development environment is <a class="reference external" href="http://pylonshq.com/">Pylons</a>, which has a decidedly different worldview than <a class="reference external" href="http://www.djangoproject.com/">Django</a>.  I definitely think that there are good things and bad things from both sides, and hopefully the good things can eventually be shared.  I&#8217;ll  definitely revisit this once I&#8217;ve got more experience on the Pylons side.</p>
-<p>Cheers to travelling around the globe, living independently, and learning new things!  Because in a nutshell, that&#8217;s what I&#8217;ve been doing.</p>
-<p>Up next: A series of screencasts.</p>
-</div></div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/6/">&larr; Older</a>
@@ -914,6 +904,10 @@ fast, and it kind of rocks.</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/04/18/using-twitter-ios5-integration-single-sign-on/">Using Twitter&#8217;s iOS5 Integration for Single Sign-On</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/01/01/reducing-code-nesting/">Reducing Code Nesting</a>
       </li>
     
@@ -927,10 +921,6 @@ fast, and it kind of rocks.</p>
     
       <li class="post">
         <a href="/blog/2010/09/27/why-node-disappoints-me/">Why node.js disappoints me</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2010/05/20/we-need-new-word-open/">We need a new word for &#8220;Open&#8221;</a>
       </li>
     
   </ul>

@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Object Oriented Programming | Eric Florenzano's Blog]]></title>
-  <link href="http://ericflo.github.com/blog/categories/object-oriented-programming/atom.xml" rel="self"/>
-  <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T18:32:48-08:00</updated>
-  <id>http://ericflo.github.com/</id>
+  <link href="http://eflorenzano.com/blog/categories/object-oriented-programming/atom.xml" rel="self"/>
+  <link href="http://eflorenzano.com/"/>
+  <updated>2012-04-18T17:34:47-07:00</updated>
+  <id>http://eflorenzano.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Exploring Mixins with Django Model Inheritance]]></title>
-    <link href="http://ericflo.github.com/blog/2008/05/17/exploring-mixins-django-model-inheritance/"/>
+    <link href="http://eflorenzano.com/blog/2008/05/17/exploring-mixins-django-model-inheritance/"/>
     <updated>2008-05-17T00:24:03-07:00</updated>
-    <id>http://ericflo.github.com/blog/2008/05/17/exploring-mixins-django-model-inheritance</id>
+    <id>http://eflorenzano.com/blog/2008/05/17/exploring-mixins-django-model-inheritance</id>
     <content type="html"><![CDATA[<p>
 Django<em> now supports <code>Model Inheritance</code></em>, and one of the coolest new opportunities that model inheritance brings is the possibility of the creation of mixins<em>, so in this post I'll walk through the steps I went through to create some simple examples. This is just an excercise (although it could be modified to be more robust)--and right now there are better ways to achieve all of the effects of the following mixins.  (See django-mptt</em>, for example).</p>
 
@@ -200,9 +200,9 @@ class BlogPost(NaiveHierarchy, DateMixin):
   
   <entry>
     <title type="html"><![CDATA[Inheritance vs. Composition]]></title>
-    <link href="http://ericflo.github.com/blog/2008/05/04/inheritance-vs-composition/"/>
+    <link href="http://eflorenzano.com/blog/2008/05/04/inheritance-vs-composition/"/>
     <updated>2008-05-04T16:12:38-07:00</updated>
-    <id>http://ericflo.github.com/blog/2008/05/04/inheritance-vs-composition</id>
+    <id>http://eflorenzano.com/blog/2008/05/04/inheritance-vs-composition</id>
     <content type="html"><![CDATA[<p>
 Lately there's been a lot of discussion in certain programming communities about which method of object extension makes more sense: inheritance, or composition.  Most of the time these discussions turn into debates, and when that happens developers tend to "take sides"--often moving towards extremist positions on the issue.  I've been sort of quietly thinking about it all lately, trying to determine which use case warrants which approach.  Here I show examples of both, explore some properties and consequences of both composition and inheritance, and finally talk about my own preferences.</p>
 
@@ -268,9 +268,9 @@ class UserDetails(User):
   
   <entry>
     <title type="html"><![CDATA[OOP and Django]]></title>
-    <link href="http://ericflo.github.com/blog/2008/02/08/oop-and-django/"/>
+    <link href="http://eflorenzano.com/blog/2008/02/08/oop-and-django/"/>
     <updated>2008-02-08T23:06:52-08:00</updated>
-    <id>http://ericflo.github.com/blog/2008/02/08/oop-and-django</id>
+    <id>http://eflorenzano.com/blog/2008/02/08/oop-and-django</id>
     <content type="html"><![CDATA[<p>
 Being a senior in college means many things.  It means job interviews and upper-level classes, emotional instability and independent living.  It also means countless hours of sitting in uninteresting classes whose sole purpose is to fulfill some graduation requirement.  For me, that means lots of daydreaming--about anything other than that class.  Recently however, during one daydream, I had a brain wave worth typing up: What's the deal with Object-Oriented Programming and Django?</p>
 

@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Screencast | Eric Florenzano's Blog]]></title>
-  <link href="http://ericflo.github.com/blog/categories/screencast/atom.xml" rel="self"/>
-  <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T18:32:48-08:00</updated>
-  <id>http://ericflo.github.com/</id>
+  <link href="http://eflorenzano.com/blog/categories/screencast/atom.xml" rel="self"/>
+  <link href="http://eflorenzano.com/"/>
+  <updated>2012-04-18T17:34:47-07:00</updated>
+  <id>http://eflorenzano.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA["Django From the Ground Up" Screencast Series Launched]]></title>
-    <link href="http://ericflo.github.com/blog/2008/09/18/django-ground-screencast-series-launched/"/>
+    <link href="http://eflorenzano.com/blog/2008/09/18/django-ground-screencast-series-launched/"/>
     <updated>2008-09-18T21:33:09-07:00</updated>
-    <id>http://ericflo.github.com/blog/2008/09/18/django-ground-screencast-series-launched</id>
+    <id>http://eflorenzano.com/blog/2008/09/18/django-ground-screencast-series-launched</id>
     <content type="html"><![CDATA[<p>
 Over the past few weeks I've been busy coding, planning, and recording a series of screencasts which walk through the complete process of building a web application, from the ground up, with Django.  First I actually needed to code the site, deploy the site, and release the source code for the site.  Then, I had to go back and decide what in that whole process was worth talking about.  Finally, I had to re-code the site, but this time in front of the camera.  It's been a long process so far and I'm not finished yet, but tonight is the night that I am finally able to unveil the first two episodes.</p>
 
@@ -35,9 +35,9 @@ Over the past few weeks I've been busy coding, planning, and recording a series 
   
   <entry>
     <title type="html"><![CDATA[First Two Django Screencasts]]></title>
-    <link href="http://ericflo.github.com/blog/2008/07/12/first-two-django-screencasts/"/>
+    <link href="http://eflorenzano.com/blog/2008/07/12/first-two-django-screencasts/"/>
     <updated>2008-07-12T20:09:49-07:00</updated>
-    <id>http://ericflo.github.com/blog/2008/07/12/first-two-django-screencasts</id>
+    <id>http://eflorenzano.com/blog/2008/07/12/first-two-django-screencasts</id>
     <content type="html"><![CDATA[<p>
 It's always been a goal of mine to post screencasts here on my blog, but for whatever reason I never ended up getting around to it.  Today, that all changes as I have created two new screencasts.  Of course, this space is already very well-covered by both <code>Michael Trier</code><em> and <code>Brian Rosner</code></em>, so hopefully this adds something new to the conversation.</p>
 

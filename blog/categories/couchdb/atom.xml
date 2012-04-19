@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: CouchDB | Eric Florenzano's Blog]]></title>
-  <link href="http://ericflo.github.com/blog/categories/couchdb/atom.xml" rel="self"/>
-  <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T18:32:48-08:00</updated>
-  <id>http://ericflo.github.com/</id>
+  <link href="http://eflorenzano.com/blog/categories/couchdb/atom.xml" rel="self"/>
+  <link href="http://eflorenzano.com/"/>
+  <updated>2012-04-18T17:34:47-07:00</updated>
+  <id>http://eflorenzano.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Why CouchDB Rocks]]></title>
-    <link href="http://ericflo.github.com/blog/2008/11/29/why-couchdb-rocks/"/>
+    <link href="http://eflorenzano.com/blog/2008/11/29/why-couchdb-rocks/"/>
     <updated>2008-11-29T14:31:31-08:00</updated>
-    <id>http://ericflo.github.com/blog/2008/11/29/why-couchdb-rocks</id>
+    <id>http://eflorenzano.com/blog/2008/11/29/why-couchdb-rocks</id>
     <content type="html"><![CDATA[<p>
 Last week I wrote an article called <code>Why CouchDB Sucks</code>_, which many people
 correctly said should have been called "What CouchDB Sucks at Doing".  Nearly
@@ -119,9 +119,9 @@ CouchDB rocks.  But don't take my word for it--try it out for yourself!</p>
   
   <entry>
     <title type="html"><![CDATA[Why CouchDB Sucks]]></title>
-    <link href="http://ericflo.github.com/blog/2008/11/23/why-couchdb-sucks/"/>
+    <link href="http://eflorenzano.com/blog/2008/11/23/why-couchdb-sucks/"/>
     <updated>2008-11-23T11:14:12-08:00</updated>
-    <id>http://ericflo.github.com/blog/2008/11/23/why-couchdb-sucks</id>
+    <id>http://eflorenzano.com/blog/2008/11/23/why-couchdb-sucks</id>
     <content type="html"><![CDATA[<p>
 CouchDB_ really sucks at doing some things.  That should come as no surprise, as
 every technology has its advantages and its drawbacks.  The thing is, when a new
@@ -178,9 +178,9 @@ gone out of style.</p>
   
   <entry>
     <title type="html"><![CDATA[Are pure client-side web apps the wave of the future?]]></title>
-    <link href="http://ericflo.github.com/blog/2008/11/21/are-pure-client-side-web-apps-wave-future/"/>
+    <link href="http://eflorenzano.com/blog/2008/11/21/are-pure-client-side-web-apps-wave-future/"/>
     <updated>2008-11-21T19:11:49-08:00</updated>
-    <id>http://ericflo.github.com/blog/2008/11/21/are-pure-client-side-web-apps-wave-future</id>
+    <id>http://eflorenzano.com/blog/2008/11/21/are-pure-client-side-web-apps-wave-future</id>
     <content type="html"><![CDATA[<p>
 It seems that the world of computing is always oscillating between offloading
 more work to the server, and offloading more work to the client.  In the very
@@ -248,9 +248,9 @@ this time, get to help shape that direction.</p>
   
   <entry>
     <title type="html"><![CDATA[Using CouchDB with Django]]></title>
-    <link href="http://ericflo.github.com/blog/2008/11/09/using-couchdb-django/"/>
+    <link href="http://eflorenzano.com/blog/2008/11/09/using-couchdb-django/"/>
     <updated>2008-11-09T21:59:59-08:00</updated>
-    <id>http://ericflo.github.com/blog/2008/11/09/using-couchdb-django</id>
+    <id>http://eflorenzano.com/blog/2008/11/09/using-couchdb-django</id>
     <content type="html"><![CDATA[<p>
 Ahhh, Django<em>: my favorite web framework.  And CouchDB</em>: my favorite new
 database technology.  How can I pair these two awesomes together to make an
@@ -451,9 +451,9 @@ If yes, then how are you dealing with that interaction?</p>
   
   <entry>
     <title type="html"><![CDATA[Revolutionary Ideas]]></title>
-    <link href="http://ericflo.github.com/blog/2008/05/15/revolutionary-ideas/"/>
+    <link href="http://eflorenzano.com/blog/2008/05/15/revolutionary-ideas/"/>
     <updated>2008-05-15T09:18:44-07:00</updated>
-    <id>http://ericflo.github.com/blog/2008/05/15/revolutionary-ideas</id>
+    <id>http://eflorenzano.com/blog/2008/05/15/revolutionary-ideas</id>
     <content type="html"><![CDATA[<p>
 Everyone has had the experience of hearing about something new and thinking: "That makes so much sense!  Why didn't I think of that?"  For programmers that keep up on open source software, new projects that fit the previous description attract not only our admiration, but we want to be a part of this new idea.  We become involved and contribute and try to push that new software into any new direction that we can; learning from it and evolving it along the way.</p>
 

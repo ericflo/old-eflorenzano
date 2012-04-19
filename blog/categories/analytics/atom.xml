@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Analytics | Eric Florenzano's Blog]]></title>
-  <link href="http://ericflo.github.com/blog/categories/analytics/atom.xml" rel="self"/>
-  <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T18:32:48-08:00</updated>
-  <id>http://ericflo.github.com/</id>
+  <link href="http://eflorenzano.com/blog/categories/analytics/atom.xml" rel="self"/>
+  <link href="http://eflorenzano.com/"/>
+  <updated>2012-04-18T17:34:47-07:00</updated>
+  <id>http://eflorenzano.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[It's been a wild ride]]></title>
-    <link href="http://ericflo.github.com/blog/2008/11/30/its-been-wild-ride/"/>
+    <link href="http://eflorenzano.com/blog/2008/11/30/its-been-wild-ride/"/>
     <updated>2008-11-30T15:58:11-08:00</updated>
-    <id>http://ericflo.github.com/blog/2008/11/30/its-been-wild-ride</id>
+    <id>http://eflorenzano.com/blog/2008/11/30/its-been-wild-ride</id>
     <content type="html"><![CDATA[<p>
 This post is my final post in the blog-post-per-day challenge.  There have been days when I really didn't want to blog (resulting in posts <code>like this</code><em>), and there have been days where I was excited about what I was writing about and spent a lot of time on a post (resulting in posts like <code>this one</code></em>).  It was much more difficult and time-consuming than I was expecting.  Another thing I wasn't expecting which actually kept motivating me to write more: actual traffic to this site.  Previously this site saw maybe 100 hits/day due to mostly various google hits on certain Django topics.  When I started doing the blog post-per-day thing, however, this is what my traffic turned into:</p>
 

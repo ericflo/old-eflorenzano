@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Digg | Eric Florenzano's Blog]]></title>
-  <link href="http://ericflo.github.com/blog/categories/digg/atom.xml" rel="self"/>
-  <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T18:32:48-08:00</updated>
-  <id>http://ericflo.github.com/</id>
+  <link href="http://eflorenzano.com/blog/categories/digg/atom.xml" rel="self"/>
+  <link href="http://eflorenzano.com/"/>
+  <updated>2012-04-18T17:34:47-07:00</updated>
+  <id>http://eflorenzano.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Announcing django-threadedcomments]]></title>
-    <link href="http://ericflo.github.com/blog/2008/01/23/announcing-django-threadedcomments/"/>
+    <link href="http://eflorenzano.com/blog/2008/01/23/announcing-django-threadedcomments/"/>
     <updated>2008-01-23T09:26:04-08:00</updated>
-    <id>http://ericflo.github.com/blog/2008/01/23/announcing-django-threadedcomments</id>
+    <id>http://eflorenzano.com/blog/2008/01/23/announcing-django-threadedcomments</id>
     <content type="html"><![CDATA[<p>
 Django-threadedcomments_ is a simple yet flexible threaded commenting system for Django.  What I mean when I say threaded is that commenters can reply not only to the original item, but to other comments as well.  It is very similar to what Reddit or Digg have in their comments sections.</p>
 
@@ -45,9 +45,9 @@ Django-threadedcomments_ is a simple yet flexible threaded commenting system for
   
   <entry>
     <title type="html"><![CDATA[Sphinx Search, Totally Rad Website]]></title>
-    <link href="http://ericflo.github.com/blog/2007/08/06/sphinx-search-totally-rad-website/"/>
+    <link href="http://eflorenzano.com/blog/2007/08/06/sphinx-search-totally-rad-website/"/>
     <updated>2007-08-06T22:00:36-07:00</updated>
-    <id>http://ericflo.github.com/blog/2007/08/06/sphinx-search-totally-rad-website</id>
+    <id>http://eflorenzano.com/blog/2007/08/06/sphinx-search-totally-rad-website</id>
     <content type="html"><![CDATA[<p>
 <code>Sphinx Search ROCKS!</code><em>  I'm pretty sure it'll be the solution to my MusicBrainz problems for my secret project.  I'm going to set up a simple postgres server holding the MusicBrainz database, with Sphinx Search installed, and have it index on a cron.  It'll be awesome!  After trying out Lucene</em> and its derivatives and being so underwhelmed, it's exciting to discover an app that truly seems to rock.  I'll report back on it later, but right now the indexer is 4 million queries into a 60 million query index.  Yeah, it's going to be a while.</p>
 
@@ -69,9 +69,9 @@ Django-threadedcomments_ is a simple yet flexible threaded commenting system for
   
   <entry>
     <title type="html"><![CDATA[New Site Live!]]></title>
-    <link href="http://ericflo.github.com/blog/2006/12/03/new-site-live/"/>
+    <link href="http://eflorenzano.com/blog/2006/12/03/new-site-live/"/>
     <updated>2006-12-03T14:23:54-08:00</updated>
-    <id>http://ericflo.github.com/blog/2006/12/03/new-site-live</id>
+    <id>http://eflorenzano.com/blog/2006/12/03/new-site-live</id>
     <content type="html"><![CDATA[<p>
 Hello all!  I have finally put my new website up for the world to see!  I'm still not much for designing the look and feel of websites, but after learning all about Django, I felt like I just had to update my website to use Django.</p>
 

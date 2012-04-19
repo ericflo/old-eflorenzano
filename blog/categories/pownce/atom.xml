@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Pownce | Eric Florenzano's Blog]]></title>
-  <link href="http://ericflo.github.com/blog/categories/pownce/atom.xml" rel="self"/>
-  <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T18:32:48-08:00</updated>
-  <id>http://ericflo.github.com/</id>
+  <link href="http://eflorenzano.com/blog/categories/pownce/atom.xml" rel="self"/>
+  <link href="http://eflorenzano.com/"/>
+  <updated>2012-04-18T17:34:47-07:00</updated>
+  <id>http://eflorenzano.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Creating a Pownce Widget Using Django]]></title>
-    <link href="http://ericflo.github.com/blog/2007/12/18/creating-pownce-widget-using-django/"/>
+    <link href="http://eflorenzano.com/blog/2007/12/18/creating-pownce-widget-using-django/"/>
     <updated>2007-12-18T10:37:52-08:00</updated>
-    <id>http://ericflo.github.com/blog/2007/12/18/creating-pownce-widget-using-django</id>
+    <id>http://eflorenzano.com/blog/2007/12/18/creating-pownce-widget-using-django</id>
     <content type="html"><![CDATA[<p>
 Widgets are everywhere!  It seems that every blog these days has at least a couple of widgets on their sidebar.  Yesterday I realized that I had never written one, and probably more importantly, I really had no concrete idea how they worked.  Using Django and a bit of Javascript, it turned out to be quite easy!  I'm going to show you the basics of how to write a widget yourself, but if enough people would like the source code to mine, I'll happily open source it.</p>
 

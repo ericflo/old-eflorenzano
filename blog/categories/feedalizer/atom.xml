@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Feedalizer | Eric Florenzano's Blog]]></title>
-  <link href="http://ericflo.github.com/blog/categories/feedalizer/atom.xml" rel="self"/>
-  <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T18:32:48-08:00</updated>
-  <id>http://ericflo.github.com/</id>
+  <link href="http://eflorenzano.com/blog/categories/feedalizer/atom.xml" rel="self"/>
+  <link href="http://eflorenzano.com/"/>
+  <updated>2012-04-18T17:34:47-07:00</updated>
+  <id>http://eflorenzano.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Djangodash was Fun!]]></title>
-    <link href="http://ericflo.github.com/blog/2008/06/07/djangodash-was-fun/"/>
+    <link href="http://eflorenzano.com/blog/2008/06/07/djangodash-was-fun/"/>
     <updated>2008-06-07T01:05:00-07:00</updated>
-    <id>http://ericflo.github.com/blog/2008/06/07/djangodash-was-fun</id>
+    <id>http://eflorenzano.com/blog/2008/06/07/djangodash-was-fun</id>
     <content type="html"><![CDATA[<p>
 Djangodash_, a two-day two-person sprint to create a project using Django, took place last weekend.  To be honest, I wasn't expecting it to be much fun, but it ended up being an absolute blast!</p>
 

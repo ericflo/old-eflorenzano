@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: django-threadedcomments | Eric Florenzano's Blog]]></title>
-  <link href="http://ericflo.github.com/blog/categories/django-threadedcomments/atom.xml" rel="self"/>
-  <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T18:32:48-08:00</updated>
-  <id>http://ericflo.github.com/</id>
+  <link href="http://eflorenzano.com/blog/categories/django-threadedcomments/atom.xml" rel="self"/>
+  <link href="http://eflorenzano.com/"/>
+  <updated>2012-04-18T17:34:47-07:00</updated>
+  <id>http://eflorenzano.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Intermediary Models and PyMag]]></title>
-    <link href="http://ericflo.github.com/blog/2008/07/29/intermediary-models-and-pymag/"/>
+    <link href="http://eflorenzano.com/blog/2008/07/29/intermediary-models-and-pymag/"/>
     <updated>2008-07-29T23:11:17-07:00</updated>
-    <id>http://ericflo.github.com/blog/2008/07/29/intermediary-models-and-pymag</id>
+    <id>http://eflorenzano.com/blog/2008/07/29/intermediary-models-and-pymag</id>
     <content type="html"><![CDATA[<p></p>
 
 <h2>Journey to Intermediary Models</h2>
@@ -55,9 +55,9 @@
   
   <entry>
     <title type="html"><![CDATA[Ideas and Execution]]></title>
-    <link href="http://ericflo.github.com/blog/2008/03/12/ideas-and-execution/"/>
+    <link href="http://eflorenzano.com/blog/2008/03/12/ideas-and-execution/"/>
     <updated>2008-03-12T03:57:30-07:00</updated>
-    <id>http://ericflo.github.com/blog/2008/03/12/ideas-and-execution</id>
+    <id>http://eflorenzano.com/blog/2008/03/12/ideas-and-execution</id>
     <content type="html"><![CDATA[<p>
 After my <code>last post about django-threadedcomments</code><em>, there have been several new releases.  We've integrated completely with comment_utils</em>, added support for gravatar<em>, and added some internationalization (I love that we abbreviate this as i18n) support as well.  Every day more and more people seem to be adding bug reports, patches, and feature requests to the ticket tracker.  This couldn't make me happier, and I hope to see it continue.  But what does this have to do with ideas?  It's the first programming idea that I've taken through conception, execution and all the way to support.  After django-threadedcomments</em>, I've decided to change my outlook on how to organize and deal with ideas that I get every day.</p>
 
@@ -99,9 +99,9 @@ After my <code>last post about django-threadedcomments</code><em>, there have be
   
   <entry>
     <title type="html"><![CDATA[AJAX, Voting, and Some Nicer CSS: Putting django-threadedcomments to the Test]]></title>
-    <link href="http://ericflo.github.com/blog/2008/01/30/ajax-voting-nicer-css-threadedcomments-test/"/>
+    <link href="http://eflorenzano.com/blog/2008/01/30/ajax-voting-nicer-css-threadedcomments-test/"/>
     <updated>2008-01-30T10:02:13-08:00</updated>
-    <id>http://ericflo.github.com/blog/2008/01/30/ajax-voting-nicer-css-threadedcomments-test</id>
+    <id>http://eflorenzano.com/blog/2008/01/30/ajax-voting-nicer-css-threadedcomments-test</id>
     <content type="html"><![CDATA[<p>
 It's an interesting feeling open-sourcing an application that you've developed for your own purposes.  Will people use it?  Will people find major design flaws?  Is it just a big waste of time?  These were the questions that were going through my mind before open-sourcing django-threadedcomments_.  Fortunately, my worries were quelled almost instantly as a people reacted quite positively to the application.  There was one recurring comment, however, that almost everyone who tried the sample implementation said: <strong>those colors are hideous</strong>.</p>
 
@@ -130,9 +130,9 @@ functionality..."
   
   <entry>
     <title type="html"><![CDATA[Announcing django-threadedcomments]]></title>
-    <link href="http://ericflo.github.com/blog/2008/01/23/announcing-django-threadedcomments/"/>
+    <link href="http://eflorenzano.com/blog/2008/01/23/announcing-django-threadedcomments/"/>
     <updated>2008-01-23T09:26:04-08:00</updated>
-    <id>http://ericflo.github.com/blog/2008/01/23/announcing-django-threadedcomments</id>
+    <id>http://eflorenzano.com/blog/2008/01/23/announcing-django-threadedcomments</id>
     <content type="html"><![CDATA[<p>
 Django-threadedcomments_ is a simple yet flexible threaded commenting system for Django.  What I mean when I say threaded is that commenters can reply not only to the original item, but to other comments as well.  It is very similar to what Reddit or Digg have in their comments sections.</p>
 

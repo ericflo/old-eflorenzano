@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: PyCon | Eric Florenzano's Blog]]></title>
-  <link href="http://ericflo.github.com/blog/categories/pycon/atom.xml" rel="self"/>
-  <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T18:32:48-08:00</updated>
-  <id>http://ericflo.github.com/</id>
+  <link href="http://eflorenzano.com/blog/categories/pycon/atom.xml" rel="self"/>
+  <link href="http://eflorenzano.com/"/>
+  <updated>2012-04-18T17:34:47-07:00</updated>
+  <id>http://eflorenzano.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Talk Controversy, Django Community, Sprints, and People]]></title>
-    <link href="http://ericflo.github.com/blog/2008/03/20/talk-controversy-django-community-sprints-and-peop/"/>
+    <link href="http://eflorenzano.com/blog/2008/03/20/talk-controversy-django-community-sprints-and-peop/"/>
     <updated>2008-03-20T17:14:33-07:00</updated>
-    <id>http://ericflo.github.com/blog/2008/03/20/talk-controversy-django-community-sprints-and-peop</id>
+    <id>http://eflorenzano.com/blog/2008/03/20/talk-controversy-django-community-sprints-and-peop</id>
     <content type="html"><![CDATA[<p>
 PyCon 2008  has come to an end for me today, and while it was a highly different
 event for me this year than last year, it was more enoyable in many ways.<br/>
@@ -114,9 +114,9 @@ I love PyCon.</p>
   
   <entry>
     <title type="html"><![CDATA[PyCon 2008]]></title>
-    <link href="http://ericflo.github.com/blog/2008/03/13/pycon-2008/"/>
+    <link href="http://eflorenzano.com/blog/2008/03/13/pycon-2008/"/>
     <updated>2008-03-13T18:04:47-07:00</updated>
-    <id>http://ericflo.github.com/blog/2008/03/13/pycon-2008</id>
+    <id>http://eflorenzano.com/blog/2008/03/13/pycon-2008</id>
     <content type="html"><![CDATA[<p>
 I'm currently on my way to Chicago for PyCon 2008!  I've miraculously convinced two of my good friends, Tony Hauber and Chris Coudron to come along as well.  They're even going to participate in the sprints.</p>
 
@@ -129,9 +129,9 @@ I'm currently on my way to Chicago for PyCon 2008!  I've miraculously convinced 
   
   <entry>
     <title type="html"><![CDATA[Django-Related Audio from Last Year's PyCon]]></title>
-    <link href="http://ericflo.github.com/blog/2007/12/11/django-related-audio-last-years-pycon/"/>
+    <link href="http://eflorenzano.com/blog/2007/12/11/django-related-audio-last-years-pycon/"/>
     <updated>2007-12-11T15:44:14-08:00</updated>
-    <id>http://ericflo.github.com/blog/2007/12/11/django-related-audio-last-years-pycon</id>
+    <id>http://eflorenzano.com/blog/2007/12/11/django-related-audio-last-years-pycon</id>
     <content type="html"><![CDATA[<p>
 I was lucky enough to be able to attend PyCon last year, and hope to do so again, but some great resources are starting to show up online for those who couldn't.  One example is Jacob Kaplan-Moss's talk named <code>Becoming an Open Source Developer: Lessons from the Django Project</code>_.</p>
 
@@ -149,9 +149,9 @@ I was lucky enough to be able to attend PyCon last year, and hope to do so again
   
   <entry>
     <title type="html"><![CDATA[Post-Pycon Thoughts]]></title>
-    <link href="http://ericflo.github.com/blog/2007/02/26/post-pycon-thoughts/"/>
+    <link href="http://eflorenzano.com/blog/2007/02/26/post-pycon-thoughts/"/>
     <updated>2007-02-26T01:10:01-08:00</updated>
-    <id>http://ericflo.github.com/blog/2007/02/26/post-pycon-thoughts</id>
+    <id>http://eflorenzano.com/blog/2007/02/26/post-pycon-thoughts</id>
     <content type="html"><![CDATA[<p>
 On the plane ride back from PyCon today, right before getting all excited about a new code idea, I sat there reflecting about PyCon and about all of the things that I remembered.</p>
 
@@ -172,9 +172,9 @@ On the plane ride back from PyCon today, right before getting all excited about 
   
   <entry>
     <title type="html"><![CDATA[I'm at PyCon]]></title>
-    <link href="http://ericflo.github.com/blog/2007/02/22/at-pycon-at-django/"/>
+    <link href="http://eflorenzano.com/blog/2007/02/22/at-pycon-at-django/"/>
     <updated>2007-02-22T13:10:23-08:00</updated>
-    <id>http://ericflo.github.com/blog/2007/02/22/at-pycon-at-django</id>
+    <id>http://eflorenzano.com/blog/2007/02/22/at-pycon-at-django</id>
     <content type="html"><![CDATA[<p>
 I'm, right now, sitting in the advanced Django tutorial at PyCon.  How cool is that?
 </p>

@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Reverse HTTP | Eric Florenzano's Blog]]></title>
-  <link href="http://ericflo.github.com/blog/categories/reverse-http/atom.xml" rel="self"/>
-  <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T18:32:48-08:00</updated>
-  <id>http://ericflo.github.com/</id>
+  <link href="http://eflorenzano.com/blog/categories/reverse-http/atom.xml" rel="self"/>
+  <link href="http://eflorenzano.com/"/>
+  <updated>2012-04-18T17:34:47-07:00</updated>
+  <id>http://eflorenzano.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Reverse HTTP]]></title>
-    <link href="http://ericflo.github.com/blog/2008/11/27/reverse-http/"/>
+    <link href="http://eflorenzano.com/blog/2008/11/27/reverse-http/"/>
     <updated>2008-11-27T10:31:05-08:00</updated>
-    <id>http://ericflo.github.com/blog/2008/11/27/reverse-http</id>
+    <id>http://eflorenzano.com/blog/2008/11/27/reverse-http</id>
     <content type="html"><![CDATA[<p>
 Yesterday I <code>wrote about Web Hooks</code>_ and how powerful it could be if one web
 service sends HTTP requests to another web service.  Today I want to take that

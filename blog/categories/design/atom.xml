@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Design | Eric Florenzano's Blog]]></title>
-  <link href="http://ericflo.github.com/blog/categories/design/atom.xml" rel="self"/>
-  <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T18:32:48-08:00</updated>
-  <id>http://ericflo.github.com/</id>
+  <link href="http://eflorenzano.com/blog/categories/design/atom.xml" rel="self"/>
+  <link href="http://eflorenzano.com/"/>
+  <updated>2012-04-18T17:34:47-07:00</updated>
+  <id>http://eflorenzano.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Notice Something Different?]]></title>
-    <link href="http://ericflo.github.com/blog/2009/02/28/notice-something-different/"/>
+    <link href="http://eflorenzano.com/blog/2009/02/28/notice-something-different/"/>
     <updated>2009-02-28T17:24:25-08:00</updated>
-    <id>http://ericflo.github.com/blog/2009/02/28/notice-something-different</id>
+    <id>http://eflorenzano.com/blog/2009/02/28/notice-something-different</id>
     <content type="html"><![CDATA[<p>
 Several months ago after rolling out the lifestreaming features on this site, I became unhappy with the way that the design scaled with the new feature.  Around that time I did a purely-visual refactor (just templates and CSS changed--no code), but it has sat untouched on my hard drive for several months.</p>
 
@@ -30,9 +30,9 @@ Several months ago after rolling out the lifestreaming features on this site, I 
   
   <entry>
     <title type="html"><![CDATA[Learning Design]]></title>
-    <link href="http://ericflo.github.com/blog/2008/04/17/learning-design/"/>
+    <link href="http://eflorenzano.com/blog/2008/04/17/learning-design/"/>
     <updated>2008-04-17T10:49:29-07:00</updated>
-    <id>http://ericflo.github.com/blog/2008/04/17/learning-design</id>
+    <id>http://eflorenzano.com/blog/2008/04/17/learning-design</id>
     <content type="html"><![CDATA[<p>
 What could have more of an impact on visitors of a website than its design?  It's the first thing that people notice when they visit the site, and it dictates what they see and how they interact with the site.  A <code>bad design</code><em> can drive visitors away, whereas a <code>good design</code></em> can bring people back again and again.</p>
 
@@ -66,9 +66,9 @@ What could have more of an impact on visitors of a website than its design?  It'
   
   <entry>
     <title type="html"><![CDATA[Fun Way of Displaying a Blogroll]]></title>
-    <link href="http://ericflo.github.com/blog/2007/12/05/fun-way-displaying-blogroll/"/>
+    <link href="http://eflorenzano.com/blog/2007/12/05/fun-way-displaying-blogroll/"/>
     <updated>2007-12-05T19:33:14-08:00</updated>
-    <id>http://ericflo.github.com/blog/2007/12/05/fun-way-displaying-blogroll</id>
+    <id>http://eflorenzano.com/blog/2007/12/05/fun-way-displaying-blogroll</id>
     <content type="html"><![CDATA[<p>
 I've just relaunched the redesign of this site.  Nothing major is different, but one fun thing that I'd like to highlight is the way the blogroll is displayed.  I got the idea from <code>Motel de Moka</code>_, which has more links to work with than I do.</p>
 
@@ -127,9 +127,9 @@ I've just relaunched the redesign of this site.  Nothing major is different, but
   
   <entry>
     <title type="html"><![CDATA[Woohoo!]]></title>
-    <link href="http://ericflo.github.com/blog/2007/07/26/woohoo/"/>
+    <link href="http://eflorenzano.com/blog/2007/07/26/woohoo/"/>
     <updated>2007-07-26T08:44:43-07:00</updated>
-    <id>http://ericflo.github.com/blog/2007/07/26/woohoo</id>
+    <id>http://eflorenzano.com/blog/2007/07/26/woohoo</id>
     <content type="html"><![CDATA[<p>
 I just found a designer!  And it's one of those guys that is way too high-profile for my budget, but he's interested in my idea!</p>
 
@@ -140,9 +140,9 @@ I just found a designer!  And it's one of those guys that is way too high-profil
   
   <entry>
     <title type="html"><![CDATA[Web Design]]></title>
-    <link href="http://ericflo.github.com/blog/2007/07/26/web-design/"/>
+    <link href="http://eflorenzano.com/blog/2007/07/26/web-design/"/>
     <updated>2007-07-26T00:40:10-07:00</updated>
-    <id>http://ericflo.github.com/blog/2007/07/26/web-design</id>
+    <id>http://eflorenzano.com/blog/2007/07/26/web-design</id>
     <content type="html"><![CDATA[<p>
 For the past month or so, in my free time I've been working on a potentially very profitable/successful idea.  I've had this idea for years, and have waited for someone else to do it, but nobody did.  This summer seemed like the perfect time to realize this idea, and to see just how far I could go with it.  There have been challenges in writing the back end for it so far, that much is certain, but by far most of my time has been spent looking for a designer.</p>
 

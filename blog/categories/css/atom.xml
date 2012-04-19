@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: CSS | Eric Florenzano's Blog]]></title>
-  <link href="http://ericflo.github.com/blog/categories/css/atom.xml" rel="self"/>
-  <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T18:32:48-08:00</updated>
-  <id>http://ericflo.github.com/</id>
+  <link href="http://eflorenzano.com/blog/categories/css/atom.xml" rel="self"/>
+  <link href="http://eflorenzano.com/"/>
+  <updated>2012-04-18T17:34:47-07:00</updated>
+  <id>http://eflorenzano.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Notice Anything?]]></title>
-    <link href="http://ericflo.github.com/blog/2007/03/09/notice-anything/"/>
+    <link href="http://eflorenzano.com/blog/2007/03/09/notice-anything/"/>
     <updated>2007-03-09T00:15:13-08:00</updated>
-    <id>http://ericflo.github.com/blog/2007/03/09/notice-anything</id>
+    <id>http://eflorenzano.com/blog/2007/03/09/notice-anything</id>
     <content type="html"><![CDATA[<p>
 So I've yet again redesigned the site.  This was not a backend redesign, but rather an aesthetic redesign consisting of mostly changing the CSS.  The other change that was made was that now I am deploying via subversion checkout.  I do my changes on my local copy, and then I commit those changes to subversion, and finally I do a checkout from the server's SVN.  This makes it much easier to deploy in general, and I will see how this ease continues into the future.</p>
 

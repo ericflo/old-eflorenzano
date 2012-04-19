@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Social Graph | Eric Florenzano's Blog]]></title>
-  <link href="http://ericflo.github.com/blog/categories/social-graph/atom.xml" rel="self"/>
-  <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T18:32:48-08:00</updated>
-  <id>http://ericflo.github.com/</id>
+  <link href="http://eflorenzano.com/blog/categories/social-graph/atom.xml" rel="self"/>
+  <link href="http://eflorenzano.com/"/>
+  <updated>2012-04-18T17:34:47-07:00</updated>
+  <id>http://eflorenzano.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[You care about Facebook, you just might not know it yet]]></title>
-    <link href="http://ericflo.github.com/blog/2009/11/10/you-care-about-facebook-you-just-might-not-know-it/"/>
+    <link href="http://eflorenzano.com/blog/2009/11/10/you-care-about-facebook-you-just-might-not-know-it/"/>
     <updated>2009-11-10T22:25:12-08:00</updated>
-    <id>http://ericflo.github.com/blog/2009/11/10/you-care-about-facebook-you-just-might-not-know-it</id>
+    <id>http://eflorenzano.com/blog/2009/11/10/you-care-about-facebook-you-just-might-not-know-it</id>
     <content type="html"><![CDATA[<p>
 I recently had a conversation with a few friends that I know through the Python community. These are people who I respect a great deal, and look to for advice and insight when it comes to web development.  During the course of this conversation, the subject of Facebook came up.  What I wasn't expecting at all was that a large number of them said that they have no interest in Facebook, and quite a few of them proudly didn't even have accounts.</p>
 
@@ -51,9 +51,9 @@ I recently had a conversation with a few friends that I know through the Python 
   
   <entry>
     <title type="html"><![CDATA[XFN Markup Enabled]]></title>
-    <link href="http://ericflo.github.com/blog/2008/02/05/xfn-markup-enabled/"/>
+    <link href="http://eflorenzano.com/blog/2008/02/05/xfn-markup-enabled/"/>
     <updated>2008-02-05T10:35:01-08:00</updated>
-    <id>http://ericflo.github.com/blog/2008/02/05/xfn-markup-enabled</id>
+    <id>http://eflorenzano.com/blog/2008/02/05/xfn-markup-enabled</id>
     <content type="html"><![CDATA[<p>
 The recently released <code>Google Social Graph API</code><em> was a bit of a wake-up call for me on the power and importance of microformats</em>.  So I've hacked together a quick implementation of XFN_ for the blogroll, and added a few <code>rel=me</code> links as well.</p>
 

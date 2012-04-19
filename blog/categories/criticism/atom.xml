@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Criticism | Eric Florenzano's Blog]]></title>
-  <link href="http://ericflo.github.com/blog/categories/criticism/atom.xml" rel="self"/>
-  <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T18:32:48-08:00</updated>
-  <id>http://ericflo.github.com/</id>
+  <link href="http://eflorenzano.com/blog/categories/criticism/atom.xml" rel="self"/>
+  <link href="http://eflorenzano.com/"/>
+  <updated>2012-04-18T17:34:47-07:00</updated>
+  <id>http://eflorenzano.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[An Object Lesson in How to Respond to Criticism]]></title>
-    <link href="http://ericflo.github.com/blog/2010/10/10/object-lesson-how-respond-criticism/"/>
+    <link href="http://eflorenzano.com/blog/2010/10/10/object-lesson-how-respond-criticism/"/>
     <updated>2010-10-10T09:56:12-07:00</updated>
-    <id>http://ericflo.github.com/blog/2010/10/10/object-lesson-how-respond-criticism</id>
+    <id>http://eflorenzano.com/blog/2010/10/10/object-lesson-how-respond-criticism</id>
     <content type="html"><![CDATA[<p>
 In the moments leading up to my DjangoCon keynote this year (called
 <code>Why Django Sucks, and How We Can Fix It</code>_), I pictured the room an hour in the

@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Sprint | Eric Florenzano's Blog]]></title>
-  <link href="http://ericflo.github.com/blog/categories/sprint/atom.xml" rel="self"/>
-  <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T18:32:48-08:00</updated>
-  <id>http://ericflo.github.com/</id>
+  <link href="http://eflorenzano.com/blog/categories/sprint/atom.xml" rel="self"/>
+  <link href="http://eflorenzano.com/"/>
+  <updated>2012-04-18T17:34:47-07:00</updated>
+  <id>http://eflorenzano.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Talk Controversy, Django Community, Sprints, and People]]></title>
-    <link href="http://ericflo.github.com/blog/2008/03/20/talk-controversy-django-community-sprints-and-peop/"/>
+    <link href="http://eflorenzano.com/blog/2008/03/20/talk-controversy-django-community-sprints-and-peop/"/>
     <updated>2008-03-20T17:14:33-07:00</updated>
-    <id>http://ericflo.github.com/blog/2008/03/20/talk-controversy-django-community-sprints-and-peop</id>
+    <id>http://eflorenzano.com/blog/2008/03/20/talk-controversy-django-community-sprints-and-peop</id>
     <content type="html"><![CDATA[<p>
 PyCon 2008  has come to an end for me today, and while it was a highly different
 event for me this year than last year, it was more enoyable in many ways.<br/>

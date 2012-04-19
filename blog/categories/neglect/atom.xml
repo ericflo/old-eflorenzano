@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Neglect | Eric Florenzano's Blog]]></title>
-  <link href="http://ericflo.github.com/blog/categories/neglect/atom.xml" rel="self"/>
-  <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T18:32:48-08:00</updated>
-  <id>http://ericflo.github.com/</id>
+  <link href="http://eflorenzano.com/blog/categories/neglect/atom.xml" rel="self"/>
+  <link href="http://eflorenzano.com/"/>
+  <updated>2012-04-18T17:34:47-07:00</updated>
+  <id>http://eflorenzano.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Yet Another Project]]></title>
-    <link href="http://ericflo.github.com/blog/2007/02/14/yet-another-project/"/>
+    <link href="http://eflorenzano.com/blog/2007/02/14/yet-another-project/"/>
     <updated>2007-02-14T00:29:31-08:00</updated>
-    <id>http://ericflo.github.com/blog/2007/02/14/yet-another-project</id>
+    <id>http://eflorenzano.com/blog/2007/02/14/yet-another-project</id>
     <content type="html"><![CDATA[<p>
 Well a few things have happened over the past few months.  Firstly, I have failed again in keeping this blog up to date.  Hopefully this post will be cathartic and I'll enjoy writing it so much that I will begin to post more often.  Secondly, I have been busy with new classes, Algorithms and Programming Languages being the most interesting of the bunch.  Thirdly, I have registered for PyCon!  Fourthly, and this is more recent, I've been working on a Django-related project which, until now, has been secret.</p>
 

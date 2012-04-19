@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: InnoDB | Eric Florenzano's Blog]]></title>
-  <link href="http://ericflo.github.com/blog/categories/innodb/atom.xml" rel="self"/>
-  <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T18:32:48-08:00</updated>
-  <id>http://ericflo.github.com/</id>
+  <link href="http://eflorenzano.com/blog/categories/innodb/atom.xml" rel="self"/>
+  <link href="http://eflorenzano.com/"/>
+  <updated>2012-04-18T17:34:47-07:00</updated>
+  <id>http://eflorenzano.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Why use a VARCHAR when you can use TEXT?]]></title>
-    <link href="http://ericflo.github.com/blog/2008/11/11/why-use-varchar-when-you-can-use-text/"/>
+    <link href="http://eflorenzano.com/blog/2008/11/11/why-use-varchar-when-you-can-use-text/"/>
     <updated>2008-11-11T08:23:24-08:00</updated>
-    <id>http://ericflo.github.com/blog/2008/11/11/why-use-varchar-when-you-can-use-text</id>
+    <id>http://eflorenzano.com/blog/2008/11/11/why-use-varchar-when-you-can-use-text</id>
     <content type="html"><![CDATA[<p>
 Admit it, you've done it many times before: you create a database schema,
 arbitrarily guessing at upper limits to the lengths of various columns, only to

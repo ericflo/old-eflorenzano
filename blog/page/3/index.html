@@ -9,8 +9,8 @@
   <meta name="author" content="Eric Florenzano">
 
   
-  <meta name="description" content="CouchDB really sucks at doing some things. That should come as no surprise, as
-every technology has its advantages and its drawbacks. The thing is, &hellip;">
+  <meta name="description" content="I&#8217;ve never tried to start a meme before, but since I don&#8217;t really have anything
+great to post about, I&#8217;d like to try to start one. &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +19,7 @@ every technology has its advantages and its drawbacks. The thing is, &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://ericflo.github.com/blog/page/3">
+  <link rel="canonical" href="http://eflorenzano.com/blog/page/3">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -62,7 +62,7 @@ every technology has its advantages and its drawbacks. The thing is, &hellip;">
   
 <form action="http://google.com/search" method="get">
   <fieldset role="search">
-    <input type="hidden" name="q" value="site:ericflo.github.com" />
+    <input type="hidden" name="q" value="site:eflorenzano.com" />
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
   </fieldset>
 </form>
@@ -77,6 +77,133 @@ every technology has its advantages and its drawbacks. The thing is, &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/11/24/trying-start-programming-meme/">Trying to Start a Programming Meme</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-11-24T21:13:18-08:00" pubdate data-updated="true">Nov 24<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I&#8217;ve never tried to start a meme before, but since I don&#8217;t really have anything
+great to post about, I&#8217;d like to try to start one.  I think this one could be
+particularly fun because it encourages implementation of a basic program in many
+different languages.</p>
+<p>Rules:</p>
+<ol class="arabic simple">
+<li>Implement a program that takes in a user&#8217;s name and their age, and prints
+hello to them once for every year that they have been alive.</li>
+<li>Post these rules, the source code for your solution, and the following list
+(with you included) on your blog.</li>
+<li>Bonus points if you implement it in a language not yet seen on the following
+list!</li>
+</ol>
+<p>The List:</p>
+<ol class="arabic simple">
+<li>[Python] <a class="reference external" href="http://www.eflorenzano.com/blog/post/trying-start-programming-meme">http://www.eflorenzano.com/blog/post/trying-start-programming-meme</a></li>
+<li>[Bash] <a class="reference external" href="http://aartemenko.com/texts/bash-meme/">http://aartemenko.com/texts/bash-meme/</a></li>
+<li>[C] <a class="reference external" href="http://dakrauth.com/media/site/text/hello.c">http://dakrauth.com/media/site/text/hello.c</a></li>
+<li>[Java] <a class="reference external" href="http://adoleo.com/blog/2008/nov/25/programming-meme/">http://adoleo.com/blog/2008/nov/25/programming-meme/</a></li>
+<li>[Python 3] <a class="reference external" href="http://mikewatkins.ca/2008/11/25/hello-meme/">http://mikewatkins.ca/2008/11/25/hello-meme/</a></li>
+<li>[Ruby] <a class="reference external" href="http://stroky.l.googlepages.com/gem">http://stroky.l.googlepages.com/gem</a></li>
+<li>[Ruby] <a class="reference external" href="http://im.camronflanders.com/archive/meme/">http://im.camronflanders.com/archive/meme/</a></li>
+<li>[Lisp] <a class="reference external" href="http://justinlilly.com/blog/2008/nov/25/back-on-the-horse/">http://justinlilly.com/blog/2008/nov/25/back-on-the-horse/</a></li>
+<li>[Lua] <a class="reference external" href="http://aartemenko.com/texts/lua-hello-meme/">http://aartemenko.com/texts/lua-hello-meme/</a></li>
+<li>[Functional Python] <a class="reference external" href="http://aartemenko.com/texts/python-functional-hello-meme/">http://aartemenko.com/texts/python-functional-hello-meme/</a></li>
+<li>[Erlang] <a class="reference external" href="http://surfacedepth.blogspot.com/2008/11/erics-programming-meme-in-erlang.html">http://surfacedepth.blogspot.com/2008/11/erics-programming-meme-in-erlang.html</a></li>
+<li>[Haskell] <a class="reference external" href="http://jasonwalsh.us/meme.html">http://jasonwalsh.us/meme.html</a></li>
+<li>[PHP] <a class="reference external" href="http://fitzgeraldsteele.wordpress.com/2008/11/25/memeing-in-php-2/">http://fitzgeraldsteele.wordpress.com/2008/11/25/memeing-in-php-2/</a></li>
+<li>[Javascript] <a class="reference external" href="http://www.taylanpince.com/blog/posts/responding-to-a-programming-meme/">http://www.taylanpince.com/blog/posts/responding-to-a-programming-meme/</a></li>
+<li>[Single-File Django] <a class="reference external" href="http://www.pocketuniverse.ca/archive/2008/november/27/florenzano-factor/">http://www.pocketuniverse.ca/archive/2008/november/27/florenzano-factor/</a></li>
+</ol>
+<p>(&#8230;and make sure to check out the comments on this post for some other fun implementations!)</p>
+<p>And here&#8217;s my implementation:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="n">name</span> <span class="o">=</span> <span class="nb">raw_input</span><span class="p">(</span><span class="s">&#39;Please enter your name: &#39;</span><span class="p">)</span>
+</span><span class="line"><span class="n">age</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">raw_input</span><span class="p">(</span><span class="s">&#39;Please enter your age: &#39;</span><span class="p">))</span>
+</span><span class="line">
+</span><span class="line"><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">age</span><span class="p">):</span>
+</span><span class="line">    <span class="k">print</span> <span class="s">&quot;</span><span class="si">%2d</span><span class="s">) Hello, </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure><p>And its output:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line">Please enter your name: Eric Florenzano
+</span><span class="line">Please enter your age: 22
+</span><span class="line"> 0<span class="o">)</span> Hello, Eric Florenzano
+</span><span class="line"> 1<span class="o">)</span> Hello, Eric Florenzano
+</span><span class="line"> 2<span class="o">)</span> Hello, Eric Florenzano
+</span><span class="line"> 3<span class="o">)</span> Hello, Eric Florenzano
+</span><span class="line"> 4<span class="o">)</span> Hello, Eric Florenzano
+</span><span class="line"> 5<span class="o">)</span> Hello, Eric Florenzano
+</span><span class="line"> 6<span class="o">)</span> Hello, Eric Florenzano
+</span><span class="line"> 7<span class="o">)</span> Hello, Eric Florenzano
+</span><span class="line"> 8<span class="o">)</span> Hello, Eric Florenzano
+</span><span class="line"> 9<span class="o">)</span> Hello, Eric Florenzano
+</span><span class="line">10<span class="o">)</span> Hello, Eric Florenzano
+</span><span class="line">11<span class="o">)</span> Hello, Eric Florenzano
+</span><span class="line">12<span class="o">)</span> Hello, Eric Florenzano
+</span><span class="line">13<span class="o">)</span> Hello, Eric Florenzano
+</span><span class="line">14<span class="o">)</span> Hello, Eric Florenzano
+</span><span class="line">15<span class="o">)</span> Hello, Eric Florenzano
+</span><span class="line">16<span class="o">)</span> Hello, Eric Florenzano
+</span><span class="line">17<span class="o">)</span> Hello, Eric Florenzano
+</span><span class="line">18<span class="o">)</span> Hello, Eric Florenzano
+</span><span class="line">19<span class="o">)</span> Hello, Eric Florenzano
+</span><span class="line">20<span class="o">)</span> Hello, Eric Florenzano
+</span><span class="line">21<span class="o">)</span> Hello, Eric Florenzano
+</span></code></pre></td></tr></table></div></figure><p>Well there you have it, my attempt at a programming meme.  I hope someone enjoys it!</p></div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1353,328 +1480,6 @@ now that all of that is said, show me how to slice in Erlang!</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2008/11/14/easy-multi-database-support-django/">Easy Multi-Database Support for Django</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-11-14T21:51:44-08:00" pubdate data-updated="true">Nov 14<span>th</span>, 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><div class="section" id="background">
-<h2>Background</h2>
-<p>One of the most requested features in Django is that it support connecting to
-multiple databases at once.  This can come in several flavors, but the two
-most common cases are <a class="reference external" href="http://en.wikipedia.org/wiki/Shard_(database_architecture)">sharding</a>, and (vertical) <a class="reference external" href="http://en.wikipedia.org/wiki/Partition_(database)">partitioning</a>.  If you&#8217;ve been
-waching closely, some of the core developers have been saying in various places
-for a few months now that this is technically possible, right now, in Django 1.0.</p>
-<p>Of course, being technically possible is a long way from being easy.  Right now
-there is no public API for dealing with multiple databases.  So why do the
-developers say that it&#8217;s possible to do?  The answer is simple: shortly before
-Django 1.0 was released, much of the internals of QuerySet objects (Django&#8217;s
-interface to the database) were refactored to use object state-level connection
-objects instead of a global connection object.</p>
-<p>This seemingly-small change opens the doors for multiple databases, even if
-there is no API in front of it.  So let&#8217;s create an API.  We&#8217;re going to be
-focusing on vertical partitioning, since it&#8217;s slightly easier, but the technique
-demonstrated here will be illustrative when implementing sharding as well.  Oh,
-and since we&#8217;re poking deep into the core of Django&#8217;s internals, I&#8217;m obliged to
-give the standard disclaimer: this is not supported and may break in future
-versions of Django, so use these techniques at your own risk.</p>
-</div>
-<div class="section" id="first-things-first">
-<h2>First things first</h2>
-<p>The first thing that needs to be done when implementing multiple database
-support is to supply Django with the information about all of the databases
-that you would like to connect to.  Here&#8217;s how that should look in
-<tt class="docutils literal">settings.py</tt>:</p>
-<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-<span class="line-number">18</span>
-<span class="line-number">19</span>
-<span class="line-number">20</span>
-<span class="line-number">21</span>
-<span class="line-number">22</span>
-<span class="line-number">23</span>
-<span class="line-number">24</span>
-<span class="line-number">25</span>
-</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="n">DATABASE_ENGINE</span> <span class="o">=</span> <span class="s">&#39;sqlite3&#39;</span>
-</span><span class="line"><span class="n">DATABASE_NAME</span> <span class="o">=</span> <span class="s">&#39;primary.db&#39;</span>
-</span><span class="line"><span class="n">DATABASE_USER</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
-</span><span class="line"><span class="n">DATABASE_PASSWORD</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
-</span><span class="line"><span class="n">DATABASE_HOST</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
-</span><span class="line"><span class="n">DATABASE_PORT</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
-</span><span class="line">
-</span><span class="line"><span class="n">DATABASES</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
-</span><span class="line">    <span class="n">primary</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
-</span><span class="line">        <span class="n">DATABASE_ENGINE</span><span class="o">=</span><span class="n">DATABASE_ENGINE</span><span class="p">,</span>
-</span><span class="line">        <span class="n">DATABASE_NAME</span><span class="o">=</span><span class="n">DATABASE_NAME</span><span class="p">,</span>
-</span><span class="line">        <span class="n">DATABASE_USER</span><span class="o">=</span><span class="n">DATABASE_USER</span><span class="p">,</span>
-</span><span class="line">        <span class="n">DATABASE_PASSWORD</span><span class="o">=</span><span class="n">DATABASE_PASSWORD</span><span class="p">,</span>
-</span><span class="line">        <span class="n">DATABASE_HOST</span><span class="o">=</span><span class="n">DATABASE_HOST</span><span class="p">,</span>
-</span><span class="line">        <span class="n">DATABASE_PORT</span><span class="o">=</span><span class="n">DATABASE_PORT</span><span class="p">,</span>
-</span><span class="line">    <span class="p">),</span>
-</span><span class="line">    <span class="n">secondary</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
-</span><span class="line">        <span class="n">DATABASE_ENGINE</span><span class="o">=</span><span class="n">DATABASE_ENGINE</span><span class="p">,</span>
-</span><span class="line">        <span class="n">DATABASE_NAME</span><span class="o">=</span><span class="s">&#39;secondary.db&#39;</span><span class="p">,</span>
-</span><span class="line">        <span class="n">DATABASE_USER</span><span class="o">=</span><span class="n">DATABASE_USER</span><span class="p">,</span>
-</span><span class="line">        <span class="n">DATABASE_PASSWORD</span><span class="o">=</span><span class="n">DATABASE_PASSWORD</span><span class="p">,</span>
-</span><span class="line">        <span class="n">DATABASE_HOST</span><span class="o">=</span><span class="n">DATABASE_HOST</span><span class="p">,</span>
-</span><span class="line">        <span class="n">DATABASE_PORT</span><span class="o">=</span><span class="n">DATABASE_PORT</span><span class="p">,</span>
-</span><span class="line">    <span class="p">),</span>
-</span><span class="line"><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure><p>We have not only created the typical database information that Django
-requires, but we&#8217;ve also created a dictionary containing information about all
-of the databases that we intend to connect to.  In this case, we are connecting
-to two sqlite databases in the same directory, named <tt class="docutils literal">primary.db</tt> and
-<tt class="docutils literal">secondary.db</tt>.</p>
-<p>Let&#8217;s now create an app, named <tt class="docutils literal">blog</tt> (I know, I know, very unoriginal).  The
-<tt class="docutils literal">models.py</tt> will look like this:</p>
-<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="kn">import</span> <span class="nn">datetime</span>
-</span><span class="line"><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
-</span><span class="line">
-</span><span class="line"><span class="k">class</span> <span class="nc">Post</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-</span><span class="line">    <span class="n">title</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
-</span><span class="line">    <span class="n">body</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
-</span><span class="line">    <span class="n">date_submitted</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">)</span>
-</span><span class="line">
-</span><span class="line"><span class="k">class</span> <span class="nc">Link</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-</span><span class="line">    <span class="n">url</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">URLField</span><span class="p">()</span>
-</span><span class="line">    <span class="n">description</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-</span><span class="line">    <span class="n">date_submitted</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure><p>And we hook it up to the admin and settings.py in the normal manner.  For more
-information on how to do this, follow <a class="reference external" href="http://docs.djangoproject.com/en/dev/#tutorial-writing-your-first-django-application">the official tutorial</a>.  We&#8217;re going to
-be storing the <tt class="docutils literal">Post</tt> objects in the primary database, and the <tt class="docutils literal">Link</tt>
-objects in the secondary database.  Since they don&#8217;t have any foreign keys, we
-don&#8217;t have to worry about joins. (They are possible, but not easy to describe
-in one post.)</p>
-</div>
-<div class="section" id="multiple-databases">
-<h2>Multiple databases</h2>
-<p>We should probably write some code that will inspect all of our models and
-create only the tables that we want in each database.  For the sake of
-simplicity and practicality of a blog post, we&#8217;re not going to do that.
-Instead, we will simply create all of the schema on both databases.  The
-management command to do so might look something like this (I called it
-multi_syncdb):</p>
-<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="kn">from</span> <span class="nn">django.core.management.base</span> <span class="kn">import</span> <span class="n">NoArgsCommand</span>
-</span><span class="line"><span class="kn">from</span> <span class="nn">django.core.management</span> <span class="kn">import</span> <span class="n">call_command</span>
-</span><span class="line"><span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
-</span><span class="line">
-</span><span class="line"><span class="k">class</span> <span class="nc">Command</span><span class="p">(</span><span class="n">NoArgsCommand</span><span class="p">):</span>
-</span><span class="line">    <span class="n">help</span> <span class="o">=</span> <span class="s">&quot;Sync multiple databases.&quot;</span>
-</span><span class="line">
-</span><span class="line">    <span class="k">def</span> <span class="nf">handle_noargs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">options</span><span class="p">):</span>
-</span><span class="line">        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">database</span> <span class="ow">in</span> <span class="n">settings</span><span class="o">.</span><span class="n">DATABASES</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
-</span><span class="line">            <span class="k">print</span> <span class="s">&quot;Running syncdb for </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,)</span>
-</span><span class="line">            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">database</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
-</span><span class="line">                <span class="nb">setattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
-</span><span class="line">            <span class="n">call_command</span><span class="p">(</span><span class="s">&#39;syncdb&#39;</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure><p>All of this has been fine, but the real workhorse of multiple database support
-lies in the model&#8217;s <tt class="docutils literal">Manager</tt>.  Let&#8217;s write a multi-db aware manager right
-now:</p>
-<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-<span class="line-number">18</span>
-<span class="line-number">19</span>
-<span class="line-number">20</span>
-<span class="line-number">21</span>
-<span class="line-number">22</span>
-<span class="line-number">23</span>
-<span class="line-number">24</span>
-<span class="line-number">25</span>
-<span class="line-number">26</span>
-<span class="line-number">27</span>
-<span class="line-number">28</span>
-<span class="line-number">29</span>
-<span class="line-number">30</span>
-<span class="line-number">31</span>
-<span class="line-number">32</span>
-<span class="line-number">33</span>
-<span class="line-number">34</span>
-<span class="line-number">35</span>
-<span class="line-number">36</span>
-<span class="line-number">37</span>
-<span class="line-number">38</span>
-<span class="line-number">39</span>
-<span class="line-number">40</span>
-<span class="line-number">41</span>
-<span class="line-number">42</span>
-<span class="line-number">43</span>
-</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
-</span><span class="line"><span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
-</span><span class="line"><span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">sql</span>
-</span><span class="line"><span class="kn">from</span> <span class="nn">django.db.transaction</span> <span class="kn">import</span> <span class="n">savepoint_state</span>
-</span><span class="line">
-</span><span class="line"><span class="k">try</span><span class="p">:</span>
-</span><span class="line">    <span class="kn">import</span> <span class="nn">thread</span>
-</span><span class="line"><span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-</span><span class="line">    <span class="kn">import</span> <span class="nn">dummy_thread</span> <span class="kn">as</span> <span class="nn">thread</span>
-</span><span class="line">
-</span><span class="line"><span class="k">class</span> <span class="nc">MultiDBManager</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Manager</span><span class="p">):</span>
-</span><span class="line">    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">database</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-</span><span class="line">        <span class="bp">self</span><span class="o">.</span><span class="n">database</span> <span class="o">=</span> <span class="n">database</span>
-</span><span class="line">        <span class="nb">super</span><span class="p">(</span><span class="n">MultiDBManager</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-</span><span class="line">
-</span><span class="line">    <span class="k">def</span> <span class="nf">get_query_set</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span class="line">        <span class="n">qs</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">MultiDBManager</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">get_query_set</span><span class="p">()</span>
-</span><span class="line">        <span class="n">qs</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">connection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_db_wrapper</span><span class="p">()</span>
-</span><span class="line">        <span class="k">return</span> <span class="n">qs</span>
-</span><span class="line">
-</span><span class="line">    <span class="k">def</span> <span class="nf">get_db_wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span class="line">        <span class="n">database</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">DATABASES</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="p">]</span>
-</span><span class="line">        <span class="n">backend</span> <span class="o">=</span> <span class="nb">__import__</span><span class="p">(</span><span class="s">&#39;django.db.backends.&#39;</span> <span class="o">+</span> <span class="n">database</span><span class="p">[</span><span class="s">&#39;DATABASE_ENGINE&#39;</span><span class="p">]</span>
-</span><span class="line">            <span class="o">+</span> <span class="s">&quot;.base&quot;</span><span class="p">,</span> <span class="p">{},</span> <span class="p">{},</span> <span class="p">[</span><span class="s">&#39;base&#39;</span><span class="p">])</span>
-</span><span class="line">        <span class="n">backup</span> <span class="o">=</span> <span class="p">{}</span>
-</span><span class="line">        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">database</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
-</span><span class="line">            <span class="n">backup</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
-</span><span class="line">            <span class="nb">setattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
-</span><span class="line">        <span class="n">wrapper</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">DatabaseWrapper</span><span class="p">()</span>
-</span><span class="line">        <span class="n">wrapper</span><span class="o">.</span><span class="n">_cursor</span><span class="p">(</span><span class="n">settings</span><span class="p">)</span>
-</span><span class="line">        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">backup</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
-</span><span class="line">            <span class="nb">setattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
-</span><span class="line">        <span class="k">return</span> <span class="n">wrapper</span>
-</span><span class="line">
-</span><span class="line">    <span class="k">def</span> <span class="nf">_insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">return_id</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">raw_values</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
-</span><span class="line">        <span class="n">query</span> <span class="o">=</span> <span class="n">sql</span><span class="o">.</span><span class="n">InsertQuery</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_db_wrapper</span><span class="p">())</span>
-</span><span class="line">        <span class="n">query</span><span class="o">.</span><span class="n">insert_values</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">raw_values</span><span class="p">)</span>
-</span><span class="line">        <span class="n">ret</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">execute_sql</span><span class="p">(</span><span class="n">return_id</span><span class="p">)</span>
-</span><span class="line">        <span class="n">query</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">_commit</span><span class="p">()</span>
-</span><span class="line">        <span class="n">thread_ident</span> <span class="o">=</span> <span class="n">thread</span><span class="o">.</span><span class="n">get_ident</span><span class="p">()</span>
-</span><span class="line">        <span class="k">if</span> <span class="n">thread_ident</span> <span class="ow">in</span> <span class="n">savepoint_state</span><span class="p">:</span>
-</span><span class="line">            <span class="k">del</span> <span class="n">savepoint_state</span><span class="p">[</span><span class="n">thread_ident</span><span class="p">]</span>
-</span><span class="line">        <span class="k">return</span> <span class="n">ret</span>
-</span></code></pre></td></tr></table></div></figure><p>I know that&#8217;s a lot of code!  Let&#8217;s go through each piece one-by-one.  In the
-<tt class="docutils literal">__init__</tt> function, we&#8217;re just taking in the name of the database that we
-want to use, and passing the rest into the inherited <tt class="docutils literal">__init__</tt> function.</p>
-<p><tt class="docutils literal">get_query_set</tt> gets the <tt class="docutils literal">QuerySet</tt> instance that it would have gotten, but
-replaces the connection on the query object with one provided by the manager,
-before returning the <tt class="docutils literal">QuerySet</tt>.  In essence, this <tt class="docutils literal">get_db_wrapper</tt> function
-is doing the bulk of the work.</p>
-<p><tt class="docutils literal">get_db_wrapper</tt> first gets the dictionary of the database connection
-information for the given database name (captured from <tt class="docutils literal">__init__</tt>), then
-dynamically imports the correct database backend from Django.  It then sets
-the global settings to the values that they should be for that database (while
-backing up the original settings for restoration later).  Then, it initializes
-that database connection, and restores the settings to their original values.</p>
-<p>Most of the database operations are done through the <tt class="docutils literal">QuerySet</tt>, there is
-still one operation which takes place elsewhere&#8211;saving.  To account for that,
-we needed to override the <tt class="docutils literal">_insert</tt> method on the manager.  In fact, all we&#8217;re
-doing here is providing the <tt class="docutils literal">InsertQuery</tt> with the correct connection and
-executing that query.  Then, we need to ensure that the query is committed and
-do any transaction management that&#8217;s necessary.</p>
-<p>That&#8217;s it!</p>
-<p>How do we specify that one ore more models will use another database then?
-Because so far all that we have done is write this <tt class="docutils literal">MultiDBManager</tt>.  We will
-just add one line assigning the manager to our <tt class="docutils literal">Link</tt> model.  The model
-now looks like this:</p>
-<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="k">class</span> <span class="nc">Link</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-</span><span class="line">    <span class="n">url</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">URLField</span><span class="p">()</span>
-</span><span class="line">    <span class="n">description</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-</span><span class="line">    <span class="n">date_submitted</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">)</span>
-</span><span class="line">
-</span><span class="line">    <span class="n">_default_manager</span> <span class="o">=</span> <span class="n">MultiDBManager</span><span class="p">(</span><span class="s">&#39;secondary&#39;</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure></div>
-<div class="section" id="conclusion">
-<h2>Conclusion</h2>
-<p>The <tt class="docutils literal">MultiDBManager</tt> can be re-used for any number of models to be partitioned
-on to any number of databases.  The hard part is making sure that none of the
-models in one database reference any models in the other database.  It&#8217;s
-possible to do it, by storing the foreign key as a regular integer and querying
-for all of the referenced model instances through Python instead of using the
-database (for obvious reasons), but then it becomes much harder.</p>
-<p>It will be great when Django provides a public API for doing this in a more
-transparent way, but for now this works.  Please let me know if you use any
-of these techniques for large scale Django deployments, and if so, what were the
-problems that were encountered along the way?</p>
-</div></div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -1692,6 +1497,10 @@ problems that were encountered along the way?</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/04/18/using-twitter-ios5-integration-single-sign-on/">Using Twitter&#8217;s iOS5 Integration for Single Sign-On</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/01/01/reducing-code-nesting/">Reducing Code Nesting</a>
       </li>
     
@@ -1705,10 +1514,6 @@ problems that were encountered along the way?</p>
     
       <li class="post">
         <a href="/blog/2010/09/27/why-node-disappoints-me/">Why node.js disappoints me</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2010/05/20/we-need-new-word-open/">We need a new word for &#8220;Open&#8221;</a>
       </li>
     
   </ul>

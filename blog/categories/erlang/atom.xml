@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Erlang | Eric Florenzano's Blog]]></title>
-  <link href="http://ericflo.github.com/blog/categories/erlang/atom.xml" rel="self"/>
-  <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T18:32:48-08:00</updated>
-  <id>http://ericflo.github.com/</id>
+  <link href="http://eflorenzano.com/blog/categories/erlang/atom.xml" rel="self"/>
+  <link href="http://eflorenzano.com/"/>
+  <updated>2012-04-18T17:34:47-07:00</updated>
+  <id>http://eflorenzano.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[How do we kick our synchronous addiction?]]></title>
-    <link href="http://ericflo.github.com/blog/2010/02/08/how-do-we-kick-our-synchronous-addiction/"/>
+    <link href="http://eflorenzano.com/blog/2010/02/08/how-do-we-kick-our-synchronous-addiction/"/>
     <updated>2010-02-08T22:15:31-08:00</updated>
-    <id>http://ericflo.github.com/blog/2010/02/08/how-do-we-kick-our-synchronous-addiction</id>
+    <id>http://eflorenzano.com/blog/2010/02/08/how-do-we-kick-our-synchronous-addiction</id>
     <content type="html"><![CDATA[<p>
 Asynchronous programming is superior <code>both in memory usage and in overall throughput</code><em> when compared to synchronous programming .  We've <code>known this fact for years</code></em>.  If we look at Django or Ruby on Rails, arguably the two most promising new web application frameworks to emerge in the past few years, both of them are written in such a way that synchronous programming  is assumed. Why is it that even in 2010 we're still writing programs that rely on synchronous programming ?</p>
 
@@ -131,9 +131,9 @@ Asynchronous programming is superior <code>both in memory usage and in overall t
   
   <entry>
     <title type="html"><![CDATA[Exploring Erlang's gen_server]]></title>
-    <link href="http://ericflo.github.com/blog/2008/11/15/exploring-erlangs-genserver/"/>
+    <link href="http://eflorenzano.com/blog/2008/11/15/exploring-erlangs-genserver/"/>
     <updated>2008-11-15T20:20:40-08:00</updated>
-    <id>http://ericflo.github.com/blog/2008/11/15/exploring-erlangs-genserver</id>
+    <id>http://eflorenzano.com/blog/2008/11/15/exploring-erlangs-genserver</id>
     <content type="html"><![CDATA[<p>
 Today I found myself at <code>Super Happy Dev House</code><em>, amongst a whole house full
 of geeks (I say this in the most friendly way possible).  I thought for a while

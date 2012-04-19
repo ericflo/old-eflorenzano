@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Javascript | Eric Florenzano's Blog]]></title>
-  <link href="http://ericflo.github.com/blog/categories/javascript/atom.xml" rel="self"/>
-  <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T18:32:48-08:00</updated>
-  <id>http://ericflo.github.com/</id>
+  <link href="http://eflorenzano.com/blog/categories/javascript/atom.xml" rel="self"/>
+  <link href="http://eflorenzano.com/"/>
+  <updated>2012-04-18T17:34:47-07:00</updated>
+  <id>http://eflorenzano.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Why node.js disappoints me]]></title>
-    <link href="http://ericflo.github.com/blog/2010/09/27/why-node-disappoints-me/"/>
+    <link href="http://eflorenzano.com/blog/2010/09/27/why-node-disappoints-me/"/>
     <updated>2010-09-27T01:23:47-07:00</updated>
-    <id>http://ericflo.github.com/blog/2010/09/27/why-node-disappoints-me</id>
+    <id>http://eflorenzano.com/blog/2010/09/27/why-node-disappoints-me</id>
     <content type="html"><![CDATA[<p>
 <code>Node.js</code>_ is currently at the center of a huge cyclone of hype.  At this point it's clear that Node is going to be a major player in the next few years of web development.  It's no wonder, either!  It represents a fresh start, one with no legacy synchronous baggage in our increasingly asynchronous, increasingly real-time web. And it's accessible to anyone who's written JavaScript (read: all web developers.)</p>
 
@@ -54,9 +54,9 @@
   
   <entry>
     <title type="html"><![CDATA[Flojax: A unobtrusive and easy strategy for creating AJAX-style web applications]]></title>
-    <link href="http://ericflo.github.com/blog/2009/04/02/flojax-unobtrusive-and-easy-strategy-creating-ajax/"/>
+    <link href="http://eflorenzano.com/blog/2009/04/02/flojax-unobtrusive-and-easy-strategy-creating-ajax/"/>
     <updated>2009-04-02T19:05:18-07:00</updated>
-    <id>http://ericflo.github.com/blog/2009/04/02/flojax-unobtrusive-and-easy-strategy-creating-ajax</id>
+    <id>http://eflorenzano.com/blog/2009/04/02/flojax-unobtrusive-and-easy-strategy-creating-ajax</id>
     <content type="html"><![CDATA[<p>
 Writing AJAX-style web applications can be very tedious.  If you're using XML
 as your transport layer, you have to parse the XML before you can work with it.
@@ -93,9 +93,9 @@ of full page reloads.</p>
 <p>.. code-block:: html</p>
 
 <pre><code>&lt;div class="buttons"&gt;
-    &lt;a href="http://ericflo.github.com/vote/up/item1/"&gt;Vote up&lt;/a&gt;
-    &lt;a href="http://ericflo.github.com/vote/down/item1/"&gt;Vote down&lt;/a&gt;
-    &lt;a href="http://ericflo.github.com/favorite/item1/"&gt;Add to your favorites&lt;/a&gt;
+    &lt;a href="http://eflorenzano.com/vote/up/item1/"&gt;Vote up&lt;/a&gt;
+    &lt;a href="http://eflorenzano.com/vote/down/item1/"&gt;Vote down&lt;/a&gt;
+    &lt;a href="http://eflorenzano.com/favorite/item1/"&gt;Add to your favorites&lt;/a&gt;
 &lt;/div&gt;
 </code></pre>
 
@@ -105,15 +105,15 @@ of full page reloads.</p>
 
 <pre><code>&lt;div class="buttons"&gt;
     {% if voted %}
-        &lt;a href="http://ericflo.github.com/vote/clear/{{ item.id }}/"&gt;Clear your vote&lt;/a&gt;
+        &lt;a href="http://eflorenzano.com/vote/clear/{{ item.id }}/"&gt;Clear your vote&lt;/a&gt;
     {% else %}
-        &lt;a href="http://ericflo.github.com/vote/up/{{ item.id }}/"&gt;Vote up&lt;/a&gt;
-        &lt;a href="http://ericflo.github.com/vote/down/{{ item.id }}/"&gt;Vote down&lt;/a&gt;
+        &lt;a href="http://eflorenzano.com/vote/up/{{ item.id }}/"&gt;Vote up&lt;/a&gt;
+        &lt;a href="http://eflorenzano.com/vote/down/{{ item.id }}/"&gt;Vote down&lt;/a&gt;
     {% endif %}
     {% if favorited %}
-        &lt;a href="http://ericflo.github.com/favorite/{{ item.id }}/"&gt;Add to your favorites&lt;/a&gt;
+        &lt;a href="http://eflorenzano.com/favorite/{{ item.id }}/"&gt;Add to your favorites&lt;/a&gt;
     {% else %}
-        &lt;a href="http://ericflo.github.com/unfavorite/{{ item.id }}/"&gt;Remove from your favorites&lt;/a&gt;
+        &lt;a href="http://eflorenzano.com/unfavorite/{{ item.id }}/"&gt;Remove from your favorites&lt;/a&gt;
     {% endif %}
 &lt;/div&gt;
 </code></pre>
@@ -141,15 +141,15 @@ fragment.</p>
 
 <pre><code>&lt;div class="buttons"&gt;
     {% if voted %}
-        &lt;a href="http://ericflo.github.com/vote/clear/{{ item.id }}/" class="flojax" rel="buttons"&gt;Clear your vote&lt;/a&gt;
+        &lt;a href="http://eflorenzano.com/vote/clear/{{ item.id }}/" class="flojax" rel="buttons"&gt;Clear your vote&lt;/a&gt;
     {% else %}
-        &lt;a href="http://ericflo.github.com/vote/up/{{ item.id }}/" class="flojax" rel="buttons"&gt;Vote up&lt;/a&gt;
-        &lt;a href="http://ericflo.github.com/vote/down/{{ item.id }}/" class="flojax" rel="buttons"&gt;Vote down&lt;/a&gt;
+        &lt;a href="http://eflorenzano.com/vote/up/{{ item.id }}/" class="flojax" rel="buttons"&gt;Vote up&lt;/a&gt;
+        &lt;a href="http://eflorenzano.com/vote/down/{{ item.id }}/" class="flojax" rel="buttons"&gt;Vote down&lt;/a&gt;
     {% endif %}
     {% if favorited %}
-        &lt;a href="http://ericflo.github.com/favorite/{{ item.id }}/" class="flojax" rel="buttons"&gt;Add to your favorites&lt;/a&gt;
+        &lt;a href="http://eflorenzano.com/favorite/{{ item.id }}/" class="flojax" rel="buttons"&gt;Add to your favorites&lt;/a&gt;
     {% else %}
-        &lt;a href="http://ericflo.github.com/unfavorite/{{ item.id }}/" class="flojax" rel="buttons"&gt;Remove from your favorites&lt;/a&gt;
+        &lt;a href="http://eflorenzano.com/unfavorite/{{ item.id }}/" class="flojax" rel="buttons"&gt;Remove from your favorites&lt;/a&gt;
     {% endif %}
 &lt;/div&gt;
 </code></pre>
@@ -303,9 +303,9 @@ for your web applications?  If so, how do they differ from what I've described?
   
   <entry>
     <title type="html"><![CDATA[The most widely available virtual machine]]></title>
-    <link href="http://ericflo.github.com/blog/2008/11/22/most-widely-available-virtual-machine/"/>
+    <link href="http://eflorenzano.com/blog/2008/11/22/most-widely-available-virtual-machine/"/>
     <updated>2008-11-22T21:37:57-08:00</updated>
-    <id>http://ericflo.github.com/blog/2008/11/22/most-widely-available-virtual-machine</id>
+    <id>http://eflorenzano.com/blog/2008/11/22/most-widely-available-virtual-machine</id>
     <content type="html"><![CDATA[<p>
 A few months back, I had a bit of an epiphany.  I suspect I was about 5 years
 too late with this epiphany, but nevertheless here it is: Microsoft,
@@ -347,9 +347,9 @@ targeting the most widely adopted virtual machine ever: JavaScript.</p>
   
   <entry>
     <title type="html"><![CDATA[Are pure client-side web apps the wave of the future?]]></title>
-    <link href="http://ericflo.github.com/blog/2008/11/21/are-pure-client-side-web-apps-wave-future/"/>
+    <link href="http://eflorenzano.com/blog/2008/11/21/are-pure-client-side-web-apps-wave-future/"/>
     <updated>2008-11-21T19:11:49-08:00</updated>
-    <id>http://ericflo.github.com/blog/2008/11/21/are-pure-client-side-web-apps-wave-future</id>
+    <id>http://eflorenzano.com/blog/2008/11/21/are-pure-client-side-web-apps-wave-future</id>
     <content type="html"><![CDATA[<p>
 It seems that the world of computing is always oscillating between offloading
 more work to the server, and offloading more work to the client.  In the very
@@ -417,9 +417,9 @@ this time, get to help shape that direction.</p>
   
   <entry>
     <title type="html"><![CDATA[FriendFeed Comment Expand Bookmarklet]]></title>
-    <link href="http://ericflo.github.com/blog/2008/05/27/friendfeed-comment-expand-bookmarklet/"/>
+    <link href="http://eflorenzano.com/blog/2008/05/27/friendfeed-comment-expand-bookmarklet/"/>
     <updated>2008-05-27T00:47:57-07:00</updated>
-    <id>http://ericflo.github.com/blog/2008/05/27/friendfeed-comment-expand-bookmarklet</id>
+    <id>http://eflorenzano.com/blog/2008/05/27/friendfeed-comment-expand-bookmarklet</id>
     <content type="html"><![CDATA[<p>
 Recently I've been using a lot of FriendFeed_ lately, and found it a bit annoying to expand comments one-by-one, so I wrote a quick bookmarklet to automatically expand all comments out.</p>
 

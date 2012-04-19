@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Scalability | Eric Florenzano's Blog]]></title>
-  <link href="http://ericflo.github.com/blog/categories/scalability/atom.xml" rel="self"/>
-  <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T18:32:48-08:00</updated>
-  <id>http://ericflo.github.com/</id>
+  <link href="http://eflorenzano.com/blog/categories/scalability/atom.xml" rel="self"/>
+  <link href="http://eflorenzano.com/"/>
+  <updated>2012-04-18T17:34:47-07:00</updated>
+  <id>http://eflorenzano.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Writing Blazing Fast, Infinitely Scalable, Pure-WSGI Utilities]]></title>
-    <link href="http://ericflo.github.com/blog/2009/01/08/writing-blazing-fast-infinitely-scalable-pure-wsgi/"/>
+    <link href="http://eflorenzano.com/blog/2009/01/08/writing-blazing-fast-infinitely-scalable-pure-wsgi/"/>
     <updated>2009-01-08T02:29:10-08:00</updated>
-    <id>http://ericflo.github.com/blog/2009/01/08/writing-blazing-fast-infinitely-scalable-pure-wsgi</id>
+    <id>http://eflorenzano.com/blog/2009/01/08/writing-blazing-fast-infinitely-scalable-pure-wsgi</id>
     <content type="html"><![CDATA[<p>
 Lately I've really fallen in love with writing utilities whose interface is
 simply HTTP.  By making it accessible via HTTP, it's really easy to write

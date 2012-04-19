@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: FreeNAS | Eric Florenzano's Blog]]></title>
-  <link href="http://ericflo.github.com/blog/categories/freenas/atom.xml" rel="self"/>
-  <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T18:32:48-08:00</updated>
-  <id>http://ericflo.github.com/</id>
+  <link href="http://eflorenzano.com/blog/categories/freenas/atom.xml" rel="self"/>
+  <link href="http://eflorenzano.com/"/>
+  <updated>2012-04-18T17:34:47-07:00</updated>
+  <id>http://eflorenzano.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[MythTV Box Down]]></title>
-    <link href="http://ericflo.github.com/blog/2006/12/05/mythtv-box-down/"/>
+    <link href="http://eflorenzano.com/blog/2006/12/05/mythtv-box-down/"/>
     <updated>2006-12-05T23:27:13-08:00</updated>
-    <id>http://ericflo.github.com/blog/2006/12/05/mythtv-box-down</id>
+    <id>http://eflorenzano.com/blog/2006/12/05/mythtv-box-down</id>
     <content type="html"><![CDATA[<p>
 Yesterday the MythTV computer that my roommate and I has died.  That is to say that the hard drives which contained all of the shows stopped functioning.  I think what we're going to do is wipe the hard drives and put only a small main hard drive in the MythTV box, and put the rest into a FreeNAS_ NAS server.</p>
 

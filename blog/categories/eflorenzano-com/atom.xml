@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Eflorenzano.com | Eric Florenzano's Blog]]></title>
-  <link href="http://ericflo.github.com/blog/categories/eflorenzano-com/atom.xml" rel="self"/>
-  <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T18:32:48-08:00</updated>
-  <id>http://ericflo.github.com/</id>
+  <link href="http://eflorenzano.com/blog/categories/eflorenzano-com/atom.xml" rel="self"/>
+  <link href="http://eflorenzano.com/"/>
+  <updated>2012-04-18T17:34:47-07:00</updated>
+  <id>http://eflorenzano.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Notice Something Different?]]></title>
-    <link href="http://ericflo.github.com/blog/2009/02/28/notice-something-different/"/>
+    <link href="http://eflorenzano.com/blog/2009/02/28/notice-something-different/"/>
     <updated>2009-02-28T17:24:25-08:00</updated>
-    <id>http://ericflo.github.com/blog/2009/02/28/notice-something-different</id>
+    <id>http://eflorenzano.com/blog/2009/02/28/notice-something-different</id>
     <content type="html"><![CDATA[<p>
 Several months ago after rolling out the lifestreaming features on this site, I became unhappy with the way that the design scaled with the new feature.  Around that time I did a purely-visual refactor (just templates and CSS changed--no code), but it has sat untouched on my hard drive for several months.</p>
 
@@ -30,9 +30,9 @@ Several months ago after rolling out the lifestreaming features on this site, I 
   
   <entry>
     <title type="html"><![CDATA[It's been a wild ride]]></title>
-    <link href="http://ericflo.github.com/blog/2008/11/30/its-been-wild-ride/"/>
+    <link href="http://eflorenzano.com/blog/2008/11/30/its-been-wild-ride/"/>
     <updated>2008-11-30T15:58:11-08:00</updated>
-    <id>http://ericflo.github.com/blog/2008/11/30/its-been-wild-ride</id>
+    <id>http://eflorenzano.com/blog/2008/11/30/its-been-wild-ride</id>
     <content type="html"><![CDATA[<p>
 This post is my final post in the blog-post-per-day challenge.  There have been days when I really didn't want to blog (resulting in posts <code>like this</code><em>), and there have been days where I was excited about what I was writing about and spent a lot of time on a post (resulting in posts like <code>this one</code></em>).  It was much more difficult and time-consuming than I was expecting.  Another thing I wasn't expecting which actually kept motivating me to write more: actual traffic to this site.  Previously this site saw maybe 100 hits/day due to mostly various google hits on certain Django topics.  When I started doing the blog post-per-day thing, however, this is what my traffic turned into:</p>
 
@@ -103,9 +103,9 @@ This post is my final post in the blog-post-per-day challenge.  There have been 
   
   <entry>
     <title type="html"><![CDATA[Blog Updated (now with more CouchDB)]]></title>
-    <link href="http://ericflo.github.com/blog/2008/11/20/blog-updated-now-more-couchdb/"/>
+    <link href="http://eflorenzano.com/blog/2008/11/20/blog-updated-now-more-couchdb/"/>
     <updated>2008-11-20T21:56:20-08:00</updated>
-    <id>http://ericflo.github.com/blog/2008/11/20/blog-updated-now-more-couchdb</id>
+    <id>http://eflorenzano.com/blog/2008/11/20/blog-updated-now-more-couchdb</id>
     <content type="html"><![CDATA[<p>
 I posted a while back about <code>using CouchDB with Django</code><em>, talking about how one might build a lifestreaming application combining the flexibility and power of CouchDB</em> with the ease of use and utility of Django<em>.  I even linked to <code>the project on github</code></em>.  At the time I was taking a hard look at the Django-based software that was running this blog.  It needed some work, to say the least.  So I did a bit of cleanup, a LOT of reorganization, and integrated this CouchDB-based lifestreaming application into the mix.</p>
 
@@ -133,9 +133,9 @@ I posted a while back about <code>using CouchDB with Django</code><em>, talking 
   
   <entry>
     <title type="html"><![CDATA[XFN Markup Enabled]]></title>
-    <link href="http://ericflo.github.com/blog/2008/02/05/xfn-markup-enabled/"/>
+    <link href="http://eflorenzano.com/blog/2008/02/05/xfn-markup-enabled/"/>
     <updated>2008-02-05T10:35:01-08:00</updated>
-    <id>http://ericflo.github.com/blog/2008/02/05/xfn-markup-enabled</id>
+    <id>http://eflorenzano.com/blog/2008/02/05/xfn-markup-enabled</id>
     <content type="html"><![CDATA[<p>
 The recently released <code>Google Social Graph API</code><em> was a bit of a wake-up call for me on the power and importance of microformats</em>.  So I've hacked together a quick implementation of XFN_ for the blogroll, and added a few <code>rel=me</code> links as well.</p>
 
@@ -150,9 +150,9 @@ The recently released <code>Google Social Graph API</code><em> was a bit of a wa
   
   <entry>
     <title type="html"><![CDATA[XFN Markup Enabled]]></title>
-    <link href="http://ericflo.github.com/blog/2008/02/05/xfn-markup-enabled/"/>
+    <link href="http://eflorenzano.com/blog/2008/02/05/xfn-markup-enabled/"/>
     <updated>2008-02-05T10:35:01-08:00</updated>
-    <id>http://ericflo.github.com/blog/2008/02/05/xfn-markup-enabled</id>
+    <id>http://eflorenzano.com/blog/2008/02/05/xfn-markup-enabled</id>
     <content type="html"><![CDATA[<p>
 The recently released <code>Google Social Graph API</code><em> was a bit of a wake-up call for me on the power and importance of microformats</em>.  So I've hacked together a quick implementation of XFN_ for the blogroll, and added a few <code>rel=me</code> links as well.</p>
 

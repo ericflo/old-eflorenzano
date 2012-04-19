@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Open Source | Eric Florenzano's Blog]]></title>
-  <link href="http://ericflo.github.com/blog/categories/open-source/atom.xml" rel="self"/>
-  <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T18:32:48-08:00</updated>
-  <id>http://ericflo.github.com/</id>
+  <link href="http://eflorenzano.com/blog/categories/open-source/atom.xml" rel="self"/>
+  <link href="http://eflorenzano.com/"/>
+  <updated>2012-04-18T17:34:47-07:00</updated>
+  <id>http://eflorenzano.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Announcing django-threadedcomments]]></title>
-    <link href="http://ericflo.github.com/blog/2008/01/23/announcing-django-threadedcomments/"/>
+    <link href="http://eflorenzano.com/blog/2008/01/23/announcing-django-threadedcomments/"/>
     <updated>2008-01-23T09:26:04-08:00</updated>
-    <id>http://ericflo.github.com/blog/2008/01/23/announcing-django-threadedcomments</id>
+    <id>http://eflorenzano.com/blog/2008/01/23/announcing-django-threadedcomments</id>
     <content type="html"><![CDATA[<p>
 Django-threadedcomments_ is a simple yet flexible threaded commenting system for Django.  What I mean when I say threaded is that commenters can reply not only to the original item, but to other comments as well.  It is very similar to what Reddit or Digg have in their comments sections.</p>
 
@@ -45,9 +45,9 @@ Django-threadedcomments_ is a simple yet flexible threaded commenting system for
   
   <entry>
     <title type="html"><![CDATA[Getting Involved in the Django Project]]></title>
-    <link href="http://ericflo.github.com/blog/2007/12/07/getting-involved-django-project/"/>
+    <link href="http://eflorenzano.com/blog/2007/12/07/getting-involved-django-project/"/>
     <updated>2007-12-07T10:24:10-08:00</updated>
-    <id>http://ericflo.github.com/blog/2007/12/07/getting-involved-django-project</id>
+    <id>http://eflorenzano.com/blog/2007/12/07/getting-involved-django-project</id>
     <content type="html"><![CDATA[<p>
 Getting involved in an open source project is hard.  I've been working with Django_ since early 2006 and doing so makes me want to contribute back to the project.  Several times now I've made attempts to do so, but all of them have failed.  Looking back it's easy to see where I, as a newcomer to the open source world, went wrong.  So let's start out with what <strong>not</strong> to do, by example.  After that I'll give some suggestions on what I think is the right way to go about it.</p>
 

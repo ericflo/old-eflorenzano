@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Software Development | Eric Florenzano's Blog]]></title>
-  <link href="http://ericflo.github.com/blog/categories/software-development/atom.xml" rel="self"/>
-  <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T18:32:48-08:00</updated>
-  <id>http://ericflo.github.com/</id>
+  <link href="http://eflorenzano.com/blog/categories/software-development/atom.xml" rel="self"/>
+  <link href="http://eflorenzano.com/"/>
+  <updated>2012-04-18T17:34:47-07:00</updated>
+  <id>http://eflorenzano.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Tagging cache keys for O(1) batch invalidation]]></title>
-    <link href="http://ericflo.github.com/blog/2009/03/01/tagging-cache-keys-o1-batch-invalidation/"/>
+    <link href="http://eflorenzano.com/blog/2009/03/01/tagging-cache-keys-o1-batch-invalidation/"/>
     <updated>2009-03-01T20:46:37-08:00</updated>
-    <id>http://ericflo.github.com/blog/2009/03/01/tagging-cache-keys-o1-batch-invalidation</id>
+    <id>http://eflorenzano.com/blog/2009/03/01/tagging-cache-keys-o1-batch-invalidation</id>
     <content type="html"><![CDATA[<p>
 Recently I've been spending some quality time trying to decrease page load times and decrease the number of database accesses on a site I'm working on.    As you would probably suspect, that means dealing with caching.  One common thing that I need to do, however, is invalidate a large group of cache keys when some action takes place.  I've devised a pattern for doing this, and while I'm sure it's not novel, I haven't seen any recent write-ups of this technique.  The base idea is that we're going to add another thin cache layer, and use the value from that first layer in the key to the second layer.</p>
 
@@ -119,9 +119,9 @@ def clear_favorite_cache(user):
   
   <entry>
     <title type="html"><![CDATA[Lessons Learned]]></title>
-    <link href="http://ericflo.github.com/blog/2008/04/10/lessions-learned/"/>
+    <link href="http://eflorenzano.com/blog/2008/04/10/lessions-learned/"/>
     <updated>2008-04-10T10:08:40-07:00</updated>
-    <id>http://ericflo.github.com/blog/2008/04/10/lessions-learned</id>
+    <id>http://eflorenzano.com/blog/2008/04/10/lessions-learned</id>
     <content type="html"><![CDATA[<p>
 Yesterday I came across a quote from <code>George Patton</code><em> (via</em>), which stuck me as really insightful, but later something burned the quote directly into my brain.</p>
 

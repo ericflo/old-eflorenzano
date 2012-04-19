@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: eyespot | Eric Florenzano's Blog]]></title>
-  <link href="http://ericflo.github.com/blog/categories/eyespot/atom.xml" rel="self"/>
-  <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T18:32:48-08:00</updated>
-  <id>http://ericflo.github.com/</id>
+  <link href="http://eflorenzano.com/blog/categories/eyespot/atom.xml" rel="self"/>
+  <link href="http://eflorenzano.com/"/>
+  <updated>2012-04-18T17:34:47-07:00</updated>
+  <id>http://eflorenzano.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Eyespot Internship: Complete]]></title>
-    <link href="http://ericflo.github.com/blog/2007/08/10/eyespot-internship-complete/"/>
+    <link href="http://eflorenzano.com/blog/2007/08/10/eyespot-internship-complete/"/>
     <updated>2007-08-10T21:48:35-07:00</updated>
-    <id>http://ericflo.github.com/blog/2007/08/10/eyespot-internship-complete</id>
+    <id>http://eflorenzano.com/blog/2007/08/10/eyespot-internship-complete</id>
     <content type="html"><![CDATA[<p>
 Today marked the last day of my internship at Eyespot.  There was such an outpouring of good will that it made me want to quit school immediately and stay with Eyespot.</p>
 
@@ -30,9 +30,9 @@ Today marked the last day of my internship at Eyespot.  There was such an outpou
   
   <entry>
     <title type="html"><![CDATA[SimpleAggregation update, Eyespot]]></title>
-    <link href="http://ericflo.github.com/blog/2007/08/02/simpleaggregation-update-eyespot/"/>
+    <link href="http://eflorenzano.com/blog/2007/08/02/simpleaggregation-update-eyespot/"/>
     <updated>2007-08-02T20:06:05-07:00</updated>
-    <id>http://ericflo.github.com/blog/2007/08/02/simpleaggregation-update-eyespot</id>
+    <id>http://eflorenzano.com/blog/2007/08/02/simpleaggregation-update-eyespot</id>
     <content type="html"><![CDATA[<p></p>
 
 <h2>django-simpleaggregation</h2>

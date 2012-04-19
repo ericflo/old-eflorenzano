@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Multiple Databases | Eric Florenzano's Blog]]></title>
-  <link href="http://ericflo.github.com/blog/categories/multiple-databases/atom.xml" rel="self"/>
-  <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T18:32:48-08:00</updated>
-  <id>http://ericflo.github.com/</id>
+  <link href="http://eflorenzano.com/blog/categories/multiple-databases/atom.xml" rel="self"/>
+  <link href="http://eflorenzano.com/"/>
+  <updated>2012-04-18T17:34:47-07:00</updated>
+  <id>http://eflorenzano.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Easy Multi-Database Support for Django]]></title>
-    <link href="http://ericflo.github.com/blog/2008/11/14/easy-multi-database-support-django/"/>
+    <link href="http://eflorenzano.com/blog/2008/11/14/easy-multi-database-support-django/"/>
     <updated>2008-11-14T21:51:44-08:00</updated>
-    <id>http://ericflo.github.com/blog/2008/11/14/easy-multi-database-support-django</id>
+    <id>http://eflorenzano.com/blog/2008/11/14/easy-multi-database-support-django</id>
     <content type="html"><![CDATA[<p></p>
 
 <h2>Background</h2>

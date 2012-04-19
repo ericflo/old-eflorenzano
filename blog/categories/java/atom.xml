@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Java | Eric Florenzano's Blog]]></title>
-  <link href="http://ericflo.github.com/blog/categories/java/atom.xml" rel="self"/>
-  <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T18:32:48-08:00</updated>
-  <id>http://ericflo.github.com/</id>
+  <link href="http://eflorenzano.com/blog/categories/java/atom.xml" rel="self"/>
+  <link href="http://eflorenzano.com/"/>
+  <updated>2012-04-18T17:34:47-07:00</updated>
+  <id>http://eflorenzano.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA["To IDE or not to IDE?", that is the question]]></title>
-    <link href="http://ericflo.github.com/blog/2008/11/13/ide-or-not-ide-question/"/>
+    <link href="http://eflorenzano.com/blog/2008/11/13/ide-or-not-ide-question/"/>
     <updated>2008-11-13T20:24:18-08:00</updated>
-    <id>http://ericflo.github.com/blog/2008/11/13/ide-or-not-ide-question</id>
+    <id>http://eflorenzano.com/blog/2008/11/13/ide-or-not-ide-question</id>
     <content type="html"><![CDATA[<p>
 A few years ago, when I first started using Python, I spent an inordinate amount
 of time looking for "a good Python IDE."  The classic <code>IDE links</code>_ page on the
@@ -62,9 +62,9 @@ off their feet?</p>
   
   <entry>
     <title type="html"><![CDATA[Inheritance vs. Composition]]></title>
-    <link href="http://ericflo.github.com/blog/2008/05/04/inheritance-vs-composition/"/>
+    <link href="http://eflorenzano.com/blog/2008/05/04/inheritance-vs-composition/"/>
     <updated>2008-05-04T16:12:38-07:00</updated>
-    <id>http://ericflo.github.com/blog/2008/05/04/inheritance-vs-composition</id>
+    <id>http://eflorenzano.com/blog/2008/05/04/inheritance-vs-composition</id>
     <content type="html"><![CDATA[<p>
 Lately there's been a lot of discussion in certain programming communities about which method of object extension makes more sense: inheritance, or composition.  Most of the time these discussions turn into debates, and when that happens developers tend to "take sides"--often moving towards extremist positions on the issue.  I've been sort of quietly thinking about it all lately, trying to determine which use case warrants which approach.  Here I show examples of both, explore some properties and consequences of both composition and inheritance, and finally talk about my own preferences.</p>
 

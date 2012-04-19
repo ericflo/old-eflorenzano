@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: SimpleAggregation | Eric Florenzano's Blog]]></title>
-  <link href="http://ericflo.github.com/blog/categories/simpleaggregation/atom.xml" rel="self"/>
-  <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T18:32:48-08:00</updated>
-  <id>http://ericflo.github.com/</id>
+  <link href="http://eflorenzano.com/blog/categories/simpleaggregation/atom.xml" rel="self"/>
+  <link href="http://eflorenzano.com/"/>
+  <updated>2012-04-18T17:34:47-07:00</updated>
+  <id>http://eflorenzano.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[SimpleAggregation update, Eyespot]]></title>
-    <link href="http://ericflo.github.com/blog/2007/08/02/simpleaggregation-update-eyespot/"/>
+    <link href="http://eflorenzano.com/blog/2007/08/02/simpleaggregation-update-eyespot/"/>
     <updated>2007-08-02T20:06:05-07:00</updated>
-    <id>http://ericflo.github.com/blog/2007/08/02/simpleaggregation-update-eyespot</id>
+    <id>http://eflorenzano.com/blog/2007/08/02/simpleaggregation-update-eyespot</id>
     <content type="html"><![CDATA[<p></p>
 
 <h2>django-simpleaggregation</h2>
@@ -57,9 +57,9 @@
   
   <entry>
     <title type="html"><![CDATA[iPhone Says: "Hello, World"]]></title>
-    <link href="http://ericflo.github.com/blog/2007/07/30/iphone-says-hello-world/"/>
+    <link href="http://eflorenzano.com/blog/2007/07/30/iphone-says-hello-world/"/>
     <updated>2007-07-30T22:45:48-07:00</updated>
-    <id>http://ericflo.github.com/blog/2007/07/30/iphone-says-hello-world</id>
+    <id>http://eflorenzano.com/blog/2007/07/30/iphone-says-hello-world</id>
     <content type="html"><![CDATA[<p>
 It was only a matter of time before the iPhone private SDK was cracked, and it looks as if that matter of time is Up_.  This news is exciting to me as an iPhone user, but also as a programmer.  Assuming Apple doesn't patch this, which is a fairly large assumption, the UIKit will just continue to get more and more community documentation, and get easier and easier to work with.  There are so many little apps that I want to see, (...for example, a voice record app!) that no bad can come out of this development.</p>
 
@@ -78,9 +78,9 @@ It was only a matter of time before the iPhone private SDK was cracked, and it l
   
   <entry>
     <title type="html"><![CDATA[Introducing django_simpleaggregation]]></title>
-    <link href="http://ericflo.github.com/blog/2007/07/30/introducing-django_simpleaggregation/"/>
+    <link href="http://eflorenzano.com/blog/2007/07/30/introducing-django_simpleaggregation/"/>
     <updated>2007-07-30T01:44:58-07:00</updated>
-    <id>http://ericflo.github.com/blog/2007/07/30/introducing-django_simpleaggregation</id>
+    <id>http://eflorenzano.com/blog/2007/07/30/introducing-django_simpleaggregation</id>
     <content type="html"><![CDATA[<p>
 I have just released version 0.1 of a spinoff project I did today.  I've been working on a side project which I'm not ready to talk about yet, and one of the things that I have consistently  needed was simple aggregation on Django models.  Nothing complicated like what we'll start to see with the new aggregation framework, but just simple things like counts on objects based on the uniqueness of certain fields of a model.</p>
 

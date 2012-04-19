@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Eric Florenzano's Blog]]></title>
-  <link href="http://ericflo.github.com/atom.xml" rel="self"/>
-  <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T18:32:48-08:00</updated>
-  <id>http://ericflo.github.com/</id>
+  <link href="http://eflorenzano.com/atom.xml" rel="self"/>
+  <link href="http://eflorenzano.com/"/>
+  <updated>2012-04-18T17:34:47-07:00</updated>
+  <id>http://eflorenzano.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
     
@@ -14,10 +14,212 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Using Twitter's iOS5 Integration for Single Sign-On]]></title>
+    <link href="http://eflorenzano.com/blog/2012/04/18/using-twitter-ios5-integration-single-sign-on/"/>
+    <updated>2012-04-18T19:00:00-07:00</updated>
+    <id>http://eflorenzano.com/blog/2012/04/18/using-twitter-ios5-integration-single-sign-on</id>
+    <content type="html"><![CDATA[<p>Apple has included integration with Twitter in iOS5, which can be really handy
+to allow your users to easily tweet or log in.  The only problem is that, as
+far as documentation of this feature is concerned, you&#8217;re largely on your own.
+This blog post is an attempt to correct that, at least in the case of sign-on.</p>
+<div class="section" id="add-the-twitter-and-accounts-libraries-to-your-project">
+<h2>Add the Twitter and Accounts libraries to your project</h2>
+<p>Click on your project file, and then on your build target.  Make sure you&#8217;re on
+the &quot;build phases&quot; tab.  Under the &quot;Link Binary With Libraries&quot; section, click
+the plus symbol to the bottom left, and search for <tt class="docutils literal">Accounts.framework</tt> and
+add it.  Then do the same for <tt class="docutils literal">Twitter.framework</tt>.  This will link all of the
+necessary libraries into your project so that we can use the Twitter
+integration.</p>
+</div>
+<div class="section" id="requesting-access-to-a-user-s-twitter-account">
+<h2>Requesting access to a user&#8217;s twitter account</h2>
+<p>The first thing to do when you want to let a user sign-on with Twitter is to
+create a long-lived (save it as an instance variable, for example) instance of
+<tt class="docutils literal">ACAccountStore</tt> and request access to the Twitter accounts contained within:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class="obj-c"><span class="line"><span class="n">ACAccountStore</span> <span class="o">*</span><span class="n">store</span> <span class="o">=</span> <span class="p">[[</span><span class="n">ACAccountStore</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span> <span class="c1">// Long-lived</span>
+</span><span class="line"><span class="n">ACAccountType</span> <span class="o">*</span><span class="n">twitterType</span> <span class="o">=</span> <span class="p">[</span><span class="n">store</span> <span class="nl">accountTypeWithAccountTypeIdentifier:</span><span class="n">ACAccountTypeIdentifierTwitter</span><span class="p">];</span>
+</span><span class="line"><span class="p">[</span><span class="n">store</span> <span class="nl">requestAccessToAccountsWithType:</span><span class="n">twitterType</span> <span class="nl">withCompletionHandler:</span><span class="o">^</span><span class="p">(</span><span class="kt">BOOL</span> <span class="n">granted</span><span class="p">,</span> <span class="n">NSError</span> <span class="o">*</span><span class="n">error</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">    <span class="k">if</span><span class="p">(</span><span class="n">granted</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">        <span class="c1">// Access has been granted, now we can access the accounts</span>
+</span><span class="line">    <span class="p">}</span>
+</span><span class="line">    <span class="c1">// Handle any error state here as you wish</span>
+</span><span class="line"><span class="p">}];</span>
+</span></code></pre></td></tr></table></div></figure><p>What do we do once we have access to the accounts?  Well, we get a list of &#8216;em.
+If they don&#8217;t have any accounts, then we can show a dialog asking them to
+connect one in the iOS settings app:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+</pre></td><td class="code"><pre><code class="obj-c"><span class="line"><span class="c1">// Remember that twitterType was instantiated above</span>
+</span><span class="line"><span class="n">NSArray</span> <span class="o">*</span><span class="n">twitterAccounts</span> <span class="o">=</span> <span class="p">[</span><span class="n">store</span> <span class="nl">accountsWithType:</span><span class="n">twitterType</span><span class="p">];</span>
+</span><span class="line">
+</span><span class="line"><span class="c1">// If there are no accounts, we need to pop up an alert</span>
+</span><span class="line"><span class="k">if</span><span class="p">(</span><span class="n">twitterAccounts</span> <span class="o">!=</span> <span class="nb">nil</span> <span class="o">&amp;&amp;</span> <span class="p">[</span><span class="n">twitterAccounts</span> <span class="n">count</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">    <span class="n">UIAlertView</span> <span class="o">*</span><span class="n">alert</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UIAlertView</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithTitle:</span><span class="s">@&quot;No Twitter Accounts&quot;</span>
+</span><span class="line">                                                    <span class="nl">message:</span><span class="s">@&quot;There are no Twitter accounts configured. You can add or create a Twitter account in Settings.&quot;</span>
+</span><span class="line">                                                   <span class="nl">delegate:</span><span class="nb">nil</span>
+</span><span class="line">                                          <span class="nl">cancelButtonTitle:</span><span class="s">@&quot;OK&quot;</span>
+</span><span class="line">                                          <span class="nl">otherButtonTitles:</span><span class="nb">nil</span><span class="p">];</span>
+</span><span class="line">    <span class="p">[</span><span class="n">alert</span> <span class="n">show</span><span class="p">];</span>
+</span><span class="line">    <span class="p">[</span><span class="n">alert</span> <span class="n">release</span><span class="p">];</span>
+</span><span class="line"><span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class="line">    <span class="n">ACAccount</span> <span class="o">*</span><span class="n">account</span> <span class="o">=</span> <span class="p">[</span><span class="n">twitterAccounts</span> <span class="nl">objectAtIndex:</span><span class="mi">0</span><span class="p">];</span>
+</span><span class="line">    <span class="c1">// Do something with their Twitter account</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></div>
+<div class="section" id="now-what">
+<h2>Now what?</h2>
+<p>Well, now you have an access token to read some information about the user from
+their Twitter stream.  The vast majority of apps will just want to grab the
+user&#8217;s basic info to get things like a username, real name, and maybe their
+location.  Here&#8217;s how that would look:</p>
+<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+<span class="line-number">34</span>
+<span class="line-number">35</span>
+<span class="line-number">36</span>
+<span class="line-number">37</span>
+<span class="line-number">38</span>
+<span class="line-number">39</span>
+<span class="line-number">40</span>
+<span class="line-number">41</span>
+<span class="line-number">42</span>
+<span class="line-number">43</span>
+<span class="line-number">44</span>
+<span class="line-number">45</span>
+<span class="line-number">46</span>
+<span class="line-number">47</span>
+<span class="line-number">48</span>
+<span class="line-number">49</span>
+<span class="line-number">50</span>
+<span class="line-number">51</span>
+</pre></td><td class="code"><pre><code class="obj-c"><span class="line"><span class="n">NSURL</span> <span class="o">*</span><span class="n">url</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSURL</span> <span class="nl">URLWithString:</span><span class="s">@&quot;http://api.twitter.com/1/account/verify_credentials.json&quot;</span><span class="p">];</span>
+</span><span class="line"><span class="n">TWRequest</span> <span class="o">*</span><span class="n">req</span> <span class="o">=</span> <span class="p">[[</span><span class="n">TWRequest</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithURL:</span><span class="n">url</span>
+</span><span class="line">                                     <span class="nl">parameters:</span><span class="nb">nil</span>
+</span><span class="line">                                  <span class="nl">requestMethod:</span><span class="n">TWRequestMethodGET</span><span class="p">];</span>
+</span><span class="line">
+</span><span class="line"><span class="c1">// Important: attach the user&#39;s Twitter ACAccount object to the request</span>
+</span><span class="line"><span class="n">req</span><span class="p">.</span><span class="n">account</span> <span class="o">=</span> <span class="n">account</span><span class="p">;</span>
+</span><span class="line">
+</span><span class="line"><span class="p">[</span><span class="n">req</span> <span class="nl">performRequestWithHandler:</span><span class="o">^</span><span class="p">(</span><span class="n">NSData</span> <span class="o">*</span><span class="n">responseData</span><span class="p">,</span>
+</span><span class="line">                                 <span class="n">NSHTTPURLResponse</span> <span class="o">*</span><span class="n">urlResponse</span><span class="p">,</span>
+</span><span class="line">                                 <span class="n">NSError</span> <span class="o">*</span><span class="n">error</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">
+</span><span class="line">    <span class="c1">// If there was an error making the request, display a message to the user</span>
+</span><span class="line">    <span class="k">if</span><span class="p">(</span><span class="n">error</span> <span class="o">!=</span> <span class="nb">nil</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">        <span class="n">UIAlertView</span> <span class="o">*</span><span class="n">alert</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UIAlertView</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithTitle:</span><span class="s">@&quot;Twitter Error&quot;</span>
+</span><span class="line">                                                        <span class="nl">message:</span><span class="s">@&quot;There was an error talking to Twitter. Please try again later.&quot;</span>
+</span><span class="line">                                                       <span class="nl">delegate:</span><span class="nb">nil</span>
+</span><span class="line">                                              <span class="nl">cancelButtonTitle:</span><span class="s">@&quot;OK&quot;</span>
+</span><span class="line">                                              <span class="nl">otherButtonTitles:</span><span class="nb">nil</span><span class="p">];</span>
+</span><span class="line">        <span class="p">[</span><span class="n">alert</span> <span class="n">show</span><span class="p">];</span>
+</span><span class="line">        <span class="p">[</span><span class="n">alert</span> <span class="n">release</span><span class="p">];</span>
+</span><span class="line">        <span class="k">return</span><span class="p">;</span>
+</span><span class="line">    <span class="p">}</span>
+</span><span class="line">
+</span><span class="line">    <span class="c1">// Parse the JSON response</span>
+</span><span class="line">    <span class="n">NSError</span> <span class="o">*</span><span class="n">jsonError</span> <span class="o">=</span> <span class="nb">nil</span><span class="p">;</span>
+</span><span class="line">    <span class="kt">id</span> <span class="n">resp</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSJSONSerialization</span> <span class="nl">JSONObjectWithData:</span><span class="n">responseData</span>
+</span><span class="line">                                                      <span class="nl">options:</span><span class="mi">0</span>
+</span><span class="line">                                                        <span class="nl">error:</span><span class="o">&amp;</span><span class="n">jsonError</span><span class="p">];</span>
+</span><span class="line">
+</span><span class="line">    <span class="c1">// If there was an error decoding the JSON, display a message to the user</span>
+</span><span class="line">    <span class="k">if</span><span class="p">(</span><span class="n">jsonError</span> <span class="o">!=</span> <span class="nb">nil</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">        <span class="n">UIAlertView</span> <span class="o">*</span><span class="n">alert</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UIAlertView</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithTitle:</span><span class="s">@&quot;Twitter Error&quot;</span>
+</span><span class="line">                                                        <span class="nl">message:</span><span class="s">@&quot;Twitter is not acting properly right now. Please try again later.&quot;</span>
+</span><span class="line">                                                       <span class="nl">delegate:</span><span class="nb">nil</span>
+</span><span class="line">                                              <span class="nl">cancelButtonTitle:</span><span class="s">@&quot;OK&quot;</span>
+</span><span class="line">                                              <span class="nl">otherButtonTitles:</span><span class="nb">nil</span><span class="p">];</span>
+</span><span class="line">        <span class="p">[</span><span class="n">alert</span> <span class="n">show</span><span class="p">];</span>
+</span><span class="line">        <span class="p">[</span><span class="n">alert</span> <span class="n">release</span><span class="p">];</span>
+</span><span class="line">        <span class="k">return</span><span class="p">;</span>
+</span><span class="line">    <span class="p">}</span>
+</span><span class="line">
+</span><span class="line">    <span class="n">NSString</span> <span class="o">*</span><span class="n">screenName</span> <span class="o">=</span> <span class="p">[</span><span class="n">resp</span> <span class="nl">objectForKey:</span><span class="s">@&quot;screen_name&quot;</span><span class="p">];</span>
+</span><span class="line">    <span class="n">NSString</span> <span class="o">*</span><span class="n">fullName</span> <span class="o">=</span> <span class="p">[</span><span class="n">resp</span> <span class="nl">objectForKey:</span><span class="s">@&quot;name&quot;</span><span class="p">];</span>
+</span><span class="line">    <span class="n">NSString</span> <span class="o">*</span><span class="n">location</span> <span class="o">=</span> <span class="p">[</span><span class="n">resp</span> <span class="nl">objectForKey:</span><span class="s">@&quot;location&quot;</span><span class="p">];</span>
+</span><span class="line">
+</span><span class="line">    <span class="c1">// Make sure to perform our operation back on the main thread</span>
+</span><span class="line">    <span class="n">dispatch_async</span><span class="p">(</span><span class="n">dispatch_get_main_queue</span><span class="p">(),</span> <span class="o">^</span><span class="p">{</span>
+</span><span class="line">        <span class="c1">// Do something with the fetched data</span>
+</span><span class="line">    <span class="p">});</span>
+</span><span class="line"><span class="p">}];</span>
+</span></code></pre></td></tr></table></div></figure><p>Most of the code here is actually error handling code.  The meat of what we&#8217;re
+doing is simply fetching the user&#8217;s credentials from Twitter, parsing the JSON,
+and doing something with it. (What exactly you want to do with the username and
+name data is left as an excercise for the reader.)</p>
+</div>
+<div class="section" id="that-s-it">
+<h2>That&#8217;s it?</h2>
+<p>Yep, that&#8217;s it.  You should be able to implement Twitter sign-on for your app
+with the simple code I&#8217;ve shown here.  The only bummer is the case when the
+user doesn&#8217;t have a Twitter account registered.  We&#8217;re <a class="reference external" href="http://stackoverflow.com/questions/10055853/opening-ios-settings-preferences">not allowed</a> to help
+the user out by sending them to the Settings app.  All we can do is tell users
+to go there and hope they can figure it out.</p>
+<p>Any other tips or tricks you have for implementing sign-on with Twitter on iOS?
+Be sure to <a class="reference external" href="http://twitter.com/ericflo">tweet me</a> about it!</p>
+<p>P.S. If you&#8217;re building mobile apps, my startup <a class="reference external" href="https://clutch.io/">clutch.io</a> can help you build
+and iterate faster on them. Check us out :)</p>
+</div>]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Reducing Code Nesting]]></title>
-    <link href="http://ericflo.github.com/blog/2012/01/01/reducing-code-nesting/"/>
+    <link href="http://eflorenzano.com/blog/2012/01/01/reducing-code-nesting/"/>
     <updated>2012-01-01T18:00:00-08:00</updated>
-    <id>http://ericflo.github.com/blog/2012/01/01/reducing-code-nesting</id>
+    <id>http://eflorenzano.com/blog/2012/01/01/reducing-code-nesting</id>
     <content type="html"><![CDATA[<p>&quot;This guy&#8217;s code sucks!&quot;  It&#8217;s something we&#8217;ve all said or thought when we run
 into code we don&#8217;t like.  Sometimes it&#8217;s because it&#8217;s buggy, sometimes it&#8217;s
 because it conforms to a style we don&#8217;t like, and sometimes it&#8217;s because it
@@ -391,9 +593,9 @@ admirable goal, and you find more and more ways to achieve it.</p>
   
   <entry>
     <title type="html"><![CDATA[The Technology Behind Convore]]></title>
-    <link href="http://ericflo.github.com/blog/2011/02/16/technology-behind-convore/"/>
+    <link href="http://eflorenzano.com/blog/2011/02/16/technology-behind-convore/"/>
     <updated>2011-02-16T12:29:35-08:00</updated>
-    <id>http://ericflo.github.com/blog/2011/02/16/technology-behind-convore</id>
+    <id>http://eflorenzano.com/blog/2011/02/16/technology-behind-convore</id>
     <content type="html"><![CDATA[<p>We launched <a class="reference external" href="https://convore.com/">Convore</a> last week, and the first question developers tend to ask
 when they find <a class="reference external" href="https://convore.com/">Convore</a> is &quot;what technology powers this site?&quot;  It is asked so
 often, in fact, that we have started to copy and paste the same short response
@@ -544,9 +746,9 @@ feel free to join <a class="reference external" href="https://convore.com/">Conv
   
   <entry>
     <title type="html"><![CDATA[An Object Lesson in How to Respond to Criticism]]></title>
-    <link href="http://ericflo.github.com/blog/2010/10/10/object-lesson-how-respond-criticism/"/>
+    <link href="http://eflorenzano.com/blog/2010/10/10/object-lesson-how-respond-criticism/"/>
     <updated>2010-10-10T09:56:12-07:00</updated>
-    <id>http://ericflo.github.com/blog/2010/10/10/object-lesson-how-respond-criticism</id>
+    <id>http://eflorenzano.com/blog/2010/10/10/object-lesson-how-respond-criticism</id>
     <content type="html"><![CDATA[<p>In the moments leading up to my DjangoCon keynote this year (called
 <a class="reference external" href="http://djangocon.blip.tv/file/4112452/">Why Django Sucks, and How We Can Fix It</a>), I pictured the room an hour in the
 future and imagined what things would be like.  I envisioned all kinds of
@@ -609,9 +811,9 @@ voice.  This is just written from my perspective.</p>]]></content>
   
   <entry>
     <title type="html"><![CDATA[Why node.js disappoints me]]></title>
-    <link href="http://ericflo.github.com/blog/2010/09/27/why-node-disappoints-me/"/>
+    <link href="http://eflorenzano.com/blog/2010/09/27/why-node-disappoints-me/"/>
     <updated>2010-09-27T01:23:47-07:00</updated>
-    <id>http://ericflo.github.com/blog/2010/09/27/why-node-disappoints-me</id>
+    <id>http://eflorenzano.com/blog/2010/09/27/why-node-disappoints-me</id>
     <content type="html"><![CDATA[<p><a class="reference external" href="http://nodejs.org/">Node.js</a> is currently at the center of a huge cyclone of hype.  At this point it&#8217;s clear that Node is going to be a major player in the next few years of web development.  It&#8217;s no wonder, either!  It represents a fresh start, one with no legacy synchronous baggage in our increasingly asynchronous, increasingly real-time web. And it&#8217;s accessible to anyone who&#8217;s written JavaScript (read: all web developers.)</p>
 <p>Oh, and those benchmarks!  Compared trivially to the currently popular web technologies, it seems an obvious leap forward.</p>
 <p>Yet one of Node&#8217;s advantages that you&#8217;ll hear repeated again and again by its proponents is that you can now code in One Language, and you won&#8217;t have to deal with the cognitive load of context switching between different languages.  Especially as ORMs and NoSQL continue to rise in popularity, there&#8217;s no need to even deal with SQL. At the end of the day you&#8217;re writing JavaScript, HTML, and CSS, and that&#8217;s it.</p>
@@ -630,9 +832,9 @@ voice.  This is just written from my perspective.</p>]]></content>
   
   <entry>
     <title type="html"><![CDATA[We need a new word for "Open"]]></title>
-    <link href="http://ericflo.github.com/blog/2010/05/20/we-need-new-word-open/"/>
+    <link href="http://eflorenzano.com/blog/2010/05/20/we-need-new-word-open/"/>
     <updated>2010-05-20T00:09:27-07:00</updated>
-    <id>http://ericflo.github.com/blog/2010/05/20/we-need-new-word-open</id>
+    <id>http://eflorenzano.com/blog/2010/05/20/we-need-new-word-open</id>
     <content type="html"><![CDATA[<p>When I say I&#8217;m developing an &quot;open&quot; API, what does that mean to you?</p>
 <p>To Facebook, it means something where you can get at some of your own data, as long as you abide by their restrictions on what you can do with it.</p>
 <p>To Twitter, it means something where you get back what you put in.</p>
@@ -644,9 +846,9 @@ voice.  This is just written from my perspective.</p>]]></content>
   
   <entry>
     <title type="html"><![CDATA[How do we kick our synchronous addiction?]]></title>
-    <link href="http://ericflo.github.com/blog/2010/02/08/how-do-we-kick-our-synchronous-addiction/"/>
+    <link href="http://eflorenzano.com/blog/2010/02/08/how-do-we-kick-our-synchronous-addiction/"/>
     <updated>2010-02-08T22:15:31-08:00</updated>
-    <id>http://ericflo.github.com/blog/2010/02/08/how-do-we-kick-our-synchronous-addiction</id>
+    <id>http://eflorenzano.com/blog/2010/02/08/how-do-we-kick-our-synchronous-addiction</id>
     <content type="html"><![CDATA[<p>Asynchronous programming is superior <a class="reference external" href="http://blog.webfaction.com/a-little-holiday-present">both in memory usage and in overall throughput</a> when compared to synchronous programming .  We&#8217;ve <a class="reference external" href="http://www.kegel.com/c10k.html">known this fact for years</a>.  If we look at Django or Ruby on Rails, arguably the two most promising new web application frameworks to emerge in the past few years, both of them are written in such a way that synchronous programming  is assumed. Why is it that even in 2010 we&#8217;re still writing programs that rely on synchronous programming ?</p>
 <p>The reason that we&#8217;re stuck on synchronous programming  is twofold.  Firstly, the programming model required for straightforward asynchronous implementations is inconvenient.  Secondly, popular and/or mainstream languages lack the built-in language constructs that are needed to implement a less-straightforward approach to asynchronous programming.</p>
 <div class="section" id="asynchronous-programming-is-too-hard">
@@ -743,9 +945,9 @@ voice.  This is just written from my perspective.</p>]]></content>
   
   <entry>
     <title type="html"><![CDATA[You care about Facebook, you just might not know it yet]]></title>
-    <link href="http://ericflo.github.com/blog/2009/11/10/you-care-about-facebook-you-just-might-not-know-it/"/>
+    <link href="http://eflorenzano.com/blog/2009/11/10/you-care-about-facebook-you-just-might-not-know-it/"/>
     <updated>2009-11-10T22:25:12-08:00</updated>
-    <id>http://ericflo.github.com/blog/2009/11/10/you-care-about-facebook-you-just-might-not-know-it</id>
+    <id>http://eflorenzano.com/blog/2009/11/10/you-care-about-facebook-you-just-might-not-know-it</id>
     <content type="html"><![CDATA[<p>I recently had a conversation with a few friends that I know through the Python community. These are people who I respect a great deal, and look to for advice and insight when it comes to web development.  During the course of this conversation, the subject of Facebook came up.  What I wasn&#8217;t expecting at all was that a large number of them said that they have no interest in Facebook, and quite a few of them proudly didn&#8217;t even have accounts.</p>
 <p>To put it bluntly, I believe that ignorance of Facebook is a major handicap today, both for developers and for entrepreneurs, and people who are not paying attention to it are burying their head in the sand.</p>
 <p>Facebook has gotten to a point where it&#8217;s the destination where <a class="reference external" href="http://mashable.com/2009/09/17/facebook-google-time-spent/">the most time is spent online</a>.  It gets an estimated <a class="reference external" href="https://www.google.com/adplanner/planning/site_profile#siteDetails?identifier=facebook.com&amp;lp=true">260 billion</a> (that&#8217;s a B on that number) pageviews per month.  In a single week, new properties are able to garner <a class="reference external" href="http://www.insidesocialgames.com/2009/10/08/zyngas-cafe-world-goes-from-0-to-8-6-million-users-in-a-week-with-big-implications/">8.6 million new active users</a>. Sites which implement <a class="reference external" href="http://developers.facebook.com/connect.php">Facebook Connect</a> typically see a <a class="reference external" href="http://www.businessinsider.com/six-months-in-facebook-connect-is-a-huge-success-2009-7">1.3x-2x boost in registrations</a>. Companies building on Facebook&#8217;s platform are <a class="reference external" href="http://www.guardian.co.uk/technology/2009/nov/09/playfish-ea">being sold for 400 million dollars</a> and are <a class="reference external" href="http://www.virtualgoodsnews.com/2009/04/100m-annual-revenues-reported-for-zynga.html">making 100 million dollars yearly</a>. There are over <cite>300 million</cite> active registered users.  In other words, if you talk to a person that spends any time on the internet at all, they likely have a Facebook account.  These numbers, by the way, are trending <a class="reference external" href="http://www.insidefacebook.com/2009/08/12/comscore-facebooks-us-audience-jumps-by-14-in-july/">up and to the right&#8211;</a>.</p>
@@ -758,9 +960,9 @@ voice.  This is just written from my perspective.</p>]]></content>
   
   <entry>
     <title type="html"><![CDATA[My Thoughts on NoSQL]]></title>
-    <link href="http://ericflo.github.com/blog/2009/07/21/my-thoughts-nosql/"/>
+    <link href="http://eflorenzano.com/blog/2009/07/21/my-thoughts-nosql/"/>
     <updated>2009-07-21T06:44:17-07:00</updated>
-    <id>http://ericflo.github.com/blog/2009/07/21/my-thoughts-nosql</id>
+    <id>http://eflorenzano.com/blog/2009/07/21/my-thoughts-nosql</id>
     <content type="html"><![CDATA[<p>Over the past few years, relational databases have fallen out of favor for a
 number of influential people in our industry.  I&#8217;d like to weigh in on that,
 but before doing so, I&#8217;d like to give my executive summary of the events leading up to
@@ -911,9 +1113,9 @@ agree with my thoughts or do you think I&#8217;m full of it?</p>
   
   <entry>
     <title type="html"><![CDATA[Flojax: A unobtrusive and easy strategy for creating AJAX-style web applications]]></title>
-    <link href="http://ericflo.github.com/blog/2009/04/02/flojax-unobtrusive-and-easy-strategy-creating-ajax/"/>
+    <link href="http://eflorenzano.com/blog/2009/04/02/flojax-unobtrusive-and-easy-strategy-creating-ajax/"/>
     <updated>2009-04-02T19:05:18-07:00</updated>
-    <id>http://ericflo.github.com/blog/2009/04/02/flojax-unobtrusive-and-easy-strategy-creating-ajax</id>
+    <id>http://eflorenzano.com/blog/2009/04/02/flojax-unobtrusive-and-easy-strategy-creating-ajax</id>
     <content type="html"><![CDATA[<p>Writing AJAX-style web applications can be very tedious.  If you&#8217;re using XML
 as your transport layer, you have to parse the XML before you can work with it.
 It&#8217;s a bit easier if you&#8217;re using JSON, but once you have parsed the data, the
@@ -1195,9 +1397,9 @@ for your web applications?  If so, how do they differ from what I&#8217;ve descr
   
   <entry>
     <title type="html"><![CDATA[Tagging cache keys for O(1) batch invalidation]]></title>
-    <link href="http://ericflo.github.com/blog/2009/03/01/tagging-cache-keys-o1-batch-invalidation/"/>
+    <link href="http://eflorenzano.com/blog/2009/03/01/tagging-cache-keys-o1-batch-invalidation/"/>
     <updated>2009-03-01T20:46:37-08:00</updated>
-    <id>http://ericflo.github.com/blog/2009/03/01/tagging-cache-keys-o1-batch-invalidation</id>
+    <id>http://eflorenzano.com/blog/2009/03/01/tagging-cache-keys-o1-batch-invalidation</id>
     <content type="html"><![CDATA[<p>Recently I&#8217;ve been spending some quality time trying to decrease page load times and decrease the number of database accesses on a site I&#8217;m working on.    As you would probably suspect, that means dealing with caching.  One common thing that I need to do, however, is invalidate a large group of cache keys when some action takes place.  I&#8217;ve devised a pattern for doing this, and while I&#8217;m sure it&#8217;s not novel, I haven&#8217;t seen any recent write-ups of this technique.  The base idea is that we&#8217;re going to add another thin cache layer, and use the value from that first layer in the key to the second layer.</p>
 <p>First, let me give a concrete example of the problem that I&#8217;m trying to solve.  I&#8217;m going to use Django/Python from here on in, but you could substitute anything else, as this pattern should work across other frameworks and even other languages.</p>
 <figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
@@ -1314,9 +1516,9 @@ for your web applications?  If so, how do they differ from what I&#8217;ve descr
   
   <entry>
     <title type="html"><![CDATA[Notice Something Different?]]></title>
-    <link href="http://ericflo.github.com/blog/2009/02/28/notice-something-different/"/>
+    <link href="http://eflorenzano.com/blog/2009/02/28/notice-something-different/"/>
     <updated>2009-02-28T17:24:25-08:00</updated>
-    <id>http://ericflo.github.com/blog/2009/02/28/notice-something-different</id>
+    <id>http://eflorenzano.com/blog/2009/02/28/notice-something-different</id>
     <content type="html"><![CDATA[<p>Several months ago after rolling out the lifestreaming features on this site, I became unhappy with the way that the design scaled with the new feature.  Around that time I did a purely-visual refactor (just templates and CSS changed&#8211;no code), but it has sat untouched on my hard drive for several months.</p>
 <p>Today I ran across that redesign and since it essentially looked complete, I deployed it to the site.  I&#8217;m still not very happy with the design, but I think that this time it&#8217;s at least easier to read than the last one, which had become very cluttered and difficult to navigate and read.</p>
 <p>Let me know what you think in the comments.</p>]]></content>
@@ -1324,9 +1526,9 @@ for your web applications?  If so, how do they differ from what I&#8217;ve descr
   
   <entry>
     <title type="html"><![CDATA[Writing Blazing Fast, Infinitely Scalable, Pure-WSGI Utilities]]></title>
-    <link href="http://ericflo.github.com/blog/2009/01/08/writing-blazing-fast-infinitely-scalable-pure-wsgi/"/>
+    <link href="http://eflorenzano.com/blog/2009/01/08/writing-blazing-fast-infinitely-scalable-pure-wsgi/"/>
     <updated>2009-01-08T02:29:10-08:00</updated>
-    <id>http://ericflo.github.com/blog/2009/01/08/writing-blazing-fast-infinitely-scalable-pure-wsgi</id>
+    <id>http://eflorenzano.com/blog/2009/01/08/writing-blazing-fast-infinitely-scalable-pure-wsgi</id>
     <content type="html"><![CDATA[<p>Lately I&#8217;ve really fallen in love with writing utilities whose interface is
 simply HTTP.  By making it accessible via HTTP, it&#8217;s really easy to write
 clients that talk to the utility and, if the need arises, there are lots of
@@ -1712,9 +1914,9 @@ subject.</p>
   
   <entry>
     <title type="html"><![CDATA[2008 in Review & 2009 Goals]]></title>
-    <link href="http://ericflo.github.com/blog/2009/01/02/2008-review-2009-goals/"/>
+    <link href="http://eflorenzano.com/blog/2009/01/02/2008-review-2009-goals/"/>
     <updated>2009-01-02T19:19:17-08:00</updated>
-    <id>http://ericflo.github.com/blog/2009/01/02/2008-review-2009-goals</id>
+    <id>http://eflorenzano.com/blog/2009/01/02/2008-review-2009-goals</id>
     <content type="html"><![CDATA[<p>Yesterday was the day of &quot;2008 in review&quot; posts.  I really enjoyed reading over
 what people had accomplished during the year, and what they planned on doing in
 the new year.  I hadn&#8217;t planned on writing this post, but for some reason I&#8217;m
@@ -1786,9 +1988,9 @@ anything like last year, I&#8217;m in for quite a ride.</p>
   
   <entry>
     <title type="html"><![CDATA[It's been a wild ride]]></title>
-    <link href="http://ericflo.github.com/blog/2008/11/30/its-been-wild-ride/"/>
+    <link href="http://eflorenzano.com/blog/2008/11/30/its-been-wild-ride/"/>
     <updated>2008-11-30T15:58:11-08:00</updated>
-    <id>http://ericflo.github.com/blog/2008/11/30/its-been-wild-ride</id>
+    <id>http://eflorenzano.com/blog/2008/11/30/its-been-wild-ride</id>
     <content type="html"><![CDATA[<p>This post is my final post in the blog-post-per-day challenge.  There have been days when I really didn&#8217;t want to blog (resulting in posts <a class="reference external" href="http://www.eflorenzano.com/blog/post/why-you-should-blog/">like this</a>), and there have been days where I was excited about what I was writing about and spent a lot of time on a post (resulting in posts like <a class="reference external" href="http://www.eflorenzano.com/blog/post/easy-multi-database-support-django/">this one</a>).  It was much more difficult and time-consuming than I was expecting.  Another thing I wasn&#8217;t expecting which actually kept motivating me to write more: actual traffic to this site.  Previously this site saw maybe 100 hits/day due to mostly various google hits on certain Django topics.  When I started doing the blog post-per-day thing, however, this is what my traffic turned into:</p>
 <img alt="http://media.eflorenzano.com/img/analytics.png" src="http://media.eflorenzano.com/img/analytics.png" />
 <p>But as I started to look at where that traffic was coming from, I realized it wasn&#8217;t organic at all.  <em>(insert sad puppy face here)</em>  In fact, most of the traffic was coming from just a few sites.  Here&#8217;s what my top 10 referring sites were:</p>
@@ -1823,9 +2025,9 @@ anything like last year, I&#8217;m in for quite a ride.</p>
   
   <entry>
     <title type="html"><![CDATA[Why CouchDB Rocks]]></title>
-    <link href="http://ericflo.github.com/blog/2008/11/29/why-couchdb-rocks/"/>
+    <link href="http://eflorenzano.com/blog/2008/11/29/why-couchdb-rocks/"/>
     <updated>2008-11-29T14:31:31-08:00</updated>
-    <id>http://ericflo.github.com/blog/2008/11/29/why-couchdb-rocks</id>
+    <id>http://eflorenzano.com/blog/2008/11/29/why-couchdb-rocks</id>
     <content type="html"><![CDATA[<p>Last week I wrote an article called <a class="reference external" href="http://www.eflorenzano.com/blog/post/why-couchdb-sucks/">Why CouchDB Sucks</a>, which many people
 correctly said should have been called &quot;What CouchDB Sucks at Doing&quot;.  Nearly
 everyone pointed out that it was not designed to do the things that I was
@@ -1905,9 +2107,9 @@ CouchDB rocks.  But don&#8217;t take my word for it&#8211;try it out for yoursel
   
   <entry>
     <title type="html"><![CDATA[Drop-dead simple Django caching]]></title>
-    <link href="http://ericflo.github.com/blog/2008/11/28/drop-dead-simple-django-caching/"/>
+    <link href="http://eflorenzano.com/blog/2008/11/28/drop-dead-simple-django-caching/"/>
     <updated>2008-11-28T21:30:13-08:00</updated>
-    <id>http://ericflo.github.com/blog/2008/11/28/drop-dead-simple-django-caching</id>
+    <id>http://eflorenzano.com/blog/2008/11/28/drop-dead-simple-django-caching</id>
     <content type="html"><![CDATA[<p>Caching is easy to screw up.  Usually it&#8217;s a manual process which is error-prone
 and tedious.  It&#8217;s actually quite easy to cache, but knowing when to invalidate
 which caches becomes a lot harder.  There is a subset of caching the caching
@@ -2055,9 +2257,9 @@ good, simple, Django caching library have?</p>]]></content>
   
   <entry>
     <title type="html"><![CDATA[Reverse HTTP]]></title>
-    <link href="http://ericflo.github.com/blog/2008/11/27/reverse-http/"/>
+    <link href="http://eflorenzano.com/blog/2008/11/27/reverse-http/"/>
     <updated>2008-11-27T10:31:05-08:00</updated>
-    <id>http://ericflo.github.com/blog/2008/11/27/reverse-http</id>
+    <id>http://eflorenzano.com/blog/2008/11/27/reverse-http</id>
     <content type="html"><![CDATA[<p>Yesterday I <a class="reference external" href="http://www.eflorenzano.com/blog/post/web-hooks/">wrote about Web Hooks</a> and how powerful it could be if one web
 service sends HTTP requests to another web service.  Today I want to take that
 concept one step further.  What if you tell that service that you would like it
@@ -2096,9 +2298,9 @@ implementation of the protocol in action, check out <a class="reference external
   
   <entry>
     <title type="html"><![CDATA["Web Hooks"]]></title>
-    <link href="http://ericflo.github.com/blog/2008/11/26/web-hooks/"/>
+    <link href="http://eflorenzano.com/blog/2008/11/26/web-hooks/"/>
     <updated>2008-11-26T20:43:30-08:00</updated>
-    <id>http://ericflo.github.com/blog/2008/11/26/web-hooks</id>
+    <id>http://eflorenzano.com/blog/2008/11/26/web-hooks</id>
     <content type="html"><![CDATA[<p>A few months back <a class="reference external" href="http://github.com/">GitHub</a> rolled out its implementation of something that they
 call &quot;Service Hooks&quot;.  The idea behind these hooks is that when you commit
 some new piece of code to GitHub, they want to be able to alert other services
@@ -2159,9 +2361,9 @@ hooks, because by doing just that, we can make the web a lot better.</p>]]></con
   
   <entry>
     <title type="html"><![CDATA[Screencast Competition for Pinax/Django]]></title>
-    <link href="http://ericflo.github.com/blog/2008/11/25/screencast-competition-pinaxdjango/"/>
+    <link href="http://eflorenzano.com/blog/2008/11/25/screencast-competition-pinaxdjango/"/>
     <updated>2008-11-25T20:47:04-08:00</updated>
-    <id>http://ericflo.github.com/blog/2008/11/25/screencast-competition-pinaxdjango</id>
+    <id>http://eflorenzano.com/blog/2008/11/25/screencast-competition-pinaxdjango</id>
     <content type="html"><![CDATA[<p>I love screencasts.  I love them at least enough to create 16 of them this year.
 That&#8217;s why when <a class="reference external" href="http://jtauber.com/">James Tauber</a> <a class="reference external" href="http://jtauber.com/blog/2008/11/24/first_pinax_screencast_competition/">announced</a> that the <a class="reference external" href="http://pinaxproject.com/">Pinax Project</a> would be
 having a <a class="reference external" href="http://contests.pinaxproject.com/contest/3/">screencast competition</a>, it made me very very happy!</p>
@@ -2179,106 +2381,6 @@ $100 at Amazon, will go to the very best screencast.  A second prize, $40 at
 Amazon, will go to the second best screencast.  As of this writing, there are no
 entries.  So what are you waiting for?  Head on over to the
 <a class="reference external" href="http://contests.pinaxproject.com/contest/3/">contest details page</a> and enter your screencast today!</p>]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Trying to Start a Programming Meme]]></title>
-    <link href="http://ericflo.github.com/blog/2008/11/24/trying-start-programming-meme/"/>
-    <updated>2008-11-24T21:13:18-08:00</updated>
-    <id>http://ericflo.github.com/blog/2008/11/24/trying-start-programming-meme</id>
-    <content type="html"><![CDATA[<p>I&#8217;ve never tried to start a meme before, but since I don&#8217;t really have anything
-great to post about, I&#8217;d like to try to start one.  I think this one could be
-particularly fun because it encourages implementation of a basic program in many
-different languages.</p>
-<p>Rules:</p>
-<ol class="arabic simple">
-<li>Implement a program that takes in a user&#8217;s name and their age, and prints
-hello to them once for every year that they have been alive.</li>
-<li>Post these rules, the source code for your solution, and the following list
-(with you included) on your blog.</li>
-<li>Bonus points if you implement it in a language not yet seen on the following
-list!</li>
-</ol>
-<p>The List:</p>
-<ol class="arabic simple">
-<li>[Python] <a class="reference external" href="http://www.eflorenzano.com/blog/post/trying-start-programming-meme">http://www.eflorenzano.com/blog/post/trying-start-programming-meme</a></li>
-<li>[Bash] <a class="reference external" href="http://aartemenko.com/texts/bash-meme/">http://aartemenko.com/texts/bash-meme/</a></li>
-<li>[C] <a class="reference external" href="http://dakrauth.com/media/site/text/hello.c">http://dakrauth.com/media/site/text/hello.c</a></li>
-<li>[Java] <a class="reference external" href="http://adoleo.com/blog/2008/nov/25/programming-meme/">http://adoleo.com/blog/2008/nov/25/programming-meme/</a></li>
-<li>[Python 3] <a class="reference external" href="http://mikewatkins.ca/2008/11/25/hello-meme/">http://mikewatkins.ca/2008/11/25/hello-meme/</a></li>
-<li>[Ruby] <a class="reference external" href="http://stroky.l.googlepages.com/gem">http://stroky.l.googlepages.com/gem</a></li>
-<li>[Ruby] <a class="reference external" href="http://im.camronflanders.com/archive/meme/">http://im.camronflanders.com/archive/meme/</a></li>
-<li>[Lisp] <a class="reference external" href="http://justinlilly.com/blog/2008/nov/25/back-on-the-horse/">http://justinlilly.com/blog/2008/nov/25/back-on-the-horse/</a></li>
-<li>[Lua] <a class="reference external" href="http://aartemenko.com/texts/lua-hello-meme/">http://aartemenko.com/texts/lua-hello-meme/</a></li>
-<li>[Functional Python] <a class="reference external" href="http://aartemenko.com/texts/python-functional-hello-meme/">http://aartemenko.com/texts/python-functional-hello-meme/</a></li>
-<li>[Erlang] <a class="reference external" href="http://surfacedepth.blogspot.com/2008/11/erics-programming-meme-in-erlang.html">http://surfacedepth.blogspot.com/2008/11/erics-programming-meme-in-erlang.html</a></li>
-<li>[Haskell] <a class="reference external" href="http://jasonwalsh.us/meme.html">http://jasonwalsh.us/meme.html</a></li>
-<li>[PHP] <a class="reference external" href="http://fitzgeraldsteele.wordpress.com/2008/11/25/memeing-in-php-2/">http://fitzgeraldsteele.wordpress.com/2008/11/25/memeing-in-php-2/</a></li>
-<li>[Javascript] <a class="reference external" href="http://www.taylanpince.com/blog/posts/responding-to-a-programming-meme/">http://www.taylanpince.com/blog/posts/responding-to-a-programming-meme/</a></li>
-<li>[Single-File Django] <a class="reference external" href="http://www.pocketuniverse.ca/archive/2008/november/27/florenzano-factor/">http://www.pocketuniverse.ca/archive/2008/november/27/florenzano-factor/</a></li>
-</ol>
-<p>(&#8230;and make sure to check out the comments on this post for some other fun implementations!)</p>
-<p>And here&#8217;s my implementation:</p>
-<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="n">name</span> <span class="o">=</span> <span class="nb">raw_input</span><span class="p">(</span><span class="s">&#39;Please enter your name: &#39;</span><span class="p">)</span>
-</span><span class="line"><span class="n">age</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">raw_input</span><span class="p">(</span><span class="s">&#39;Please enter your age: &#39;</span><span class="p">))</span>
-</span><span class="line">
-</span><span class="line"><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">age</span><span class="p">):</span>
-</span><span class="line">    <span class="k">print</span> <span class="s">&quot;</span><span class="si">%2d</span><span class="s">) Hello, </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure><p>And its output:</p>
-<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-<span class="line-number">18</span>
-<span class="line-number">19</span>
-<span class="line-number">20</span>
-<span class="line-number">21</span>
-<span class="line-number">22</span>
-<span class="line-number">23</span>
-<span class="line-number">24</span>
-</pre></td><td class="code"><pre><code class="bash"><span class="line">Please enter your name: Eric Florenzano
-</span><span class="line">Please enter your age: 22
-</span><span class="line"> 0<span class="o">)</span> Hello, Eric Florenzano
-</span><span class="line"> 1<span class="o">)</span> Hello, Eric Florenzano
-</span><span class="line"> 2<span class="o">)</span> Hello, Eric Florenzano
-</span><span class="line"> 3<span class="o">)</span> Hello, Eric Florenzano
-</span><span class="line"> 4<span class="o">)</span> Hello, Eric Florenzano
-</span><span class="line"> 5<span class="o">)</span> Hello, Eric Florenzano
-</span><span class="line"> 6<span class="o">)</span> Hello, Eric Florenzano
-</span><span class="line"> 7<span class="o">)</span> Hello, Eric Florenzano
-</span><span class="line"> 8<span class="o">)</span> Hello, Eric Florenzano
-</span><span class="line"> 9<span class="o">)</span> Hello, Eric Florenzano
-</span><span class="line">10<span class="o">)</span> Hello, Eric Florenzano
-</span><span class="line">11<span class="o">)</span> Hello, Eric Florenzano
-</span><span class="line">12<span class="o">)</span> Hello, Eric Florenzano
-</span><span class="line">13<span class="o">)</span> Hello, Eric Florenzano
-</span><span class="line">14<span class="o">)</span> Hello, Eric Florenzano
-</span><span class="line">15<span class="o">)</span> Hello, Eric Florenzano
-</span><span class="line">16<span class="o">)</span> Hello, Eric Florenzano
-</span><span class="line">17<span class="o">)</span> Hello, Eric Florenzano
-</span><span class="line">18<span class="o">)</span> Hello, Eric Florenzano
-</span><span class="line">19<span class="o">)</span> Hello, Eric Florenzano
-</span><span class="line">20<span class="o">)</span> Hello, Eric Florenzano
-</span><span class="line">21<span class="o">)</span> Hello, Eric Florenzano
-</span></code></pre></td></tr></table></div></figure><p>Well there you have it, my attempt at a programming meme.  I hope someone enjoys it!</p>]]></content>
   </entry>
   
 </feed>

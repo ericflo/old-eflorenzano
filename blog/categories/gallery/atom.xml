@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Gallery | Eric Florenzano's Blog]]></title>
-  <link href="http://ericflo.github.com/blog/categories/gallery/atom.xml" rel="self"/>
-  <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T18:32:48-08:00</updated>
-  <id>http://ericflo.github.com/</id>
+  <link href="http://eflorenzano.com/blog/categories/gallery/atom.xml" rel="self"/>
+  <link href="http://eflorenzano.com/"/>
+  <updated>2012-04-18T17:34:47-07:00</updated>
+  <id>http://eflorenzano.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Writing a Gallery App in Django, Part I]]></title>
-    <link href="http://ericflo.github.com/blog/2006/12/19/writing-gallery-app-part-one/"/>
+    <link href="http://eflorenzano.com/blog/2006/12/19/writing-gallery-app-part-one/"/>
     <updated>2006-12-19T20:28:17-08:00</updated>
-    <id>http://ericflo.github.com/blog/2006/12/19/writing-gallery-app-part-one</id>
+    <id>http://eflorenzano.com/blog/2006/12/19/writing-gallery-app-part-one</id>
     <content type="html"><![CDATA[<p>
 One thing that I see the need for on almost every site is a place to put images.  Whether it's a band website, a personal homepage, or a school newspaper, there will be a need for a photo gallery.  The easy way to do that is to use an open source package available already like Gallery2.  But that's written in PHP and it won't integrate easily with the rest of your site--especially if you use Django as the framework for the rest of your site.</p>
 

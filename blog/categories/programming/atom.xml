@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Programming | Eric Florenzano's Blog]]></title>
-  <link href="http://ericflo.github.com/blog/categories/programming/atom.xml" rel="self"/>
-  <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T18:32:48-08:00</updated>
-  <id>http://ericflo.github.com/</id>
+  <link href="http://eflorenzano.com/blog/categories/programming/atom.xml" rel="self"/>
+  <link href="http://eflorenzano.com/"/>
+  <updated>2012-04-18T17:34:47-07:00</updated>
+  <id>http://eflorenzano.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
     
@@ -14,10 +14,158 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Using Twitter's iOS5 Integration for Single Sign-On]]></title>
+    <link href="http://eflorenzano.com/blog/2012/04/18/using-twitter-ios5-integration-single-sign-on/"/>
+    <updated>2012-04-18T19:00:00-07:00</updated>
+    <id>http://eflorenzano.com/blog/2012/04/18/using-twitter-ios5-integration-single-sign-on</id>
+    <content type="html"><![CDATA[<p>Apple has included integration with Twitter in iOS5, which can be really handy
+to allow your users to easily tweet or log in.  The only problem is that, as
+far as documentation of this feature is concerned, you're largely on your own.
+This blog post is an attempt to correct that, at least in the case of sign-on.</p>
+
+<h1>Add the Twitter and Accounts libraries to your project</h1>
+
+<p>Click on your project file, and then on your build target.  Make sure you're on
+the "build phases" tab.  Under the "Link Binary With Libraries" section, click
+the plus symbol to the bottom left, and search for <code>Accounts.framework</code> and
+add it.  Then do the same for <code>Twitter.framework</code>.  This will link all of the
+necessary libraries into your project so that we can use the Twitter
+integration.</p>
+
+<h1>Requesting access to a user's twitter account</h1>
+
+<p>The first thing to do when you want to let a user sign-on with Twitter is to
+create a long-lived (save it as an instance variable, for example) instance of
+<code>ACAccountStore</code> and request access to the Twitter accounts contained within:</p>
+
+<p>.. code-block:: obj-c</p>
+
+<pre><code>ACAccountStore *store = [[ACAccountStore alloc] init]; // Long-lived
+ACAccountType *twitterType = [store accountTypeWithAccountTypeIdentifier:ACAccountTypeIdentifierTwitter];
+[store requestAccessToAccountsWithType:twitterType withCompletionHandler:^(BOOL granted, NSError *error) {
+    if(granted) {
+        // Access has been granted, now we can access the accounts
+    }
+    // Handle any error state here as you wish
+}];
+</code></pre>
+
+<p>What do we do once we have access to the accounts?  Well, we get a list of 'em.
+If they don't have any accounts, then we can show a dialog asking them to
+connect one in the iOS settings app:</p>
+
+<p>.. code-block:: obj-c</p>
+
+<pre><code>// Remember that twitterType was instantiated above
+NSArray *twitterAccounts = [store accountsWithType:twitterType];
+
+// If there are no accounts, we need to pop up an alert
+if(twitterAccounts != nil &amp;&amp; [twitterAccounts count] &gt; 0) {
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No Twitter Accounts"
+                                                    message:@"There are no Twitter accounts configured. You can add or create a Twitter account in Settings."
+                                                   delegate:nil
+                                          cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil];
+    [alert show];
+    [alert release];
+} else {
+    ACAccount *account = [twitterAccounts objectAtIndex:0];
+    // Do something with their Twitter account
+}
+</code></pre>
+
+<h1>Now what?</h1>
+
+<p>Well, now you have an access token to read some information about the user from
+their Twitter stream.  The vast majority of apps will just want to grab the
+user's basic info to get things like a username, real name, and maybe their
+location.  Here's how that would look:</p>
+
+<p>.. code-block:: obj-c</p>
+
+<pre><code>NSURL *url = [NSURL URLWithString:@"http://api.twitter.com/1/account/verify_credentials.json"];
+TWRequest *req = [[TWRequest alloc] initWithURL:url
+                                     parameters:nil
+                                  requestMethod:TWRequestMethodGET];
+
+// Important: attach the user's Twitter ACAccount object to the request
+req.account = account;
+
+[req performRequestWithHandler:^(NSData *responseData,
+                                 NSHTTPURLResponse *urlResponse,
+                                 NSError *error) {
+
+    // If there was an error making the request, display a message to the user
+    if(error != nil) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Twitter Error"
+                                                        message:@"There was an error talking to Twitter. Please try again later."
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
+        [alert release];
+        return;
+    }
+
+    // Parse the JSON response
+    NSError *jsonError = nil;
+    id resp = [NSJSONSerialization JSONObjectWithData:responseData
+                                                      options:0
+                                                        error:&amp;jsonError];
+
+    // If there was an error decoding the JSON, display a message to the user
+    if(jsonError != nil) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Twitter Error"
+                                                        message:@"Twitter is not acting properly right now. Please try again later."
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
+        [alert release];
+        return;
+    }
+
+    NSString *screenName = [resp objectForKey:@"screen_name"];
+    NSString *fullName = [resp objectForKey:@"name"];
+    NSString *location = [resp objectForKey:@"location"];
+
+    // Make sure to perform our operation back on the main thread
+    dispatch_async(dispatch_get_main_queue(), ^{
+        // Do something with the fetched data
+    });
+}];
+</code></pre>
+
+<p>Most of the code here is actually error handling code.  The meat of what we're
+doing is simply fetching the user's credentials from Twitter, parsing the JSON,
+and doing something with it. (What exactly you want to do with the username and
+name data is left as an excercise for the reader.)</p>
+
+<h1>That's it?</h1>
+
+<p>Yep, that's it.  You should be able to implement Twitter sign-on for your app
+with the simple code I've shown here.  The only bummer is the case when the
+user doesn't have a Twitter account registered.  We're <code>not allowed</code>_ to help
+the user out by sending them to the Settings app.  All we can do is tell users
+to go there and hope they can figure it out.</p>
+
+<p>Any other tips or tricks you have for implementing sign-on with Twitter on iOS?
+Be sure to <code>tweet me</code>_ about it!</p>
+
+<p>P.S. If you're building mobile apps, my startup <code>clutch.io</code>_ can help you build
+and iterate faster on them. Check us out :)</p>
+
+<p>.. <em><code>not allowed</code>: http://stackoverflow.com/questions/10055853/opening-ios-settings-preferences
+.. </em><code>tweet me</code>: http://twitter.com/ericflo
+.. _<code>clutch.io</code>: https://clutch.io/</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Reducing Code Nesting]]></title>
-    <link href="http://ericflo.github.com/blog/2012/01/01/reducing-code-nesting/"/>
+    <link href="http://eflorenzano.com/blog/2012/01/01/reducing-code-nesting/"/>
     <updated>2012-01-01T18:00:00-08:00</updated>
-    <id>http://ericflo.github.com/blog/2012/01/01/reducing-code-nesting</id>
+    <id>http://eflorenzano.com/blog/2012/01/01/reducing-code-nesting</id>
     <content type="html"><![CDATA[<p>"This guy's code sucks!"  It's something we've all said or thought when we run
 into code we don't like.  Sometimes it's because it's buggy, sometimes it's
 because it conforms to a style we don't like, and sometimes it's because it
@@ -297,9 +445,9 @@ admirable goal, and you find more and more ways to achieve it.</p>
   
   <entry>
     <title type="html"><![CDATA[Why node.js disappoints me]]></title>
-    <link href="http://ericflo.github.com/blog/2010/09/27/why-node-disappoints-me/"/>
+    <link href="http://eflorenzano.com/blog/2010/09/27/why-node-disappoints-me/"/>
     <updated>2010-09-27T01:23:47-07:00</updated>
-    <id>http://ericflo.github.com/blog/2010/09/27/why-node-disappoints-me</id>
+    <id>http://eflorenzano.com/blog/2010/09/27/why-node-disappoints-me</id>
     <content type="html"><![CDATA[<p>
 <code>Node.js</code>_ is currently at the center of a huge cyclone of hype.  At this point it's clear that Node is going to be a major player in the next few years of web development.  It's no wonder, either!  It represents a fresh start, one with no legacy synchronous baggage in our increasingly asynchronous, increasingly real-time web. And it's accessible to anyone who's written JavaScript (read: all web developers.)</p>
 
@@ -336,9 +484,9 @@ admirable goal, and you find more and more ways to achieve it.</p>
   
   <entry>
     <title type="html"><![CDATA[My Thoughts on NoSQL]]></title>
-    <link href="http://ericflo.github.com/blog/2009/07/21/my-thoughts-nosql/"/>
+    <link href="http://eflorenzano.com/blog/2009/07/21/my-thoughts-nosql/"/>
     <updated>2009-07-21T06:44:17-07:00</updated>
-    <id>http://ericflo.github.com/blog/2009/07/21/my-thoughts-nosql</id>
+    <id>http://eflorenzano.com/blog/2009/07/21/my-thoughts-nosql</id>
     <content type="html"><![CDATA[<p>
 Over the past few years, relational databases have fallen out of favor for a
 number of influential people in our industry.  I'd like to weigh in on that,
@@ -513,9 +661,9 @@ agree with my thoughts or do you think I'm full of it?
   
   <entry>
     <title type="html"><![CDATA[Flojax: A unobtrusive and easy strategy for creating AJAX-style web applications]]></title>
-    <link href="http://ericflo.github.com/blog/2009/04/02/flojax-unobtrusive-and-easy-strategy-creating-ajax/"/>
+    <link href="http://eflorenzano.com/blog/2009/04/02/flojax-unobtrusive-and-easy-strategy-creating-ajax/"/>
     <updated>2009-04-02T19:05:18-07:00</updated>
-    <id>http://ericflo.github.com/blog/2009/04/02/flojax-unobtrusive-and-easy-strategy-creating-ajax</id>
+    <id>http://eflorenzano.com/blog/2009/04/02/flojax-unobtrusive-and-easy-strategy-creating-ajax</id>
     <content type="html"><![CDATA[<p>
 Writing AJAX-style web applications can be very tedious.  If you're using XML
 as your transport layer, you have to parse the XML before you can work with it.
@@ -552,9 +700,9 @@ of full page reloads.</p>
 <p>.. code-block:: html</p>
 
 <pre><code>&lt;div class="buttons"&gt;
-    &lt;a href="http://ericflo.github.com/vote/up/item1/"&gt;Vote up&lt;/a&gt;
-    &lt;a href="http://ericflo.github.com/vote/down/item1/"&gt;Vote down&lt;/a&gt;
-    &lt;a href="http://ericflo.github.com/favorite/item1/"&gt;Add to your favorites&lt;/a&gt;
+    &lt;a href="http://eflorenzano.com/vote/up/item1/"&gt;Vote up&lt;/a&gt;
+    &lt;a href="http://eflorenzano.com/vote/down/item1/"&gt;Vote down&lt;/a&gt;
+    &lt;a href="http://eflorenzano.com/favorite/item1/"&gt;Add to your favorites&lt;/a&gt;
 &lt;/div&gt;
 </code></pre>
 
@@ -564,15 +712,15 @@ of full page reloads.</p>
 
 <pre><code>&lt;div class="buttons"&gt;
     {% if voted %}
-        &lt;a href="http://ericflo.github.com/vote/clear/{{ item.id }}/"&gt;Clear your vote&lt;/a&gt;
+        &lt;a href="http://eflorenzano.com/vote/clear/{{ item.id }}/"&gt;Clear your vote&lt;/a&gt;
     {% else %}
-        &lt;a href="http://ericflo.github.com/vote/up/{{ item.id }}/"&gt;Vote up&lt;/a&gt;
-        &lt;a href="http://ericflo.github.com/vote/down/{{ item.id }}/"&gt;Vote down&lt;/a&gt;
+        &lt;a href="http://eflorenzano.com/vote/up/{{ item.id }}/"&gt;Vote up&lt;/a&gt;
+        &lt;a href="http://eflorenzano.com/vote/down/{{ item.id }}/"&gt;Vote down&lt;/a&gt;
     {% endif %}
     {% if favorited %}
-        &lt;a href="http://ericflo.github.com/favorite/{{ item.id }}/"&gt;Add to your favorites&lt;/a&gt;
+        &lt;a href="http://eflorenzano.com/favorite/{{ item.id }}/"&gt;Add to your favorites&lt;/a&gt;
     {% else %}
-        &lt;a href="http://ericflo.github.com/unfavorite/{{ item.id }}/"&gt;Remove from your favorites&lt;/a&gt;
+        &lt;a href="http://eflorenzano.com/unfavorite/{{ item.id }}/"&gt;Remove from your favorites&lt;/a&gt;
     {% endif %}
 &lt;/div&gt;
 </code></pre>
@@ -600,15 +748,15 @@ fragment.</p>
 
 <pre><code>&lt;div class="buttons"&gt;
     {% if voted %}
-        &lt;a href="http://ericflo.github.com/vote/clear/{{ item.id }}/" class="flojax" rel="buttons"&gt;Clear your vote&lt;/a&gt;
+        &lt;a href="http://eflorenzano.com/vote/clear/{{ item.id }}/" class="flojax" rel="buttons"&gt;Clear your vote&lt;/a&gt;
     {% else %}
-        &lt;a href="http://ericflo.github.com/vote/up/{{ item.id }}/" class="flojax" rel="buttons"&gt;Vote up&lt;/a&gt;
-        &lt;a href="http://ericflo.github.com/vote/down/{{ item.id }}/" class="flojax" rel="buttons"&gt;Vote down&lt;/a&gt;
+        &lt;a href="http://eflorenzano.com/vote/up/{{ item.id }}/" class="flojax" rel="buttons"&gt;Vote up&lt;/a&gt;
+        &lt;a href="http://eflorenzano.com/vote/down/{{ item.id }}/" class="flojax" rel="buttons"&gt;Vote down&lt;/a&gt;
     {% endif %}
     {% if favorited %}
-        &lt;a href="http://ericflo.github.com/favorite/{{ item.id }}/" class="flojax" rel="buttons"&gt;Add to your favorites&lt;/a&gt;
+        &lt;a href="http://eflorenzano.com/favorite/{{ item.id }}/" class="flojax" rel="buttons"&gt;Add to your favorites&lt;/a&gt;
     {% else %}
-        &lt;a href="http://ericflo.github.com/unfavorite/{{ item.id }}/" class="flojax" rel="buttons"&gt;Remove from your favorites&lt;/a&gt;
+        &lt;a href="http://eflorenzano.com/unfavorite/{{ item.id }}/" class="flojax" rel="buttons"&gt;Remove from your favorites&lt;/a&gt;
     {% endif %}
 &lt;/div&gt;
 </code></pre>
@@ -756,110 +904,6 @@ approach.</p>
 
 <p>What do you think about this technique?  Are you using any techniques like this
 for your web applications?  If so, how do they differ from what I've described?
-</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Tagging cache keys for O(1) batch invalidation]]></title>
-    <link href="http://ericflo.github.com/blog/2009/03/01/tagging-cache-keys-o1-batch-invalidation/"/>
-    <updated>2009-03-01T20:46:37-08:00</updated>
-    <id>http://ericflo.github.com/blog/2009/03/01/tagging-cache-keys-o1-batch-invalidation</id>
-    <content type="html"><![CDATA[<p>
-Recently I've been spending some quality time trying to decrease page load times and decrease the number of database accesses on a site I'm working on.    As you would probably suspect, that means dealing with caching.  One common thing that I need to do, however, is invalidate a large group of cache keys when some action takes place.  I've devised a pattern for doing this, and while I'm sure it's not novel, I haven't seen any recent write-ups of this technique.  The base idea is that we're going to add another thin cache layer, and use the value from that first layer in the key to the second layer.</p>
-
-<p>First, let me give a concrete example of the problem that I'm trying to solve.  I'm going to use Django/Python from here on in, but you could substitute anything else, as this pattern should work across other frameworks and even other languages.</p>
-
-<p>.. code-block:: python</p>
-
-<pre><code>import datetime
-from django.db import models
-
-class Favorite(models.Model):
-    user = models.ForeignKey(User)
-    item = models.ForeignKey(Item)
-    date_added = models.DateTimeField(default=datetime.datetime.now)
-
-    def __unicode__(self):
-        return u'%s has favorited %s' % (self.user, self.item)
-</code></pre>
-
-<p>Given this model, now let's say that we have a function that gets the Favorite instances for a given user, which might look like this:</p>
-
-<p>.. code-block:: python</p>
-
-<pre><code>def get_favorites(user, start=None, end=None):
-    faves = Favorite.objects.filter(user=user)
-    return list(faves[start:end])
-</code></pre>
-
-<p>There's not much here yet--we're simply filtering to only include the Favorite instances for the given user, slicing it based on the given start and end numbers, and forcing evaluation before returning a list.  Now let's start thinking about how we will cache this.  We'll start by just implementing a naive cache strategy, which in this case simply means that the cache is never invalidated:</p>
-
-<p>.. code-block:: python</p>
-
-<pre><code>from django.core.cache import cache
-
-def get_favorites(user, start=None, end=None):
-    key = 'get_favorites-%s-%s-%s' % (user.id, start, end)
-    faves = cache.get(key)
-    if faves is not None:
-        return faves
-    faves = Favorite.objects.filter(user=user)[start:end]
-    cache.set(key, list(faves), 86400 * 7)
-    return faves
-</code></pre>
-
-<p>Now we come to the hard part: how do we invalidate those cache keys?  It's especially tricky because we don't know exactly what keys have been created.  What combinations of start/end have been given? We could invalidate all combinations of start/end up to some number, but that's horribly inefficient and wasteful.  So what do we do?  My solution is to introduce another layer.  Let me explain with code:</p>
-
-<p>.. code-block:: python</p>
-
-<pre><code>import uuid
-from django.core.cache import cache
-
-def favorite_list_hash(user):
-    key = 'favorite-list-hash-%s' % (user.id,)
-    cached_key_hash = cache.get(key)
-    if cached_key_hash:
-        key_hash = cached_key_hash
-    else:
-        key_hash = str(uuid.uuid4())
-        cache.set(key, key_hash, 86400 * 7)
-    return (key_hash, not cached_key_hash)
-</code></pre>
-
-<p>Essentially what this gives us is a temporary unique identifier for each user, that's either stored in cache or generated and stuffed into the cache.  How does this help?  We can use this identifier in the <em>keys</em> to the <code>get_favorites</code> function:</p>
-
-<p>.. code-block:: python</p>
-
-<pre><code>from django.core.cache import cache
-
-def get_favorites(user, start=None, end=None):
-    key_hash, created = favorite_list_hash(user)
-    key = 'get_favorites-%s-%s-%s-%s' % (user.id, start, end, key_hash)
-    if not created:
-        faves = cache.get(key)
-        if faves is not None:
-            return faves
-    faves = Favorite.objects.filter(user=user)[start:end]
-    cache.set(key, list(faves), 86400 * 7)
-    return faves
-</code></pre>
-
-<p>As you can see, the first thing we do is grab that hash for the user, then we use it as the last part of the key for the function.  The whole <code>if not created</code> thing is just an optimization that helps to avoid cache fetches when we know they will fail.  Here's the great thing now: invalidating all of the different cached versions of <code>get_favorite</code> for a given user is a single function call:</p>
-
-<p>.. code-block:: python</p>
-
-<pre><code>from django.core.cache import cache
-
-def clear_favorite_cache(user):
-    cache.delete('favorite-list-hash-%s' % (user.id,))
-</code></pre>
-
-<p>By deleting that single key, the next time <code>get_favorites</code> is called, it will call <code>favorite_list_hash</code> which will result in a cache miss, which will mean it will generate a new unique identifier and stuff it in cache, meaning that all of the keys for <code>get_favorites</code> are instantly different.  I think that this is a powerful pattern that allows for coarser-grained caching without really sacrificing much of anything.</p>
-
-<p>There is one aspect of this technique that some people will not like: it leaves old cache keys around taking up memory.  I don't consider this a problem because memory is cheap these days and Memcached is generally smart about evicting the least recently used data.</p>
-
-<p>I'm interested though, since I don't see people posting much about nontrivial cache key generation and invalidation.  How are you doing this type of thing?  Are most people just doing naive caching and calling that good enough?
 </p>
 ]]></content>
   </entry>

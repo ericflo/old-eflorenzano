@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Wil Wheaton | Eric Florenzano's Blog]]></title>
-  <link href="http://ericflo.github.com/blog/categories/wil-wheaton/atom.xml" rel="self"/>
-  <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T18:32:48-08:00</updated>
-  <id>http://ericflo.github.com/</id>
+  <link href="http://eflorenzano.com/blog/categories/wil-wheaton/atom.xml" rel="self"/>
+  <link href="http://eflorenzano.com/"/>
+  <updated>2012-04-18T17:34:47-07:00</updated>
+  <id>http://eflorenzano.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Memcached and OpenWebLoad]]></title>
-    <link href="http://ericflo.github.com/blog/2006/12/04/memcached-and-openwebload/"/>
+    <link href="http://eflorenzano.com/blog/2006/12/04/memcached-and-openwebload/"/>
     <updated>2006-12-04T13:46:58-08:00</updated>
-    <id>http://ericflo.github.com/blog/2006/12/04/memcached-and-openwebload</id>
+    <id>http://eflorenzano.com/blog/2006/12/04/memcached-and-openwebload</id>
     <content type="html"><![CDATA[<p>
 There has been a somewhat minor update to the site.  Now almost all of the site is cached.  That is, there is a memcached_ backend running on the server, and this website can take advantage of that.</p>
 

@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Bookmarklet | Eric Florenzano's Blog]]></title>
-  <link href="http://ericflo.github.com/blog/categories/bookmarklet/atom.xml" rel="self"/>
-  <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T18:32:48-08:00</updated>
-  <id>http://ericflo.github.com/</id>
+  <link href="http://eflorenzano.com/blog/categories/bookmarklet/atom.xml" rel="self"/>
+  <link href="http://eflorenzano.com/"/>
+  <updated>2012-04-18T17:34:47-07:00</updated>
+  <id>http://eflorenzano.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[FriendFeed Comment Expand Bookmarklet]]></title>
-    <link href="http://ericflo.github.com/blog/2008/05/27/friendfeed-comment-expand-bookmarklet/"/>
+    <link href="http://eflorenzano.com/blog/2008/05/27/friendfeed-comment-expand-bookmarklet/"/>
     <updated>2008-05-27T00:47:57-07:00</updated>
-    <id>http://ericflo.github.com/blog/2008/05/27/friendfeed-comment-expand-bookmarklet</id>
+    <id>http://eflorenzano.com/blog/2008/05/27/friendfeed-comment-expand-bookmarklet</id>
     <content type="html"><![CDATA[<p>
 Recently I've been using a lot of FriendFeed_ lately, and found it a bit annoying to expand comments one-by-one, so I wrote a quick bookmarklet to automatically expand all comments out.</p>
 

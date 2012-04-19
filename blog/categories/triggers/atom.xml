@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Triggers | Eric Florenzano's Blog]]></title>
-  <link href="http://ericflo.github.com/blog/categories/triggers/atom.xml" rel="self"/>
-  <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T18:32:48-08:00</updated>
-  <id>http://ericflo.github.com/</id>
+  <link href="http://eflorenzano.com/blog/categories/triggers/atom.xml" rel="self"/>
+  <link href="http://eflorenzano.com/"/>
+  <updated>2012-04-18T17:34:47-07:00</updated>
+  <id>http://eflorenzano.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Database triggers aren't evil, and they actually kind of rock]]></title>
-    <link href="http://ericflo.github.com/blog/2008/11/03/database-triggers-arent-evil-and-they-actually-kin/"/>
+    <link href="http://eflorenzano.com/blog/2008/11/03/database-triggers-arent-evil-and-they-actually-kin/"/>
     <updated>2008-11-03T18:44:19-08:00</updated>
-    <id>http://ericflo.github.com/blog/2008/11/03/database-triggers-arent-evil-and-they-actually-kin</id>
+    <id>http://eflorenzano.com/blog/2008/11/03/database-triggers-arent-evil-and-they-actually-kin</id>
     <content type="html"><![CDATA[<p></p>
 
 <h2>Who says they suck?</h2>

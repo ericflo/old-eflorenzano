@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: US Presidential Elections | Eric Florenzano's Blog]]></title>
-  <link href="http://ericflo.github.com/blog/categories/us-presidential-elections/atom.xml" rel="self"/>
-  <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T18:32:48-08:00</updated>
-  <id>http://ericflo.github.com/</id>
+  <link href="http://eflorenzano.com/blog/categories/us-presidential-elections/atom.xml" rel="self"/>
+  <link href="http://eflorenzano.com/"/>
+  <updated>2012-04-18T17:34:47-07:00</updated>
+  <id>http://eflorenzano.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[I Caucused Tonight]]></title>
-    <link href="http://ericflo.github.com/blog/2008/01/03/i-caucused-tonight/"/>
+    <link href="http://eflorenzano.com/blog/2008/01/03/i-caucused-tonight/"/>
     <updated>2008-01-03T18:20:58-08:00</updated>
-    <id>http://ericflo.github.com/blog/2008/01/03/i-caucused-tonight</id>
+    <id>http://eflorenzano.com/blog/2008/01/03/i-caucused-tonight</id>
     <content type="html"><![CDATA[<p>
 I just got back from the caucuses, and am happy to report that Obama took our precinct in a landslide.  It was an immensely interesting experience to be a part of this process and it really felt like I was doing something important--because I was.  What was most interesting was that a small group of dedicated Obama supporters conscientiously defected to go support Biden, because the Biden supporters pledged to support Edwards if Biden was not deemed viable.  This meant that Obama lost no delegates, but that Edwards lost one delegate.</p>
 

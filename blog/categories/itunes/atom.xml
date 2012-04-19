@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: iTunes | Eric Florenzano's Blog]]></title>
-  <link href="http://ericflo.github.com/blog/categories/itunes/atom.xml" rel="self"/>
-  <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T18:32:48-08:00</updated>
-  <id>http://ericflo.github.com/</id>
+  <link href="http://eflorenzano.com/blog/categories/itunes/atom.xml" rel="self"/>
+  <link href="http://eflorenzano.com/"/>
+  <updated>2012-04-18T17:34:47-07:00</updated>
+  <id>http://eflorenzano.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Information has a Long Way to Go]]></title>
-    <link href="http://ericflo.github.com/blog/2007/07/31/information-has-long-way-go/"/>
+    <link href="http://eflorenzano.com/blog/2007/07/31/information-has-long-way-go/"/>
     <updated>2007-07-31T20:29:33-07:00</updated>
-    <id>http://ericflo.github.com/blog/2007/07/31/information-has-long-way-go</id>
+    <id>http://eflorenzano.com/blog/2007/07/31/information-has-long-way-go</id>
     <content type="html"><![CDATA[<p>
 I don't know how Google<em> manages to <code>do it</code></em>!  They've linked music track/artist/album to online music vendors, a deceivingly simple-sounding task which has been the bane of my existence for the last two weeks.</p>
 

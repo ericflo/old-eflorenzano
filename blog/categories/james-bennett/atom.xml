@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: James Bennett | Eric Florenzano's Blog]]></title>
-  <link href="http://ericflo.github.com/blog/categories/james-bennett/atom.xml" rel="self"/>
-  <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T18:32:48-08:00</updated>
-  <id>http://ericflo.github.com/</id>
+  <link href="http://eflorenzano.com/blog/categories/james-bennett/atom.xml" rel="self"/>
+  <link href="http://eflorenzano.com/"/>
+  <updated>2012-04-18T17:34:47-07:00</updated>
+  <id>http://eflorenzano.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[On Context Processors in Django]]></title>
-    <link href="http://ericflo.github.com/blog/2008/02/11/context-processors-django/"/>
+    <link href="http://eflorenzano.com/blog/2008/02/11/context-processors-django/"/>
     <updated>2008-02-11T12:20:01-08:00</updated>
-    <id>http://ericflo.github.com/blog/2008/02/11/context-processors-django</id>
+    <id>http://eflorenzano.com/blog/2008/02/11/context-processors-django</id>
     <content type="html"><![CDATA[<p>
 This started out as a response in the comments to James Bennett's <code>latest post</code>_, but I think that there's enough here to warrant its own post.  If you haven't yet read it, then I suggest you do--it's a well-put argument for Django's application-level modularity and pluggability.</p>
 

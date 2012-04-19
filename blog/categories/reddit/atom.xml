@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Reddit | Eric Florenzano's Blog]]></title>
-  <link href="http://ericflo.github.com/blog/categories/reddit/atom.xml" rel="self"/>
-  <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T18:32:48-08:00</updated>
-  <id>http://ericflo.github.com/</id>
+  <link href="http://eflorenzano.com/blog/categories/reddit/atom.xml" rel="self"/>
+  <link href="http://eflorenzano.com/"/>
+  <updated>2012-04-18T17:34:47-07:00</updated>
+  <id>http://eflorenzano.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[AJAX, Voting, and Some Nicer CSS: Putting django-threadedcomments to the Test]]></title>
-    <link href="http://ericflo.github.com/blog/2008/01/30/ajax-voting-nicer-css-threadedcomments-test/"/>
+    <link href="http://eflorenzano.com/blog/2008/01/30/ajax-voting-nicer-css-threadedcomments-test/"/>
     <updated>2008-01-30T10:02:13-08:00</updated>
-    <id>http://ericflo.github.com/blog/2008/01/30/ajax-voting-nicer-css-threadedcomments-test</id>
+    <id>http://eflorenzano.com/blog/2008/01/30/ajax-voting-nicer-css-threadedcomments-test</id>
     <content type="html"><![CDATA[<p>
 It's an interesting feeling open-sourcing an application that you've developed for your own purposes.  Will people use it?  Will people find major design flaws?  Is it just a big waste of time?  These were the questions that were going through my mind before open-sourcing django-threadedcomments_.  Fortunately, my worries were quelled almost instantly as a people reacted quite positively to the application.  There was one recurring comment, however, that almost everyone who tried the sample implementation said: <strong>those colors are hideous</strong>.</p>
 
@@ -46,9 +46,9 @@ functionality..."
   
   <entry>
     <title type="html"><![CDATA[Announcing django-threadedcomments]]></title>
-    <link href="http://ericflo.github.com/blog/2008/01/23/announcing-django-threadedcomments/"/>
+    <link href="http://eflorenzano.com/blog/2008/01/23/announcing-django-threadedcomments/"/>
     <updated>2008-01-23T09:26:04-08:00</updated>
-    <id>http://ericflo.github.com/blog/2008/01/23/announcing-django-threadedcomments</id>
+    <id>http://eflorenzano.com/blog/2008/01/23/announcing-django-threadedcomments</id>
     <content type="html"><![CDATA[<p>
 Django-threadedcomments_ is a simple yet flexible threaded commenting system for Django.  What I mean when I say threaded is that commenters can reply not only to the original item, but to other comments as well.  It is very similar to what Reddit or Digg have in their comments sections.</p>
 

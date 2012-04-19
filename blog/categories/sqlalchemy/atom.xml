@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: SQLAlchemy | Eric Florenzano's Blog]]></title>
-  <link href="http://ericflo.github.com/blog/categories/sqlalchemy/atom.xml" rel="self"/>
-  <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T18:32:48-08:00</updated>
-  <id>http://ericflo.github.com/</id>
+  <link href="http://eflorenzano.com/blog/categories/sqlalchemy/atom.xml" rel="self"/>
+  <link href="http://eflorenzano.com/"/>
+  <updated>2012-04-18T17:34:47-07:00</updated>
+  <id>http://eflorenzano.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Why SQLAlchemy is the best ORM on the face of the planet]]></title>
-    <link href="http://ericflo.github.com/blog/2008/11/04/why-sqlalchemy-best-orm-face-planet/"/>
+    <link href="http://eflorenzano.com/blog/2008/11/04/why-sqlalchemy-best-orm-face-planet/"/>
     <updated>2008-11-04T18:03:04-08:00</updated>
-    <id>http://ericflo.github.com/blog/2008/11/04/why-sqlalchemy-best-orm-face-planet</id>
+    <id>http://eflorenzano.com/blog/2008/11/04/why-sqlalchemy-best-orm-face-planet</id>
     <content type="html"><![CDATA[<p>
 SQLAlchemy<em> started out with a bang.  When it came out, there was really nothing else out there that even came close in terms of features, performance, and ease of use.  SQLObject</em> was the reigning champion of Python ORMs, and the Django ORM was around but much less powerful at that time.  So now it's 3 years later.  Is SQLAlchemy still the best?  I think it is, and here's why:</p>
 

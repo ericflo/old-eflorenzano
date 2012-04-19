@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Spawning | Eric Florenzano's Blog]]></title>
-  <link href="http://ericflo.github.com/blog/categories/spawning/atom.xml" rel="self"/>
-  <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T18:32:48-08:00</updated>
-  <id>http://ericflo.github.com/</id>
+  <link href="http://eflorenzano.com/blog/categories/spawning/atom.xml" rel="self"/>
+  <link href="http://eflorenzano.com/"/>
+  <updated>2012-04-18T17:34:47-07:00</updated>
+  <id>http://eflorenzano.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Spawning + Django]]></title>
-    <link href="http://ericflo.github.com/blog/2008/07/30/spawning-django/"/>
+    <link href="http://eflorenzano.com/blog/2008/07/30/spawning-django/"/>
     <updated>2008-07-30T21:51:17-07:00</updated>
-    <id>http://ericflo.github.com/blog/2008/07/30/spawning-django</id>
+    <id>http://eflorenzano.com/blog/2008/07/30/spawning-django</id>
     <content type="html"><![CDATA[<p>
 Yesterday <code>Donovan Preston</code><em> released new versions of both eventlet</em> and Spawning<em>.  What are those, you ask?  Eventlet</em> is a networking library written using coroutines instead of normal subroutes, which makes writing networked non-blocking IO applications much much simpler.  Spawning is a WSGI<em> server, written using eventlet</em>, which supports all of the things you'd expect of a good WSGI_ server: multiple processes, multiple threads, etc.</p>
 

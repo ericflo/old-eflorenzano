@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: April 1st | Eric Florenzano's Blog]]></title>
-  <link href="http://ericflo.github.com/blog/categories/april-1st/atom.xml" rel="self"/>
-  <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T18:32:48-08:00</updated>
-  <id>http://ericflo.github.com/</id>
+  <link href="http://eflorenzano.com/blog/categories/april-1st/atom.xml" rel="self"/>
+  <link href="http://eflorenzano.com/"/>
+  <updated>2012-04-18T17:34:47-07:00</updated>
+  <id>http://eflorenzano.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[April Fools]]></title>
-    <link href="http://ericflo.github.com/blog/2008/03/31/april-fools/"/>
+    <link href="http://eflorenzano.com/blog/2008/03/31/april-fools/"/>
     <updated>2008-03-31T23:14:03-07:00</updated>
-    <id>http://ericflo.github.com/blog/2008/03/31/april-fools</id>
+    <id>http://eflorenzano.com/blog/2008/03/31/april-fools</id>
     <content type="html"><![CDATA[<p>
 April Fool's Day rocks!  Maybe I enjoy it because it happens to share the same day as my birthday, but I think it's more to do with the fact that everyone's having fun, being lighthearted, and simply not taking things too seriously.  Last year the blog wasn't in any shape to do anything fun for the occasion, but this year it took me about 10 minutes to whip up some middleware fun.  That's right, if you can read and understand this right now, the secret is out: a bit of Django middleware is all that's needed to turn your blog into l33t-sp34k central.</p>
 

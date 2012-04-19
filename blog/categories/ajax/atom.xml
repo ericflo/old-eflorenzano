@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: AJAX | Eric Florenzano's Blog]]></title>
-  <link href="http://ericflo.github.com/blog/categories/ajax/atom.xml" rel="self"/>
-  <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T18:32:48-08:00</updated>
-  <id>http://ericflo.github.com/</id>
+  <link href="http://eflorenzano.com/blog/categories/ajax/atom.xml" rel="self"/>
+  <link href="http://eflorenzano.com/"/>
+  <updated>2012-04-18T17:34:47-07:00</updated>
+  <id>http://eflorenzano.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Flojax: A unobtrusive and easy strategy for creating AJAX-style web applications]]></title>
-    <link href="http://ericflo.github.com/blog/2009/04/02/flojax-unobtrusive-and-easy-strategy-creating-ajax/"/>
+    <link href="http://eflorenzano.com/blog/2009/04/02/flojax-unobtrusive-and-easy-strategy-creating-ajax/"/>
     <updated>2009-04-02T19:05:18-07:00</updated>
-    <id>http://ericflo.github.com/blog/2009/04/02/flojax-unobtrusive-and-easy-strategy-creating-ajax</id>
+    <id>http://eflorenzano.com/blog/2009/04/02/flojax-unobtrusive-and-easy-strategy-creating-ajax</id>
     <content type="html"><![CDATA[<p>
 Writing AJAX-style web applications can be very tedious.  If you're using XML
 as your transport layer, you have to parse the XML before you can work with it.
@@ -54,9 +54,9 @@ of full page reloads.</p>
 <p>.. code-block:: html</p>
 
 <pre><code>&lt;div class="buttons"&gt;
-    &lt;a href="http://ericflo.github.com/vote/up/item1/"&gt;Vote up&lt;/a&gt;
-    &lt;a href="http://ericflo.github.com/vote/down/item1/"&gt;Vote down&lt;/a&gt;
-    &lt;a href="http://ericflo.github.com/favorite/item1/"&gt;Add to your favorites&lt;/a&gt;
+    &lt;a href="http://eflorenzano.com/vote/up/item1/"&gt;Vote up&lt;/a&gt;
+    &lt;a href="http://eflorenzano.com/vote/down/item1/"&gt;Vote down&lt;/a&gt;
+    &lt;a href="http://eflorenzano.com/favorite/item1/"&gt;Add to your favorites&lt;/a&gt;
 &lt;/div&gt;
 </code></pre>
 
@@ -66,15 +66,15 @@ of full page reloads.</p>
 
 <pre><code>&lt;div class="buttons"&gt;
     {% if voted %}
-        &lt;a href="http://ericflo.github.com/vote/clear/{{ item.id }}/"&gt;Clear your vote&lt;/a&gt;
+        &lt;a href="http://eflorenzano.com/vote/clear/{{ item.id }}/"&gt;Clear your vote&lt;/a&gt;
     {% else %}
-        &lt;a href="http://ericflo.github.com/vote/up/{{ item.id }}/"&gt;Vote up&lt;/a&gt;
-        &lt;a href="http://ericflo.github.com/vote/down/{{ item.id }}/"&gt;Vote down&lt;/a&gt;
+        &lt;a href="http://eflorenzano.com/vote/up/{{ item.id }}/"&gt;Vote up&lt;/a&gt;
+        &lt;a href="http://eflorenzano.com/vote/down/{{ item.id }}/"&gt;Vote down&lt;/a&gt;
     {% endif %}
     {% if favorited %}
-        &lt;a href="http://ericflo.github.com/favorite/{{ item.id }}/"&gt;Add to your favorites&lt;/a&gt;
+        &lt;a href="http://eflorenzano.com/favorite/{{ item.id }}/"&gt;Add to your favorites&lt;/a&gt;
     {% else %}
-        &lt;a href="http://ericflo.github.com/unfavorite/{{ item.id }}/"&gt;Remove from your favorites&lt;/a&gt;
+        &lt;a href="http://eflorenzano.com/unfavorite/{{ item.id }}/"&gt;Remove from your favorites&lt;/a&gt;
     {% endif %}
 &lt;/div&gt;
 </code></pre>
@@ -102,15 +102,15 @@ fragment.</p>
 
 <pre><code>&lt;div class="buttons"&gt;
     {% if voted %}
-        &lt;a href="http://ericflo.github.com/vote/clear/{{ item.id }}/" class="flojax" rel="buttons"&gt;Clear your vote&lt;/a&gt;
+        &lt;a href="http://eflorenzano.com/vote/clear/{{ item.id }}/" class="flojax" rel="buttons"&gt;Clear your vote&lt;/a&gt;
     {% else %}
-        &lt;a href="http://ericflo.github.com/vote/up/{{ item.id }}/" class="flojax" rel="buttons"&gt;Vote up&lt;/a&gt;
-        &lt;a href="http://ericflo.github.com/vote/down/{{ item.id }}/" class="flojax" rel="buttons"&gt;Vote down&lt;/a&gt;
+        &lt;a href="http://eflorenzano.com/vote/up/{{ item.id }}/" class="flojax" rel="buttons"&gt;Vote up&lt;/a&gt;
+        &lt;a href="http://eflorenzano.com/vote/down/{{ item.id }}/" class="flojax" rel="buttons"&gt;Vote down&lt;/a&gt;
     {% endif %}
     {% if favorited %}
-        &lt;a href="http://ericflo.github.com/favorite/{{ item.id }}/" class="flojax" rel="buttons"&gt;Add to your favorites&lt;/a&gt;
+        &lt;a href="http://eflorenzano.com/favorite/{{ item.id }}/" class="flojax" rel="buttons"&gt;Add to your favorites&lt;/a&gt;
     {% else %}
-        &lt;a href="http://ericflo.github.com/unfavorite/{{ item.id }}/" class="flojax" rel="buttons"&gt;Remove from your favorites&lt;/a&gt;
+        &lt;a href="http://eflorenzano.com/unfavorite/{{ item.id }}/" class="flojax" rel="buttons"&gt;Remove from your favorites&lt;/a&gt;
     {% endif %}
 &lt;/div&gt;
 </code></pre>
@@ -264,9 +264,9 @@ for your web applications?  If so, how do they differ from what I've described?
   
   <entry>
     <title type="html"><![CDATA[New Site Live!]]></title>
-    <link href="http://ericflo.github.com/blog/2006/12/03/new-site-live/"/>
+    <link href="http://eflorenzano.com/blog/2006/12/03/new-site-live/"/>
     <updated>2006-12-03T14:23:54-08:00</updated>
-    <id>http://ericflo.github.com/blog/2006/12/03/new-site-live</id>
+    <id>http://eflorenzano.com/blog/2006/12/03/new-site-live</id>
     <content type="html"><![CDATA[<p>
 Hello all!  I have finally put my new website up for the world to see!  I'm still not much for designing the look and feel of websites, but after learning all about Django, I felt like I just had to update my website to use Django.</p>
 

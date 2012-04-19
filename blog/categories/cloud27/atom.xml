@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Cloud27 | Eric Florenzano's Blog]]></title>
-  <link href="http://ericflo.github.com/blog/categories/cloud27/atom.xml" rel="self"/>
-  <link href="http://ericflo.github.com/"/>
-  <updated>2012-01-01T18:32:48-08:00</updated>
-  <id>http://ericflo.github.com/</id>
+  <link href="http://eflorenzano.com/blog/categories/cloud27/atom.xml" rel="self"/>
+  <link href="http://eflorenzano.com/"/>
+  <updated>2012-04-18T17:34:47-07:00</updated>
+  <id>http://eflorenzano.com/</id>
   <author>
     <name><![CDATA[Eric Florenzano]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[DjangoCon: Great conference, or greatest conference ever?]]></title>
-    <link href="http://ericflo.github.com/blog/2008/09/08/djangocon-great-conference-or-greatest-conference/"/>
+    <link href="http://eflorenzano.com/blog/2008/09/08/djangocon-great-conference-or-greatest-conference/"/>
     <updated>2008-09-08T00:58:30-07:00</updated>
-    <id>http://ericflo.github.com/blog/2008/09/08/djangocon-great-conference-or-greatest-conference</id>
+    <id>http://eflorenzano.com/blog/2008/09/08/djangocon-great-conference-or-greatest-conference</id>
     <content type="html"><![CDATA[<p>
 The internet is such a strange place.  It allows us to collaborate on projects without ever seeing each other in person.  It allows us to meet new people, discover interests that we never knew we had, and keep in touch with friends.  However much the internet allows us to connect, though, there's simply no replacement for face-to-face contact.  Who would have thought that a piece of software whose main goal is to ease the pain of creating websites could bring people together from Prague, London, Germany, and even Lawrence, Kansas?  To me, it's nearly inconceivable.  But inconceivable or not, Django now has its <code>very own conference</code>_.</p>
 
