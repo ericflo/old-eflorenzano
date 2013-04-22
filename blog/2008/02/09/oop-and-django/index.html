@@ -1,0 +1,87 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>OOP and Django - Eric Florenzano&rsquo;s Blog</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+
+    <link href="/atom.xml" rel="alternate" title="Eric Florenzano's Blog" type="application/atom+xml">
+
+    <link href="/static/css/bootstrap.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="/static/css/code.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="/static/js/html5shiv.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="center-column">
+        <h1 class="blog-header"><a href="/">Eric Florenzano&rsquo;s Blog</a></h1>
+        <ul class="blog-header-links">
+          <li><a href="/">Home</a></li>
+          <li><a href="/blog/archives/">Archives</a></li>
+          <li><a href="https://twitter.com/ericflo" class="twitter-follow-button" data-show-count="false">Follow @ericflo</a></li>
+          <li class="feed"><a href="/atom.xml"><img src="/static/img/feed-icon-28x28.png" width="20" height="20" alt="Subscribe to this blog" /></a></li>
+        </ul>
+        
+  <div class="blog-post-detail">
+    <h3><a href="/blog/2008/02/09/oop-and-django/">OOP and Django</a></h3>
+<p class="datetime">Feb 09, 2008</p>
+<div class="document">
+<p>Being a senior in college means many things.  It means job interviews and upper-level classes, emotional instability and independent living.  It also means countless hours of sitting in uninteresting classes whose sole purpose is to fulfill some graduation requirement.  For me, that means lots of daydreaming--about anything other than that class.  Recently however, during one daydream, I had a brain wave worth typing up: What's the deal with Object-Oriented Programming and Django?</p>
+<div class="section" id="the-convention">
+<h4>The Convention</h4>
+<p>Browsing through the <tt class="docutils literal">views.py</tt> file in just about any publicly-available Django-based application will almost certainly reveal nothing more than a bunch of functions.  These functions are undeniably specialized: they take in an <tt class="docutils literal">HttpRequest</tt> object (plus possibly some more information), and they return an <tt class="docutils literal">HttpResponse</tt> object.  Although these functions may be specialized, nevertheless they are still just functions.</p>
+<p>This should come as no surprise to anyone who has used the framework--in fact, it's encouraged by common convention!  Not only does <a class="reference external" href="http://www.djangoproject.com/documentation/tutorial03/">the tutorial</a> use plain functions for views, but also the <a class="reference external" href="http://djangobook.com/en/1.0/chapter08/">Django Book</a>, and <a class="reference external" href="http://code.google.com/p/django-voting/">just</a> <a class="reference external" href="http://code.google.com/p/django-registration/">about</a> <a class="reference external" href="http://code.google.com/p/django-profiles/">every</a> <a class="reference external" href="http://code.google.com/p/django-tagging/">other</a> <a class="reference external" href="http://code.google.com/p/django-openid/">application</a> <a class="reference external" href="http://code.google.com/p/django-threadedcomments/">out</a> <a class="reference external" href="http://code.google.com/p/django-contact-form/">there</a>.  The question now becomes &quot;why&quot;?  Why, in a language that seems to be &quot;objects all the way down&quot;, does a paradigm emerge for this domain (Django views) wherein functions are used almost exclusively in lieu of objects?</p>
+</div>
+<div class="section" id="that-s-not-entirely-true-sir">
+<h4>That's not entirely true, sir...</h4>
+<p>Any time a broad statement like &quot;just about any&quot; is used, the exceptions are what become interesting.  The admin application (both newforms-admin and old) is probably the most notable and interesting exception to my earlier broad statement.  It's interesting because it's Django's shining star!  Other applications which use object orientation: databrowse and formtools.  These are some great Django apps which use Object-Orientation in the views.</p>
+<p>Looking at those apps which use OOP and those which don't reveals an interesting idea: those apps which strive to go above-and-beyond in terms of modularity tend to be those who end up using classes and their methods for views.  Now this same functionality could be accomplished by using plain functions, but they haven't--their functionality was accomplished using classes and methods.</p>
+<p>Please keep in mind that what I'm not trying to do is make a value judgement on Object-Oriented programming vs. functional programming vs. any other <a class="reference external" href="http://en.wikipedia.org/wiki/Programming_paradigm">programming paradigm</a>.  Instead, I'm providing an observation about the emergence of a common practice, and trying to analyze its implications.</p>
+</div>
+<div class="section" id="but-wait">
+<h4>But wait!</h4>
+<p>What really is the difference between writing a plain function as a view and Object-Oriented programming?  It's completely reasonable to argue that writing a plain function for a view <strong>is</strong>, in fact, Object-Oriented programming.  All class methods take in self as their first positional argument, and all views take in request as their first positional argument.  Taking in this argument allows access to state which would otherwise be difficult to access.  Changing the order of urlpatterns is equivalent to changing the polymorphic properties of a class and dynamic method lookup.</p>
+<p>In essence, one could argue that <strong>using a plain function as a view is strictly equivalent to writing a method on the HttpRequest object</strong>.  Thinking about it in this way, writing a Django application is really nothing more than building up a monolithic <tt class="docutils literal">HttpRequest</tt> object which the user can call different methods on using its API: the URL.  To me, this is a really interesting idea!</p>
+</div>
+<div class="section" id="off-my-rocker">
+<h4>Off My Rocker</h4>
+<p>This is the result of extreme classroom boredom--so maybe posts here will continue down this slightly-more-esoteric road for a while.  But honestly this was an interesting thought-experiment, and I'd like to get some feedback on what people think as well.   Am I totally off base with this analysis?  Moreover, do you use true Python &quot;classes&quot; as your views?  If so, what benefits does it bring to the table?</p>
+</div>
+</div>
+
+<div class="categories">
+    Posted in:
+    <ul>
+      
+        <li><a href="/blog/categories/django/">Django</a></li>
+      
+        <li><a href="/blog/categories/python/">Python</a></li>
+      
+        <li><a href="/blog/categories/object-oriented-programming/">Object Oriented Programming</a></li>
+      
+    </ul>
+  </div>
+  </div>
+  <hr />
+  <br />
+  <br />
+
+      </div>
+    </div>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    
+  </body>
+</html>

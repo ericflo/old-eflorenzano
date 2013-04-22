@@ -1,0 +1,179 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Drop-dead simple Django caching - Eric Florenzano&rsquo;s Blog</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+
+    <link href="/atom.xml" rel="alternate" title="Eric Florenzano's Blog" type="application/atom+xml">
+
+    <link href="/static/css/bootstrap.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="/static/css/code.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="/static/js/html5shiv.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="center-column">
+        <h1 class="blog-header"><a href="/">Eric Florenzano&rsquo;s Blog</a></h1>
+        <ul class="blog-header-links">
+          <li><a href="/">Home</a></li>
+          <li><a href="/blog/archives/">Archives</a></li>
+          <li><a href="https://twitter.com/ericflo" class="twitter-follow-button" data-show-count="false">Follow @ericflo</a></li>
+          <li class="feed"><a href="/atom.xml"><img src="/static/img/feed-icon-28x28.png" width="20" height="20" alt="Subscribe to this blog" /></a></li>
+        </ul>
+        
+  <div class="blog-post-detail">
+    <h3><a href="/blog/2008/11/29/drop-dead-simple-django-caching/">Drop-dead simple Django caching</a></h3>
+<p class="datetime">Nov 29, 2008</p>
+<div class="document">
+<p>Caching is easy to screw up.  Usually it's a manual process which is error-prone
+and tedious.  It's actually quite easy to cache, but knowing when to invalidate
+which caches becomes a lot harder.  There is a subset of caching the caching
+problem that, with Django, can be done quite easily.  The underlying idea is
+that every Django model has a primary key, which makes for an excellent key to
+a cache.  Using this basic idea, we can cover a fairly large use case for
+caching, automatically, in a much more deterministic way.  Let's begin.</p>
+<p>First, we need to decide upon a setting for how long each individual item should
+be saved in the cache.  I'm going to call that <tt class="docutils literal">SIMPLE_CACHE_SECONDS</tt> and
+grab it like so:</p>
+<pre class="code python literal-block">
+<span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
+
+<span class="n">SIMPLE_CACHE_SECONDS</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s">'SIMPLE_CACHE_SECONDS'</span><span class="p">,</span> <span class="mi">2592000</span><span class="p">)</span>
+</pre>
+<p>The next thing we need to do is be able to generate a cache key from an instance
+of a model.  Thanks to Django's <tt class="docutils literal">_meta</tt> information, we can get the app label
+and model name, plus the primary key, and we're all set.</p>
+<pre class="code python literal-block">
+<span class="k">def</span> <span class="nf">key_from_instance</span><span class="p">(</span><span class="n">instance</span><span class="p">):</span>
+    <span class="n">opts</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">_meta</span>
+    <span class="k">return</span> <span class="s">'</span><span class="si">%s</span><span class="s">.</span><span class="si">%s</span><span class="s">:</span><span class="si">%s</span><span class="s">'</span> <span class="o">%</span> <span class="p">(</span><span class="n">opts</span><span class="o">.</span><span class="n">app_label</span><span class="p">,</span> <span class="n">opts</span><span class="o">.</span><span class="n">module_name</span><span class="p">,</span> <span class="n">instance</span><span class="o">.</span><span class="n">pk</span><span class="p">)</span>
+</pre>
+<p>So now let's start setting the cache!  My preferred way to do it is via a
+signal, but you could do it in a less generic way by overriding <tt class="docutils literal">save</tt> on a
+model.  My signal looks like this:</p>
+<pre class="code python literal-block">
+<span class="kn">from</span> <span class="nn">django.core.cache</span> <span class="kn">import</span> <span class="n">cache</span>
+<span class="kn">from</span> <span class="nn">django.db.models.signals</span> <span class="kn">import</span> <span class="n">post_save</span>
+
+<span class="k">def</span> <span class="nf">post_save_cache</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">cache</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">key_from_instance</span><span class="p">(</span><span class="n">instance</span><span class="p">),</span> <span class="n">instance</span><span class="p">,</span> <span class="n">SIMPLE_CACHE_SECONDS</span><span class="p">)</span>
+<span class="n">post_save</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">post_save_cache</span><span class="p">)</span>
+</pre>
+<p>Now that we're putting items in the cache, we should probably delete them from
+the cache when the model instance is deleted:</p>
+<pre class="code python literal-block">
+<span class="kn">from</span> <span class="nn">django.db.models.signals</span> <span class="kn">import</span> <span class="n">pre_delete</span>
+
+<span class="k">def</span> <span class="nf">pre_delete_uncache</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">cache</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">key_from_instance</span><span class="p">(</span><span class="n">instance</span><span class="p">))</span>
+<span class="n">pre_delete</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">pre_delete_uncache</span><span class="p">)</span>
+</pre>
+<p>This is all good and well, but right now we don't really have a way to get at
+that information.  Cache is pretty useless if we never use it!  Our interface to
+the database is through the model's <tt class="docutils literal">QuerySet</tt>, so let's make sure that our
+QuerySet is making good use of our newly-populated cache.  To do so, we'll
+subclass <tt class="docutils literal">QuerySet</tt>:</p>
+<pre class="code python literal-block">
+<span class="kn">from</span> <span class="nn">django.db.models.query</span> <span class="kn">import</span> <span class="n">QuerySet</span>
+
+<span class="k">class</span> <span class="nc">SimpleCacheQuerySet</span><span class="p">(</span><span class="n">QuerySet</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">pk</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="p">(</span><span class="s">'pk'</span><span class="p">,</span> <span class="s">'pk__exact'</span><span class="p">,</span> <span class="s">'id'</span><span class="p">,</span> <span class="s">'id__exact'</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="n">pk</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="n">val</span><span class="p">]</span>
+                <span class="k">break</span>
+        <span class="k">if</span> <span class="n">pk</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">opts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_meta</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="s">'</span><span class="si">%s</span><span class="s">.</span><span class="si">%s</span><span class="s">:</span><span class="si">%s</span><span class="s">'</span> <span class="o">%</span> <span class="p">(</span><span class="n">opts</span><span class="o">.</span><span class="n">app_label</span><span class="p">,</span> <span class="n">opts</span><span class="o">.</span><span class="n">module_name</span><span class="p">,</span> <span class="n">pk</span><span class="p">)</span>
+            <span class="n">obj</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">obj</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_result_cache</span> <span class="o">=</span> <span class="p">[</span><span class="n">obj</span><span class="p">]</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">SimpleCacheQuerySet</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre>
+<p>The only method that we really need to overwrite is <tt class="docutils literal">filter</tt>, since <tt class="docutils literal">get</tt>
+and <tt class="docutils literal">get_or_create</tt> both just rely on filter anyway.  The first <tt class="docutils literal">for</tt> loop
+in the filter method just checks to see if there is a query by <tt class="docutils literal">id</tt> or <tt class="docutils literal">pk</tt>,
+and if so, then we construct a key and try to fetch it from the cache.  If we
+found the item in the cache, then we place it into Django's internal result
+cache.  At that point we're as good as done.  Then we just let Django do the
+rest!</p>
+<p>This <tt class="docutils literal">SimpleCacheQuerySet</tt> won't be used all on its own though, we need to
+actually force a model to use it.  How do we do that?  We create a manager:</p>
+<pre class="code python literal-block">
+<span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+
+<span class="k">class</span> <span class="nc">SimpleCacheManager</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Manager</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_query_set</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">SimpleCacheQuerySet</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
+</pre>
+<p>Now that we have this transparent caching library set up, we can go around to
+all of our models and import it and attach it as needed.  Here's how that might
+look:</p>
+<pre class="code python literal-block">
+<span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+<span class="kn">from</span> <span class="nn">django_simplecache</span> <span class="kn">import</span> <span class="n">SimpleCacheManager</span>
+
+<span class="k">class</span> <span class="nc">BlogPost</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+    <span class="n">body</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+
+    <span class="n">objects</span> <span class="o">=</span> <span class="n">SimpleCacheManager</span><span class="p">()</span>
+</pre>
+<p>That's it!  Just by attaching this manager to our model we're getting all the
+benefits of per-object caching right away. Of course, this isn't comprehensive.
+It does hit the vast majority of use cases, though.  If you were to use this for
+a real site, however, then you wouldn't be able to use <tt class="docutils literal">update</tt> method.  It's
+a little bit trickier since there's no <tt class="docutils literal">post_update</tt> signal, but it's nowhere
+near impossible. Let's just say that, for now, it's being left unimplemented as
+an exercise for the reader. <tt class="docutils literal">in_bulk</tt> would be actually quite fun to
+implement, too, because you could get all of the results possible from cache,
+and all the rest could be gotten from the database, then merge those two
+dictionaries before returning.</p>
+<p>I think this would be a really good reusable Django application.  Essentially,
+we've grown a library from the ground up that really isn't all that much code.
+I think it took me 20 minutes to write the actual code, but with some serious
+polish and love, this library could evolve into something that I think many
+reusable apps would use to great benefit.  What do you think?  What should a
+good, simple, Django caching library have?</p>
+</div>
+
+<div class="categories">
+    Posted in:
+    <ul>
+      
+        <li><a href="/blog/categories/python/">Python</a></li>
+      
+        <li><a href="/blog/categories/django/">Django</a></li>
+      
+        <li><a href="/blog/categories/caching/">Caching</a></li>
+      
+        <li><a href="/blog/categories/programming/">Programming</a></li>
+      
+    </ul>
+  </div>
+  </div>
+  <hr />
+  <br />
+  <br />
+
+      </div>
+    </div>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    
+  </body>
+</html>

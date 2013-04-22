@@ -1,0 +1,113 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Are pure client-side web apps the wave of the future? - Eric Florenzano&rsquo;s Blog</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+
+    <link href="/atom.xml" rel="alternate" title="Eric Florenzano's Blog" type="application/atom+xml">
+
+    <link href="/static/css/bootstrap.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="/static/css/code.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="/static/js/html5shiv.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="center-column">
+        <h1 class="blog-header"><a href="/">Eric Florenzano&rsquo;s Blog</a></h1>
+        <ul class="blog-header-links">
+          <li><a href="/">Home</a></li>
+          <li><a href="/blog/archives/">Archives</a></li>
+          <li><a href="https://twitter.com/ericflo" class="twitter-follow-button" data-show-count="false">Follow @ericflo</a></li>
+          <li class="feed"><a href="/atom.xml"><img src="/static/img/feed-icon-28x28.png" width="20" height="20" alt="Subscribe to this blog" /></a></li>
+        </ul>
+        
+  <div class="blog-post-detail">
+    <h3><a href="/blog/2008/11/22/are-pure-client-side-web-apps-wave-future/">Are pure client-side web apps the wave of the future?</a></h3>
+<p class="datetime">Nov 22, 2008</p>
+<div class="document">
+<p>It seems that the world of computing is always oscillating between offloading
+more work to the server, and offloading more work to the client.  In the very
+early days of dumb terminals, we had most of the actual computation being done
+on big mainframes.  Then personal computers became more powerful, allowing for
+much richer applications to be created.</p>
+<p>With the advent of the internet, the landscape of computing architectures
+shifted again to being done focused on the server.  Now, however, JavaScript has
+become more powerful.  Combined with things like SVG and the canvas tag, we can
+create extremely rich applications that take place solely in the browser.</p>
+<p>Projects like <a class="reference external" href="http://incubator.apache.org/couchdb/">CouchDB</a> are even starting to open the door for
+<a class="reference external" href="http://jchris.mfdz.com/code/2008/11/my_couch_or_yours__shareable_ap">truly peer-to-peer web applications</a>.  With all of this taking place, it seems
+that client-side web applications are poised to see some fairly strong growth.
+This is especially evident now that companies as big as Google seem interested
+in the idea, with its <a class="reference external" href="http://gears.google.com/">Google Gears</a> product that allows you to &quot;work offline&quot;.
+But there are certain things that need to be satisfied first.</p>
+<p>We need a way of enforcing security across these apps.  It looks like some
+combination of OpenID and OAuth are going to be the winners in this space, but
+I've never seen a seamless implementation of either of these protocols, even by
+the companies most invested in the technology.  There is a lot of work to go on
+usability before authentication and authorization are ubiquitous through these
+open protocols.</p>
+<p>We also need to standardize more on the data interchange formats that we use to
+shuttle information back and forth between these different apps.  <a class="reference external" href="http://en.wikipedia.org/wiki/Atom_(standard)">Atom</a> goes a
+long way towards describing the data that we use, but its adoption is nowhere
+near ubiquitous, and some sites still rely on older, more outdated, RSS
+syndication formats that aren't quite up to the task.</p>
+<p>But even if we standardize on some application platform (be it Google Gears or
+CouchDB or some other container), security, and data interchange formats, there
+are certain things that need to be considered.  For one, there are some
+applications that just aren't practical to be implemented on the client.  Video
+editing comes to mind (and I would know, considering I interned for <a class="reference external" href="http://eyespot.com/">eyespot</a>, a
+company which was attempting to do just that).</p>
+<p>Another concern is that, as we've seen with the emergence of standards for CSS
+and HTML, a certain amount of rigidness is good, but a strict conformist
+attitude leads to significantly stifled innovation.  If you were to write an app
+that doesn't fall within the boundaries of what's possible given the agreed-upon
+standards, would you still be able to go forward with the development of the
+app, or would you run into resistance from those who have a stake in those
+standards?</p>
+<p>In all, I have a feeling that we are going to move more and more to a hybrid
+approach, with much more logic being computed on the side of the client
+(especially in terms of visual components and interactivity), and that much more
+of the server side is going to be involved in slicing and serving up just the
+raw data.  We can see this happening today with technologies like AJAX being
+touted as the centerpiece of some &quot;Web Two Point Oh&quot; sites.  I'm excited to see
+where this will all go, and more than excited that, being a developer during
+this time, get to help shape that direction.</p>
+</div>
+
+<div class="categories">
+    Posted in:
+    <ul>
+      
+        <li><a href="/blog/categories/javascript/">Javascript</a></li>
+      
+        <li><a href="/blog/categories/programming/">Programming</a></li>
+      
+        <li><a href="/blog/categories/couchdb/">CouchDB</a></li>
+      
+    </ul>
+  </div>
+  </div>
+  <hr />
+  <br />
+  <br />
+
+      </div>
+    </div>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    
+  </body>
+</html>

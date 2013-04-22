@@ -1,0 +1,152 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>WSGI middleware is awesome, and Django should use it more - Eric Florenzano&rsquo;s Blog</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+
+    <link href="/atom.xml" rel="alternate" title="Eric Florenzano's Blog" type="application/atom+xml">
+
+    <link href="/static/css/bootstrap.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="/static/css/code.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="/static/js/html5shiv.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="center-column">
+        <h1 class="blog-header"><a href="/">Eric Florenzano&rsquo;s Blog</a></h1>
+        <ul class="blog-header-links">
+          <li><a href="/">Home</a></li>
+          <li><a href="/blog/archives/">Archives</a></li>
+          <li><a href="https://twitter.com/ericflo" class="twitter-follow-button" data-show-count="false">Follow @ericflo</a></li>
+          <li class="feed"><a href="/atom.xml"><img src="/static/img/feed-icon-28x28.png" width="20" height="20" alt="Subscribe to this blog" /></a></li>
+        </ul>
+        
+  <div class="blog-post-detail">
+    <h3><a href="/blog/2008/11/18/wsgi-middlware-awesome-django-use-it-more/">WSGI middleware is awesome, and Django should use it more</a></h3>
+<p class="datetime">Nov 18, 2008</p>
+<div class="document">
+<p>Most people in the Django community are deploying their apps these days with
+<a class="reference external" href="http://code.google.com/p/modwsgi/">mod_wsgi</a>.  If not, then you're at least using <a class="reference external" href="http://wsgi.org/wsgi/">WSGI</a> as a communication layer
+with your application server, in one way or another.  The great thing about
+WSGI is that it gives everyone a common interface through which to talk.  It
+also has the added benefit of being a common abstraction that many people have
+built these great, really useful tools on top of.</p>
+<p>Consider <a class="reference external" href="http://repoze.org/">Repoze</a>.  If you navigate to the <a class="reference external" href="http://repoze.org/repoze_components.html#middleware">middleware section</a> of their
+website, they have some really cool stuff available!  There are utilities for
+logging, authentication, security, profiling, templating, etc.  All of these
+pieces of middleware are designed to be totally pluggable, because they are
+designed to work solely based on what's available through WSGI.</p>
+<p>My personal favorite of that lot is <tt class="docutils literal">repoze.profile</tt>.  It accumulates
+Python profiling information about whatever app is being run, and allows you to
+view that profile information via a web interface by visiting a special URL.
+There is absolutely no reason that the Pylons, TurboGears, or CherryPy guys
+should be able to get away with keeping this stuff for themselves, so I want to
+show just how easy it is to integrate this profiling module with Django.</p>
+<p>First, though, here's a typical .wsgi file that might be used in conjunction
+with <tt class="docutils literal">mod_wsgi</tt>:</p>
+<pre class="code python literal-block">
+<span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span>
+
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">'DJANGO_SETTINGS_MODULE'</span><span class="p">]</span> <span class="o">=</span> <span class="s">'settings'</span>
+
+<span class="kn">import</span> <span class="nn">django.core.handlers.wsgi</span>
+
+<span class="n">application</span> <span class="o">=</span> <span class="n">django</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">handlers</span><span class="o">.</span><span class="n">wsgi</span><span class="o">.</span><span class="n">WSGIHandler</span><span class="p">()</span>
+</pre>
+<p>There's really nothing special going on here, and if you would like to learn
+more about how to set up this WSGI file, visit
+<a class="reference external" href="http://code.google.com/p/modwsgi/wiki/IntegrationWithDjango">mod_wsgi's documentation on the subject</a>.  Now if you'll notice,
+<tt class="docutils literal">application</tt> is simply an instance of <tt class="docutils literal">WSGIHandler</tt>, which is simply a
+callable.  A WSGI middleware is just a wrapper around that callable.  Here's how
+easy it is to add the profiling middleware:</p>
+<pre class="code python literal-block">
+<span class="kn">from</span> <span class="nn">repoze.profile.profiler</span> <span class="kn">import</span> <span class="n">AccumulatingProfileMiddleware</span>
+<span class="n">application</span> <span class="o">=</span> <span class="n">AccumulatingProfileMiddleware</span><span class="p">(</span>
+    <span class="n">application</span><span class="p">,</span>
+    <span class="n">log_filename</span><span class="o">=</span><span class="s">'/tmp/djangoprofile.log'</span><span class="p">,</span>
+    <span class="n">discard_first_request</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="n">flush_at_shutdown</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="n">path</span><span class="o">=</span><span class="s">'/__profile__'</span><span class="p">)</span>
+</pre>
+<p>There we go!  We have imported the profiling middleware, and passed the Django
+WSGI application as the first argument.  The rest is just setting options for
+the middleware.  You can restart apache and the WSGI profiling middleware is
+already working.</p>
+<p>Sometimes, though, you don't want all of Apache just to run some middleware.
+You want to be able to do the same thing, but locally.  Believe it or not,
+Django's local development server is just a WSGI server itself, so one option
+would be to do the wrapping directly in django, <a class="reference external" href="http://code.djangoproject.com/browser/django/trunk/django/core/management/commands/runserver.py#L60">right here</a>.  But you really
+don't want to be hacking inside of Django internals if you don't have to.
+Fortunately there are many alternative WSGI servers out there.  Brian Rosner
+has created a custom management command to use the excellent CherryPy WSGI
+server with Django, on <a class="reference external" href="http://oebfare.com/blog/2008/nov/03/writing-custom-management-command/">his blog</a>.</p>
+<p>Let's say you just want to try this out quickly after reading this blog post,
+though.  If you're running Python 2.5 or greater, you're in luck, because a
+script less than 10 lines long can get you up and running:</p>
+<pre class="code python literal-block">
+<span class="c">#!/usr/bin/env python</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">wsgiref.simple_server</span> <span class="kn">import</span> <span class="n">make_server</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="nb">execfile</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">httpd</span> <span class="o">=</span> <span class="n">make_server</span><span class="p">(</span><span class="s">''</span><span class="p">,</span> <span class="mi">8000</span><span class="p">,</span> <span class="n">application</span><span class="p">)</span>
+    <span class="n">httpd</span><span class="o">.</span><span class="n">serve_forever</span><span class="p">()</span>
+</pre>
+<p>Now, to run it, simply invoke it like this:</p>
+<pre class="code bash literal-block">
+python runserver.py my_wsgi_file.wsgi
+</pre>
+<p>Now, navigate around your app for a little bit and then point your browser to
+<a class="reference external" href="http://localhost:8000/__profile__">the profile url</a> and see how freaking awesome middleware can be.</p>
+<p>I'm not trying to stir up any controversy, I'm not saying we should stop making
+Django middleware or anything like that.  But I seriously, seriously hope that
+someone tries this out and realizes the multitudes of great WSGI apps out there
+that can be taken advantage of.  <a class="reference external" href="http://compoundthinking.com/blog/">Mark Ramm</a> wasn't full of hot air when he
+talked about this at DjangoCon or <a class="reference external" href="http://compoundthinking.com/blog/index.php/2008/10/06/wsgi-middleare-is-cool/">blogged about it</a> later.  He was right, and
+I for one wish I had listened sooner.</p>
+</div>
+
+<div class="categories">
+    Posted in:
+    <ul>
+      
+        <li><a href="/blog/categories/python/">Python</a></li>
+      
+        <li><a href="/blog/categories/django/">Django</a></li>
+      
+        <li><a href="/blog/categories/programming/">Programming</a></li>
+      
+        <li><a href="/blog/categories/wsgi/">WSGI</a></li>
+      
+        <li><a href="/blog/categories/repoze/">Repoze</a></li>
+      
+    </ul>
+  </div>
+  </div>
+  <hr />
+  <br />
+  <br />
+
+      </div>
+    </div>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    
+  </body>
+</html>

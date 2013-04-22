@@ -1,755 +1,440 @@
 
 <!DOCTYPE html>
-<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
-<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
-<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
-<head>
-  <meta charset="utf-8">
-  <title>Eric Florenzano's Blog</title>
-  <meta name="author" content="Eric Florenzano">
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
 
-  
-  <meta name="description" content="Apple has included integration with Twitter in iOS5, which can be really handy
-to allow your users to easily tweet or log in. The only problem is &hellip;">
-  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
 
-  <!-- http://t.co/dKP3o1e -->
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="/atom.xml" rel="alternate" title="Eric Florenzano's Blog" type="application/atom+xml">
 
-  
-  <link rel="canonical" href="http://eflorenzano.com">
-  <link href="/favicon.png" rel="icon">
-  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="/javascripts/ender.js"></script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
-  <link href="/atom.xml" rel="alternate" title="Eric Florenzano's Blog" type="application/atom+xml">
-  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
-<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+    <link href="/static/css/bootstrap.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="/static/css/code.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
 
-  
-  <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-1959803-2']);
-    _gaq.push(['_trackPageview']);
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="/static/js/html5shiv.js"></script>
+    <![endif]-->
 
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-  </script>
-
-
-</head>
-
-<body   >
-  <header role="banner"><hgroup>
-  <h1><a href="/">Eric Florenzano's Blog</a></h1>
-  
-    <h2>I am me.</h2>
-  
-</hgroup>
-
-</header>
-  <nav role="navigation"><ul class="subscription" data-subscription="rss">
-  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
-  
-</ul>
-  
-<form action="http://google.com/search" method="get">
-  <fieldset role="search">
-    <input type="hidden" name="q" value="site:eflorenzano.com" />
-    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
-  </fieldset>
-</form>
-  
-<ul class="main-navigation">
-  <li><a href="/">Blog</a></li>
-  <li><a href="/blog/archives">Archives</a></li>
-</ul>
-
-</nav>
-  <div id="main">
-    <div id="content">
-      <div class="blog-index">
-  
-  
-  
-    <article>
-      
-  <header>
+    <!-- Fav and touch icons -->
     
-      <h1 class="entry-title"><a href="/blog/2012/04/18/using-twitter-ios5-integration-single-sign-on/">Using Twitter&#8217;s iOS5 Integration for Single Sign-On</a></h1>
-    
-    
-      <p class="meta">
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="center-column">
+        <h1 class="blog-header"><a href="/">Eric Florenzano&rsquo;s Blog</a></h1>
+        <ul class="blog-header-links">
+          <li>Home</li>
+          <li><a href="/blog/archives/">Archives</a></li>
+          <li><a href="https://twitter.com/ericflo" class="twitter-follow-button" data-show-count="false">Follow @ericflo</a></li>
+          <li class="feed"><a href="/atom.xml"><img src="/static/img/feed-icon-28x28.png" width="20" height="20" alt="Subscribe to this blog" /></a></li>
+        </ul>
         
 
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-04-18T19:00:00-07:00" pubdate data-updated="true">Apr 18<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Apple has included integration with Twitter in iOS5, which can be really handy
-to allow your users to easily tweet or log in.  The only problem is that, as
-far as documentation of this feature is concerned, you&#8217;re largely on your own.
-This blog post is an attempt to correct that, at least in the case of sign-on.</p>
+  <h3><a href="/blog/2012/04/18/using-twitter-ios5-integration-single-sign-on/">Using Twitter&#39;s iOS5 Integration for Single Sign-On</a></h3>
+<p class="datetime">Apr 18, 2012</p>
+<div class="document">
+<p>Apple has included integration with Twitter in iOS5, which can be really handy to allow your users to easily tweet or log in. The only problem is that, as far as documentation of this feature is concerned, you're largely on your own. This blog post is an attempt to correct that, at least in the case of sign-on.</p>
 <div class="section" id="add-the-twitter-and-accounts-libraries-to-your-project">
-<h2>Add the Twitter and Accounts libraries to your project</h2>
-<p>Click on your project file, and then on your build target.  Make sure you&#8217;re on
-the &quot;build phases&quot; tab.  Under the &quot;Link Binary With Libraries&quot; section, click
-the plus symbol to the bottom left, and search for <tt class="docutils literal">Accounts.framework</tt> and
-add it.  Then do the same for <tt class="docutils literal">Twitter.framework</tt>.  This will link all of the
-necessary libraries into your project so that we can use the Twitter
-integration.</p>
+<h4>Add the Twitter and Accounts libraries to your project</h4>
+<p>Click on your project file, and then on your build target. Make sure you're on the &quot;build phases&quot; tab. Under the &quot;Link Binary With Libraries&quot; section, click the plus symbol to the bottom left, and search for <tt class="docutils literal">Accounts.framework</tt> and add it. Then do the same for <tt class="docutils literal">Twitter.framework</tt>. This will link all of the necessary libraries into your project so that we can use the Twitter integration.</p>
 </div>
 <div class="section" id="requesting-access-to-a-user-s-twitter-account">
-<h2>Requesting access to a user&#8217;s twitter account</h2>
-<p>The first thing to do when you want to let a user sign-on with Twitter is to
-create a long-lived (save it as an instance variable, for example) instance of
-<tt class="docutils literal">ACAccountStore</tt> and request access to the Twitter accounts contained within:</p>
-<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-</pre></td><td class="code"><pre><code class="obj-c"><span class="line"><span class="n">ACAccountStore</span> <span class="o">*</span><span class="n">store</span> <span class="o">=</span> <span class="p">[[</span><span class="n">ACAccountStore</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span> <span class="c1">// Long-lived</span>
-</span><span class="line"><span class="n">ACAccountType</span> <span class="o">*</span><span class="n">twitterType</span> <span class="o">=</span> <span class="p">[</span><span class="n">store</span> <span class="nl">accountTypeWithAccountTypeIdentifier:</span><span class="n">ACAccountTypeIdentifierTwitter</span><span class="p">];</span>
-</span><span class="line"><span class="p">[</span><span class="n">store</span> <span class="nl">requestAccessToAccountsWithType:</span><span class="n">twitterType</span> <span class="nl">withCompletionHandler:</span><span class="o">^</span><span class="p">(</span><span class="kt">BOOL</span> <span class="n">granted</span><span class="p">,</span> <span class="n">NSError</span> <span class="o">*</span><span class="n">error</span><span class="p">)</span> <span class="p">{</span>
-</span><span class="line">    <span class="k">if</span><span class="p">(</span><span class="n">granted</span><span class="p">)</span> <span class="p">{</span>
-</span><span class="line">        <span class="c1">// Access has been granted, now we can access the accounts</span>
-</span><span class="line">    <span class="p">}</span>
-</span><span class="line">    <span class="c1">// Handle any error state here as you wish</span>
-</span><span class="line"><span class="p">}];</span>
-</span></code></pre></td></tr></table></div></figure><p>What do we do once we have access to the accounts?  Well, we get a list of &#8216;em.
-If they don&#8217;t have any accounts, then we can show a dialog asking them to
-connect one in the iOS settings app:</p>
-<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-</pre></td><td class="code"><pre><code class="obj-c"><span class="line"><span class="c1">// Remember that twitterType was instantiated above</span>
-</span><span class="line"><span class="n">NSArray</span> <span class="o">*</span><span class="n">twitterAccounts</span> <span class="o">=</span> <span class="p">[</span><span class="n">store</span> <span class="nl">accountsWithType:</span><span class="n">twitterType</span><span class="p">];</span>
-</span><span class="line">
-</span><span class="line"><span class="c1">// If there are no accounts, we need to pop up an alert</span>
-</span><span class="line"><span class="k">if</span><span class="p">(</span><span class="n">twitterAccounts</span> <span class="o">!=</span> <span class="nb">nil</span> <span class="o">&amp;&amp;</span> <span class="p">[</span><span class="n">twitterAccounts</span> <span class="n">count</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-</span><span class="line">    <span class="n">UIAlertView</span> <span class="o">*</span><span class="n">alert</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UIAlertView</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithTitle:</span><span class="s">@&quot;No Twitter Accounts&quot;</span>
-</span><span class="line">                                                    <span class="nl">message:</span><span class="s">@&quot;There are no Twitter accounts configured. You can add or create a Twitter account in Settings.&quot;</span>
-</span><span class="line">                                                   <span class="nl">delegate:</span><span class="nb">nil</span>
-</span><span class="line">                                          <span class="nl">cancelButtonTitle:</span><span class="s">@&quot;OK&quot;</span>
-</span><span class="line">                                          <span class="nl">otherButtonTitles:</span><span class="nb">nil</span><span class="p">];</span>
-</span><span class="line">    <span class="p">[</span><span class="n">alert</span> <span class="n">show</span><span class="p">];</span>
-</span><span class="line">    <span class="p">[</span><span class="n">alert</span> <span class="n">release</span><span class="p">];</span>
-</span><span class="line"><span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class="line">    <span class="n">ACAccount</span> <span class="o">*</span><span class="n">account</span> <span class="o">=</span> <span class="p">[</span><span class="n">twitterAccounts</span> <span class="nl">objectAtIndex:</span><span class="mi">0</span><span class="p">];</span>
-</span><span class="line">    <span class="c1">// Do something with their Twitter account</span>
-</span><span class="line"><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure></div>
+<h4>Requesting access to a user's twitter account</h4>
+<p>The first thing to do when you want to let a user sign-on with Twitter is to create a long-lived (save it as an instance variable, for example) instance of ACAccountStore and request access to the Twitter accounts contained within:</p>
+<pre class="code objc literal-block">
+<span class="n">ACAccountStore</span> <span class="o">*</span><span class="n">store</span> <span class="o">=</span> <span class="p">[[</span><span class="n">ACAccountStore</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span> <span class="c1">// Long-lived
+</span><span class="n">ACAccountType</span> <span class="o">*</span><span class="n">twitterType</span> <span class="o">=</span> <span class="p">[</span><span class="n">store</span> <span class="nl">accountTypeWithAccountTypeIdentifier:</span><span class="n">ACAccountTypeIdentifierTwitter</span><span class="p">];</span>
+<span class="p">[</span><span class="n">store</span> <span class="nl">requestAccessToAccountsWithType:</span><span class="n">twitterType</span> <span class="nl">withCompletionHandler:</span><span class="o">^</span><span class="p">(</span><span class="kt">BOOL</span> <span class="n">granted</span><span class="p">,</span> <span class="n">NSError</span> <span class="o">*</span><span class="n">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">granted</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// Access has been granted, now we can access the accounts
+</span>    <span class="p">}</span>
+    <span class="c1">// Handle any error state here as you wish
+</span><span class="p">}];</span>
+</pre>
+<p>What do we do once we have access to the accounts? Well, we get a list of 'em. If they don't have any accounts, then we can show a dialog asking them to connect one in the iOS settings app:</p>
+<pre class="code objc literal-block">
+<span class="c1">// Remember that twitterType was instantiated above
+</span><span class="n">NSArray</span> <span class="o">*</span><span class="n">twitterAccounts</span> <span class="o">=</span> <span class="p">[</span><span class="n">store</span> <span class="nl">accountsWithType:</span><span class="n">twitterType</span><span class="p">];</span>
+
+<span class="c1">// If there are no accounts, we need to pop up an alert
+</span><span class="k">if</span><span class="p">(</span><span class="n">twitterAccounts</span> <span class="o">!=</span> <span class="nb">nil</span> <span class="o">&amp;&amp;</span> <span class="p">[</span><span class="n">twitterAccounts</span> <span class="n">count</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">UIAlertView</span> <span class="o">*</span><span class="n">alert</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UIAlertView</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithTitle:</span><span class="s">&#64;&quot;No Twitter Accounts&quot;</span>
+                                                    <span class="nl">message:</span><span class="s">&#64;&quot;There are no Twitter accounts configured. You can add or create a Twitter account in Settings.&quot;</span>
+                                                   <span class="nl">delegate:</span><span class="nb">nil</span>
+                                          <span class="nl">cancelButtonTitle:</span><span class="s">&#64;&quot;OK&quot;</span>
+                                          <span class="nl">otherButtonTitles:</span><span class="nb">nil</span><span class="p">];</span>
+    <span class="p">[</span><span class="n">alert</span> <span class="n">show</span><span class="p">];</span>
+    <span class="p">[</span><span class="n">alert</span> <span class="n">release</span><span class="p">];</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="n">ACAccount</span> <span class="o">*</span><span class="n">account</span> <span class="o">=</span> <span class="p">[</span><span class="n">twitterAccounts</span> <span class="nl">objectAtIndex:</span><span class="mi">0</span><span class="p">];</span>
+    <span class="c1">// Do something with their Twitter account
+</span><span class="p">}</span>
+</pre>
+</div>
 <div class="section" id="now-what">
-<h2>Now what?</h2>
-<p>Well, now you have an access token to read some information about the user from
-their Twitter stream.  The vast majority of apps will just want to grab the
-user&#8217;s basic info to get things like a username, real name, and maybe their
-location.  Here&#8217;s how that would look:</p>
-<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-<span class="line-number">18</span>
-<span class="line-number">19</span>
-<span class="line-number">20</span>
-<span class="line-number">21</span>
-<span class="line-number">22</span>
-<span class="line-number">23</span>
-<span class="line-number">24</span>
-<span class="line-number">25</span>
-<span class="line-number">26</span>
-<span class="line-number">27</span>
-<span class="line-number">28</span>
-<span class="line-number">29</span>
-<span class="line-number">30</span>
-<span class="line-number">31</span>
-<span class="line-number">32</span>
-<span class="line-number">33</span>
-<span class="line-number">34</span>
-<span class="line-number">35</span>
-<span class="line-number">36</span>
-<span class="line-number">37</span>
-<span class="line-number">38</span>
-<span class="line-number">39</span>
-<span class="line-number">40</span>
-<span class="line-number">41</span>
-<span class="line-number">42</span>
-<span class="line-number">43</span>
-<span class="line-number">44</span>
-<span class="line-number">45</span>
-<span class="line-number">46</span>
-<span class="line-number">47</span>
-<span class="line-number">48</span>
-<span class="line-number">49</span>
-<span class="line-number">50</span>
-<span class="line-number">51</span>
-</pre></td><td class="code"><pre><code class="obj-c"><span class="line"><span class="n">NSURL</span> <span class="o">*</span><span class="n">url</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSURL</span> <span class="nl">URLWithString:</span><span class="s">@&quot;http://api.twitter.com/1/account/verify_credentials.json&quot;</span><span class="p">];</span>
-</span><span class="line"><span class="n">TWRequest</span> <span class="o">*</span><span class="n">req</span> <span class="o">=</span> <span class="p">[[</span><span class="n">TWRequest</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithURL:</span><span class="n">url</span>
-</span><span class="line">                                     <span class="nl">parameters:</span><span class="nb">nil</span>
-</span><span class="line">                                  <span class="nl">requestMethod:</span><span class="n">TWRequestMethodGET</span><span class="p">];</span>
-</span><span class="line">
-</span><span class="line"><span class="c1">// Important: attach the user&#39;s Twitter ACAccount object to the request</span>
-</span><span class="line"><span class="n">req</span><span class="p">.</span><span class="n">account</span> <span class="o">=</span> <span class="n">account</span><span class="p">;</span>
-</span><span class="line">
-</span><span class="line"><span class="p">[</span><span class="n">req</span> <span class="nl">performRequestWithHandler:</span><span class="o">^</span><span class="p">(</span><span class="n">NSData</span> <span class="o">*</span><span class="n">responseData</span><span class="p">,</span>
-</span><span class="line">                                 <span class="n">NSHTTPURLResponse</span> <span class="o">*</span><span class="n">urlResponse</span><span class="p">,</span>
-</span><span class="line">                                 <span class="n">NSError</span> <span class="o">*</span><span class="n">error</span><span class="p">)</span> <span class="p">{</span>
-</span><span class="line">
-</span><span class="line">    <span class="c1">// If there was an error making the request, display a message to the user</span>
-</span><span class="line">    <span class="k">if</span><span class="p">(</span><span class="n">error</span> <span class="o">!=</span> <span class="nb">nil</span><span class="p">)</span> <span class="p">{</span>
-</span><span class="line">        <span class="n">UIAlertView</span> <span class="o">*</span><span class="n">alert</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UIAlertView</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithTitle:</span><span class="s">@&quot;Twitter Error&quot;</span>
-</span><span class="line">                                                        <span class="nl">message:</span><span class="s">@&quot;There was an error talking to Twitter. Please try again later.&quot;</span>
-</span><span class="line">                                                       <span class="nl">delegate:</span><span class="nb">nil</span>
-</span><span class="line">                                              <span class="nl">cancelButtonTitle:</span><span class="s">@&quot;OK&quot;</span>
-</span><span class="line">                                              <span class="nl">otherButtonTitles:</span><span class="nb">nil</span><span class="p">];</span>
-</span><span class="line">        <span class="p">[</span><span class="n">alert</span> <span class="n">show</span><span class="p">];</span>
-</span><span class="line">        <span class="p">[</span><span class="n">alert</span> <span class="n">release</span><span class="p">];</span>
-</span><span class="line">        <span class="k">return</span><span class="p">;</span>
-</span><span class="line">    <span class="p">}</span>
-</span><span class="line">
-</span><span class="line">    <span class="c1">// Parse the JSON response</span>
-</span><span class="line">    <span class="n">NSError</span> <span class="o">*</span><span class="n">jsonError</span> <span class="o">=</span> <span class="nb">nil</span><span class="p">;</span>
-</span><span class="line">    <span class="kt">id</span> <span class="n">resp</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSJSONSerialization</span> <span class="nl">JSONObjectWithData:</span><span class="n">responseData</span>
-</span><span class="line">                                                      <span class="nl">options:</span><span class="mi">0</span>
-</span><span class="line">                                                        <span class="nl">error:</span><span class="o">&amp;</span><span class="n">jsonError</span><span class="p">];</span>
-</span><span class="line">
-</span><span class="line">    <span class="c1">// If there was an error decoding the JSON, display a message to the user</span>
-</span><span class="line">    <span class="k">if</span><span class="p">(</span><span class="n">jsonError</span> <span class="o">!=</span> <span class="nb">nil</span><span class="p">)</span> <span class="p">{</span>
-</span><span class="line">        <span class="n">UIAlertView</span> <span class="o">*</span><span class="n">alert</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UIAlertView</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithTitle:</span><span class="s">@&quot;Twitter Error&quot;</span>
-</span><span class="line">                                                        <span class="nl">message:</span><span class="s">@&quot;Twitter is not acting properly right now. Please try again later.&quot;</span>
-</span><span class="line">                                                       <span class="nl">delegate:</span><span class="nb">nil</span>
-</span><span class="line">                                              <span class="nl">cancelButtonTitle:</span><span class="s">@&quot;OK&quot;</span>
-</span><span class="line">                                              <span class="nl">otherButtonTitles:</span><span class="nb">nil</span><span class="p">];</span>
-</span><span class="line">        <span class="p">[</span><span class="n">alert</span> <span class="n">show</span><span class="p">];</span>
-</span><span class="line">        <span class="p">[</span><span class="n">alert</span> <span class="n">release</span><span class="p">];</span>
-</span><span class="line">        <span class="k">return</span><span class="p">;</span>
-</span><span class="line">    <span class="p">}</span>
-</span><span class="line">
-</span><span class="line">    <span class="n">NSString</span> <span class="o">*</span><span class="n">screenName</span> <span class="o">=</span> <span class="p">[</span><span class="n">resp</span> <span class="nl">objectForKey:</span><span class="s">@&quot;screen_name&quot;</span><span class="p">];</span>
-</span><span class="line">    <span class="n">NSString</span> <span class="o">*</span><span class="n">fullName</span> <span class="o">=</span> <span class="p">[</span><span class="n">resp</span> <span class="nl">objectForKey:</span><span class="s">@&quot;name&quot;</span><span class="p">];</span>
-</span><span class="line">    <span class="n">NSString</span> <span class="o">*</span><span class="n">location</span> <span class="o">=</span> <span class="p">[</span><span class="n">resp</span> <span class="nl">objectForKey:</span><span class="s">@&quot;location&quot;</span><span class="p">];</span>
-</span><span class="line">
-</span><span class="line">    <span class="c1">// Make sure to perform our operation back on the main thread</span>
-</span><span class="line">    <span class="n">dispatch_async</span><span class="p">(</span><span class="n">dispatch_get_main_queue</span><span class="p">(),</span> <span class="o">^</span><span class="p">{</span>
-</span><span class="line">        <span class="c1">// Do something with the fetched data</span>
-</span><span class="line">    <span class="p">});</span>
-</span><span class="line"><span class="p">}];</span>
-</span></code></pre></td></tr></table></div></figure><p>Most of the code here is actually error handling code.  The meat of what we&#8217;re
-doing is simply fetching the user&#8217;s credentials from Twitter, parsing the JSON,
-and doing something with it. (What exactly you want to do with the username and
-name data is left as an excercise for the reader.)</p>
+<h4>Now what?</h4>
+<p>Well, now you have an access token to read some information about the user from their Twitter stream. The vast majority of apps will just want to grab the user's basic info to get things like a username, real name, and maybe their location. Here's how that would look:</p>
+<pre class="code objc literal-block">
+<span class="n">NSURL</span> <span class="o">*</span><span class="n">url</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSURL</span> <span class="nl">URLWithString:</span><span class="s">&#64;&quot;http://api.twitter.com/1/account/verify_credentials.json&quot;</span><span class="p">];</span>
+<span class="n">TWRequest</span> <span class="o">*</span><span class="n">req</span> <span class="o">=</span> <span class="p">[[</span><span class="n">TWRequest</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithURL:</span><span class="n">url</span>
+                                     <span class="nl">parameters:</span><span class="nb">nil</span>
+                                  <span class="nl">requestMethod:</span><span class="n">TWRequestMethodGET</span><span class="p">];</span>
+
+<span class="c1">// Important: attach the user's Twitter ACAccount object to the request
+</span><span class="n">req</span><span class="p">.</span><span class="n">account</span> <span class="o">=</span> <span class="n">account</span><span class="p">;</span>
+
+<span class="p">[</span><span class="n">req</span> <span class="nl">performRequestWithHandler:</span><span class="o">^</span><span class="p">(</span><span class="n">NSData</span> <span class="o">*</span><span class="n">responseData</span><span class="p">,</span>
+                                 <span class="n">NSHTTPURLResponse</span> <span class="o">*</span><span class="n">urlResponse</span><span class="p">,</span>
+                                 <span class="n">NSError</span> <span class="o">*</span><span class="n">error</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="c1">// If there was an error making the request, display a message to the user
+</span>    <span class="k">if</span><span class="p">(</span><span class="n">error</span> <span class="o">!=</span> <span class="nb">nil</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">UIAlertView</span> <span class="o">*</span><span class="n">alert</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UIAlertView</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithTitle:</span><span class="s">&#64;&quot;Twitter Error&quot;</span>
+                                                        <span class="nl">message:</span><span class="s">&#64;&quot;There was an error talking to Twitter. Please try again later.&quot;</span>
+                                                       <span class="nl">delegate:</span><span class="nb">nil</span>
+                                              <span class="nl">cancelButtonTitle:</span><span class="s">&#64;&quot;OK&quot;</span>
+                                              <span class="nl">otherButtonTitles:</span><span class="nb">nil</span><span class="p">];</span>
+        <span class="p">[</span><span class="n">alert</span> <span class="n">show</span><span class="p">];</span>
+        <span class="p">[</span><span class="n">alert</span> <span class="n">release</span><span class="p">];</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// Parse the JSON response
+</span>    <span class="n">NSError</span> <span class="o">*</span><span class="n">jsonError</span> <span class="o">=</span> <span class="nb">nil</span><span class="p">;</span>
+    <span class="kt">id</span> <span class="n">resp</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSJSONSerialization</span> <span class="nl">JSONObjectWithData:</span><span class="n">responseData</span>
+                                                      <span class="nl">options:</span><span class="mi">0</span>
+                                                        <span class="nl">error:</span><span class="o">&amp;</span><span class="n">jsonError</span><span class="p">];</span>
+
+    <span class="c1">// If there was an error decoding the JSON, display a message to the user
+</span>    <span class="k">if</span><span class="p">(</span><span class="n">jsonError</span> <span class="o">!=</span> <span class="nb">nil</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">UIAlertView</span> <span class="o">*</span><span class="n">alert</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UIAlertView</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithTitle:</span><span class="s">&#64;&quot;Twitter Error&quot;</span>
+                                                        <span class="nl">message:</span><span class="s">&#64;&quot;Twitter is not acting properly right now. Please try again later.&quot;</span>
+                                                       <span class="nl">delegate:</span><span class="nb">nil</span>
+                                              <span class="nl">cancelButtonTitle:</span><span class="s">&#64;&quot;OK&quot;</span>
+                                              <span class="nl">otherButtonTitles:</span><span class="nb">nil</span><span class="p">];</span>
+        <span class="p">[</span><span class="n">alert</span> <span class="n">show</span><span class="p">];</span>
+        <span class="p">[</span><span class="n">alert</span> <span class="n">release</span><span class="p">];</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">NSString</span> <span class="o">*</span><span class="n">screenName</span> <span class="o">=</span> <span class="p">[</span><span class="n">resp</span> <span class="nl">objectForKey:</span><span class="s">&#64;&quot;screen_name&quot;</span><span class="p">];</span>
+    <span class="n">NSString</span> <span class="o">*</span><span class="n">fullName</span> <span class="o">=</span> <span class="p">[</span><span class="n">resp</span> <span class="nl">objectForKey:</span><span class="s">&#64;&quot;name&quot;</span><span class="p">];</span>
+    <span class="n">NSString</span> <span class="o">*</span><span class="n">location</span> <span class="o">=</span> <span class="p">[</span><span class="n">resp</span> <span class="nl">objectForKey:</span><span class="s">&#64;&quot;location&quot;</span><span class="p">];</span>
+
+    <span class="c1">// Make sure to perform our operation back on the main thread
+</span>    <span class="n">dispatch_async</span><span class="p">(</span><span class="n">dispatch_get_main_queue</span><span class="p">(),</span> <span class="o">^</span><span class="p">{</span>
+        <span class="c1">// Do something with the fetched data
+</span>    <span class="p">});</span>
+<span class="p">}];</span>
+</pre>
+<p>Most of the code here is actually error handling code. The meat of what we're doing is simply fetching the user's credentials from Twitter, parsing the JSON, and doing something with it. (What exactly you want to do with the username and name data is left as an excercise for the reader.)</p>
 </div>
 <div class="section" id="that-s-it">
-<h2>That&#8217;s it?</h2>
-<p>Yep, that&#8217;s it.  You should be able to implement Twitter sign-on for your app
-with the simple code I&#8217;ve shown here.  The only bummer is the case when the
-user doesn&#8217;t have a Twitter account registered.  We&#8217;re <a class="reference external" href="http://stackoverflow.com/questions/10055853/opening-ios-settings-preferences">not allowed</a> to help
-the user out by sending them to the Settings app.  All we can do is tell users
-to go there and hope they can figure it out.</p>
-<p>Any other tips or tricks you have for implementing sign-on with Twitter on iOS?
-Be sure to <a class="reference external" href="http://twitter.com/ericflo">tweet me</a> about it!</p>
-<p>P.S. If you&#8217;re building mobile apps, my startup <a class="reference external" href="https://clutch.io/">clutch.io</a> can help you build
-and iterate faster on them. Check us out :)</p>
-</div></div>
-  
-  
+<h4>That's it?</h4>
+<p>Yep, that's it. You should be able to implement Twitter sign-on for your app with the simple code I've shown here. The only bummer is the case when the user doesn't have a Twitter account registered. We're <a class="reference external" href="http://stackoverflow.com/questions/10055853/opening-ios-settings-preferences">not allowed</a> to help the user out by sending them to the Settings app. All we can do is tell users to go there and hope they can figure it out.</p>
+<p>Any other tips or tricks you have for implementing sign-on with Twitter on iOS? Be sure to <a class="reference external" href="http://twitter.com/ericflo">tweet me</a> about it!</p>
+<p>P.S. If you're building mobile apps, my startup <a class="reference external" href="https://clutch.io/">clutch.io</a> can help you build and iterate faster on them. Check us out :)</p>
+</div>
+</div>
 
-
-    </article>
-  
-  
-    <article>
+<div class="categories">
+    Posted in:
+    <ul>
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/01/01/reducing-code-nesting/">Reducing Code Nesting</a></h1>
-    
-    
-      <p class="meta">
-        
+        <li><a href="/blog/categories/login/">Login</a></li>
+      
+        <li><a href="/blog/categories/programming/">Programming</a></li>
+      
+        <li><a href="/blog/categories/registration/">Registration</a></li>
+      
+        <li><a href="/blog/categories/sign-on/">Sign-On</a></li>
+      
+        <li><a href="/blog/categories/twitter/">Twitter</a></li>
+      
+        <li><a href="/blog/categories/ios/">iOS</a></li>
+      
+    </ul>
+  </div>
+  <hr />
 
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-01-01T18:00:00-08:00" pubdate data-updated="true">Jan 1<span>st</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>&quot;This guy&#8217;s code sucks!&quot;  It&#8217;s something we&#8217;ve all said or thought when we run
-into code we don&#8217;t like.  Sometimes it&#8217;s because it&#8217;s buggy, sometimes it&#8217;s
-because it conforms to a style we don&#8217;t like, and sometimes it&#8217;s because it
+  <h3><a href="/blog/2012/01/02/reducing-code-nesting/">Reducing Code Nesting</a></h3>
+<p class="datetime">Jan 02, 2012</p>
+<div class="document">
+<p>&quot;This guy's code sucks!&quot;  It's something we've all said or thought when we run
+into code we don't like.  Sometimes it's because it's buggy, sometimes it's
+because it conforms to a style we don't like, and sometimes it's because it
 just feels wrong.  Recently I found myself thinking this, and automatically
 jumping to the conclusion that the developer who wrote it was a novice.  The
 code had a distinct property that I dislike: lots of nesting.  But the more I
-think about it, the more I realized that it&#8217;s not really something I&#8217;ve heard
+think about it, the more I realized that it's not really something I've heard
 discussed much.</p>
-<p>So let&#8217;s talk about it.  I&#8217;m going to first talk about what I mean by nesting,
-why I think it&#8217;s a bad quality, and then I&#8217;m going to go over some tricks I&#8217;ve
+<p>So let's talk about it.  I'm going to first talk about what I mean by nesting,
+why I think it's a bad quality, and then I'm going to go over some tricks I've
 learned over the years to reduce it.</p>
 <div class="section" id="what-do-i-mean-by-code-nesting-and-why-is-it-bad">
-<h2>What do I mean by code nesting, and why is it bad?</h2>
-<p>It&#8217;s easier to demonstrate rather than talk about it.  This is what I mean by
+<h4>What do I mean by code nesting, and why is it bad?</h4>
+<p>It's easier to demonstrate rather than talk about it.  This is what I mean by
 deep code nesting, with my apologies for the contrived example:</p>
-<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="k">def</span> <span class="nf">get_cached_user</span><span class="p">(</span><span class="n">user_id</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-</span><span class="line">    <span class="sd">&quot;&quot;&quot;</span>
-</span><span class="line"><span class="sd">    Returns a cached user object either by their user_id or by their username.</span>
-</span><span class="line"><span class="sd">    &quot;&quot;&quot;</span>
-</span><span class="line">    <span class="n">user</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get_user_by_id</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
-</span><span class="line">    <span class="k">if</span> <span class="ow">not</span> <span class="n">user</span><span class="p">:</span>
-</span><span class="line">        <span class="n">user</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get_user_by_username</span><span class="p">(</span><span class="n">username</span><span class="p">)</span>
-</span><span class="line">        <span class="k">if</span> <span class="ow">not</span> <span class="n">user</span><span class="p">:</span>
-</span><span class="line">            <span class="n">user</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_user_by_id</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
-</span><span class="line">            <span class="k">if</span> <span class="ow">not</span> <span class="n">user</span><span class="p">:</span>
-</span><span class="line">                <span class="n">user</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_user_by_username</span><span class="p">(</span><span class="n">username</span><span class="p">)</span>
-</span><span class="line">                <span class="k">if</span> <span class="ow">not</span> <span class="n">user</span><span class="p">:</span>
-</span><span class="line">                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;User not found&#39;</span><span class="p">)</span>
-</span><span class="line">            <span class="n">cache</span><span class="o">.</span><span class="n">set_user</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">username</span><span class="p">)</span>
-</span><span class="line">    <span class="k">return</span> <span class="n">user</span>
-</span></code></pre></td></tr></table></div></figure><p>You can see in this Python code just by looking at the indentation level that
-there&#8217;s lots of nesting.  Before we can determine that the user was not found,
+<pre class="code python literal-block">
+<span class="k">def</span> <span class="nf">get_cached_user</span><span class="p">(</span><span class="n">user_id</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;
+    Returns a cached user object either by their user_id or by their username.
+    &quot;&quot;&quot;</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get_user_by_id</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">user</span><span class="p">:</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get_user_by_username</span><span class="p">(</span><span class="n">username</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">user</span><span class="p">:</span>
+            <span class="n">user</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_user_by_id</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">user</span><span class="p">:</span>
+                <span class="n">user</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_user_by_username</span><span class="p">(</span><span class="n">username</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">user</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">'User not found'</span><span class="p">)</span>
+            <span class="n">cache</span><span class="o">.</span><span class="n">set_user</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">username</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">user</span>
+</pre>
+<p>You can see in this Python code just by looking at the indentation level that
+there's lots of nesting.  Before we can determine that the user was not found,
 we must pass through four conditionals, and each conditional is nested within
 the previous conditional.</p>
 <p>I argue that this is bad code.  Every added level of nesting is another piece
 of context that your brain has to keep track of.  Each nested block is one you
 have to line up by eye to see what conditional it lines up with (even if your
-editor helps at this with visuals, it doesn&#8217;t remove the issue entirely.)  And
+editor helps at this with visuals, it doesn't remove the issue entirely.)  And
 this is just a straightforward example where we just return the user at the
-end, let&#8217;s take a look at an example that does something more complicated:</p>
-<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-<span class="line-number">18</span>
-<span class="line-number">19</span>
-<span class="line-number">20</span>
-<span class="line-number">21</span>
-<span class="line-number">22</span>
-<span class="line-number">23</span>
-<span class="line-number">24</span>
-<span class="line-number">25</span>
-<span class="line-number">26</span>
-</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="k">def</span> <span class="nf">get_media_details</span><span class="p">(</span><span class="n">media</span><span class="p">):</span>
-</span><span class="line">    <span class="sd">&quot;&quot;&quot;</span>
-</span><span class="line"><span class="sd">    Returns a dictionary of extra data about the given media object.</span>
-</span><span class="line"><span class="sd">    &quot;&quot;&quot;</span>
-</span><span class="line">    <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
-</span><span class="line">    <span class="k">if</span> <span class="n">media</span><span class="o">.</span><span class="n">is_video</span><span class="p">:</span>
-</span><span class="line">        <span class="n">data</span><span class="p">[</span><span class="s">&#39;kind&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;video&#39;</span>
-</span><span class="line">        <span class="k">if</span> <span class="n">media</span><span class="o">.</span><span class="n">is_youtube</span><span class="p">:</span>
-</span><span class="line">            <span class="n">data</span><span class="p">[</span><span class="s">&#39;url&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;http://youtube.com/&#39;</span>
-</span><span class="line">        <span class="k">if</span> <span class="n">media</span><span class="o">.</span><span class="n">is_vimeo</span><span class="p">:</span>
-</span><span class="line">            <span class="n">data</span><span class="p">[</span><span class="s">&#39;vimeo&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
-</span><span class="line">            <span class="k">if</span> <span class="n">media</span><span class="o">.</span><span class="n">vimeo_version</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-</span><span class="line">                <span class="n">data</span><span class="p">[</span><span class="s">&#39;url&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;http://vimeo.com/v2/&#39;</span>
-</span><span class="line">        <span class="k">if</span> <span class="s">&#39;url&#39;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
-</span><span class="line">            <span class="n">data</span><span class="p">[</span><span class="s">&#39;secure_url&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;url&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;http:&#39;</span><span class="p">,</span> <span class="s">&#39;https:&#39;</span><span class="p">)</span>
-</span><span class="line">    <span class="k">elif</span> <span class="n">media</span><span class="o">.</span><span class="n">is_audio</span><span class="p">:</span>
-</span><span class="line">        <span class="n">data</span><span class="p">[</span><span class="s">&#39;kind&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;audio&#39;</span>
-</span><span class="line">    <span class="k">elif</span> <span class="n">media</span><span class="o">.</span><span class="n">is_text</span><span class="p">:</span>
-</span><span class="line">        <span class="n">data</span><span class="p">[</span><span class="s">&#39;kind&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;text&#39;</span>
-</span><span class="line">    <span class="k">if</span> <span class="s">&#39;kind&#39;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
-</span><span class="line">        <span class="n">data</span><span class="p">[</span><span class="s">&#39;kind_verbose&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-</span><span class="line">            <span class="s">&#39;video&#39;</span><span class="p">:</span> <span class="s">&#39;Video Stream&#39;</span><span class="p">,</span>
-</span><span class="line">            <span class="s">&#39;audio&#39;</span><span class="p">:</span> <span class="s">&#39;Audio File&#39;</span><span class="p">,</span>
-</span><span class="line">            <span class="s">&#39;text&#39;</span><span class="p">:</span> <span class="s">&#39;Text Content&#39;</span><span class="p">,</span>
-</span><span class="line">        <span class="p">}[</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;kind&#39;</span><span class="p">]]</span>
-</span><span class="line">    <span class="k">return</span> <span class="n">data</span>
-</span></code></pre></td></tr></table></div></figure><p>It was unbelievably hard for me to even write that last example.  It&#8217;s
-obviously contrived and such, but the point is that it&#8217;s so difficult to
-even understand what it&#8217;s doing.  Unlike the previous example, this doesn&#8217;t
+end, let's take a look at an example that does something more complicated:</p>
+<pre class="code python literal-block">
+<span class="k">def</span> <span class="nf">get_media_details</span><span class="p">(</span><span class="n">media</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;
+    Returns a dictionary of extra data about the given media object.
+    &quot;&quot;&quot;</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="n">media</span><span class="o">.</span><span class="n">is_video</span><span class="p">:</span>
+        <span class="n">data</span><span class="p">[</span><span class="s">'kind'</span><span class="p">]</span> <span class="o">=</span> <span class="s">'video'</span>
+        <span class="k">if</span> <span class="n">media</span><span class="o">.</span><span class="n">is_youtube</span><span class="p">:</span>
+            <span class="n">data</span><span class="p">[</span><span class="s">'url'</span><span class="p">]</span> <span class="o">=</span> <span class="s">'http://youtube.com/'</span>
+        <span class="k">if</span> <span class="n">media</span><span class="o">.</span><span class="n">is_vimeo</span><span class="p">:</span>
+            <span class="n">data</span><span class="p">[</span><span class="s">'vimeo'</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="k">if</span> <span class="n">media</span><span class="o">.</span><span class="n">vimeo_version</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">data</span><span class="p">[</span><span class="s">'url'</span><span class="p">]</span> <span class="o">=</span> <span class="s">'http://vimeo.com/v2/'</span>
+        <span class="k">if</span> <span class="s">'url'</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="n">data</span><span class="p">[</span><span class="s">'secure_url'</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s">'url'</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">'http:'</span><span class="p">,</span> <span class="s">'https:'</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">media</span><span class="o">.</span><span class="n">is_audio</span><span class="p">:</span>
+        <span class="n">data</span><span class="p">[</span><span class="s">'kind'</span><span class="p">]</span> <span class="o">=</span> <span class="s">'audio'</span>
+    <span class="k">elif</span> <span class="n">media</span><span class="o">.</span><span class="n">is_text</span><span class="p">:</span>
+        <span class="n">data</span><span class="p">[</span><span class="s">'kind'</span><span class="p">]</span> <span class="o">=</span> <span class="s">'text'</span>
+    <span class="k">if</span> <span class="s">'kind'</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+        <span class="n">data</span><span class="p">[</span><span class="s">'kind_verbose'</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">'video'</span><span class="p">:</span> <span class="s">'Video Stream'</span><span class="p">,</span>
+            <span class="s">'audio'</span><span class="p">:</span> <span class="s">'Audio File'</span><span class="p">,</span>
+            <span class="s">'text'</span><span class="p">:</span> <span class="s">'Text Content'</span><span class="p">,</span>
+        <span class="p">}[</span><span class="n">data</span><span class="p">[</span><span class="s">'kind'</span><span class="p">]]</span>
+    <span class="k">return</span> <span class="n">data</span>
+</pre>
+<p>It was unbelievably hard for me to even write that last example.  It's
+obviously contrived and such, but the point is that it's so difficult to
+even understand what it's doing.  Unlike the previous example, this doesn't
 simply nest and then return; it nests and then un-nests, and then nests again,
 and then finally returns.</p>
 </div>
 <div class="section" id="how-to-avoid-nesting">
-<h2>How to Avoid Nesting</h2>
-<p>The best way that I&#8217;ve discovered to avoid nesting is to return early.  Caching
+<h4>How to Avoid Nesting</h4>
+<p>The best way that I've discovered to avoid nesting is to return early.  Caching
 is the perfect example of this.  Instead of testing for a cache failure and
 fetching from the database inside the conditional, check for cache success and
 return that early.</p>
 <p>So this code:</p>
-<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="k">def</span> <span class="nf">get_cached_user</span><span class="p">(</span><span class="n">user_id</span><span class="p">):</span>
-</span><span class="line">    <span class="n">user</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get_user_by_id</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
-</span><span class="line">    <span class="c"># The main logic all happens in this nested block</span>
-</span><span class="line">    <span class="k">if</span> <span class="ow">not</span> <span class="n">user</span><span class="p">:</span>
-</span><span class="line">        <span class="n">user</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_user_by_id</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
-</span><span class="line">        <span class="n">cache</span><span class="o">.</span><span class="n">set_user_for_id</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span> <span class="n">user</span><span class="p">)</span>
-</span><span class="line">    <span class="k">return</span> <span class="n">user</span>
-</span></code></pre></td></tr></table></div></figure><p>Becomes this:</p>
-<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="k">def</span> <span class="nf">get_cached_user</span><span class="p">(</span><span class="n">user_id</span><span class="p">):</span>
-</span><span class="line">    <span class="n">user</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get_user_by_id</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
-</span><span class="line">    <span class="k">if</span> <span class="n">user</span><span class="p">:</span>
-</span><span class="line">        <span class="k">return</span> <span class="n">user</span>
-</span><span class="line">    <span class="c"># The main logic happens outside of the nested block</span>
-</span><span class="line">    <span class="n">user</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_user_by_id</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
-</span><span class="line">    <span class="n">cache</span><span class="o">.</span><span class="n">set_user_for_id</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span> <span class="n">user</span><span class="p">)</span>
-</span><span class="line">    <span class="k">return</span> <span class="n">user</span>
-</span></code></pre></td></tr></table></div></figure><p>In the simple case, it doesn&#8217;t seem to improve much, but what happens if we
-apply this technique to our first example?  It&#8217;s dramatically improved:</p>
-<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-<span class="line-number">18</span>
-<span class="line-number">19</span>
-<span class="line-number">20</span>
-<span class="line-number">21</span>
-<span class="line-number">22</span>
-<span class="line-number">23</span>
-<span class="line-number">24</span>
-<span class="line-number">25</span>
-</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="k">def</span> <span class="nf">get_cached_user</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span> <span class="n">username</span><span class="p">):</span>
-</span><span class="line">    <span class="c"># First check the cache by id</span>
-</span><span class="line">    <span class="n">user</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get_user_by_id</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
-</span><span class="line">    <span class="k">if</span> <span class="n">user</span><span class="p">:</span>
-</span><span class="line">        <span class="k">return</span> <span class="n">user</span>
-</span><span class="line">
-</span><span class="line">    <span class="c"># Now check the cache by username</span>
-</span><span class="line">    <span class="n">user</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get_user_by_username</span><span class="p">(</span><span class="n">username</span><span class="p">)</span>
-</span><span class="line">    <span class="k">if</span> <span class="n">user</span><span class="p">:</span>
-</span><span class="line">        <span class="k">return</span> <span class="n">user</span>
-</span><span class="line">
-</span><span class="line">    <span class="c"># Both caches failed, so try hitting the db for the id</span>
-</span><span class="line">    <span class="n">user</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_user_by_id</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
-</span><span class="line">    <span class="k">if</span> <span class="n">user</span><span class="p">:</span>
-</span><span class="line">        <span class="n">cache</span><span class="o">.</span><span class="n">set_user</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">username</span><span class="p">)</span>
-</span><span class="line">        <span class="k">return</span> <span class="n">user</span>
-</span><span class="line">
-</span><span class="line">    <span class="c"># Looks like that didn&#39;t exist, try the username</span>
-</span><span class="line">    <span class="n">user</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_user_by_username</span><span class="p">(</span><span class="n">username</span><span class="p">)</span>
-</span><span class="line">    <span class="k">if</span> <span class="ow">not</span> <span class="n">user</span><span class="p">:</span>
-</span><span class="line">        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;User not found&#39;</span><span class="p">)</span>
-</span><span class="line">
-</span><span class="line">    <span class="c"># Cache our final user value for future use</span>
-</span><span class="line">    <span class="n">cache</span><span class="o">.</span><span class="n">set_user</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">username</span><span class="p">)</span>
-</span><span class="line">    <span class="k">return</span> <span class="n">user</span>
-</span></code></pre></td></tr></table></div></figure><p>Not only does it make it easier to read top-to-bottom, and force us to keep
+<pre class="code python literal-block">
+<span class="k">def</span> <span class="nf">get_cached_user</span><span class="p">(</span><span class="n">user_id</span><span class="p">):</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get_user_by_id</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
+    <span class="c"># The main logic all happens in this nested block</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">user</span><span class="p">:</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_user_by_id</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
+        <span class="n">cache</span><span class="o">.</span><span class="n">set_user_for_id</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span> <span class="n">user</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">user</span>
+</pre>
+<p>Becomes this:</p>
+<pre class="code python literal-block">
+<span class="k">def</span> <span class="nf">get_cached_user</span><span class="p">(</span><span class="n">user_id</span><span class="p">):</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get_user_by_id</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">user</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">user</span>
+    <span class="c"># The main logic happens outside of the nested block</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_user_by_id</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
+    <span class="n">cache</span><span class="o">.</span><span class="n">set_user_for_id</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span> <span class="n">user</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">user</span>
+</pre>
+<p>In the simple case, it doesn't seem to improve much, but what happens if we
+apply this technique to our first example?  It's dramatically improved:</p>
+<pre class="code python literal-block">
+<span class="k">def</span> <span class="nf">get_cached_user</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span> <span class="n">username</span><span class="p">):</span>
+    <span class="c"># First check the cache by id</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get_user_by_id</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">user</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">user</span>
+
+    <span class="c"># Now check the cache by username</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get_user_by_username</span><span class="p">(</span><span class="n">username</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">user</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">user</span>
+
+    <span class="c"># Both caches failed, so try hitting the db for the id</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_user_by_id</span><span class="p">(</span><span class="n">user_id</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">user</span><span class="p">:</span>
+        <span class="n">cache</span><span class="o">.</span><span class="n">set_user</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">username</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">user</span>
+
+    <span class="c"># Looks like that didn't exist, try the username</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_user_by_username</span><span class="p">(</span><span class="n">username</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">user</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">'User not found'</span><span class="p">)</span>
+
+    <span class="c"># Cache our final user value for future use</span>
+    <span class="n">cache</span><span class="o">.</span><span class="n">set_user</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">username</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">user</span>
+</pre>
+<p>Not only does it make it easier to read top-to-bottom, and force us to keep
 track of way less context, and make our code editors do less line wrapping,
 but it also makes it easier to separate the blocks of code and more easily
 comment them.</p>
 <p>So what other techniques can we use?  It starts to depend more on the
-situation.  Are you nesting because you&#8217;re writing a bunch of callbacks?  If
+situation.  Are you nesting because you're writing a bunch of callbacks?  If
 so, you can usually restructure your code to use named functions instead of
-anonymous functions.  Here&#8217;s how that would might look before refactoring:</p>
-<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="kd">function</span> <span class="nx">getCachedUser</span><span class="p">(</span><span class="nx">userId</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
-</span><span class="line">    <span class="nx">cache</span><span class="p">.</span><span class="nx">getUser</span><span class="p">(</span><span class="nx">userId</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
-</span><span class="line">        <span class="k">if</span><span class="p">(</span><span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
-</span><span class="line">            <span class="k">return</span> <span class="nx">callback</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span>
-</span><span class="line">        <span class="p">}</span>
-</span><span class="line">        <span class="nx">db</span><span class="p">.</span><span class="nx">getUser</span><span class="p">(</span><span class="nx">userId</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
-</span><span class="line">            <span class="nx">cache</span><span class="p">.</span><span class="nx">setUser</span><span class="p">(</span><span class="nx">userId</span><span class="p">,</span> <span class="nx">user</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class="line">                <span class="nx">callback</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span>
-</span><span class="line">            <span class="p">});</span>
-</span><span class="line">        <span class="p">});</span>
-</span><span class="line">    <span class="p">});</span>
-</span><span class="line"><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure><p>Note that in this example we even applied the technique of returning early in
-the first callback function, but as you can see there&#8217;s still a bunch of
+anonymous functions.  Here's how that would might look before refactoring:</p>
+<pre class="code javascript literal-block">
+<span class="kd">function</span> <span class="nx">getCachedUser</span><span class="p">(</span><span class="nx">userId</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">cache</span><span class="p">.</span><span class="nx">getUser</span><span class="p">(</span><span class="nx">userId</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">callback</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="nx">db</span><span class="p">.</span><span class="nx">getUser</span><span class="p">(</span><span class="nx">userId</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">cache</span><span class="p">.</span><span class="nx">setUser</span><span class="p">(</span><span class="nx">userId</span><span class="p">,</span> <span class="nx">user</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">callback</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span>
+            <span class="p">});</span>
+        <span class="p">});</span>
+    <span class="p">});</span>
+<span class="p">}</span>
+</pre>
+<p>Note that in this example we even applied the technique of returning early in
+the first callback function, but as you can see there's still a bunch of
 nesting going on.  Now if we switch to using named functions?</p>
-<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-<span class="line-number">18</span>
-<span class="line-number">19</span>
-<span class="line-number">20</span>
-<span class="line-number">21</span>
-<span class="line-number">22</span>
-<span class="line-number">23</span>
-<span class="line-number">24</span>
-<span class="line-number">25</span>
-<span class="line-number">26</span>
-</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="kd">function</span> <span class="nx">curry</span><span class="p">(</span><span class="nx">fn</span><span class="p">)</span> <span class="p">{</span>
-</span><span class="line">    <span class="kd">var</span> <span class="nx">slice</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">slice</span><span class="p">;</span>
-</span><span class="line">    <span class="kd">var</span> <span class="nx">args</span> <span class="o">=</span> <span class="nx">slice</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="nx">arguments</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
-</span><span class="line">    <span class="k">return</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-</span><span class="line">        <span class="k">return</span> <span class="nx">fn</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">args</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">slice</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="nx">arguments</span><span class="p">)));</span>
-</span><span class="line">    <span class="p">};</span>
-</span><span class="line"><span class="p">}</span>
-</span><span class="line">
-</span><span class="line"><span class="kd">function</span> <span class="kr">final</span><span class="p">(</span><span class="nx">callback</span><span class="p">,</span> <span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
-</span><span class="line">    <span class="nx">callback</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span>
-</span><span class="line"><span class="p">}</span>
-</span><span class="line">
-</span><span class="line"><span class="kd">function</span> <span class="nx">dbResult</span><span class="p">(</span><span class="nx">callback</span><span class="p">,</span> <span class="nx">userId</span><span class="p">,</span> <span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
-</span><span class="line">    <span class="nx">cache</span><span class="p">.</span><span class="nx">setUser</span><span class="p">(</span><span class="nx">userId</span><span class="p">,</span> <span class="nx">user</span><span class="p">,</span> <span class="nx">curry</span><span class="p">(</span><span class="kr">final</span><span class="p">,</span> <span class="nx">callback</span><span class="p">,</span> <span class="nx">user</span><span class="p">));</span>
-</span><span class="line"><span class="p">}</span>
-</span><span class="line">
-</span><span class="line"><span class="kd">function</span> <span class="nx">cacheResult</span><span class="p">(</span><span class="nx">callback</span><span class="p">,</span> <span class="nx">userId</span><span class="p">,</span> <span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
-</span><span class="line">    <span class="k">if</span><span class="p">(</span><span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
-</span><span class="line">        <span class="k">return</span> <span class="nx">callback</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span>
-</span><span class="line">    <span class="p">}</span>
-</span><span class="line">    <span class="nx">db</span><span class="p">.</span><span class="nx">getUser</span><span class="p">(</span><span class="nx">userId</span><span class="p">,</span> <span class="nx">curry</span><span class="p">(</span><span class="nx">dbResult</span><span class="p">,</span> <span class="nx">callback</span><span class="p">,</span> <span class="nx">userId</span><span class="p">));</span>
-</span><span class="line"><span class="p">}</span>
-</span><span class="line">
-</span><span class="line"><span class="kd">function</span> <span class="nx">getCachedUser</span><span class="p">(</span><span class="nx">userId</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
-</span><span class="line">    <span class="nx">cache</span><span class="p">.</span><span class="nx">getUser</span><span class="p">(</span><span class="nx">userId</span><span class="p">,</span> <span class="nx">curry</span><span class="p">(</span><span class="nx">cacheResult</span><span class="p">,</span> <span class="nx">callback</span><span class="p">,</span> <span class="nx">userId</span><span class="p">));</span>
-</span><span class="line"><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure><p>This is a lot better in terms of nesting.  Unfortunately we had to write a
+<pre class="code javascript literal-block">
+<span class="kd">function</span> <span class="nx">curry</span><span class="p">(</span><span class="nx">fn</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">slice</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">slice</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">args</span> <span class="o">=</span> <span class="nx">slice</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="nx">arguments</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+    <span class="k">return</span> <span class="kd">function</span> <span class="p">(</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">fn</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">args</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">slice</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="nx">arguments</span><span class="p">)));</span>
+    <span class="p">};</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="kr">final</span><span class="p">(</span><span class="nx">callback</span><span class="p">,</span> <span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">callback</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">dbResult</span><span class="p">(</span><span class="nx">callback</span><span class="p">,</span> <span class="nx">userId</span><span class="p">,</span> <span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">cache</span><span class="p">.</span><span class="nx">setUser</span><span class="p">(</span><span class="nx">userId</span><span class="p">,</span> <span class="nx">user</span><span class="p">,</span> <span class="nx">curry</span><span class="p">(</span><span class="kr">final</span><span class="p">,</span> <span class="nx">callback</span><span class="p">,</span> <span class="nx">user</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">cacheResult</span><span class="p">(</span><span class="nx">callback</span><span class="p">,</span> <span class="nx">userId</span><span class="p">,</span> <span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">callback</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="nx">db</span><span class="p">.</span><span class="nx">getUser</span><span class="p">(</span><span class="nx">userId</span><span class="p">,</span> <span class="nx">curry</span><span class="p">(</span><span class="nx">dbResult</span><span class="p">,</span> <span class="nx">callback</span><span class="p">,</span> <span class="nx">userId</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">getCachedUser</span><span class="p">(</span><span class="nx">userId</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">cache</span><span class="p">.</span><span class="nx">getUser</span><span class="p">(</span><span class="nx">userId</span><span class="p">,</span> <span class="nx">curry</span><span class="p">(</span><span class="nx">cacheResult</span><span class="p">,</span> <span class="nx">callback</span><span class="p">,</span> <span class="nx">userId</span><span class="p">));</span>
+<span class="p">}</span>
+</pre>
+<p>This is a lot better in terms of nesting.  Unfortunately we had to write a
 helper function called curry, but that only has to be written once and can be
 re-used for all code written in this style.  Also unfortunately I still find
 this kind of code difficult to follow, which is why I avoid writing much
 callback-style code.  However, at least you can reduce the nesting.  In all
-honesty, there are probably better ways of reducing nesting that I&#8217;m not aware
+honesty, there are probably better ways of reducing nesting that I'm not aware
 of.  If you can rewrite the <tt class="docutils literal">getCachedUser</tt> function in JS in a better way,
 please blog it!</p>
-<p>Another way to reduce nesting is to assign an intermediate variable.  Here&#8217;s
+<p>Another way to reduce nesting is to assign an intermediate variable.  Here's
 an example in Erlang of some file function that nests a case statement within
 another case statement.</p>
-<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-</pre></td><td class="code"><pre><code class="erlang"><span class="line"><span class="nf">do_some_file_thing</span><span class="p">(</span><span class="nv">File</span><span class="p">)</span> <span class="o">-&gt;</span>
-</span><span class="line">    <span class="k">case</span> <span class="nn">file</span><span class="p">:</span><span class="n">open</span><span class="p">(</span><span class="nv">File</span><span class="p">,</span> <span class="p">[</span><span class="n">raw</span><span class="p">,</span> <span class="n">binary</span><span class="p">,</span> <span class="n">read</span><span class="p">])</span> <span class="k">of</span>
-</span><span class="line">        <span class="p">{</span><span class="n">ok</span><span class="p">,</span> <span class="nv">Fd</span><span class="p">}</span> <span class="o">-&gt;</span>
-</span><span class="line">            <span class="nv">Start</span> <span class="o">=</span> <span class="n">now</span><span class="p">(),</span>
-</span><span class="line">            <span class="k">case</span> <span class="n">process_file_data</span><span class="p">(</span><span class="nv">Fd</span><span class="p">)</span> <span class="k">of</span>
-</span><span class="line">                <span class="p">{</span><span class="n">ok</span><span class="p">,</span> <span class="nv">Processed</span><span class="p">}</span> <span class="o">-&gt;</span>
-</span><span class="line">                    <span class="p">{</span><span class="n">ok</span><span class="p">,</span> <span class="nv">Start</span><span class="p">,</span> <span class="n">now</span><span class="p">(),</span> <span class="nv">Processed</span><span class="p">};</span>
-</span><span class="line">                <span class="nv">Error</span> <span class="o">-&gt;</span>
-</span><span class="line">                    <span class="nv">Error</span>
-</span><span class="line">            <span class="k">end</span><span class="p">;</span>
-</span><span class="line">        <span class="nv">Error</span> <span class="o">-&gt;</span>
-</span><span class="line">            <span class="nv">Error</span>
-</span><span class="line">    <span class="k">end</span><span class="p">.</span>
-</span></code></pre></td></tr></table></div></figure><p>We can assign to an intermediate &quot;Resp&quot; variable, and bring that second case
-statement out into the function&#8217;s main code block, like so:</p>
-<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-</pre></td><td class="code"><pre><code class="erlang"><span class="line"><span class="nf">do_some_file_thing</span><span class="p">(</span><span class="nv">File</span><span class="p">)</span> <span class="o">-&gt;</span>
-</span><span class="line">    <span class="nv">Resp</span> <span class="o">=</span> <span class="k">case</span> <span class="nn">file</span><span class="p">:</span><span class="n">open</span><span class="p">(</span><span class="nv">File</span><span class="p">,</span> <span class="p">[</span><span class="n">raw</span><span class="p">,</span> <span class="n">binary</span><span class="p">,</span> <span class="n">read</span><span class="p">])</span> <span class="k">of</span>
-</span><span class="line">        <span class="p">{</span><span class="n">ok</span><span class="p">,</span> <span class="nv">Fd</span><span class="p">}</span> <span class="o">-&gt;</span>
-</span><span class="line">            <span class="p">{</span><span class="n">timestamp</span><span class="p">,</span> <span class="n">now</span><span class="p">(),</span> <span class="n">process_file_data</span><span class="p">(</span><span class="nv">Fd</span><span class="p">)};</span>
-</span><span class="line">        <span class="nv">Error</span> <span class="o">-&gt;</span>
-</span><span class="line">            <span class="nv">Error</span>
-</span><span class="line">    <span class="k">end</span><span class="p">,</span>
-</span><span class="line">    <span class="k">case</span> <span class="nv">Resp</span> <span class="k">of</span>
-</span><span class="line">        <span class="p">{</span><span class="n">timestamp</span><span class="p">,</span> <span class="nv">Start</span><span class="p">,</span> <span class="p">{</span><span class="n">ok</span><span class="p">,</span> <span class="nv">Processed</span><span class="p">}}</span> <span class="o">-&gt;</span>
-</span><span class="line">            <span class="p">{</span><span class="n">ok</span><span class="p">,</span> <span class="nv">Start</span><span class="p">,</span> <span class="n">now</span><span class="p">(),</span> <span class="nv">Processed</span><span class="p">};</span>
-</span><span class="line">        <span class="p">{</span><span class="n">timestamp</span><span class="p">,</span> <span class="nv">Start</span><span class="p">,</span> <span class="nv">Error</span><span class="p">}</span> <span class="o">-&gt;</span>
-</span><span class="line">            <span class="nv">Error</span><span class="p">;</span>
-</span><span class="line">        <span class="nv">Error</span> <span class="o">-&gt;</span>
-</span><span class="line">            <span class="nv">Error</span>
-</span><span class="line">    <span class="k">end</span><span class="p">.</span>
-</span></code></pre></td></tr></table></div></figure></div>
+<pre class="code erlang literal-block">
+<span class="nf">do_some_file_thing</span><span class="p">(</span><span class="nv">File</span><span class="p">)</span> <span class="o">-&gt;</span>
+    <span class="k">case</span> <span class="nn">file</span><span class="p">:</span><span class="n">open</span><span class="p">(</span><span class="nv">File</span><span class="p">,</span> <span class="p">[</span><span class="n">raw</span><span class="p">,</span> <span class="n">binary</span><span class="p">,</span> <span class="n">read</span><span class="p">])</span> <span class="k">of</span>
+        <span class="p">{</span><span class="n">ok</span><span class="p">,</span> <span class="nv">Fd</span><span class="p">}</span> <span class="o">-&gt;</span>
+            <span class="nv">Start</span> <span class="o">=</span> <span class="n">now</span><span class="p">(),</span>
+            <span class="k">case</span> <span class="n">process_file_data</span><span class="p">(</span><span class="nv">Fd</span><span class="p">)</span> <span class="k">of</span>
+                <span class="p">{</span><span class="n">ok</span><span class="p">,</span> <span class="nv">Processed</span><span class="p">}</span> <span class="o">-&gt;</span>
+                    <span class="p">{</span><span class="n">ok</span><span class="p">,</span> <span class="nv">Start</span><span class="p">,</span> <span class="n">now</span><span class="p">(),</span> <span class="nv">Processed</span><span class="p">};</span>
+                <span class="nv">Error</span> <span class="o">-&gt;</span>
+                    <span class="nv">Error</span>
+            <span class="k">end</span><span class="p">;</span>
+        <span class="nv">Error</span> <span class="o">-&gt;</span>
+            <span class="nv">Error</span>
+    <span class="k">end</span><span class="p">.</span>
+</pre>
+<p>We can assign to an intermediate &quot;Resp&quot; variable, and bring that second case
+statement out into the function's main code block, like so:</p>
+<pre class="code erlang literal-block">
+<span class="nf">do_some_file_thing</span><span class="p">(</span><span class="nv">File</span><span class="p">)</span> <span class="o">-&gt;</span>
+    <span class="nv">Resp</span> <span class="o">=</span> <span class="k">case</span> <span class="nn">file</span><span class="p">:</span><span class="n">open</span><span class="p">(</span><span class="nv">File</span><span class="p">,</span> <span class="p">[</span><span class="n">raw</span><span class="p">,</span> <span class="n">binary</span><span class="p">,</span> <span class="n">read</span><span class="p">])</span> <span class="k">of</span>
+        <span class="p">{</span><span class="n">ok</span><span class="p">,</span> <span class="nv">Fd</span><span class="p">}</span> <span class="o">-&gt;</span>
+            <span class="p">{</span><span class="n">timestamp</span><span class="p">,</span> <span class="n">now</span><span class="p">(),</span> <span class="n">process_file_data</span><span class="p">(</span><span class="nv">Fd</span><span class="p">)};</span>
+        <span class="nv">Error</span> <span class="o">-&gt;</span>
+            <span class="nv">Error</span>
+    <span class="k">end</span><span class="p">,</span>
+    <span class="k">case</span> <span class="nv">Resp</span> <span class="k">of</span>
+        <span class="p">{</span><span class="n">timestamp</span><span class="p">,</span> <span class="nv">Start</span><span class="p">,</span> <span class="p">{</span><span class="n">ok</span><span class="p">,</span> <span class="nv">Processed</span><span class="p">}}</span> <span class="o">-&gt;</span>
+            <span class="p">{</span><span class="n">ok</span><span class="p">,</span> <span class="nv">Start</span><span class="p">,</span> <span class="n">now</span><span class="p">(),</span> <span class="nv">Processed</span><span class="p">};</span>
+        <span class="p">{</span><span class="n">timestamp</span><span class="p">,</span> <span class="nv">Start</span><span class="p">,</span> <span class="nv">Error</span><span class="p">}</span> <span class="o">-&gt;</span>
+            <span class="nv">Error</span><span class="p">;</span>
+        <span class="nv">Error</span> <span class="o">-&gt;</span>
+            <span class="nv">Error</span>
+    <span class="k">end</span><span class="p">.</span>
+</pre>
+</div>
 <div class="section" id="what-does-this-all-mean">
-<h2>What does this all mean?</h2>
-<p>At the end of the day, this isn&#8217;t going to make or break you as a programmer.
-In fact, nothing I&#8217;ve mentioned even changes the code&#8217;s logic, but simply its
-implementation.  It&#8217;s simply something to think about as you code, as you read
-other people&#8217;s code.  Hopefully you agree with me that less nesting is an
+<h4>What does this all mean?</h4>
+<p>At the end of the day, this isn't going to make or break you as a programmer.
+In fact, nothing I've mentioned even changes the code's logic, but simply its
+implementation.  It's simply something to think about as you code, as you read
+other people's code.  Hopefully you agree with me that less nesting is an
 admirable goal, and you find more and more ways to achieve it.</p>
 <p>Discuss this post <a class="reference external" href="http://news.ycombinator.com/item?id=3414526">on Hacker News</a>.</p>
-</div></div>
-  
-  
+</div>
+</div>
 
-
-    </article>
-  
-  
-    <article>
+<div class="categories">
+    Posted in:
+    <ul>
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/02/16/technology-behind-convore/">The Technology Behind Convore</a></h1>
-    
-    
-      <p class="meta">
-        
+        <li><a href="/blog/categories/programming/">Programming</a></li>
+      
+        <li><a href="/blog/categories/observations/">Observations</a></li>
+      
+    </ul>
+  </div>
+  <hr />
 
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-02-16T12:29:35-08:00" pubdate data-updated="true">Feb 16<span>th</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>We launched <a class="reference external" href="https://convore.com/">Convore</a> last week, and the first question developers tend to ask
+  <h3><a href="/blog/2011/02/16/technology-behind-convore/">The Technology Behind Convore</a></h3>
+<p class="datetime">Feb 16, 2011</p>
+<div class="document">
+<p>We launched <a class="reference external" href="https://convore.com/">Convore</a> last week, and the first question developers tend to ask
 when they find <a class="reference external" href="https://convore.com/">Convore</a> is &quot;what technology powers this site?&quot;  It is asked so
 often, in fact, that we have started to copy and paste the same short response
 again and again.  That response was good enough to satisfy people who simply
 wanted to know if we were Rails or Django, or whether we were using node.js for
-the real-time stuff, but this article will expand upon that&#8211;  not only giving
+the real-time stuff, but this article will expand upon that--  not only giving
 more details for the curious, but also giving us a link to point people at when
 they ask the question in the future.  I always wish other people were totally
 open about their architectures, so that I can learn from their good choices and
-their bad, so I&#8217;d like to be as open as possible about ours.  Let&#8217;s dive in!</p>
+their bad, so I'd like to be as open as possible about ours.  Let's dive in!</p>
 <div class="section" id="the-basics">
-<h2>The basics</h2>
+<h4>The basics</h4>
 <p>All of our application code is powered by Python.  Our front-end html page
 generation is done by Django, which we use in a surprisingly traditional way
 given the real-time nature of Convore as a product.  Everything is assembled
@@ -761,65 +446,45 @@ Solr, which is interfaced into our application by way of the handy Haystack
 Django application.</p>
 </div>
 <div class="section" id="the-message-lifecycle">
-<h2>The message lifecycle</h2>
-<p>When a new message comes into the system, first it&#8217;s parsed by a series of
+<h4>The message lifecycle</h4>
+<p>When a new message comes into the system, first it's parsed by a series of
 regular expressions designed to pull out interesting bits of information from
-the message.  Right now all we&#8217;re looking for is username references and
+the message.  Right now all we're looking for is username references and
 links (and further, whether those links point at images which should be
 rendered in-line.)  At the end of this parsing stage, we have a structured
 message parse list, which is converted into JSON.</p>
 <p>So, for example if someone posted the message:</p>
-<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class="text"><span class="line">@ericflo @simonw Here&#39;s how we connect/disconnect from Redis in production: http://dpaste.com/406797/
-</span></code></pre></td></tr></table></div></figure><p>The resulting JSON parse list would look like this:</p>
-<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-<span class="line-number">18</span>
-<span class="line-number">19</span>
-<span class="line-number">20</span>
-<span class="line-number">21</span>
-<span class="line-number">22</span>
-<span class="line-number">23</span>
-</pre></td><td class="code"><pre><code class="text"><span class="line">[
-</span><span class="line">    {
-</span><span class="line">        &quot;type&quot;: &quot;username&quot;,
-</span><span class="line">        &quot;user_id&quot;: 1,
-</span><span class="line">        &quot;username&quot;: &quot;ericflo&quot;,
-</span><span class="line">        &quot;markup&quot;: &quot;&lt;a href=\&quot;/users/ericflo/\&quot;&gt;@ericflo&lt;/a&gt;&quot;
-</span><span class="line">    },
-</span><span class="line">    {
-</span><span class="line">        &quot;type&quot;: &quot;username&quot;,
-</span><span class="line">        &quot;user_id&quot;: 56,
-</span><span class="line">        &quot;username&quot;: &quot;simonw&quot;,
-</span><span class="line">        &quot;markup&quot;: &quot; &lt;a href=\&quot;/users/simonw/\&quot;&gt;@simonw&lt;/a&gt;&quot;
-</span><span class="line">    },
-</span><span class="line">    {
-</span><span class="line">        &quot;type&quot;: &quot;text&quot;,
-</span><span class="line">        &quot;markup&quot;: &quot; Here&amp;#39;s how we connect/disconnect from Redis in production: &quot;
-</span><span class="line">    },
-</span><span class="line">    {
-</span><span class="line">        &quot;type&quot;: &quot;url&quot;,
-</span><span class="line">        &quot;url&quot;: &quot;http://dpaste.com/406797/&quot;,
-</span><span class="line">        &quot;markup&quot;: &quot;&lt;a href=\&quot;http://dpaste.com/406797/\&quot; target=\&quot;_blank\&quot;&gt;http://dpaste.com/406797/&lt;/a&gt;&quot;
-</span><span class="line">    }
-</span><span class="line">]
-</span></code></pre></td></tr></table></div></figure><p>After this is constructed, we log all our available information about this
-message, and then save to the database&#8211;  both the raw message as it was received,
+<pre class="code text literal-block">
+&#64;ericflo &#64;simonw Here's how we connect/disconnect from Redis in production: http://dpaste.com/406797/
+</pre>
+<p>The resulting JSON parse list would look like this:</p>
+<pre class="code text literal-block">
+[
+    {
+        &quot;type&quot;: &quot;username&quot;,
+        &quot;user_id&quot;: 1,
+        &quot;username&quot;: &quot;ericflo&quot;,
+        &quot;markup&quot;: &quot;&lt;a href=\&quot;/users/ericflo/\&quot;&gt;&#64;ericflo&lt;/a&gt;&quot;
+    },
+    {
+        &quot;type&quot;: &quot;username&quot;,
+        &quot;user_id&quot;: 56,
+        &quot;username&quot;: &quot;simonw&quot;,
+        &quot;markup&quot;: &quot; &lt;a href=\&quot;/users/simonw/\&quot;&gt;&#64;simonw&lt;/a&gt;&quot;
+    },
+    {
+        &quot;type&quot;: &quot;text&quot;,
+        &quot;markup&quot;: &quot; Here&amp;#39;s how we connect/disconnect from Redis in production: &quot;
+    },
+    {
+        &quot;type&quot;: &quot;url&quot;,
+        &quot;url&quot;: &quot;http://dpaste.com/406797/&quot;,
+        &quot;markup&quot;: &quot;&lt;a href=\&quot;http://dpaste.com/406797/\&quot; target=\&quot;_blank\&quot;&gt;http://dpaste.com/406797/&lt;/a&gt;&quot;
+    }
+]
+</pre>
+<p>After this is constructed, we log all our available information about this
+message, and then save to the database--  both the raw message as it was received,
 and the JSON-encoded parsed node list.</p>
 <p>Now a task is sent to Celery (by way of Redis) notifying it that this new
 message has been received.  This Celery task now increments the unread count
@@ -834,7 +499,7 @@ all simultaneously return the new message information, at which point they
 reconnect again, waiting for the next message to arrive.</p>
 </div>
 <div class="section" id="the-real-time-endpoint">
-<h2>The real-time endpoint</h2>
+<h4>The real-time endpoint</h4>
 <p>Our live updates endpoint is actually a very simple and lightweight pure-WSGI
 Python application, hosted using Eventlet.  It spawns off a coroutine for each
 request, and in that coroutine, it looks up all the groups that a user is a
@@ -846,79 +511,76 @@ marking a topic as read before it returns a response, but the most important
 thing is to be a bridge between the user and Redis pub/sub.</p>
 </div>
 <div class="section" id="future-improvements">
-<h2>Future improvements</h2>
+<h4>Future improvements</h4>
 <p>There are so many places where our architecture can be improved.  This is our
 first version, and now that real users are using the system, already some of
 our initial assumptions are being challenged.  For instance, we thought that
 pub/sub to a channel per group would be enough, but what that means is that
 everyone in a group sees the exact same events as everyone else in that group.</p>
-<p>This means we don&#8217;t have the ability to customize each user&#8217;s experience based
-on their preferences&#8211;no way to put a user on ignore, filter certain messages,
-etc.  It also means that we aren&#8217;t able to sync up a user&#8217;s experience across
-tabs or browsers, since we don&#8217;t really want to broadcast to everyone in the
+<p>This means we don't have the ability to customize each user's experience based
+on their preferences--no way to put a user on ignore, filter certain messages,
+etc.  It also means that we aren't able to sync up a user's experience across
+tabs or browsers, since we don't really want to broadcast to everyone in the
 group that one user has visited a topic, thereby removing any unread messages
-in that topic.  So going forward we&#8217;re going to have to break up that per-group
+in that topic.  So going forward we're going to have to break up that per-group
 pub/sub into per-user pub/sub.</p>
-<p>Another area that could be improved is our unread counts.  Right now they&#8217;re
+<p>Another area that could be improved is our unread counts.  Right now they're
 stored as rows in our PostgreSQL database, which makes it extremely easy to
 batch update them and do aggregate queries on them, but the number of these
 rows is increasing rapidly, and without some kind of sharding scheme, it will
 at some point become more difficult to work with such a large amount of rows.
 My feeling is that this will eventually need to be moved into a non-relational
-data store, and we&#8217;ll need to write a service layer in front of it to deal with
+data store, and we'll need to write a service layer in front of it to deal with
 pre-aggregating and distributing updates, but nothing is set in stone just yet.</p>
 <p>Finally, Python may not be the best language for this real-time endpoint.
 Eventlet is a fantastic Python library and it allowed us to build something
 extremely fast that has scaled to several thousand concurrent connections
 without breaking a sweat on launch day, but it has its limits.  There is a
 large body of work out there on handling a large number of open connections,
-using Java&#8217;s NIO framework, Erlang&#8217;s mochiweb, or node.js.</p>
+using Java's NIO framework, Erlang's mochiweb, or node.js.</p>
 </div>
 <div class="section" id="that-s-all-folks">
-<h2>That&#8217;s all folks</h2>
-<p>We&#8217;re pretty proud of what we&#8217;ve built in a very short time, and we&#8217;re glad
-it has held up as well as it has on our launch day and afterwards.  We&#8217;re
-excited about the problems we&#8217;re now being faced with, both scaling the
+<h4>That's all folks</h4>
+<p>We're pretty proud of what we've built in a very short time, and we're glad
+it has held up as well as it has on our launch day and afterwards.  We're
+excited about the problems we're now being faced with, both scaling the
 technology, and scaling the product.  I hope this article has quenched any
 curiosity out there about how Convore works.  If there are any questions,
 feel free to join <a class="reference external" href="https://convore.com/">Convore</a> and ask away!</p>
 <p>(Or discuss it <a class="reference external" href="http://news.ycombinator.com/item?id=2228137">on Hacker News</a>)</p>
-</div></div>
-  
-  
+</div>
+</div>
 
-
-    </article>
-  
-  
-    <article>
+<div class="categories">
+    Posted in:
+    <ul>
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/10/10/object-lesson-how-respond-criticism/">An Object Lesson in How to Respond to Criticism</a></h1>
-    
-    
-      <p class="meta">
-        
+        <li><a href="/blog/categories/django/">Django</a></li>
+      
+        <li><a href="/blog/categories/python/">Python</a></li>
+      
+        <li><a href="/blog/categories/postgresql/">PostgreSQL</a></li>
+      
+        <li><a href="/blog/categories/convore/">Convore</a></li>
+      
+        <li><a href="/blog/categories/realtime/">Realtime</a></li>
+      
+        <li><a href="/blog/categories/redis/">Redis</a></li>
+      
+        <li><a href="/blog/categories/haystack/">Haystack</a></li>
+      
+        <li><a href="/blog/categories/solr/">Solr</a></li>
+      
+        <li><a href="/blog/categories/eventlet/">Eventlet</a></li>
+      
+    </ul>
+  </div>
+  <hr />
 
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-10-10T09:56:12-07:00" pubdate data-updated="true">Oct 10<span>th</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>In the moments leading up to my DjangoCon keynote this year (called
+  <h3><a href="/blog/2010/10/10/object-lesson-how-respond-criticism/">An Object Lesson in How to Respond to Criticism</a></h3>
+<p class="datetime">Oct 10, 2010</p>
+<div class="document">
+<p>In the moments leading up to my DjangoCon keynote this year (called
 <a class="reference external" href="http://djangocon.blip.tv/file/4112452/">Why Django Sucks, and How We Can Fix It</a>), I pictured the room an hour in the
 future and imagined what things would be like.  I envisioned all kinds of
 scenarios: one where people were literally booing, or another where I needed to
@@ -929,7 +591,7 @@ that everyone in the room was enthusiastic about.</p>
 <p>When it was finished, I braced myself for one of these scenarios to unfold.
 Instead, what happened in the following moments, the following days, and indeed
 the following month since then has been what I consider to be the most gracious
-and useful response to criticism that I&#8217;ve ever seen.  And I think it deserves
+and useful response to criticism that I've ever seen.  And I think it deserves
 to be highlighted, because I believe that reacting well to criticism is vital
 for any successful community.</p>
 <p>So what happened in the moments directly following the talk?
@@ -940,14 +602,14 @@ of which were quite extreme), but it also set the tone for the discourse around
 my talk; civility.</p>
 <p>Afterwards, privately, I apologized to several of the Django core developers.
 These are people I respect and admire, and I wanted to make sure that they knew
-that, at least on my end, it wasn&#8217;t personal.  I was expecting forgiveness, but
+that, at least on my end, it wasn't personal.  I was expecting forgiveness, but
 instead I received thanks.  Thanking me for criticising their project?  Not
 what I was expecting.</p>
 <p>One of the things that I suggested was to make <a class="reference external" href="http://alexgaynor.net/">Alex Gaynor</a> a core developer.
 A few people at the conference made comments wondering how many days it would
 take before that would happen.  Days went by, and the conference ended without
 this happening.  A week went by.  A few more.  But I knew better, because the
-Django core committers don&#8217;t do anything brashly.  They took their time, let
+Django core committers don't do anything brashly.  They took their time, let
 all dust and emotions settle down, and listened to the discussion.</p>
 <p>And then <a class="reference external" href="http://jacobian.org/">Jacob Kaplan-Moss</a> issued <a class="reference external" href="http://groups.google.com/group/django-developers/browse_thread/thread/9ebc3e57d539d1ff">an official announcement</a>.  I
 particularly agreed with one of the <a class="reference external" href="http://news.ycombinator.com/item?id=1740675">top comments on hackernews</a>:</p>
@@ -959,893 +621,77 @@ policy gracefully: clear, forthright, and non-defensive.&quot;
 </pre>
 <p>Clear.  Forthright.  Non-defensive.</p>
 <p>Some people saw this as an opening to change even more about Django, and even
-when some of the discussion was phrased rudely or accusatory, the Django team&#8217;s
+when some of the discussion was phrased rudely or accusatory, the Django team's
 responses were thoughtful and calm.  Now, over a week later (again
-demonstrating that things aren&#8217;t done brashly), we see that a half-dozen new
+demonstrating that things aren't done brashly), we see that a half-dozen new
 people have been added to the core team.  Yes, that includes <a class="reference external" href="http://alexgaynor.net/">Alex Gaynor</a>.
 So not only was the new policy clear, forthright, and non-defensive, but there
-was concrete follow-through so that everyone can see that it wasn&#8217;t just words.</p>
-<p>And even in that short time since the new committers were added, Django&#8217;s code
-is already reaping the benefits&#8211;we&#8217;ve seen a flurry of bugs fixed and tickets
-closed.  Django&#8217;s future has never looked so promising!</p>
+was concrete follow-through so that everyone can see that it wasn't just words.</p>
+<p>And even in that short time since the new committers were added, Django's code
+is already reaping the benefits--we've seen a flurry of bugs fixed and tickets
+closed.  Django's future has never looked so promising!</p>
 <p>Why do I think this is so important?  Because a community which welcomes
 constructive criticism is one in which people feel they can make a difference.
-And it&#8217;s because they <em>can</em> make a difference.  It&#8217;s a community that&#8217;s never
-satisfied with the status quo.  It&#8217;s a community that can grow and change and
-adapt, when the world around it changes.  It&#8217;s a community that we can be proud
+And it's because they <em>can</em> make a difference.  It's a community that's never
+satisfied with the status quo.  It's a community that can grow and change and
+adapt, when the world around it changes.  It's a community that we can be proud
 of.</p>
 <p>NB: I was not the only one to criticize Django at DjangoCon.  I was merely one
-voice.  This is just written from my perspective.</p></div>
-  
-  
+voice.  This is just written from my perspective.</p>
+</div>
 
-
-    </article>
-  
-  
-    <article>
+<div class="categories">
+    Posted in:
+    <ul>
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/09/27/why-node-disappoints-me/">Why node.js Disappoints Me</a></h1>
-    
-    
-      <p class="meta">
-        
+        <li><a href="/blog/categories/djangocon/">DjangoCon</a></li>
+      
+        <li><a href="/blog/categories/django/">Django</a></li>
+      
+        <li><a href="/blog/categories/criticism/">Criticism</a></li>
+      
+    </ul>
+  </div>
+  <hr />
 
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-09-27T01:23:47-07:00" pubdate data-updated="true">Sep 27<span>th</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><a class="reference external" href="http://nodejs.org/">Node.js</a> is currently at the center of a huge cyclone of hype.  At this point it&#8217;s clear that Node is going to be a major player in the next few years of web development.  It&#8217;s no wonder, either!  It represents a fresh start, one with no legacy synchronous baggage in our increasingly asynchronous, increasingly real-time web. And it&#8217;s accessible to anyone who&#8217;s written JavaScript (read: all web developers.)</p>
+  <h3><a href="/blog/2010/09/27/why-node-disappoints-me/">Why node.js disappoints me</a></h3>
+<p class="datetime">Sep 27, 2010</p>
+<div class="document">
+<p><a class="reference external" href="http://nodejs.org/">Node.js</a> is currently at the center of a huge cyclone of hype.  At this point it's clear that Node is going to be a major player in the next few years of web development.  It's no wonder, either!  It represents a fresh start, one with no legacy synchronous baggage in our increasingly asynchronous, increasingly real-time web. And it's accessible to anyone who's written JavaScript (read: all web developers.)</p>
 <p>Oh, and those benchmarks!  Compared trivially to the currently popular web technologies, it seems an obvious leap forward.</p>
-<p>Yet one of Node&#8217;s advantages that you&#8217;ll hear repeated again and again by its proponents is that you can now code in One Language, and you won&#8217;t have to deal with the cognitive load of context switching between different languages.  Especially as ORMs and NoSQL continue to rise in popularity, there&#8217;s no need to even deal with SQL. At the end of the day you&#8217;re writing JavaScript, HTML, and CSS, and that&#8217;s it.</p>
-<p>Seeing this happen with all of these pieces falling into place&#8211;a fresh start with a unified language&#8211;I started to get excited.  This would change the way we thought about our web code.  The frontend is the backend is the query language is the storage layer is JavaScript!  It&#8217;s a revolution.</p>
-<p>And then I saw what people did with this opportunity.  They effectively ported Sinatra/Django/Rails to JavaScript&#8211;and did it in such a way that it would only run on the server, with a specific feature set of JavaScript that only Node can reasonably understand.</p>
+<p>Yet one of Node's advantages that you'll hear repeated again and again by its proponents is that you can now code in One Language, and you won't have to deal with the cognitive load of context switching between different languages.  Especially as ORMs and NoSQL continue to rise in popularity, there's no need to even deal with SQL. At the end of the day you're writing JavaScript, HTML, and CSS, and that's it.</p>
+<p>Seeing this happen with all of these pieces falling into place--a fresh start with a unified language--I started to get excited.  This would change the way we thought about our web code.  The frontend is the backend is the query language is the storage layer is JavaScript!  It's a revolution.</p>
+<p>And then I saw what people did with this opportunity.  They effectively ported Sinatra/Django/Rails to JavaScript--and did it in such a way that it would only run on the server, with a specific feature set of JavaScript that only Node can reasonably understand.</p>
 <p>Not exactly the revolution I was hoping for.</p>
-<p>Instead of coding in one language, we&#8217;re actually coding in two. One is the subset JavaScript that can be run in all browsers, and another is the set of JavaScript that can be run by Node.  Knowing the difference between the two languages and context switching between them is simply a required skill.</p>
-<p>You know what would be awesome? If we wrote our libraries so that they could run either on the server or on the client, and they did so in a transparent way.  Maybe it would help to give a concrete example of how this could be awesome.  Let&#8217;s talk about HTML templating.</p>
+<p>Instead of coding in one language, we're actually coding in two. One is the subset JavaScript that can be run in all browsers, and another is the set of JavaScript that can be run by Node.  Knowing the difference between the two languages and context switching between them is simply a required skill.</p>
+<p>You know what would be awesome? If we wrote our libraries so that they could run either on the server or on the client, and they did so in a transparent way.  Maybe it would help to give a concrete example of how this could be awesome.  Let's talk about HTML templating.</p>
 <p>Imagine a framework where the first page-load was always rendered server-side, meaning the client gets a single fully-rendered page.  Then for desktop browsers, browsing around the site just made calls to API endpoints returning JSON or XML, and the client rendered the templates for the changed portions of the page.  For mobile browsers with less power or for search engines, the rendering would always be done on the server.  Imagine that the templating library could record some key metrics to determine how long things were taking to render, and dynamically switch between rendering on the server and client based on server load or client speed.</p>
 <p>Imagine a case where a back-end service fails temporarily.  In this case the rendering of that particular component could be deferred, the browser could be told to poll a resource.  When the back-end service is recovered, it could send the data for the client to render on its own.</p>
 <p>How awesome would that be?</p>
-<p>It&#8217;s not just HTML templating, either.  This same principle could be applied to any number of things: URL routing, form validation, hell even most application logic could be done using this style.</p>
-<p>But it&#8217;s going to take discipline.  Instead of reaching for those fancy V8 features, code will need to be written in a strict subset of the JavaScript that&#8217;s available.  Maybe Node could detect incompatible code and throw warnings, that would be cool.</p>
-<p>I just really hope that someday we stop re-inventing the same exact wheel, and instead build something substantially different and better.</p></div>
-  
-  
+<p>It's not just HTML templating, either.  This same principle could be applied to any number of things: URL routing, form validation, hell even most application logic could be done using this style.</p>
+<p>But it's going to take discipline.  Instead of reaching for those fancy V8 features, code will need to be written in a strict subset of the JavaScript that's available.  Maybe Node could detect incompatible code and throw warnings, that would be cool.</p>
+<p>I just really hope that someday we stop re-inventing the same exact wheel, and instead build something substantially different and better.</p>
+</div>
 
-
-    </article>
-  
-  
-    <article>
+<div class="categories">
+    Posted in:
+    <ul>
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/05/20/we-need-new-word-open/">We Need a New Word for &#8220;Open&#8221;</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-05-20T00:09:27-07:00" pubdate data-updated="true">May 20<span>th</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>When I say I&#8217;m developing an &quot;open&quot; API, what does that mean to you?</p>
-<p>To Facebook, it means something where you can get at some of your own data, as long as you abide by their restrictions on what you can do with it.</p>
-<p>To Twitter, it means something where you get back what you put in.</p>
-<p>To Flickr, it means something where you can get every single piece of data that you&#8217;ve ever put in the system, enriched by any value that Flickr can provide.</p>
-<p>To Google, it means something where you can get back what you put in, you can host your own version of the API on your own server, and your server has exactly the same status as any Google server has, and that Google&#8217;s servers and your server will interact and work as a system.</p>
-<p>We need new words.  Words that have more specific meaning&#8211;which encompass the broad idea of &quot;open&quot;, yet remain accessible and recognizable by everyone.  Federated is a good word, but it&#8217;s possible to have a closed, federated system.</p>
-<p>What words should we use?</p></div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
+        <li><a href="/blog/categories/javascript/">Javascript</a></li>
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2010/02/08/how-do-we-kick-our-synchronous-addiction/">How Do We Kick Our Synchronous Addiction?</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-02-08T22:15:31-08:00" pubdate data-updated="true">Feb 8<span>th</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Asynchronous programming is superior <a class="reference external" href="http://blog.webfaction.com/a-little-holiday-present">both in memory usage and in overall throughput</a> when compared to synchronous programming .  We&#8217;ve <a class="reference external" href="http://www.kegel.com/c10k.html">known this fact for years</a>.  If we look at Django or Ruby on Rails, arguably the two most promising new web application frameworks to emerge in the past few years, both of them are written in such a way that synchronous programming  is assumed. Why is it that even in 2010 we&#8217;re still writing programs that rely on synchronous programming ?</p>
-<p>The reason that we&#8217;re stuck on synchronous programming  is twofold.  Firstly, the programming model required for straightforward asynchronous implementations is inconvenient.  Secondly, popular and/or mainstream languages lack the built-in language constructs that are needed to implement a less-straightforward approach to asynchronous programming.</p>
-<div class="section" id="asynchronous-programming-is-too-hard">
-<h2>Asynchronous programming is too hard</h2>
-<p>Let&#8217;s first examine the straightforward implementation: an event loop.  In this programming model, we have a single process with a single loop that runs continuously.  Functionality is achieved by writing functions to execute small tasks quickly, and inserting those functions into that event loop.  One of those functions might read some bytes from a socket, while another function might write a few bytes to a file, and yet another function might do something computational like calculating an XOR on the data that&#8217;s been buffered from that first socket.</p>
-<p>The most important part about this event loop is that only one thing is ever happening at a time.  That means that you really have to break your logic up into small chunks that can be performed incrementally.  If any one of our functions blocks, it hogs the event loop and nothing else can execute during that time.</p>
-<p>We have some really great frameworks geared towards making this event loop model easier to work with.  In Python, there&#8217;s <a class="reference external" href="http://twistedmatrix.com/trac/">Twisted</a> and, more recently, <a class="reference external" href="http://www.tornadoweb.org/">Tornado</a>.  In Ruby there&#8217;s <a class="reference external" href="http://rubyeventmachine.com/">EventMachine</a>.  In PERL there&#8217;s <a class="reference external" href="http://poe.perl.org/">POE</a>.  What these frameworks do is twofold: provide constructs for more easily working with an event loop (e.g. <a class="reference external" href="http://twistedmatrix.com/documents/current/core/howto/defer.html">Deferreds</a> or <a class="reference external" href="http://en.wikipedia.org/wiki/Futures_and_promises">Promises</a>), and provide asynchronous implementations of common tasks (e.g. HTTP clients and DNS resolution).</p>
-<p>But these frameworks stop very short of making asynchronous programming easy for two reasons.  The first reason is that we really do have to completely change our coding style.  Consider what it would take to render a simple blog web page with comments.  Here&#8217;s some JavaScript code to demonstrate how this might work in a synchronous framework:</p>
-<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="kd">function</span> <span class="nx">handleBlogPostRequest</span><span class="p">(</span><span class="nx">request</span><span class="p">,</span> <span class="nx">response</span><span class="p">,</span> <span class="nx">postSlug</span><span class="p">)</span> <span class="p">{</span>
-</span><span class="line">    <span class="kd">var</span> <span class="nx">db</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">DBClient</span><span class="p">();</span>
-</span><span class="line">    <span class="kd">var</span> <span class="nx">post</span> <span class="o">=</span> <span class="nx">db</span><span class="p">.</span><span class="nx">getBlogPost</span><span class="p">(</span><span class="nx">postSlug</span><span class="p">);</span>
-</span><span class="line">    <span class="kd">var</span> <span class="nx">comments</span> <span class="o">=</span> <span class="nx">db</span><span class="p">.</span><span class="nx">getComments</span><span class="p">(</span><span class="nx">post</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
-</span><span class="line">    <span class="kd">var</span> <span class="nx">html</span> <span class="o">=</span> <span class="nx">template</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;blog/post.html&#39;</span><span class="p">,</span>
-</span><span class="line">        <span class="p">{</span><span class="s1">&#39;post&#39;</span><span class="o">:</span> <span class="nx">post</span><span class="p">,</span> <span class="s1">&#39;comments&#39;</span><span class="o">:</span> <span class="nx">comments</span><span class="p">});</span>
-</span><span class="line">    <span class="nx">response</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">html</span><span class="p">);</span>
-</span><span class="line">    <span class="nx">response</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span>
-</span><span class="line"><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure><p>Now here&#8217;s some JavaScript code to demonstrate how this might look in an asynchronous framework.  Note several things here: We&#8217;ve specifically written this in such a way that it doesn&#8217;t become nested four levels deep.  We&#8217;ve also written these callback functions inside of the <tt class="docutils literal">handleBlogPostRequest</tt> function to take advantage of closure so as to retain access to the request and response objects, the template context, and the database client. Both the desire to avoid nesting and the closure are things that we need to think about as we write this code, that were not even considerations in the synchronous version:</p>
-<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="kd">function</span> <span class="nx">handleBlogPostRequest</span><span class="p">(</span><span class="nx">request</span><span class="p">,</span> <span class="nx">response</span><span class="p">,</span> <span class="nx">postSlug</span><span class="p">)</span> <span class="p">{</span>
-</span><span class="line">    <span class="kd">var</span> <span class="nx">context</span> <span class="o">=</span> <span class="p">{};</span>
-</span><span class="line">    <span class="kd">var</span> <span class="nx">db</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">DBClient</span><span class="p">();</span>
-</span><span class="line">    <span class="kd">function</span> <span class="nx">pageRendered</span><span class="p">(</span><span class="nx">html</span><span class="p">)</span> <span class="p">{</span>
-</span><span class="line">        <span class="nx">response</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">html</span><span class="p">);</span>
-</span><span class="line">        <span class="nx">response</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span>
-</span><span class="line">    <span class="p">}</span>
-</span><span class="line">    <span class="kd">function</span> <span class="nx">gotComments</span><span class="p">(</span><span class="nx">comments</span><span class="p">)</span> <span class="p">{</span>
-</span><span class="line">        <span class="nx">context</span><span class="p">[</span><span class="s1">&#39;comments&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nx">comments</span><span class="p">;</span>
-</span><span class="line">        <span class="nx">template</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">&#39;blog/post.html&#39;</span><span class="p">,</span> <span class="nx">context</span><span class="p">).</span><span class="nx">addCallback</span><span class="p">(</span><span class="nx">pageRendered</span><span class="p">);</span>
-</span><span class="line">    <span class="p">}</span>
-</span><span class="line">    <span class="kd">function</span> <span class="nx">gotBlogPost</span><span class="p">(</span><span class="nx">post</span><span class="p">)</span> <span class="p">{</span>
-</span><span class="line">        <span class="nx">context</span><span class="p">[</span><span class="s1">&#39;post&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nx">post</span><span class="p">;</span>
-</span><span class="line">        <span class="nx">db</span><span class="p">.</span><span class="nx">getComments</span><span class="p">(</span><span class="nx">post</span><span class="p">.</span><span class="nx">id</span><span class="p">).</span><span class="nx">addCallback</span><span class="p">(</span><span class="nx">gotComments</span><span class="p">);</span>
-</span><span class="line">    <span class="p">}</span>
-</span><span class="line">    <span class="nx">db</span><span class="p">.</span><span class="nx">getBlogPost</span><span class="p">(</span><span class="nx">postSlug</span><span class="p">).</span><span class="nx">addCallback</span><span class="p">(</span><span class="nx">gotBlogPost</span><span class="p">);</span>
-</span><span class="line"><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure><p>I&#8217;ve chosen JavaScript here to prove a point, by the way.  People are very excited about <a class="reference external" href="http://nodejs.org/">node.js</a> right now, and it&#8217;s a very cool framework, but it doesn&#8217;t hide all of the complexities involved in doing things asynchronously.  It only hides some of the implementation details of the event loop.</p>
-<p>The second reason why these frameworks fall short is because not all IO can be handled properly by a framework, and in these cases we have to resort to bad hacks.  For example, MySQL does not offer an asynchronous database driver, so most of the major frameworks end up using threads to ensure that this communication happens out of band.</p>
-<p>Given the inconvenient API, the added complexity, and the simple fact that most developers haven&#8217;t switched to using this style of programming, leads us to the conclusion that this type of framework is not a desirable final solution to the problem (even though I do concede that you can get Real Work done today using these techniques, and many people do).  That being the case, what other options do we have for asynchronous programming? Coroutines and lightweight processes, which brings us to our next major problem.</p>
-</div>
-<div class="section" id="languages-don-t-support-easier-asynchronous-paradigms">
-<h2>Languages don&#8217;t support easier asynchronous paradigms</h2>
-<p>There are a few language constructs that, if implemented properly in modern programming languages, could pave the way for alternative methods of doing asynchronous programming that don&#8217;t have the drawbacks of the event loop.  These constructs are coroutines and lightweight processes.</p>
-<p>A coroutine is a function that can suspend and resume its execution at certain, programmatically specified, locations.  This simple concept can serve to transform blocking-looking code to be non-blocking.  At certain critical points in your IO library code, the low-level functions that are doing IO can choose to &quot;cooperate&quot;.  That is, it can choose to suspend execution in order for another function to resume execution and continue on.</p>
-<p>Here&#8217;s an example (it&#8217;s Python, but fairly understandable for all I hope):</p>
-<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="k">def</span> <span class="nf">download_pages</span><span class="p">():</span>
-</span><span class="line">    <span class="n">google</span> <span class="o">=</span> <span class="n">urlopen</span><span class="p">(</span><span class="s">&#39;http://www.google.com/&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-</span><span class="line">    <span class="n">yahoo</span> <span class="o">=</span> <span class="n">urlopen</span><span class="p">(</span><span class="s">&#39;http://www.yahoo.com/&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-</span></code></pre></td></tr></table></div></figure><p>Normally the way this would work is that a socket would be opened, connected to Google, an HTTP request sent, and the full response would be read, buffered, and assigned to the <tt class="docutils literal">google</tt> variable, and then in turn the same series of steps would be taken for the <tt class="docutils literal">yahoo</tt> variable.</p>
-<p>Ok, now imagine that the underlying socket implementation were built using coroutines that cooperated with each other.  This time, just like before, the socket would be opened and a connection would be made to Google, and then a request would be fired off.  This time, however, after sending the request, the socket implementation suspends its own execution.</p>
-<p>Having suspended its execution (but not yet having returned a value), execution continues on to the next line.  The same thing happens on the Yahoo line: once its request has been fired off, the Yahoo line suspends its execution.  But now there&#8217;s something else to cooperate with&#8211;there&#8217;s actually some data ready to be read on the Google socket&#8211;so it resumes execution at that point.  It reads some data from the Gooogle socket, and then suspends its execution again.</p>
-<p>It jumps back and forth between the two coroutines until one has finished.  Let&#8217;s say that the Yahoo socket has finished, but the Google one has not.  In this case, the Google socket just continues to read from its socket until it has completed, because there are no other coroutines to cooperate with.  Once the Google socket is finally finished, the function returns with all of the buffered data.</p>
-<p>Then the Yahoo line returns with all of its buffered data.</p>
-<p>We&#8217;ve preserved the style of our blocking code, but we&#8217;ve used asynchronous programming to do it.  Best of all, we&#8217;ve preserved our original program flow&#8211;the <tt class="docutils literal">google</tt> variable is assigned first, and then the <tt class="docutils literal">yahoo</tt> variable is assigned.  In truth, we&#8217;ve got a smart event loop going on underneath the covers to control who gets to execute, but it&#8217;s hidden from us due to the fact that coroutines are in play.</p>
-<p>Languages like PHP, Python, Ruby, and Perl simply don&#8217;t have built-in coroutines that are robust enough to implement this kind of behind-the-scenes transformation.  So what about these lightweight processes?</p>
-<p>Lightweight processes are what Erlang uses as its main concurrency primitive.  Essentially these are processes that are mostly implemented in the Erlang VM itself.  Each process has approximately 300 words of overhead and its execution is scheduled primarily by the Erlang VM, sharing no state at all amongst processes.  Essentially, we don&#8217;t have to think twice about spawning a process, as it&#8217;s essentially free.  The catch is that these processes can only communicate via message passing.</p>
-<p>Implementing these lightweight processes at the VM level gets rid of the memory overhead, the context switching, and the relative sluggishness of interprocess communication provided by the operating system.  Since the VM also has insight into the memory stack of each process, it can freely move or resize those processes and their stacks.  That&#8217;s something that the OS simply cannot do.</p>
-<p>With this model of lightweight processes, it&#8217;s possible to again revert back to the convenient model of using a separate process for all of our asynchronous programming needs.  The question becomes this: can this notion of lightweight processes be implemented in languages other than Erlang?  The answer to that is &quot;I don&#8217;t know.&quot;  To my knowledge, Erlang takes advantage of some features of the language itself (such as having no mutable data structures) in its lightweight process implementation.</p>
-</div>
-<div class="section" id="where-do-we-go-from-here">
-<h2>Where do we go from here?</h2>
-<p>The key to moving forward is to drop the notion that developers need to learn to think about all of their code in terms of callbacks and asynchrony, as the asynchronous event loop frameworks require them to do.  Over the past ten years, we can see that most developers, when faced with that decision, simply choose to ignore it.  They continue to use the inferior blocking methodologies of yesteryear.</p>
-<p>We need to look at these alternative implementations like coroutines and lightweight processes, so that we can make asynchronous programming as easy as synchronous programming.  Only then will we be able to kick this synchronous addiction.</p>
-</div></div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
+        <li><a href="/blog/categories/node/">Node</a></li>
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/11/10/you-care-about-facebook-you-just-might-not-know-it/">You Care About Facebook, You Just Might Not Know It Yet</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-11-10T22:25:12-08:00" pubdate data-updated="true">Nov 10<span>th</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I recently had a conversation with a few friends that I know through the Python community. These are people who I respect a great deal, and look to for advice and insight when it comes to web development.  During the course of this conversation, the subject of Facebook came up.  What I wasn&#8217;t expecting at all was that a large number of them said that they have no interest in Facebook, and quite a few of them proudly didn&#8217;t even have accounts.</p>
-<p>To put it bluntly, I believe that ignorance of Facebook is a major handicap today, both for developers and for entrepreneurs, and people who are not paying attention to it are burying their head in the sand.</p>
-<p>Facebook has gotten to a point where it&#8217;s the destination where <a class="reference external" href="http://mashable.com/2009/09/17/facebook-google-time-spent/">the most time is spent online</a>.  It gets an estimated <a class="reference external" href="https://www.google.com/adplanner/planning/site_profile#siteDetails?identifier=facebook.com&amp;lp=true">260 billion</a> (that&#8217;s a B on that number) pageviews per month.  In a single week, new properties are able to garner <a class="reference external" href="http://www.insidesocialgames.com/2009/10/08/zyngas-cafe-world-goes-from-0-to-8-6-million-users-in-a-week-with-big-implications/">8.6 million new active users</a>. Sites which implement <a class="reference external" href="http://developers.facebook.com/connect.php">Facebook Connect</a> typically see a <a class="reference external" href="http://www.businessinsider.com/six-months-in-facebook-connect-is-a-huge-success-2009-7">1.3x-2x boost in registrations</a>. Companies building on Facebook&#8217;s platform are <a class="reference external" href="http://www.guardian.co.uk/technology/2009/nov/09/playfish-ea">being sold for 400 million dollars</a> and are <a class="reference external" href="http://www.virtualgoodsnews.com/2009/04/100m-annual-revenues-reported-for-zynga.html">making 100 million dollars yearly</a>. There are over <cite>300 million</cite> active registered users.  In other words, if you talk to a person that spends any time on the internet at all, they likely have a Facebook account.  These numbers, by the way, are trending <a class="reference external" href="http://www.insidefacebook.com/2009/08/12/comscore-facebooks-us-audience-jumps-by-14-in-july/">up and to the right&#8211;</a>.</p>
-<p>Take the word Facebook out of the above paragraph, and replace it with icanhazcheeseburger. Replace it with 4chan, or somethingawful, or barbie, or anything. No matter what you replace as the company name, it doesn&#8217;t change the fact that those numbers are compelling enough to be irresponsible to ignore.</p>
-<p>Let me be perfectly clear: I don&#8217;t particularly enjoy using Facebook.  I find its UI cluttered, its privacy controls confusing, and its content fairly trivial.  From the development side, Facebook&#8217;s APIs are clunky at best. I&#8217;m definitely not advocating that you should log in every day and love it.  I don&#8217;t.  The mass populous, however, does.  I&#8217;m simply advocating that you should at least have an account, log in every once in a while, and keep tabs on the announcements that they make for developers.</p>
-<p>As people spend more and more time consuming and producing content inside of the Facebook ecosystem, it&#8217;s going to be those who change and embrace it who succeed, and those who fail to adapt that stand to lose.  Note that I said producing content &quot;inside of the Facebook ecosystem&quot;, and not &quot;inside Facebook&quot;, as Facebook has been making very strong pushes to extend the reach of its platform well outside of its destination site.  You can augment your site to have people pushing content into Facebook from your own destination sites.</p>
-<p>Facebook is willing to give you access to a person&#8217;s information, to their entire social graph, and to allow your user to become an advocate of your site, all while making registration on your site as simple as one click.  Sure, you may evaluate all of that as an option and decide that it&#8217;s not important enough to implement, but surely it&#8217;s an important enough option to warrant your cognizance.</p>
-<p>Do I think that Facebook will be relevant in 10 years? Probably. I&#8217;m not willing to bet much on it.  One thing you can be <strong>absolutely</strong> sure about though, is that if another service with this much power comes along, I&#8217;ll have an account and be acutely aware of its developer resources.</p></div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
+        <li><a href="/blog/categories/programming/">Programming</a></li>
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/07/21/my-thoughts-nosql/">My Thoughts on NoSQL</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-07-21T06:44:17-07:00" pubdate data-updated="true">Jul 21<span>st</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Over the past few years, relational databases have fallen out of favor for a
-number of influential people in our industry.  I&#8217;d like to weigh in on that,
-but before doing so, I&#8217;d like to give my executive summary of the events leading up to
-this movement:</p>
-<p>In the late nineties and early thousands, websites were mostly read-only&#8211;a
-publisher would create some content and users would consume that content.
-The data access patterns for these types of applications became very
-well-understood, and as a result many tools were created and much research and
-development was done to further develop these technologies.</p>
-<p>As the web has grown more social, however, more and more it&#8217;s the people
-themselves who have become the publishers.  And with that fundamental shift
-away from read-heavy architectures to read/write and write-heavy
-architectures, a lot of the way that we think about storing and retrieving
-data needed to change.</p>
-<p>Most people have done this by relying less on the features provided by
-traditional relational databases and engineering more database logic in their
-application code.  Essentially, they stop using relational databases the way
-they were intended to be used, and they instead use them as dumb data stores.</p>
-<p>Other people have engineered new database systems from the ground up, each
-with a different set of tradeoffs and differences from their relational
-database brethren.  It&#8217;s these new databases that have some in our industry
-excited, and it&#8217;s these databases that I&#8217;m going to focus on primarily in this
-post.</p>
-<p>(By the way, there&#8217;s a whole lot more theory behind the movement away from
-SQL.  Primarily of interest is the CAP theorem and the Dynamo paper.  Both of
-these illustrate the necessary tradeoffs of between different approaches to
-designing databases.)</p>
-<div class="section" id="let-s-get-this-out-of-the-way">
-<h2>Let&#8217;s get this out of the way</h2>
-<p>I love SQL.  More than even that, I love my precious ORM and being able to
-query for whatever information I want whenever I want it.  For the vast
-majority of sites out there (we&#8217;re talking 99.9% of the sites out there,
-folks) it suits their needs very well, providing a good balance of ease of use
-and performance.</p>
-<p>There&#8217;s no reason for them to switch away from SQL, and there&#8217;s no way they
-will.  If there&#8217;s one thing I <em>don&#8217;t</em> like about this whole NoSQL movement,
-it&#8217;s the presumption that everyone who&#8217;s interested in alternative databases
-hates the status quo.  That&#8217;s simply not true.</p>
-<p>But we&#8217;re not talking about most sites out there, we&#8217;re not talking about the
-status quo, we&#8217;re talking about the few applications that need something
-totally different.</p>
-</div>
-<div class="section" id="tokyo-cabinet-tokyo-tyrant">
-<h2>Tokyo Cabinet / Tokyo Tyrant</h2>
-<p>Tokyo Cabinet (and its network interface, Tokyo Tyrant) is the logical
-successor to Berkeley DB&#8211;a blazing fast, open-source, embeddable key-value
-store that does just about what you would expect from its description.  It
-supports 3 modes of operation: hashtable mode, b-tree mode, and table mode.</p>
-<p>(Table mode still pretty much sucks, and I&#8217;m not convinced it&#8217;s a good idea
-for the project since it&#8217;s added bloat and other systems like RDBMs are
-probably better for storing tabular data, so I&#8217;m going to skip it.)</p>
-<p>Essentially, the API into Tokyo Cabinet is that of a gigantic associative
-array.  You give it a key and a value, and then later, given a key, it will
-give you back the value you put in.  Its largest assets are that it&#8217;s fast and
-straightforward.</p>
-<p>If your problem is such that you have a small to medium-sized amount of data,
-which needs to be updated rapidly, and can be easily modeled in
-terms of keys and values (almost all scenarios can be rewritten in terms of
-keys and values, but some problems are easier to convert than others), then
-Tokyo Cabinet and Tokyo Tyrant are the way to go.</p>
-</div>
-<div class="section" id="couchdb">
-<h2>CouchDB</h2>
-<p>CouchDB is similar to Tokyo Cabinet in that it essentially maps keys to data,
-but CouchDB&#8217;s philosophy is completely different. Instead of arbitrary data,
-its data has structure&#8211;it&#8217;s a JSON object.  Instead of only being able to
-query by keys, you can upload functions that index your data for you and then
-you can call those functions.  All of this is done over a very simple REST
-interface.</p>
-<p>But none of this really matters.  None of these really set CouchDB apart,
-because you could just encode JSON data and store it in Tokyo Cabinet, you can
-maintain your own indexes of data fairly easily, and you can build a simple
-REST API in a matter of days, if not hours.</p>
-<p>What really sets CouchDB apart from the pack is it&#8217;s innovative replication
-strategy.  It was written in such a way that nodes which are disconnected for
-long periods of time can reconnect, sync with each other, and reconcile their
-differences in a way that no other database (since Lotus Notes?) could do.</p>
-<p>It&#8217;s functionality that allows for interesting and new distributed types of
-applications and data that I think could possibly change the way we take our
-applications offline.  I imagine that some day every computer will come with
-CouchDB pre-installed and it&#8217;ll be a data store that we use without even
-knowing that we&#8217;re using it.</p>
-<p>However, I wouldn&#8217;t choose it for a super high scalability site with lots of
-data and sharding and replication and high availability and all those
-buzzwords, because I&#8217;m not convinced it&#8217;s the right tool for that job, but I
-am convinced that its replication strategy will keep it relevant for years to
-come.</p>
-</div>
-<div class="section" id="redis">
-<h2>Redis</h2>
-<p>Wow, looking at the bullet points this database seems to do just about
-everything, perfectly!  Yeah, it&#8217;s a bit prone to hyperbole and there are some
-great things about it, but a lot of it is hot air.  For example, it claims to
-support sharding but really all it does is have the client run a hash function
-on its key and use that to determine which server to send its value to.  This
-is something that any database can do.</p>
-<p>When you get down to it, Redis is a key-value store which provides a richer
-API than something like Tokyo Cabinet.  It does more operations in memory,
-only periodically flushing to disk, so there&#8217;s more of a risk that you could
-lose data on a crash.  The tradeoff is that it&#8217;s extremely fast, and it does
-some neat things like allow you to append a value to the end of a list of
-items already stored for a given key.</p>
-<p>It also has atomic operations.  This is honestly the only reason I find this
-project interesting, because the atomic operation support that it has means
-that it can be turned into a best-of-breed tally server.  If you are building
-a server to keep real-time counts of various things, you would be remiss to
-overlook Redis as a very viable option.</p>
-</div>
-<div class="section" id="cassandra">
-<h2>Cassandra</h2>
-<p>It&#8217;s good to save the best for last, and that&#8217;s exactly what I&#8217;ve done as I
-find Cassandra to be easily the most interesting non-relational database out
-there today.  Originally developed by Facebook, it was developed by some of
-the key engineers behind Amazon&#8217;s famous Dynamo database.</p>
-<p>Cassandra can be thought of as a huge 4-or-5-level associative array, where
-each dimension of the array gets a free index based on the keys in that level.
-The real power comes from that optional 5th level in the associative array,
-which can turn a simple key-value architecture into an architecture where you
-can now deal with sorted lists, based on an index of your own specification.
-That 5th level is called a SuperColumn, and it&#8217;s one of the reasons that
-Cassandra stands out from the crowd.</p>
-<p>Cassandra has no single points of failure, and can scale from one machine to
-several thousands of machines clustered in different data centers.  It has no
-central master, so any data can be written to any of the nodes in the cluster,
-and can be read likewise from any other node in the cluster.</p>
-<p>It provides knobs that can be tweaked to slide the scale between consistency
-and availability, depending on your particular application and problem domain.
-And it provides a high availability guarantee, that if one node goes down,
-another node will step in to replace it smoothly.</p>
-<p>Writing about all the features of Cassandra is a whole different post, but I
-am convinced that its data model is rich enough to support a wide variety of
-applications while providing the kind of extreme scalability and high
-availability features that few other databases can achieve&#8211;all while
-maintaining a lower latency than other solutions out there.</p>
-</div>
-<div class="section" id="conclusion">
-<h2>Conclusion</h2>
-<p>There are many other non-relational databases out there: HBase and Hypertable,
-which are replicating Google&#8217;s BigTable despite its complexity and problems
-with single points of failure.  MongoDB is another database that has been
-getting some traction, but it seems to be a jack of all trades, master of
-none.  In short, the above databases are the ones that I find interesting
-right now, and I would use each of them for different use cases.</p>
-<p>What do you all think about this whole non-relational database thing?  Do you
-agree with my thoughts or do you think I&#8217;m full of it?</p>
-</div></div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2009/04/02/flojax-unobtrusive-and-easy-strategy-creating-ajax/">Flojax: A Unobtrusive and Easy Strategy for Creating AJAX-style Web Applications</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-04-02T19:05:18-07:00" pubdate data-updated="true">Apr 2<span>nd</span>, 2009</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Writing AJAX-style web applications can be very tedious.  If you&#8217;re using XML
-as your transport layer, you have to parse the XML before you can work with it.
-It&#8217;s a bit easier if you&#8217;re using JSON, but once you have parsed the data, the
-data still needs to be turned into HTML markup that matches the current markup
-on the page.  Finally, the newly created markup needs to be inserted into the
-correct place in the DOM, and any event handlers need to be attached to the
-appropriate newly-inserted markup.</p>
-<p>So there&#8217;s the parsing, the markup assembly, the DOM insertion, and finally the
-event handler attachment.  Most of the time, people tend to write custom code
-for each element that needs asynchronous updating.  There are several drawbacks
-with this scenario, but the most frustrating part is probably that the
-presentation logic is implemented twice&#8211;once in a templating language on the
-server which is designed specifically for outputting markup, and again on the
-client with inline Javascript.  This leads to problems both in the agility and
-in the maintainability of this type of application.</p>
-<p>With flojax, this can all be  accomplished with one generalized implementation.
-The same server-side logic that generates the data for the first synchronous
-request can be used to respond to subsequent asynchronous requests, and
-unobtrusive attributes specify what to do for the rest.</p>
-<div class="section" id="the-basics">
-<h2>The Basics</h2>
-<p>The first component for creating an application using the flojax strategy is to
-break up the content that you would like to reload asynchronously into smaller
-fragments.  As a basic example of this, let&#8217;s examine the case where there is a
-panel of buttons that you would like to turn into asynchronous requests instead
-of full page reloads.</p>
-<p>The rendered markup for a fragment of buttons could look something like this:</p>
-<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-</pre></td><td class="code"><pre><code class="html"><span class="line"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;buttons&quot;</span><span class="nt">&gt;</span>
-</span><span class="line">    <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;/vote/up/item1/&quot;</span><span class="nt">&gt;</span>Vote up<span class="nt">&lt;/a&gt;</span>
-</span><span class="line">    <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;/vote/down/item1/&quot;</span><span class="nt">&gt;</span>Vote down<span class="nt">&lt;/a&gt;</span>
-</span><span class="line">    <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;/favorite/item1/&quot;</span><span class="nt">&gt;</span>Add to your favorites<span class="nt">&lt;/a&gt;</span>
-</span><span class="line"><span class="nt">&lt;/div&gt;</span>
-</span></code></pre></td></tr></table></div></figure><p>In a templating language, the logic might look something like this:</p>
-<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-</pre></td><td class="code"><pre><code class="html"><span class="line"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;buttons&quot;</span><span class="nt">&gt;</span>
-</span><span class="line">    {% if voted %}
-</span><span class="line">        <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;/vote/clear/{{ item.id }}/&quot;</span><span class="nt">&gt;</span>Clear your vote<span class="nt">&lt;/a&gt;</span>
-</span><span class="line">    {% else %}
-</span><span class="line">        <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;/vote/up/{{ item.id }}/&quot;</span><span class="nt">&gt;</span>Vote up<span class="nt">&lt;/a&gt;</span>
-</span><span class="line">        <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;/vote/down/{{ item.id }}/&quot;</span><span class="nt">&gt;</span>Vote down<span class="nt">&lt;/a&gt;</span>
-</span><span class="line">    {% endif %}
-</span><span class="line">    {% if favorited %}
-</span><span class="line">        <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;/favorite/{{ item.id }}/&quot;</span><span class="nt">&gt;</span>Add to your favorites<span class="nt">&lt;/a&gt;</span>
-</span><span class="line">    {% else %}
-</span><span class="line">        <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;/unfavorite/{{ item.id }}/&quot;</span><span class="nt">&gt;</span>Remove from your favorites<span class="nt">&lt;/a&gt;</span>
-</span><span class="line">    {% endif %}
-</span><span class="line"><span class="nt">&lt;/div&gt;</span>
-</span></code></pre></td></tr></table></div></figure><p>(Typically you wouldn&#8217;t use anchors to do operations that can change state on
-the server, so you can imagine this would be accomplished using forms.  However,
-for demonstration and clarity purposes I&#8217;m going to leave these as links.)</p>
-<p>Now that we have written a fragment, we can start using it in our larger
-templates by way of an include, which might look something like this:</p>
-<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-</pre></td><td class="code"><pre><code class="html"><span class="line">...
-</span><span class="line"><span class="nt">&lt;p&gt;</span>If you like this item, consider favoriting or voting on it:<span class="nt">&lt;/p&gt;</span>
-</span><span class="line">{% include &quot;fragments/buttons.html&quot; %}
-</span><span class="line">...
-</span></code></pre></td></tr></table></div></figure><p>To change this from being standard links to being asynchronously updated, we
-just need to annotate a small amount of data onto the relevant links in the
-fragment.</p>
-<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-</pre></td><td class="code"><pre><code class="html"><span class="line"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;buttons&quot;</span><span class="nt">&gt;</span>
-</span><span class="line">    {% if voted %}
-</span><span class="line">        <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;/vote/clear/{{ item.id }}/&quot;</span> <span class="na">class=</span><span class="s">&quot;flojax&quot;</span> <span class="na">rel=</span><span class="s">&quot;buttons&quot;</span><span class="nt">&gt;</span>Clear your vote<span class="nt">&lt;/a&gt;</span>
-</span><span class="line">    {% else %}
-</span><span class="line">        <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;/vote/up/{{ item.id }}/&quot;</span> <span class="na">class=</span><span class="s">&quot;flojax&quot;</span> <span class="na">rel=</span><span class="s">&quot;buttons&quot;</span><span class="nt">&gt;</span>Vote up<span class="nt">&lt;/a&gt;</span>
-</span><span class="line">        <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;/vote/down/{{ item.id }}/&quot;</span> <span class="na">class=</span><span class="s">&quot;flojax&quot;</span> <span class="na">rel=</span><span class="s">&quot;buttons&quot;</span><span class="nt">&gt;</span>Vote down<span class="nt">&lt;/a&gt;</span>
-</span><span class="line">    {% endif %}
-</span><span class="line">    {% if favorited %}
-</span><span class="line">        <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;/favorite/{{ item.id }}/&quot;</span> <span class="na">class=</span><span class="s">&quot;flojax&quot;</span> <span class="na">rel=</span><span class="s">&quot;buttons&quot;</span><span class="nt">&gt;</span>Add to your favorites<span class="nt">&lt;/a&gt;</span>
-</span><span class="line">    {% else %}
-</span><span class="line">        <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;/unfavorite/{{ item.id }}/&quot;</span> <span class="na">class=</span><span class="s">&quot;flojax&quot;</span> <span class="na">rel=</span><span class="s">&quot;buttons&quot;</span><span class="nt">&gt;</span>Remove from your favorites<span class="nt">&lt;/a&gt;</span>
-</span><span class="line">    {% endif %}
-</span><span class="line"><span class="nt">&lt;/div&gt;</span>
-</span></code></pre></td></tr></table></div></figure><p>That&#8217;s it!  At this point, all of the click events that happen on these links
-will be changed into POST requests, and the response from the server will be
-inserted into the DOM in place of this div with the class of &quot;buttons&quot;.  If you
-didn&#8217;t catch it, all that was done was to add the &quot;flojax&quot; class onto each of
-the links, and add a rel attribute that refers to the class of the parent node
-in the DOM to be replaced&#8211;in this case, &quot;buttons&quot;.</p>
-<p>Of course, there needs to be a server side component to this strategy, so that
-instead of rendering the whole page, the server just renders the fragment.  Most
-modern Javascript frameworks add a header to the request to let the server know
-that the request was made asynchronously from Javascript.  Here&#8217;s how the code
-on the server to handle the flojax-style request might look (in a kind of
-non-web-framework-specific Python code):</p>
-<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-<span class="line-number">18</span>
-</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="k">def</span> <span class="nf">vote</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">item_id</span><span class="p">):</span>
-</span><span class="line">    <span class="n">item</span> <span class="o">=</span> <span class="n">get_item</span><span class="p">(</span><span class="n">item_id</span><span class="p">)</span>
-</span><span class="line">
-</span><span class="line">    <span class="k">if</span> <span class="n">direction</span> <span class="o">==</span> <span class="s">&#39;clear&#39;</span><span class="p">:</span>
-</span><span class="line">        <span class="n">clear_vote</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span>
-</span><span class="line">    <span class="k">elif</span> <span class="n">direction</span> <span class="o">==</span> <span class="s">&#39;up&#39;</span><span class="p">:</span>
-</span><span class="line">        <span class="n">vote_up</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span>
-</span><span class="line">    <span class="k">elif</span> <span class="n">direction</span> <span class="o">==</span> <span class="s">&#39;down&#39;</span><span class="p">:</span>
-</span><span class="line">        <span class="n">vote_down</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span>
-</span><span class="line">
-</span><span class="line">    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;voted&#39;</span><span class="p">:</span> <span class="n">direction</span> <span class="o">!=</span> <span class="s">&#39;clear&#39;</span><span class="p">,</span> <span class="s">&#39;item&#39;</span><span class="p">:</span> <span class="n">item</span><span class="p">}</span>
-</span><span class="line">
-</span><span class="line">    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">is_ajax</span><span class="p">():</span>
-</span><span class="line">        <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="s">&#39;fragments/buttons.html&#39;</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
-</span><span class="line">
-</span><span class="line">    <span class="c"># ... the non-ajax implementation details go here</span>
-</span><span class="line">
-</span><span class="line">    <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="s">&#39;items/item_detail.html&#39;</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure><p>There are several advantages to writing your request handlers in this way.
-First, note that we were able to totally reuse the same templating logic from
-before&#8211;we just render out the fragment instead of including it in a larger
-template.  Second, we have provided a graceful degradation path where users
-without javascript are able to interact with the site as well, albeit with a
-worse user experience.</p>
-<p>That&#8217;s really all there is to writing web applications using the flojax
-strategy.</p>
-</div>
-<div class="section" id="implementation-details">
-<h2>Implementation Details</h2>
-<p>I don&#8217;t believe that the Javascript code for this method can be easily reused,
-because each web application tends to have a different way of showing errors and
-other such things to the user.  In this post, I&#8217;m going to provide a reference
-implementation (using jQuery) that can be used as a starting point for writing
-your own versions.  The bulk of the work is done in a function that is called on
-every page load, called <tt class="docutils literal">flojax_init</tt>.</p>
-<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-<span class="line-number">18</span>
-<span class="line-number">19</span>
-<span class="line-number">20</span>
-<span class="line-number">21</span>
-<span class="line-number">22</span>
-<span class="line-number">23</span>
-<span class="line-number">24</span>
-<span class="line-number">25</span>
-<span class="line-number">26</span>
-</pre></td><td class="code"><pre><code class="javascript"><span class="line"><span class="kd">function</span> <span class="nx">flojax_clicked</span><span class="p">()</span> <span class="p">{</span>
-</span><span class="line">    <span class="kd">var</span> <span class="nx">link</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
-</span><span class="line">    <span class="kd">var</span> <span class="nx">parent</span> <span class="o">=</span> <span class="nx">link</span><span class="p">.</span><span class="nx">parents</span><span class="p">(</span><span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="nx">link</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;rel&#39;</span><span class="p">));</span>
-</span><span class="line">
-</span><span class="line">    <span class="kd">function</span> <span class="nx">successCallback</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">textStatus</span><span class="p">)</span> <span class="p">{</span>
-</span><span class="line">        <span class="nx">parent</span><span class="p">.</span><span class="nx">replaceWith</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
-</span><span class="line">        <span class="nx">flojax_init</span><span class="p">();</span>
-</span><span class="line">    <span class="p">}</span>
-</span><span class="line">    <span class="kd">function</span> <span class="nx">errorCallback</span><span class="p">(</span><span class="nx">request</span><span class="p">,</span> <span class="nx">textStatus</span><span class="p">,</span> <span class="nx">errorThrown</span><span class="p">)</span> <span class="p">{</span>
-</span><span class="line">        <span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;There was an error in performing the requested operation&#39;</span><span class="p">);</span>
-</span><span class="line">    <span class="p">}</span>
-</span><span class="line">
-</span><span class="line">    <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
-</span><span class="line">        <span class="s1">&#39;url&#39;</span><span class="o">:</span> <span class="nx">link</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;href&#39;</span><span class="p">),</span>
-</span><span class="line">        <span class="s1">&#39;type&#39;</span><span class="o">:</span> <span class="s1">&#39;POST&#39;</span><span class="p">,</span>
-</span><span class="line">        <span class="s1">&#39;data&#39;</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
-</span><span class="line">        <span class="s1">&#39;success&#39;</span><span class="o">:</span> <span class="nx">successCallback</span><span class="p">,</span>
-</span><span class="line">        <span class="s1">&#39;error&#39;</span><span class="o">:</span> <span class="nx">errorCallback</span>
-</span><span class="line">    <span class="p">});</span>
-</span><span class="line">
-</span><span class="line">    <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
-</span><span class="line"><span class="p">}</span>
-</span><span class="line">
-</span><span class="line"><span class="kd">function</span> <span class="nx">flojax_init</span><span class="p">()</span> <span class="p">{</span>
-</span><span class="line">    <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;a.flojax&#39;</span><span class="p">).</span><span class="nx">live</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="nx">flojax_clicked</span><span class="p">);</span>
-</span><span class="line"><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure><p>There&#8217;s really not a lot of code there.  It POSTS to the given URL and replaces
-the specified parent class with the content of the response, and then
-re-initializes the flojax handler.  The re-initialization could even be done in
-a smarter way, as well, by targeting only the newly inserted content.  Also, you
-might imagine that an alert message probably wouldn&#8217;t be such a great user
-experience, so you could integrate error messages into some sort of Javascript
-messaging or growl-style system.</p>
-</div>
-<div class="section" id="extending-flojax">
-<h2>Extending Flojax</h2>
-<p>Often times you&#8217;ll want to do other things on the page when the asynchronous
-request happens.  For our example, maybe there is some kind of vote counter that
-needs to be updated or some other messages that need to be displayed.</p>
-<p>In these cases, I have found that using hidden input elements in the fragments
-can be useful for transferring that information from the server to the client.
-As long as the value in the hidden elements adheres to some predefined structure
-that your client knows about (it could even be something like JSON if you need
-to go that route).</p>
-<p>If what you want can&#8217;t be done by extending the fragments in this way, then
-flojax isn&#8217;t the right strategy for that particular feature.</p>
-</div>
-<div class="section" id="limitations">
-<h2>Limitations</h2>
-<p>This technique cannot solve all of the world&#8217;s problems.  It can&#8217;t even solve
-all of the problems involved in writing an AJAX-style web application.  It can,
-however, handle a fair amount of simple cases where all you want to do is
-quickly set up a way for a user&#8217;s action to replace content on a page.</p>
-<p>Some specific examples of things that flojax can&#8217;t help with are if a user
-action can possibly update many items on a page, or if something needs to happen
-without a user clicking on a link.  In these situations, you are better off
-coding a custom solution instead of trying to shoehorn it into the flojax
-workflow.</p>
-</div>
-<div class="section" id="conclusion">
-<h2>Conclusion</h2>
-<p>Writing AJAX-style web applications is usually tedious, but using the techniques
-that I&#8217;ve described, a large majority of the tedious work can be reduced.  By
-using the same template code for rendering the page initially as with subsequent
-asynchronous requests, you ensure that code is not duplicated.  By rendering HTML
-fragments, the client doesn&#8217;t have to go through the effort of parsing the
-output and converting the result into correct DOM objects.  Finally, by using a
-few unobtrusive conventions (like the <tt class="docutils literal">rel</tt> attribute and the <tt class="docutils literal">flojax</tt>
-class), the Javascript code that a web application developer writes is able to
-be reused again and again.</p>
-<p>I don&#8217;t believe that any of the details that I&#8217;m describing are new.  In fact,
-people have been doing most of these things for years.  What I think may in fact
-be new is the generalization of the sum of these techniques in this way.  It&#8217;s
-still very much a work in progress, though.  As I use flojax more and more, I
-hope to find not only places where it can be extended to cover more use cases,
-but also its limitations and places where it makes more sense to use another
-approach.</p>
-<p>What do you think about this technique?  Are you using any techniques like this
-for your web applications?  If so, how do they differ from what I&#8217;ve described?</p>
-</div></div>
-  
-  
-
-
-    </article>
-  
-  <div class="pagination">
-    
-      <a class="prev" href="/blog/page/2/">&larr; Older</a>
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
+    </ul>
   </div>
-</div>
-<aside class="sidebar">
-  
-    <section>
-  <h1>Recent Posts</h1>
-  <ul id="recent_posts">
-    
-      <li class="post">
-        <a href="/blog/2012/04/18/using-twitter-ios5-integration-single-sign-on/">Using Twitter&#8217;s iOS5 Integration for Single Sign-On</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/01/01/reducing-code-nesting/">Reducing Code Nesting</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2011/02/16/technology-behind-convore/">The Technology Behind Convore</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2010/10/10/object-lesson-how-respond-criticism/">An Object Lesson in How to Respond to Criticism</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2010/09/27/why-node-disappoints-me/">Why node.js disappoints me</a>
-      </li>
-    
-  </ul>
-</section>
+  <hr />
 
+<h3 class="archive-link"><a href="/blog/archives/">Blog Archives</a></h3>
 
-<section>
-  <h1>Latest Tweets</h1>
-  <ul id="tweets">
-    <li class="loading">Status updating&#8230;</li>
-  </ul>
-  <script type="text/javascript">
-    $.domReady(function(){
-      getTwitterFeed("ericflo", 4, false);
-    });
-  </script>
-  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
-  
-    <a href="http://twitter.com/ericflo" class="twitter-follow-button" data-show-count="false">Follow @ericflo</a>
-  
-</section>
-
-
-
-<section class="googleplus">
-  <h1>
-    <a href="https://plus.google.com/109591387819364984777?rel=author">
-      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
-      Google+
-    </a>
-  </h1>
-</section>
-
-
-
-  
-</aside>
-
+      </div>
     </div>
-  </div>
-  <footer role="contentinfo"><p>
-  Copyright &copy; 2012 - Eric Florenzano -
-  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
-</p>
-
-</footer>
-  
-
-
-
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) {return;}
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
-
-
-
-  <script type="text/javascript">
-    (function() {
-      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
-      script.src = 'https://apis.google.com/js/plusone.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
-    })();
-  </script>
-
-
-
-  <script type="text/javascript">
-    (function(){
-      var twitterWidgets = document.createElement('script');
-      twitterWidgets.type = 'text/javascript';
-      twitterWidgets.async = true;
-      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
-      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
-    })();
-  </script>
-
-
-
-
-
-</body>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    
+  </body>
 </html>

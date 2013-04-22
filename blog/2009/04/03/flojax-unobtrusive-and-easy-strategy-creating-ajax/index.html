@@ -1,0 +1,280 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Flojax: A unobtrusive and easy strategy for creating AJAX-style web applications - Eric Florenzano&rsquo;s Blog</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+
+    <link href="/atom.xml" rel="alternate" title="Eric Florenzano's Blog" type="application/atom+xml">
+
+    <link href="/static/css/bootstrap.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="/static/css/code.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="/static/js/html5shiv.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="center-column">
+        <h1 class="blog-header"><a href="/">Eric Florenzano&rsquo;s Blog</a></h1>
+        <ul class="blog-header-links">
+          <li><a href="/">Home</a></li>
+          <li><a href="/blog/archives/">Archives</a></li>
+          <li><a href="https://twitter.com/ericflo" class="twitter-follow-button" data-show-count="false">Follow @ericflo</a></li>
+          <li class="feed"><a href="/atom.xml"><img src="/static/img/feed-icon-28x28.png" width="20" height="20" alt="Subscribe to this blog" /></a></li>
+        </ul>
+        
+  <div class="blog-post-detail">
+    <h3><a href="/blog/2009/04/03/flojax-unobtrusive-and-easy-strategy-creating-ajax/">Flojax: A unobtrusive and easy strategy for creating AJAX-style web applications</a></h3>
+<p class="datetime">Apr 03, 2009</p>
+<div class="document">
+<p>Writing AJAX-style web applications can be very tedious.  If you're using XML
+as your transport layer, you have to parse the XML before you can work with it.
+It's a bit easier if you're using JSON, but once you have parsed the data, the
+data still needs to be turned into HTML markup that matches the current markup
+on the page.  Finally, the newly created markup needs to be inserted into the
+correct place in the DOM, and any event handlers need to be attached to the
+appropriate newly-inserted markup.</p>
+<p>So there's the parsing, the markup assembly, the DOM insertion, and finally the
+event handler attachment.  Most of the time, people tend to write custom code
+for each element that needs asynchronous updating.  There are several drawbacks
+with this scenario, but the most frustrating part is probably that the
+presentation logic is implemented twice--once in a templating language on the
+server which is designed specifically for outputting markup, and again on the
+client with inline Javascript.  This leads to problems both in the agility and
+in the maintainability of this type of application.</p>
+<p>With flojax, this can all be  accomplished with one generalized implementation.
+The same server-side logic that generates the data for the first synchronous
+request can be used to respond to subsequent asynchronous requests, and
+unobtrusive attributes specify what to do for the rest.</p>
+<div class="section" id="the-basics">
+<h4>The Basics</h4>
+<p>The first component for creating an application using the flojax strategy is to
+break up the content that you would like to reload asynchronously into smaller
+fragments.  As a basic example of this, let's examine the case where there is a
+panel of buttons that you would like to turn into asynchronous requests instead
+of full page reloads.</p>
+<p>The rendered markup for a fragment of buttons could look something like this:</p>
+<pre class="code html literal-block">
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;buttons&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;/vote/up/item1/&quot;</span><span class="nt">&gt;</span>Vote up<span class="nt">&lt;/a&gt;</span>
+    <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;/vote/down/item1/&quot;</span><span class="nt">&gt;</span>Vote down<span class="nt">&lt;/a&gt;</span>
+    <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;/favorite/item1/&quot;</span><span class="nt">&gt;</span>Add to your favorites<span class="nt">&lt;/a&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</pre>
+<p>In a templating language, the logic might look something like this:</p>
+<pre class="code html literal-block">
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;buttons&quot;</span><span class="nt">&gt;</span>
+    {% if voted %}
+        <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;/vote/clear/{{ item.id }}/&quot;</span><span class="nt">&gt;</span>Clear your vote<span class="nt">&lt;/a&gt;</span>
+    {% else %}
+        <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;/vote/up/{{ item.id }}/&quot;</span><span class="nt">&gt;</span>Vote up<span class="nt">&lt;/a&gt;</span>
+        <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;/vote/down/{{ item.id }}/&quot;</span><span class="nt">&gt;</span>Vote down<span class="nt">&lt;/a&gt;</span>
+    {% endif %}
+    {% if favorited %}
+        <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;/favorite/{{ item.id }}/&quot;</span><span class="nt">&gt;</span>Add to your favorites<span class="nt">&lt;/a&gt;</span>
+    {% else %}
+        <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;/unfavorite/{{ item.id }}/&quot;</span><span class="nt">&gt;</span>Remove from your favorites<span class="nt">&lt;/a&gt;</span>
+    {% endif %}
+<span class="nt">&lt;/div&gt;</span>
+</pre>
+<p>(Typically you wouldn't use anchors to do operations that can change state on
+the server, so you can imagine this would be accomplished using forms.  However,
+for demonstration and clarity purposes I'm going to leave these as links.)</p>
+<p>Now that we have written a fragment, we can start using it in our larger
+templates by way of an include, which might look something like this:</p>
+<pre class="code html literal-block">
+...
+<span class="nt">&lt;p&gt;</span>If you like this item, consider favoriting or voting on it:<span class="nt">&lt;/p&gt;</span>
+{% include &quot;fragments/buttons.html&quot; %}
+...
+</pre>
+<p>To change this from being standard links to being asynchronously updated, we
+just need to annotate a small amount of data onto the relevant links in the
+fragment.</p>
+<pre class="code html literal-block">
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;buttons&quot;</span><span class="nt">&gt;</span>
+    {% if voted %}
+        <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;/vote/clear/{{ item.id }}/&quot;</span> <span class="na">class=</span><span class="s">&quot;flojax&quot;</span> <span class="na">rel=</span><span class="s">&quot;buttons&quot;</span><span class="nt">&gt;</span>Clear your vote<span class="nt">&lt;/a&gt;</span>
+    {% else %}
+        <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;/vote/up/{{ item.id }}/&quot;</span> <span class="na">class=</span><span class="s">&quot;flojax&quot;</span> <span class="na">rel=</span><span class="s">&quot;buttons&quot;</span><span class="nt">&gt;</span>Vote up<span class="nt">&lt;/a&gt;</span>
+        <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;/vote/down/{{ item.id }}/&quot;</span> <span class="na">class=</span><span class="s">&quot;flojax&quot;</span> <span class="na">rel=</span><span class="s">&quot;buttons&quot;</span><span class="nt">&gt;</span>Vote down<span class="nt">&lt;/a&gt;</span>
+    {% endif %}
+    {% if favorited %}
+        <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;/favorite/{{ item.id }}/&quot;</span> <span class="na">class=</span><span class="s">&quot;flojax&quot;</span> <span class="na">rel=</span><span class="s">&quot;buttons&quot;</span><span class="nt">&gt;</span>Add to your favorites<span class="nt">&lt;/a&gt;</span>
+    {% else %}
+        <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;/unfavorite/{{ item.id }}/&quot;</span> <span class="na">class=</span><span class="s">&quot;flojax&quot;</span> <span class="na">rel=</span><span class="s">&quot;buttons&quot;</span><span class="nt">&gt;</span>Remove from your favorites<span class="nt">&lt;/a&gt;</span>
+    {% endif %}
+<span class="nt">&lt;/div&gt;</span>
+</pre>
+<p>That's it!  At this point, all of the click events that happen on these links
+will be changed into POST requests, and the response from the server will be
+inserted into the DOM in place of this div with the class of &quot;buttons&quot;.  If you
+didn't catch it, all that was done was to add the &quot;flojax&quot; class onto each of
+the links, and add a rel attribute that refers to the class of the parent node
+in the DOM to be replaced--in this case, &quot;buttons&quot;.</p>
+<p>Of course, there needs to be a server side component to this strategy, so that
+instead of rendering the whole page, the server just renders the fragment.  Most
+modern Javascript frameworks add a header to the request to let the server know
+that the request was made asynchronously from Javascript.  Here's how the code
+on the server to handle the flojax-style request might look (in a kind of
+non-web-framework-specific Python code):</p>
+<pre class="code python literal-block">
+<span class="k">def</span> <span class="nf">vote</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">item_id</span><span class="p">):</span>
+    <span class="n">item</span> <span class="o">=</span> <span class="n">get_item</span><span class="p">(</span><span class="n">item_id</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">direction</span> <span class="o">==</span> <span class="s">'clear'</span><span class="p">:</span>
+        <span class="n">clear_vote</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">direction</span> <span class="o">==</span> <span class="s">'up'</span><span class="p">:</span>
+        <span class="n">vote_up</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">direction</span> <span class="o">==</span> <span class="s">'down'</span><span class="p">:</span>
+        <span class="n">vote_down</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span>
+
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s">'voted'</span><span class="p">:</span> <span class="n">direction</span> <span class="o">!=</span> <span class="s">'clear'</span><span class="p">,</span> <span class="s">'item'</span><span class="p">:</span> <span class="n">item</span><span class="p">}</span>
+
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">is_ajax</span><span class="p">():</span>
+        <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="s">'fragments/buttons.html'</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+
+    <span class="c"># ... the non-ajax implementation details go here</span>
+
+    <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="s">'items/item_detail.html'</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+</pre>
+<p>There are several advantages to writing your request handlers in this way.
+First, note that we were able to totally reuse the same templating logic from
+before--we just render out the fragment instead of including it in a larger
+template.  Second, we have provided a graceful degradation path where users
+without javascript are able to interact with the site as well, albeit with a
+worse user experience.</p>
+<p>That's really all there is to writing web applications using the flojax
+strategy.</p>
+</div>
+<div class="section" id="implementation-details">
+<h4>Implementation Details</h4>
+<p>I don't believe that the Javascript code for this method can be easily reused,
+because each web application tends to have a different way of showing errors and
+other such things to the user.  In this post, I'm going to provide a reference
+implementation (using jQuery) that can be used as a starting point for writing
+your own versions.  The bulk of the work is done in a function that is called on
+every page load, called <tt class="docutils literal">flojax_init</tt>.</p>
+<pre class="code javascript literal-block">
+<span class="kd">function</span> <span class="nx">flojax_clicked</span><span class="p">(</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">link</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">parent</span> <span class="o">=</span> <span class="nx">link</span><span class="p">.</span><span class="nx">parents</span><span class="p">(</span><span class="s1">'.'</span> <span class="o">+</span> <span class="nx">link</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">'rel'</span><span class="p">));</span>
+
+    <span class="kd">function</span> <span class="nx">successCallback</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">textStatus</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">parent</span><span class="p">.</span><span class="nx">replaceWith</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+        <span class="nx">flojax_init</span><span class="p">(</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="kd">function</span> <span class="nx">errorCallback</span><span class="p">(</span><span class="nx">request</span><span class="p">,</span> <span class="nx">textStatus</span><span class="p">,</span> <span class="nx">errorThrown</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">alert</span><span class="p">(</span><span class="s1">'There was an error in performing the requested operation'</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">(</span><span class="p">{</span>
+        <span class="s1">'url'</span><span class="o">:</span> <span class="nx">link</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">'href'</span><span class="p">),</span>
+        <span class="s1">'type'</span><span class="o">:</span> <span class="s1">'POST'</span><span class="p">,</span>
+        <span class="s1">'data'</span><span class="o">:</span> <span class="s1">''</span><span class="p">,</span>
+        <span class="s1">'success'</span><span class="o">:</span> <span class="nx">successCallback</span><span class="p">,</span>
+        <span class="s1">'error'</span><span class="o">:</span> <span class="nx">errorCallback</span>
+    <span class="p">});</span>
+
+    <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">flojax_init</span><span class="p">(</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">$</span><span class="p">(</span><span class="s1">'a.flojax'</span><span class="p">).</span><span class="nx">live</span><span class="p">(</span><span class="s1">'click'</span><span class="p">,</span> <span class="nx">flojax_clicked</span><span class="p">);</span>
+<span class="p">}</span>
+</pre>
+<p>There's really not a lot of code there.  It POSTS to the given URL and replaces
+the specified parent class with the content of the response, and then
+re-initializes the flojax handler.  The re-initialization could even be done in
+a smarter way, as well, by targeting only the newly inserted content.  Also, you
+might imagine that an alert message probably wouldn't be such a great user
+experience, so you could integrate error messages into some sort of Javascript
+messaging or growl-style system.</p>
+</div>
+<div class="section" id="extending-flojax">
+<h4>Extending Flojax</h4>
+<p>Often times you'll want to do other things on the page when the asynchronous
+request happens.  For our example, maybe there is some kind of vote counter that
+needs to be updated or some other messages that need to be displayed.</p>
+<p>In these cases, I have found that using hidden input elements in the fragments
+can be useful for transferring that information from the server to the client.
+As long as the value in the hidden elements adheres to some predefined structure
+that your client knows about (it could even be something like JSON if you need
+to go that route).</p>
+<p>If what you want can't be done by extending the fragments in this way, then
+flojax isn't the right strategy for that particular feature.</p>
+</div>
+<div class="section" id="limitations">
+<h4>Limitations</h4>
+<p>This technique cannot solve all of the world's problems.  It can't even solve
+all of the problems involved in writing an AJAX-style web application.  It can,
+however, handle a fair amount of simple cases where all you want to do is
+quickly set up a way for a user's action to replace content on a page.</p>
+<p>Some specific examples of things that flojax can't help with are if a user
+action can possibly update many items on a page, or if something needs to happen
+without a user clicking on a link.  In these situations, you are better off
+coding a custom solution instead of trying to shoehorn it into the flojax
+workflow.</p>
+</div>
+<div class="section" id="conclusion">
+<h4>Conclusion</h4>
+<p>Writing AJAX-style web applications is usually tedious, but using the techniques
+that I've described, a large majority of the tedious work can be reduced.  By
+using the same template code for rendering the page initially as with subsequent
+asynchronous requests, you ensure that code is not duplicated.  By rendering HTML
+fragments, the client doesn't have to go through the effort of parsing the
+output and converting the result into correct DOM objects.  Finally, by using a
+few unobtrusive conventions (like the <tt class="docutils literal">rel</tt> attribute and the <tt class="docutils literal">flojax</tt>
+class), the Javascript code that a web application developer writes is able to
+be reused again and again.</p>
+<p>I don't believe that any of the details that I'm describing are new.  In fact,
+people have been doing most of these things for years.  What I think may in fact
+be new is the generalization of the sum of these techniques in this way.  It's
+still very much a work in progress, though.  As I use flojax more and more, I
+hope to find not only places where it can be extended to cover more use cases,
+but also its limitations and places where it makes more sense to use another
+approach.</p>
+<p>What do you think about this technique?  Are you using any techniques like this
+for your web applications?  If so, how do they differ from what I've described?</p>
+</div>
+</div>
+
+<div class="categories">
+    Posted in:
+    <ul>
+      
+        <li><a href="/blog/categories/javascript/">Javascript</a></li>
+      
+        <li><a href="/blog/categories/python/">Python</a></li>
+      
+        <li><a href="/blog/categories/django/">Django</a></li>
+      
+        <li><a href="/blog/categories/ajax/">AJAX</a></li>
+      
+        <li><a href="/blog/categories/programming/">Programming</a></li>
+      
+    </ul>
+  </div>
+  </div>
+  <hr />
+  <br />
+  <br />
+
+      </div>
+    </div>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    
+  </body>
+</html>

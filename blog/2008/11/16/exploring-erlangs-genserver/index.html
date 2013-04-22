@@ -1,0 +1,267 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Exploring Erlang&#39;s gen_server - Eric Florenzano&rsquo;s Blog</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+
+    <link href="/atom.xml" rel="alternate" title="Eric Florenzano's Blog" type="application/atom+xml">
+
+    <link href="/static/css/bootstrap.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="/static/css/code.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="/static/js/html5shiv.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="center-column">
+        <h1 class="blog-header"><a href="/">Eric Florenzano&rsquo;s Blog</a></h1>
+        <ul class="blog-header-links">
+          <li><a href="/">Home</a></li>
+          <li><a href="/blog/archives/">Archives</a></li>
+          <li><a href="https://twitter.com/ericflo" class="twitter-follow-button" data-show-count="false">Follow @ericflo</a></li>
+          <li class="feed"><a href="/atom.xml"><img src="/static/img/feed-icon-28x28.png" width="20" height="20" alt="Subscribe to this blog" /></a></li>
+        </ul>
+        
+  <div class="blog-post-detail">
+    <h3><a href="/blog/2008/11/16/exploring-erlangs-genserver/">Exploring Erlang&#39;s gen_server</a></h3>
+<p class="datetime">Nov 16, 2008</p>
+<div class="document">
+<p>Today I found myself at <a class="reference external" href="http://superhappydevhouse.org/">Super Happy Dev House</a>, amongst a whole house full
+of geeks (I say this in the most friendly way possible).  I thought for a while
+about working on <a class="reference external" href="http://pinaxproject.com/">Pinax</a> project, which is what I really wanted to do.  However,
+it didn't seem geeky enough for the occasion.</p>
+<p>No, today the call of the geek was too strong.  There was only one place to turn
+to achieve maximal geekiness: functional programming.  Not only functional
+programming, but I thought this occasion called for a concurrency-oriented
+programming language. Yes, today was the perfect day for some Erlang.</p>
+<p>I've done a few small projects with Erlang, but never before have I used <a class="reference external" href="http://www.erlang.org/doc/design_principles/part_frame.html">OTP</a>.
+So the goal is to write an OTP <tt class="docutils literal">gen_server</tt> which would store a user's
+&quot;presence&quot; (think <a class="reference external" href="http://twitter.com/">Twitter</a>, <a class="reference external" href="http://pownce.com/">Pownce</a>, etc.) in memory.  No, it's not a good idea.
+Yes, it's kind of fun.  So here we go!</p>
+<p>First we need to decide on an API:</p>
+<pre class="code erlang literal-block">
+<span class="nf">start_link</span><span class="p">()</span> <span class="o">-&gt;</span>
+    <span class="nn">gen_server</span><span class="p">:</span><span class="n">start_link</span><span class="p">({</span><span class="n">local</span><span class="p">,</span> <span class="o">?</span><span class="nv">SERVER</span><span class="p">},</span> <span class="o">?</span><span class="nv">MODULE</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[]).</span>
+
+<span class="nf">post_presence</span><span class="p">(</span><span class="nv">UserID</span><span class="p">,</span> <span class="nv">Presence</span><span class="p">)</span> <span class="o">-&gt;</span>
+    <span class="nn">gen_server</span><span class="p">:</span><span class="n">cast</span><span class="p">(</span><span class="o">?</span><span class="nv">SERVER</span><span class="p">,</span> <span class="p">{</span><span class="n">post_presence</span><span class="p">,</span> <span class="nv">UserID</span><span class="p">,</span> <span class="nv">Presence</span><span class="p">}).</span>
+
+<span class="nf">list_presence</span><span class="p">(</span><span class="nv">UserID</span><span class="p">)</span> <span class="o">-&gt;</span>
+    <span class="nn">gen_server</span><span class="p">:</span><span class="n">call</span><span class="p">(</span><span class="o">?</span><span class="nv">SERVER</span><span class="p">,</span> <span class="p">{</span><span class="n">list_presence</span><span class="p">,</span> <span class="nv">UserID</span><span class="p">}).</span>
+
+<span class="nf">list_presence</span><span class="p">(</span><span class="nv">UserID</span><span class="p">,</span> <span class="nv">Limit</span><span class="p">)</span> <span class="o">-&gt;</span>
+    <span class="nn">gen_server</span><span class="p">:</span><span class="n">call</span><span class="p">(</span><span class="o">?</span><span class="nv">SERVER</span><span class="p">,</span> <span class="p">{</span><span class="n">list_presence</span><span class="p">,</span> <span class="nv">UserID</span><span class="p">,</span> <span class="nv">Limit</span><span class="p">}).</span>
+
+<span class="nf">public_list</span><span class="p">(</span><span class="nv">Limit</span><span class="p">)</span> <span class="o">-&gt;</span>
+    <span class="nn">gen_server</span><span class="p">:</span><span class="n">call</span><span class="p">(</span><span class="o">?</span><span class="nv">SERVER</span><span class="p">,</span> <span class="p">{</span><span class="n">public_list</span><span class="p">,</span> <span class="nv">Limit</span><span class="p">}).</span>
+</pre>
+<p><tt class="docutils literal">start_link</tt> will start the server.  <tt class="docutils literal">post_presence</tt> will post a user's
+current presence to the server.  <tt class="docutils literal">list_presence</tt> with one argument gets all
+of the specified user's presence information.  With a second argument, it limits
+the amount of returned presence information to the specified number. Calling
+<tt class="docutils literal">public_list</tt> means that you're getting the latest posts from anyone.</p>
+<p>Before that, though, let's get some of the <tt class="docutils literal">gen_server</tt> cruft out of the way:</p>
+<pre class="code erlang literal-block">
+<span class="p">-</span><span class="ni">module</span><span class="p">(</span><span class="n">presence_database</span><span class="p">).</span>
+<span class="p">-</span><span class="ni">behavior</span><span class="p">(</span><span class="n">gen_server</span><span class="p">).</span>
+
+<span class="p">-</span><span class="ni">define</span><span class="p">(</span><span class="no">SERVER</span><span class="p">,</span> <span class="o">?</span><span class="nv">MODULE</span><span class="p">).</span>
+
+<span class="c">%% gen_server API
+</span><span class="p">-</span><span class="ni">export</span><span class="p">([</span><span class="n">init</span><span class="o">/</span><span class="mi">1</span><span class="p">,</span> <span class="n">handle_call</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="n">handle_cast</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">handle_info</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">terminate</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">code_change</span><span class="o">/</span><span class="mi">3</span><span class="p">]).</span>
+
+<span class="c">%% presence API
+</span><span class="p">-</span><span class="ni">export</span><span class="p">([</span><span class="n">start_link</span><span class="o">/</span><span class="mi">0</span><span class="p">,</span> <span class="n">post_presence</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">list_presence</span><span class="o">/</span><span class="mi">1</span><span class="p">,</span> <span class="n">list_presence</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">public_list</span><span class="o">/</span><span class="mi">1</span><span class="p">]).</span>
+
+<span class="nf">handle_info</span><span class="p">(_</span><span class="nv">Info</span><span class="p">,</span> <span class="nv">State</span><span class="p">)</span> <span class="o">-&gt;</span>
+    <span class="p">{</span><span class="n">noreply</span><span class="p">,</span> <span class="nv">State</span><span class="p">}.</span>
+
+<span class="nf">terminate</span><span class="p">(_</span><span class="nv">Reason</span><span class="p">,</span> <span class="p">_</span><span class="nv">State</span><span class="p">)</span> <span class="o">-&gt;</span>
+    <span class="n">ok</span><span class="p">.</span>
+
+<span class="nf">code_change</span><span class="p">(_</span><span class="nv">OldVersion</span><span class="p">,</span> <span class="nv">State</span><span class="p">,</span> <span class="p">_</span><span class="nv">Extra</span><span class="p">)</span> <span class="o">-&gt;</span>
+    <span class="p">{</span><span class="n">ok</span><span class="p">,</span> <span class="nv">State</span><span class="p">}.</span>
+
+<span class="nf">init</span><span class="p">([])</span> <span class="o">-&gt;</span>
+    <span class="p">{</span><span class="n">ok</span><span class="p">,</span> <span class="nn">dict</span><span class="p">:</span><span class="n">new</span><span class="p">()}.</span>
+</pre>
+<p>These are mostly things that we need to have in order for things to work.  We
+define our module name, the behavior that this module mimics, and define a
+constant.  Then, we export the required functions for gen_server and export
+our public presence api functions.  Finally we implement really simple functions
+for those gen_server functions that we don't care much about.</p>
+<p>Now since I couldn't figure out how to slice a list in Erlang, I wrote my own
+slice function.  Make sure to flame me for this.</p>
+<pre class="code erlang literal-block">
+<span class="nf">slice</span><span class="p">(</span><span class="nv">List</span><span class="p">,</span> <span class="nv">Start</span><span class="p">,</span> <span class="nv">End</span><span class="p">)</span> <span class="o">-&gt;</span>
+    <span class="n">slice</span><span class="p">(</span><span class="nv">List</span><span class="p">,</span> <span class="nv">Start</span><span class="p">,</span> <span class="nv">End</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">[]).</span>
+
+<span class="nf">slice</span><span class="p">([],</span> <span class="p">_</span><span class="nv">Start</span><span class="p">,</span> <span class="p">_</span><span class="nv">End</span><span class="p">,</span> <span class="p">_</span><span class="nv">Index</span><span class="p">,</span> <span class="nv">Acc</span><span class="p">)</span> <span class="o">-&gt;</span>
+    <span class="nn">lists</span><span class="p">:</span><span class="n">reverse</span><span class="p">(</span><span class="nv">Acc</span><span class="p">);</span>
+<span class="nf">slice</span><span class="p">([</span><span class="nv">Item</span> <span class="p">|</span> <span class="nv">Rest</span><span class="p">],</span> <span class="nv">Start</span><span class="p">,</span> <span class="nv">End</span><span class="p">,</span> <span class="nv">Index</span><span class="p">,</span> <span class="nv">Acc</span><span class="p">)</span> <span class="o">-&gt;</span>
+    <span class="k">case</span> <span class="nv">Index</span> <span class="o">&gt;=</span> <span class="nv">Start</span> <span class="k">of</span>
+        <span class="n">true</span> <span class="o">-&gt;</span>
+            <span class="k">case</span> <span class="nv">Index</span> <span class="o">&lt;</span> <span class="nv">End</span> <span class="k">of</span>
+                <span class="n">true</span> <span class="o">-&gt;</span>
+                    <span class="n">slice</span><span class="p">(</span><span class="nv">Rest</span><span class="p">,</span> <span class="nv">Start</span><span class="p">,</span> <span class="nv">End</span><span class="p">,</span> <span class="nv">Index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="nv">Item</span> <span class="p">|</span> <span class="nv">Acc</span><span class="p">]);</span>
+                <span class="n">false</span> <span class="o">-&gt;</span>
+                    <span class="n">slice</span><span class="p">(</span><span class="nv">Rest</span><span class="p">,</span> <span class="nv">Start</span><span class="p">,</span> <span class="nv">End</span><span class="p">,</span> <span class="nv">Index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nv">Acc</span><span class="p">)</span>
+            <span class="k">end</span><span class="p">;</span>
+        <span class="p">_</span> <span class="o">-&gt;</span>
+            <span class="n">slice</span><span class="p">(</span><span class="nv">Rest</span><span class="p">,</span> <span class="nv">Start</span><span class="p">,</span> <span class="nv">End</span><span class="p">,</span> <span class="nv">Index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nv">Acc</span><span class="p">)</span>
+    <span class="k">end</span><span class="p">.</span>
+</pre>
+<p>...and I'm pretty sure that using <a class="reference external" href="http://www.erlang.org/doc/reference_manual/expressions.html#guards">guard expressions</a> this could be done in one
+case statement.  Or maybe it could be done in a single list comprehension.  I
+don't know.  This works for our purposes.</p>
+<p>Now we have to write functions called <tt class="docutils literal">handle_cast</tt> and <tt class="docutils literal">handle_call</tt>.
+<tt class="docutils literal">handle_cast</tt> is essentially a server function which you don't expect a
+response from.  Messages can queue up to this function and they will be handled
+sequentially but never return any value to the caller.  <tt class="docutils literal">handle_call</tt> is
+exactly the opposite.  The caller is expecting a response, so this is a blocking
+operation.</p>
+<p>Let's use <tt class="docutils literal">handle_cast</tt> to accept new presence notifications:</p>
+<pre class="code erlang literal-block">
+<span class="nf">handle_cast</span><span class="p">({</span><span class="n">post_presence</span><span class="p">,</span> <span class="nv">UserID</span><span class="p">,</span> <span class="nv">Presence</span><span class="p">},</span> <span class="nv">State</span><span class="p">)</span> <span class="o">-&gt;</span>
+    <span class="k">case</span> <span class="nn">dict</span><span class="p">:</span><span class="n">is_key</span><span class="p">(</span><span class="nv">UserID</span><span class="p">,</span> <span class="nv">State</span><span class="p">)</span> <span class="k">of</span>
+        <span class="n">true</span> <span class="o">-&gt;</span>
+            <span class="p">{</span><span class="n">noreply</span><span class="p">,</span> <span class="nn">dict</span><span class="p">:</span><span class="n">append</span><span class="p">(</span><span class="nv">UserID</span><span class="p">,</span> <span class="p">{</span><span class="nn">erlang</span><span class="p">:</span><span class="n">now</span><span class="p">(),</span> <span class="nv">Presence</span><span class="p">},</span> <span class="nv">State</span><span class="p">)};</span>
+        <span class="p">_</span> <span class="o">-&gt;</span>
+            <span class="p">{</span><span class="n">noreply</span><span class="p">,</span> <span class="nn">dict</span><span class="p">:</span><span class="n">store</span><span class="p">(</span><span class="nv">UserID</span><span class="p">,</span> <span class="p">[{</span><span class="nn">erlang</span><span class="p">:</span><span class="n">now</span><span class="p">(),</span> <span class="nv">Presence</span><span class="p">}],</span> <span class="nv">State</span><span class="p">)}</span>
+    <span class="k">end</span><span class="p">;</span>
+<span class="nf">handle_cast</span><span class="p">(_</span><span class="nv">Msg</span><span class="p">,</span> <span class="nv">State</span><span class="p">)</span> <span class="o">-&gt;</span>
+    <span class="p">{</span><span class="n">noreply</span><span class="p">,</span> <span class="nv">State</span><span class="p">}.</span>
+</pre>
+<p>In essence, we check to see if the user has registered their presence, and if
+so, we add their presence to their presence list.  If they haven't submitted
+their presence before, we create a new presence list for them and add their
+submitted presence to that list.  We have also generated a catchall version
+of the function for when the call doesn't match the signature
+<tt class="docutils literal">{post_presence, UserID, Presence}</tt> for some reason.</p>
+<p>Now let's do the harder one: the call to get various presence information from
+our server:</p>
+<pre class="code erlang literal-block">
+<span class="nf">userfy_list</span><span class="p">(</span><span class="nv">User</span><span class="p">,</span> <span class="nv">List</span><span class="p">)</span> <span class="o">-&gt;</span>
+    <span class="nn">lists</span><span class="p">:</span><span class="n">map</span><span class="p">(</span><span class="k">fun</span><span class="p">({</span><span class="nv">Time</span><span class="p">,</span> <span class="nv">Msg</span><span class="p">})</span> <span class="o">-&gt;</span> <span class="p">{</span><span class="nv">User</span><span class="p">,</span> <span class="nv">Time</span><span class="p">,</span> <span class="nv">Msg</span><span class="p">}</span> <span class="k">end</span><span class="p">,</span> <span class="nv">List</span><span class="p">).</span>
+
+<span class="nf">handle_call</span><span class="p">({</span><span class="n">list_presence</span><span class="p">,</span> <span class="nv">UserID</span><span class="p">},</span> <span class="p">_</span><span class="nv">From</span><span class="p">,</span> <span class="nv">State</span><span class="p">)</span> <span class="o">-&gt;</span>
+    <span class="k">case</span> <span class="nn">dict</span><span class="p">:</span><span class="n">find</span><span class="p">(</span><span class="nv">UserID</span><span class="p">,</span> <span class="nv">State</span><span class="p">)</span> <span class="k">of</span>
+        <span class="p">{</span><span class="n">ok</span><span class="p">,</span> <span class="nv">Value</span><span class="p">}</span> <span class="o">-&gt;</span>
+            <span class="p">{</span><span class="n">reply</span><span class="p">,</span> <span class="nv">Value</span><span class="p">,</span> <span class="nv">State</span><span class="p">};</span>
+        <span class="n">error</span> <span class="o">-&gt;</span>
+            <span class="p">{</span><span class="n">reply</span><span class="p">,</span> <span class="p">{</span><span class="n">error</span><span class="p">,</span> <span class="n">user_does_not_exist</span><span class="p">},</span> <span class="nv">State</span><span class="p">}</span>
+    <span class="k">end</span><span class="p">;</span>
+<span class="nf">handle_call</span><span class="p">({</span><span class="n">list_presence</span><span class="p">,</span> <span class="nv">UserID</span><span class="p">,</span> <span class="nv">Limit</span><span class="p">},</span> <span class="p">_</span><span class="nv">From</span><span class="p">,</span> <span class="nv">State</span><span class="p">)</span> <span class="o">-&gt;</span>
+    <span class="k">case</span> <span class="nn">dict</span><span class="p">:</span><span class="n">find</span><span class="p">(</span><span class="nv">UserID</span><span class="p">,</span> <span class="nv">State</span><span class="p">)</span> <span class="k">of</span>
+        <span class="p">{</span><span class="n">ok</span><span class="p">,</span> <span class="nv">Value</span><span class="p">}</span> <span class="o">-&gt;</span>
+            <span class="p">{</span><span class="n">reply</span><span class="p">,</span> <span class="nn">lists</span><span class="p">:</span><span class="n">nthtail</span><span class="p">(</span><span class="nv">Limit</span><span class="p">,</span> <span class="nv">Value</span><span class="p">),</span> <span class="nv">State</span><span class="p">};</span>
+        <span class="n">error</span> <span class="o">-&gt;</span>
+            <span class="p">{</span><span class="n">reply</span><span class="p">,</span> <span class="p">{</span><span class="n">error</span><span class="p">,</span> <span class="n">user_does_not_exist</span><span class="p">},</span> <span class="nv">State</span><span class="p">}</span>
+    <span class="k">end</span><span class="p">;</span>
+<span class="nf">handle_call</span><span class="p">({</span><span class="n">public_list</span><span class="p">,</span> <span class="nv">Limit</span><span class="p">},</span> <span class="p">_</span><span class="nv">From</span><span class="p">,</span> <span class="nv">State</span><span class="p">)</span> <span class="o">-&gt;</span>
+    <span class="nv">LatestEntries</span> <span class="o">=</span> <span class="nn">lists</span><span class="p">:</span><span class="n">flatten</span><span class="p">([</span><span class="n">userfy_list</span><span class="p">(</span><span class="nv">User</span><span class="p">,</span> <span class="nv">List</span><span class="p">)</span> <span class="p">||</span> <span class="p">{</span><span class="nv">User</span><span class="p">,</span> <span class="nv">List</span><span class="p">}</span> <span class="o">&lt;-</span> <span class="nn">dict</span><span class="p">:</span><span class="n">to_list</span><span class="p">(</span><span class="nv">State</span><span class="p">)]),</span>
+    <span class="nv">Sorted</span> <span class="o">=</span> <span class="nn">lists</span><span class="p">:</span><span class="n">sort</span><span class="p">(</span><span class="k">fun</span><span class="p">({_,</span> <span class="nv">A</span><span class="p">,</span> <span class="p">_},</span> <span class="p">{_,</span> <span class="nv">B</span><span class="p">,</span> <span class="p">_})</span> <span class="o">-&gt;</span> <span class="nv">A</span> <span class="o">&gt;</span> <span class="nv">B</span> <span class="k">end</span><span class="p">,</span> <span class="nv">LatestEntries</span><span class="p">),</span>
+    <span class="p">{</span><span class="n">reply</span><span class="p">,</span> <span class="n">slice</span><span class="p">(</span><span class="nv">Sorted</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nv">Limit</span><span class="p">),</span> <span class="nv">State</span><span class="p">};</span>
+<span class="nf">handle_call</span><span class="p">(_</span><span class="nv">Request</span><span class="p">,</span> <span class="p">_</span><span class="nv">From</span><span class="p">,</span> <span class="nv">State</span><span class="p">)</span> <span class="o">-&gt;</span>
+    <span class="p">{</span><span class="n">reply</span><span class="p">,</span> <span class="n">ok</span><span class="p">,</span> <span class="nv">State</span><span class="p">}.</span>
+</pre>
+<p>The first version of <tt class="docutils literal">handle_call</tt> is very straightforward.  It simply looks
+up the list of presence information for a given user and returns that in
+the reply.  The second version does a similar thing, but calls <tt class="docutils literal">lists:nthtail</tt>
+on the value to limit the number of presence data that is included in that list.</p>
+<p>The final version of <tt class="docutils literal">handle_call</tt> is the most complicated, because we want to
+get information about everyone, order it by the date that it was posted, and
+limit the number of returned results by the specified limit.  An added
+complexity is that we have to change the data format to include the name of the
+user who posted it.</p>
+<p>First it uses a list comprehension to take the state dictionary and run our
+<tt class="docutils literal">userfy_list</tt> function on every User/List pair.  This will add the user to the
+presence tuple.  Then we flatten that list to be just a single list of userfied
+tuples.  Then, we sort that by the middle value (the timestamp of the presence).
+Finally, we use our newly-created slice function to take just the slice of
+information that we care about and return it to the user.  Again, there is a
+catchall <tt class="docutils literal">handle_call</tt> which discards incorrectly-formatted messages.</p>
+<div class="section" id="demo">
+<h4>Demo</h4>
+<pre class="code erlang literal-block">
+<span class="mi">1</span><span class="o">&gt;</span> <span class="n">c</span><span class="p">(</span><span class="n">presence_database</span><span class="p">).</span>
+<span class="p">{</span><span class="n">ok</span><span class="p">,</span><span class="n">presence_database</span><span class="p">}</span>
+<span class="mi">2</span><span class="o">&gt;</span> <span class="nn">presence_database</span><span class="p">:</span><span class="n">start_link</span><span class="p">().</span>
+<span class="p">{</span><span class="n">ok</span><span class="p">,</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">.</span><span class="mi">37</span><span class="p">.</span><span class="mi">0</span><span class="o">&gt;</span><span class="p">}</span>
+<span class="mi">3</span><span class="o">&gt;</span> <span class="nn">presence_database</span><span class="p">:</span><span class="n">post_presence</span><span class="p">(</span><span class="s">&quot;ericflo&quot;</span><span class="p">,</span> <span class="s">&quot;I am at Super Happy Dev House&quot;</span><span class="p">).</span>
+<span class="n">ok</span>
+<span class="mi">4</span><span class="o">&gt;</span> <span class="nn">presence_database</span><span class="p">:</span><span class="n">post_presence</span><span class="p">(</span><span class="s">&quot;ericflo&quot;</span><span class="p">,</span> <span class="s">&quot;I am writing erlang code&quot;</span><span class="p">).</span>
+<span class="n">ok</span>
+<span class="mi">5</span><span class="o">&gt;</span> <span class="nn">presence_database</span><span class="p">:</span><span class="n">post_presence</span><span class="p">(</span><span class="s">&quot;dreid&quot;</span><span class="p">,</span> <span class="s">&quot;I am having fun at SHDH&quot;</span><span class="p">).</span>
+<span class="n">ok</span>
+<span class="mi">6</span><span class="o">&gt;</span> <span class="nn">presence_database</span><span class="p">:</span><span class="n">list_presence</span><span class="p">(</span><span class="s">&quot;ericflo&quot;</span><span class="p">).</span>
+<span class="p">[{{</span><span class="mi">1226</span><span class="p">,</span><span class="mi">816100</span><span class="p">,</span><span class="mi">955</span><span class="p">},</span><span class="s">&quot;I am at Super Happy Dev House&quot;</span><span class="p">},</span>
+ <span class="p">{{</span><span class="mi">1226</span><span class="p">,</span><span class="mi">816113</span><span class="p">,</span><span class="mi">249498</span><span class="p">},</span><span class="s">&quot;I am writing erlang code&quot;</span><span class="p">}]</span>
+<span class="mi">7</span><span class="o">&gt;</span> <span class="nn">presence_database</span><span class="p">:</span><span class="n">list_presence</span><span class="p">(</span><span class="s">&quot;dreid&quot;</span><span class="p">).</span>
+<span class="p">[{{</span><span class="mi">1226</span><span class="p">,</span><span class="mi">816135</span><span class="p">,</span><span class="mi">937300</span><span class="p">},</span><span class="s">&quot;I am having fun at SHDH&quot;</span><span class="p">}]</span>
+<span class="mi">8</span><span class="o">&gt;</span> <span class="nn">presence_database</span><span class="p">:</span><span class="n">public_list</span><span class="p">(</span><span class="mi">5</span><span class="p">).</span>
+<span class="p">[{</span><span class="s">&quot;dreid&quot;</span><span class="p">,{</span><span class="mi">1226</span><span class="p">,</span><span class="mi">816135</span><span class="p">,</span><span class="mi">937300</span><span class="p">},</span><span class="s">&quot;I am having fun at SHDH&quot;</span><span class="p">},</span>
+ <span class="p">{</span><span class="s">&quot;ericflo&quot;</span><span class="p">,{</span><span class="mi">1226</span><span class="p">,</span><span class="mi">816113</span><span class="p">,</span><span class="mi">249498</span><span class="p">},</span><span class="s">&quot;I am writing erlang code&quot;</span><span class="p">},</span>
+ <span class="p">{</span><span class="s">&quot;ericflo&quot;</span><span class="p">,</span>
+  <span class="p">{</span><span class="mi">1226</span><span class="p">,</span><span class="mi">816100</span><span class="p">,</span><span class="mi">955</span><span class="p">},</span>
+  <span class="s">&quot;I am at Super Happy Dev House&quot;</span><span class="p">}]</span>
+<span class="mi">9</span><span class="o">&gt;</span> <span class="nn">presence_database</span><span class="p">:</span><span class="n">public_list</span><span class="p">(</span><span class="mi">2</span><span class="p">).</span>
+<span class="p">[{</span><span class="s">&quot;dreid&quot;</span><span class="p">,{</span><span class="mi">1226</span><span class="p">,</span><span class="mi">816135</span><span class="p">,</span><span class="mi">937300</span><span class="p">},</span><span class="s">&quot;I am having fun at SHDH&quot;</span><span class="p">},</span>
+ <span class="p">{</span><span class="s">&quot;ericflo&quot;</span><span class="p">,{</span><span class="mi">1226</span><span class="p">,</span><span class="mi">816113</span><span class="p">,</span><span class="mi">249498</span><span class="p">},</span><span class="s">&quot;I am writing erlang code&quot;</span><span class="p">}]</span>
+</pre>
+</div>
+<div class="section" id="conclusions">
+<h4>Conclusions</h4>
+<p>This really isn't robust.  If we wanted it to be more robust, we should use
+some sort of persistent storage, we should use more than one process and do some
+sort of consistent hashing to distribute the load, and we should have a
+supervisor process to ensure that crashed processes restart correctly and reload
+their data.</p>
+<p>All of that is the case, but yet through this simple exercise I've learned a ton
+about Erlang's <tt class="docutils literal">gen_server</tt> module.  I don't know if my explanations will do
+people any good, but hopefully they give a glimpse into the world of Erlang.  So
+now that all of that is said, show me how to slice in Erlang!</p>
+<p><strong>EDIT:</strong> Commenter <em>Mihai</em> has made me aware of the <tt class="docutils literal">lists:sublist</tt> function, which does exactly what I want.  I can now discard my crappy slice function.</p>
+</div>
+</div>
+
+<div class="categories">
+    Posted in:
+    <ul>
+      
+        <li><a href="/blog/categories/gen_server/">gen_server</a></li>
+      
+        <li><a href="/blog/categories/presence/">Presence</a></li>
+      
+        <li><a href="/blog/categories/erlang/">Erlang</a></li>
+      
+        <li><a href="/blog/categories/programming/">Programming</a></li>
+      
+    </ul>
+  </div>
+  </div>
+  <hr />
+  <br />
+  <br />
+
+      </div>
+    </div>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    
+  </body>
+</html>

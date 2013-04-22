@@ -1,0 +1,149 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Making Django Imports Less Painful - Eric Florenzano&rsquo;s Blog</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+
+    <link href="/atom.xml" rel="alternate" title="Eric Florenzano's Blog" type="application/atom+xml">
+
+    <link href="/static/css/bootstrap.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="/static/css/code.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="/static/js/html5shiv.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="center-column">
+        <h1 class="blog-header"><a href="/">Eric Florenzano&rsquo;s Blog</a></h1>
+        <ul class="blog-header-links">
+          <li><a href="/">Home</a></li>
+          <li><a href="/blog/archives/">Archives</a></li>
+          <li><a href="https://twitter.com/ericflo" class="twitter-follow-button" data-show-count="false">Follow @ericflo</a></li>
+          <li class="feed"><a href="/atom.xml"><img src="/static/img/feed-icon-28x28.png" width="20" height="20" alt="Subscribe to this blog" /></a></li>
+        </ul>
+        
+  <div class="blog-post-detail">
+    <h3><a href="/blog/2008/11/11/making-django-imports-less-painful/">Making Django Imports Less Painful</a></h3>
+<p class="datetime">Nov 11, 2008</p>
+<div class="document">
+<p>Way back in the early days of Django, it used to magically import certain functions before any views were ever run.  At some point that bit of magic got stripped out and now we have to explicitly import the things that we are going to use...much like everything else in Python.  One thing that <a class="reference external" href="http://simonwillison.net/">Simon Willison</a> suggested at DjangoCon is that the core developers might think about including a common set of functions that could be imported and used as shortcuts instead of importing everything again and again.</p>
+<p>I shrugged it off at the time, thinking it was a solution in search of a problem, but wanting to keep an open mind, I wanted to try it out in one app to see how it would look.  In this spirit, I created a file called <tt class="docutils literal">dj.py</tt> inside of a project of mine, <a class="reference external" href="http://code.google.com/p/django-avatar/">django-avatar</a>.  I looked around at what some of the most commonly used functions were, and came up with a <tt class="docutils literal">dj.py</tt> file that looked something like this:</p>
+<pre class="code python literal-block">
+<span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponseRedirect</span>
+<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render_to_response</span>
+<span class="kn">from</span> <span class="nn">django.template</span> <span class="kn">import</span> <span class="n">RequestContext</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.decorators</span> <span class="kn">import</span> <span class="n">login_required</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">User</span>
+<span class="kn">from</span> <span class="nn">django.utils.translation</span> <span class="kn">import</span> <span class="n">ugettext</span> <span class="k">as</span> <span class="n">_</span>
+<span class="kn">from</span> <span class="nn">django</span> <span class="kn">import</span> <span class="n">forms</span>
+<span class="kn">from</span> <span class="nn">django.utils.safestring</span> <span class="kn">import</span> <span class="n">mark_safe</span>
+</pre>
+<p>Then I went through and deleted all of these imports from throughout the project, and replaced it with a single import:</p>
+<pre class="code python literal-block">
+<span class="kn">from</span> <span class="nn">avatar</span> <span class="kn">import</span> <span class="n">dj</span>
+</pre>
+<p>Now we have that shortcut module loaded, we can use it.  Here's an example of what one view looked like before:</p>
+<pre class="code python literal-block">
+<span class="kn">from</span> <span class="nn">django.contrib.auth.decorators</span> <span class="kn">import</span> <span class="n">login_required</span>
+<span class="kn">from</span> <span class="nn">django.template</span> <span class="kn">import</span> <span class="n">RequestContext</span>
+<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render_to_response</span>
+<span class="kn">from</span> <span class="nn">django.utils.translation</span> <span class="kn">import</span> <span class="n">ugettext</span> <span class="k">as</span> <span class="n">_</span>
+<span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponseRedirect</span>
+
+<span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">extra_context</span><span class="o">=</span><span class="p">{},</span> <span class="n">next_override</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="n">avatars</span> <span class="o">=</span> <span class="n">Avatar</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">'-primary'</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">avatars</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">avatar</span> <span class="o">=</span> <span class="n">avatars</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">avatar</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">delete_avatar_form</span> <span class="o">=</span> <span class="n">DeleteAvatarForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span> <span class="ow">or</span> <span class="bp">None</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">'POST'</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">delete_avatar_form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="n">ids</span> <span class="o">=</span> <span class="n">delete_avatar_form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s">'choices'</span><span class="p">]</span>
+            <span class="n">Avatar</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">id__in</span><span class="o">=</span><span class="n">ids</span><span class="p">)</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+            <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">message_set</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+                <span class="n">message</span><span class="o">=</span><span class="n">_</span><span class="p">(</span><span class="s">&quot;Successfully deleted the requested avatars.&quot;</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">HttpResponseRedirect</span><span class="p">(</span><span class="n">next_override</span> <span class="ow">or</span> <span class="n">_get_next</span><span class="p">(</span><span class="n">request</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span>
+        <span class="s">'avatar/confirm_delete.html'</span><span class="p">,</span>
+        <span class="n">extra_context</span><span class="p">,</span>
+        <span class="n">context_instance</span> <span class="o">=</span> <span class="n">RequestContext</span><span class="p">(</span>
+            <span class="n">request</span><span class="p">,</span>
+            <span class="p">{</span> <span class="s">'avatar'</span><span class="p">:</span> <span class="n">avatar</span><span class="p">,</span>
+              <span class="s">'avatars'</span><span class="p">:</span> <span class="n">avatars</span><span class="p">,</span>
+              <span class="s">'delete_avatar_form'</span><span class="p">:</span> <span class="n">delete_avatar_form</span><span class="p">,</span>
+              <span class="s">'next'</span><span class="p">:</span> <span class="n">next_override</span> <span class="ow">or</span> <span class="n">_get_next</span><span class="p">(</span><span class="n">request</span><span class="p">),</span> <span class="p">}</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+<span class="n">change</span> <span class="o">=</span> <span class="n">login_required</span><span class="p">(</span><span class="n">change</span><span class="p">)</span>
+</pre>
+<p>And here's what the code looked like afterward:</p>
+<pre class="code python literal-block">
+<span class="kn">from</span> <span class="nn">avatar</span> <span class="kn">import</span> <span class="n">dj</span>
+
+<span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">extra_context</span><span class="o">=</span><span class="p">{},</span> <span class="n">next_override</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="n">avatars</span> <span class="o">=</span> <span class="n">Avatar</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">'-primary'</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">avatars</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">avatar</span> <span class="o">=</span> <span class="n">avatars</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">avatar</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">delete_avatar_form</span> <span class="o">=</span> <span class="n">DeleteAvatarForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span> <span class="ow">or</span> <span class="bp">None</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">'POST'</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">delete_avatar_form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="n">ids</span> <span class="o">=</span> <span class="n">delete_avatar_form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s">'choices'</span><span class="p">]</span>
+            <span class="n">Avatar</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">id__in</span><span class="o">=</span><span class="n">ids</span><span class="p">)</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+            <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">message_set</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+                <span class="n">message</span><span class="o">=</span><span class="n">dj</span><span class="o">.</span><span class="n">_</span><span class="p">(</span><span class="s">&quot;Successfully deleted the requested avatars.&quot;</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">dj</span><span class="o">.</span><span class="n">HttpResponseRedirect</span><span class="p">(</span><span class="n">next_override</span> <span class="ow">or</span> <span class="n">_get_next</span><span class="p">(</span><span class="n">request</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">dj</span><span class="o">.</span><span class="n">render_to_response</span><span class="p">(</span>
+        <span class="s">'avatar/confirm_delete.html'</span><span class="p">,</span>
+        <span class="n">extra_context</span><span class="p">,</span>
+        <span class="n">context_instance</span> <span class="o">=</span> <span class="n">dj</span><span class="o">.</span><span class="n">RequestContext</span><span class="p">(</span>
+            <span class="n">request</span><span class="p">,</span>
+            <span class="p">{</span> <span class="s">'avatar'</span><span class="p">:</span> <span class="n">avatar</span><span class="p">,</span>
+              <span class="s">'avatars'</span><span class="p">:</span> <span class="n">avatars</span><span class="p">,</span>
+              <span class="s">'delete_avatar_form'</span><span class="p">:</span> <span class="n">delete_avatar_form</span><span class="p">,</span>
+              <span class="s">'next'</span><span class="p">:</span> <span class="n">next_override</span> <span class="ow">or</span> <span class="n">_get_next</span><span class="p">(</span><span class="n">request</span><span class="p">),</span> <span class="p">}</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+<span class="n">change</span> <span class="o">=</span> <span class="n">dj</span><span class="o">.</span><span class="n">login_required</span><span class="p">(</span><span class="n">change</span><span class="p">)</span>
+</pre>
+<p>It works!  Although after all of that, I have decided that in my opinion it's just not worth the effort.  It adds an extra level of indirection when tracing through the code, it litters the view with the <tt class="docutils literal">dj</tt> namespace, and it's harder to know what you have available to you.  Maybe you like this style better, though.  If so, what about this style do you like?</p>
+</div>
+
+<div class="categories">
+    Posted in:
+    <ul>
+      
+        <li><a href="/blog/categories/python/">Python</a></li>
+      
+        <li><a href="/blog/categories/django/">Django</a></li>
+      
+        <li><a href="/blog/categories/programming/">Programming</a></li>
+      
+    </ul>
+  </div>
+  </div>
+  <hr />
+  <br />
+  <br />
+
+      </div>
+    </div>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    
+  </body>
+</html>

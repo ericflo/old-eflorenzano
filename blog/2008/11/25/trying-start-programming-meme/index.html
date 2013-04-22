@@ -1,0 +1,134 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Trying to Start a Programming Meme - Eric Florenzano&rsquo;s Blog</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+
+    <link href="/atom.xml" rel="alternate" title="Eric Florenzano's Blog" type="application/atom+xml">
+
+    <link href="/static/css/bootstrap.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="/static/css/code.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="/static/js/html5shiv.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="center-column">
+        <h1 class="blog-header"><a href="/">Eric Florenzano&rsquo;s Blog</a></h1>
+        <ul class="blog-header-links">
+          <li><a href="/">Home</a></li>
+          <li><a href="/blog/archives/">Archives</a></li>
+          <li><a href="https://twitter.com/ericflo" class="twitter-follow-button" data-show-count="false">Follow @ericflo</a></li>
+          <li class="feed"><a href="/atom.xml"><img src="/static/img/feed-icon-28x28.png" width="20" height="20" alt="Subscribe to this blog" /></a></li>
+        </ul>
+        
+  <div class="blog-post-detail">
+    <h3><a href="/blog/2008/11/25/trying-start-programming-meme/">Trying to Start a Programming Meme</a></h3>
+<p class="datetime">Nov 25, 2008</p>
+<div class="document">
+<p>I've never tried to start a meme before, but since I don't really have anything
+great to post about, I'd like to try to start one.  I think this one could be
+particularly fun because it encourages implementation of a basic program in many
+different languages.</p>
+<p>Rules:</p>
+<ol class="arabic simple">
+<li>Implement a program that takes in a user's name and their age, and prints
+hello to them once for every year that they have been alive.</li>
+<li>Post these rules, the source code for your solution, and the following list
+(with you included) on your blog.</li>
+<li>Bonus points if you implement it in a language not yet seen on the following
+list!</li>
+</ol>
+<p>The List:</p>
+<ol class="arabic simple">
+<li>[Python] <a class="reference external" href="http://www.eflorenzano.com/blog/post/trying-start-programming-meme">http://www.eflorenzano.com/blog/post/trying-start-programming-meme</a></li>
+<li>[Bash] <a class="reference external" href="http://aartemenko.com/texts/bash-meme/">http://aartemenko.com/texts/bash-meme/</a></li>
+<li>[C] <a class="reference external" href="http://dakrauth.com/media/site/text/hello.c">http://dakrauth.com/media/site/text/hello.c</a></li>
+<li>[Java] <a class="reference external" href="http://adoleo.com/blog/2008/nov/25/programming-meme/">http://adoleo.com/blog/2008/nov/25/programming-meme/</a></li>
+<li>[Python 3] <a class="reference external" href="http://mikewatkins.ca/2008/11/25/hello-meme/">http://mikewatkins.ca/2008/11/25/hello-meme/</a></li>
+<li>[Ruby] <a class="reference external" href="http://stroky.l.googlepages.com/gem">http://stroky.l.googlepages.com/gem</a></li>
+<li>[Ruby] <a class="reference external" href="http://im.camronflanders.com/archive/meme/">http://im.camronflanders.com/archive/meme/</a></li>
+<li>[Lisp] <a class="reference external" href="http://justinlilly.com/blog/2008/nov/25/back-on-the-horse/">http://justinlilly.com/blog/2008/nov/25/back-on-the-horse/</a></li>
+<li>[Lua] <a class="reference external" href="http://aartemenko.com/texts/lua-hello-meme/">http://aartemenko.com/texts/lua-hello-meme/</a></li>
+<li>[Functional Python] <a class="reference external" href="http://aartemenko.com/texts/python-functional-hello-meme/">http://aartemenko.com/texts/python-functional-hello-meme/</a></li>
+<li>[Erlang] <a class="reference external" href="http://surfacedepth.blogspot.com/2008/11/erics-programming-meme-in-erlang.html">http://surfacedepth.blogspot.com/2008/11/erics-programming-meme-in-erlang.html</a></li>
+<li>[Haskell] <a class="reference external" href="http://jasonwalsh.us/meme.html">http://jasonwalsh.us/meme.html</a></li>
+<li>[PHP] <a class="reference external" href="http://fitzgeraldsteele.wordpress.com/2008/11/25/memeing-in-php-2/">http://fitzgeraldsteele.wordpress.com/2008/11/25/memeing-in-php-2/</a></li>
+<li>[Javascript] <a class="reference external" href="http://www.taylanpince.com/blog/posts/responding-to-a-programming-meme/">http://www.taylanpince.com/blog/posts/responding-to-a-programming-meme/</a></li>
+<li>[Single-File Django] <a class="reference external" href="http://www.pocketuniverse.ca/archive/2008/november/27/florenzano-factor/">http://www.pocketuniverse.ca/archive/2008/november/27/florenzano-factor/</a></li>
+</ol>
+<p>(...and make sure to check out the comments on this post for some other fun implementations!)</p>
+<p>And here's my implementation:</p>
+<pre class="code python literal-block">
+<span class="n">name</span> <span class="o">=</span> <span class="nb">raw_input</span><span class="p">(</span><span class="s">'Please enter your name: '</span><span class="p">)</span>
+<span class="n">age</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">raw_input</span><span class="p">(</span><span class="s">'Please enter your age: '</span><span class="p">))</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">age</span><span class="p">):</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="si">%2d</span><span class="s">) Hello, </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+</pre>
+<p>And its output:</p>
+<pre class="code bash literal-block">
+Please enter your name: Eric Florenzano
+Please enter your age: 22
+ 0<span class="o">)</span> Hello, Eric Florenzano
+ 1<span class="o">)</span> Hello, Eric Florenzano
+ 2<span class="o">)</span> Hello, Eric Florenzano
+ 3<span class="o">)</span> Hello, Eric Florenzano
+ 4<span class="o">)</span> Hello, Eric Florenzano
+ 5<span class="o">)</span> Hello, Eric Florenzano
+ 6<span class="o">)</span> Hello, Eric Florenzano
+ 7<span class="o">)</span> Hello, Eric Florenzano
+ 8<span class="o">)</span> Hello, Eric Florenzano
+ 9<span class="o">)</span> Hello, Eric Florenzano
+10<span class="o">)</span> Hello, Eric Florenzano
+11<span class="o">)</span> Hello, Eric Florenzano
+12<span class="o">)</span> Hello, Eric Florenzano
+13<span class="o">)</span> Hello, Eric Florenzano
+14<span class="o">)</span> Hello, Eric Florenzano
+15<span class="o">)</span> Hello, Eric Florenzano
+16<span class="o">)</span> Hello, Eric Florenzano
+17<span class="o">)</span> Hello, Eric Florenzano
+18<span class="o">)</span> Hello, Eric Florenzano
+19<span class="o">)</span> Hello, Eric Florenzano
+20<span class="o">)</span> Hello, Eric Florenzano
+21<span class="o">)</span> Hello, Eric Florenzano
+</pre>
+<p>Well there you have it, my attempt at a programming meme.  I hope someone enjoys it!</p>
+</div>
+
+<div class="categories">
+    Posted in:
+    <ul>
+      
+        <li><a href="/blog/categories/python/">Python</a></li>
+      
+        <li><a href="/blog/categories/meme/">Meme</a></li>
+      
+        <li><a href="/blog/categories/programming/">Programming</a></li>
+      
+    </ul>
+  </div>
+  </div>
+  <hr />
+  <br />
+  <br />
+
+      </div>
+    </div>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    
+  </body>
+</html>

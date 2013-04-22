@@ -1,418 +1,164 @@
 
 <!DOCTYPE html>
-<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
-<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
-<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
-<head>
-  <meta charset="utf-8">
-  <title>Gems of Python - Eric Florenzano's Blog</title>
-  <meta name="author" content="Eric Florenzano">
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Gems of Python - Eric Florenzano&rsquo;s Blog</title>
 
-  
-  <meta name="description" content="I&#8217;ve been using Python for a few years now, and continue to love it. But the language is large enough that it seems every project that I look &hellip;">
-  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
 
-  <!-- http://t.co/dKP3o1e -->
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="/atom.xml" rel="alternate" title="Eric Florenzano's Blog" type="application/atom+xml">
 
-  
-  <link rel="canonical" href="http://eflorenzano.com/blog/2008/11/02/gems-python">
-  <link href="/favicon.png" rel="icon">
-  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="/javascripts/ender.js"></script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
-  <link href="/atom.xml" rel="alternate" title="Eric Florenzano's Blog" type="application/atom+xml">
-  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
-<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+    <link href="/static/css/bootstrap.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="/static/css/code.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
 
-  
-  <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-1959803-2']);
-    _gaq.push(['_trackPageview']);
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="/static/js/html5shiv.js"></script>
+    <![endif]-->
 
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-  </script>
-
-
-</head>
-
-<body   >
-  <header role="banner"><hgroup>
-  <h1><a href="/">Eric Florenzano's Blog</a></h1>
-  
-    <h2>I am me.</h2>
-  
-</hgroup>
-
-</header>
-  <nav role="navigation"><ul class="subscription" data-subscription="rss">
-  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
-  
-</ul>
-  
-<form action="http://google.com/search" method="get">
-  <fieldset role="search">
-    <input type="hidden" name="q" value="site:eflorenzano.com" />
-    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
-  </fieldset>
-</form>
-  
-<ul class="main-navigation">
-  <li><a href="/">Blog</a></li>
-  <li><a href="/blog/archives">Archives</a></li>
-</ul>
-
-</nav>
-  <div id="main">
-    <div id="content">
-      <div>
-<article class="hentry" role="article">
-  
-  <header>
+    <!-- Fav and touch icons -->
     
-      <h1 class="entry-title">Gems of Python</h1>
-    
-    
-      <p class="meta">
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="center-column">
+        <h1 class="blog-header"><a href="/">Eric Florenzano&rsquo;s Blog</a></h1>
+        <ul class="blog-header-links">
+          <li><a href="/">Home</a></li>
+          <li><a href="/blog/archives/">Archives</a></li>
+          <li><a href="https://twitter.com/ericflo" class="twitter-follow-button" data-show-count="false">Follow @ericflo</a></li>
+          <li class="feed"><a href="/atom.xml"><img src="/static/img/feed-icon-28x28.png" width="20" height="20" alt="Subscribe to this blog" /></a></li>
+        </ul>
         
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-11-02T14:04:42-08:00" pubdate data-updated="true">Nov 2<span>nd</span>, 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-<div class="entry-content"><p>I&#8217;ve been using Python for a few years now, and continue to love it.  But the language is large enough that it seems every project that I look at uses a different subset of the language&#8217;s features.  The nice thing is that by reading different people&#8217;s code, you can find out about some real gems in the Python programming language.  Some of these tips are extremely obvious, and some are more obscure.  In any case, here are what I consider to be some real gems:</p>
+  <div class="blog-post-detail">
+    <h3><a href="/blog/2008/11/02/gems-python/">Gems of Python</a></h3>
+<p class="datetime">Nov 02, 2008</p>
+<div class="document">
+<p>I've been using Python for a few years now, and continue to love it.  But the language is large enough that it seems every project that I look at uses a different subset of the language's features.  The nice thing is that by reading different people's code, you can find out about some real gems in the Python programming language.  Some of these tips are extremely obvious, and some are more obscure.  In any case, here are what I consider to be some real gems:</p>
 <ol class="arabic">
-<li><p class="first"><a class="reference external" href="http://docs.python.org/library/functions.html?highlight=filter#filter">filter</a>  This is one of Python&#8217;s built-in functions, which allows you to remove unwanted items from a list.  It&#8217;s very useful and highly overlooked.  Here&#8217;s an example of how to use it:</p>
-<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-</pre></td><td class="code"><pre><code class="pycon"><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">lst</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;1&#39;</span><span class="p">,</span> <span class="s">&#39;2&#39;</span><span class="p">,</span> <span class="s">&#39;3&#39;</span><span class="p">,</span> <span class="s">&#39;4&#39;</span><span class="p">,</span> <span class="s">&#39;asdf&#39;</span><span class="p">,</span> <span class="s">&#39;5&#39;</span><span class="p">]</span>
-</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">is_int_string</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
-</span><span class="line"><span class="gp">... </span>    <span class="k">try</span><span class="p">:</span>
-</span><span class="line"><span class="gp">... </span>        <span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-</span><span class="line"><span class="gp">... </span>        <span class="k">return</span> <span class="bp">True</span>
-</span><span class="line"><span class="gp">... </span>    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-</span><span class="line"><span class="gp">... </span>        <span class="k">return</span> <span class="bp">False</span>
-</span><span class="line"><span class="gp">...</span>
-</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">int_string_list</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="n">is_int_string</span><span class="p">,</span> <span class="n">lst</span><span class="p">)</span>
-</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">int_string_list</span>
-</span><span class="line"><span class="go">[&#39;1&#39;, &#39;2&#39;, &#39;3&#39;, &#39;4&#39;, &#39;5&#39;]</span>
-</span></code></pre></td></tr></table></div></figure><p>But there is a really neat filter shortcut, too.  You can have it filter out any values which evaluate to False.</p>
-<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-</pre></td><td class="code"><pre><code class="pycon"><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">lst</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="s">&#39;asdf&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="p">[],</span> <span class="p">(),</span> <span class="s">&#39;fdsa&#39;</span><span class="p">]</span>
-</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="nb">filter</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">lst</span><span class="p">)</span>
-</span><span class="line"><span class="go">[2, &#39;asdf&#39;, &#39;fdsa&#39;]</span>
-</span></code></pre></td></tr></table></div></figure><p>This is really great for filtering out unwanted values in a list.  I use it actually quite frequently and hope to see it in more python projects.</p>
+<li><p class="first"><a class="reference external" href="http://docs.python.org/library/functions.html?highlight=filter#filter">filter</a>  This is one of Python's built-in functions, which allows you to remove unwanted items from a list.  It's very useful and highly overlooked.  Here's an example of how to use it:</p>
+<pre class="code pycon literal-block">
+<span class="n"></span><span class="gp">&gt;&gt;&gt; </span><span class="n">lst</span> <span class="o">=</span> <span class="p">[</span><span class="s">'1'</span><span class="p">,</span> <span class="s">'2'</span><span class="p">,</span> <span class="s">'3'</span><span class="p">,</span> <span class="s">'4'</span><span class="p">,</span> <span class="s">'asdf'</span><span class="p">,</span> <span class="s">'5'</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">is_int_string</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">try</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="bp">True</span>
+<span class="gp">... </span>    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="bp">False</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">int_string_list</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="n">is_int_string</span><span class="p">,</span> <span class="n">lst</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">int_string_list</span>
+<span class="go">['1', '2', '3', '4', '5']</span>
+</pre>
+<p>But there is a really neat filter shortcut, too.  You can have it filter out any values which evaluate to False.</p>
+<pre class="code pycon literal-block">
+<span class="n"></span><span class="gp">&gt;&gt;&gt; </span><span class="n">lst</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s">''</span><span class="p">,</span> <span class="s">'asdf'</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="p">[],</span> <span class="p">(),</span> <span class="s">'fdsa'</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">filter</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">lst</span><span class="p">)</span>
+<span class="go">[2, 'asdf', 'fdsa']</span>
+</pre>
+<p>This is really great for filtering out unwanted values in a list.  I use it actually quite frequently and hope to see it in more python projects.</p>
 </li>
 <li><p class="first"><a class="reference external" href="http://docs.python.org/library/itertools.html?highlight=itertools#itertools.chain">itertools.chain</a>  I often have a list of lists, and want to run some operation on each item in that list of lists.  itertools.chain allows that to happen.  Let me demonstrate with an example:</p>
-<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-</pre></td><td class="code"><pre><code class="pycon"><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">itertools</span>
-</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">lst</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">]]</span>
-</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="p">(</span><span class="o">*</span><span class="n">lst</span><span class="p">))</span>
-</span><span class="line"><span class="go">[1, 2, 3, 4, 5, 6, 7, 8, 9]</span>
-</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="nb">sum</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="p">(</span><span class="o">*</span><span class="n">lst</span><span class="p">))</span>
-</span><span class="line"><span class="go">45</span>
-</span></code></pre></td></tr></table></div></figure><p><strong>itertools.chain</strong> has become a major part of my day-to-day coding toolbox, and it&#8217;s a real python gem.</p>
+<pre class="code pycon literal-block">
+<span class="kn"></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">itertools</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lst</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="p">(</span><span class="o">*</span><span class="n">lst</span><span class="p">))</span>
+<span class="go">[1, 2, 3, 4, 5, 6, 7, 8, 9]
+</span><span class="nb"></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">sum</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="p">(</span><span class="o">*</span><span class="n">lst</span><span class="p">))</span>
+<span class="go">45</span>
+</pre>
+<p><strong>itertools.chain</strong> has become a major part of my day-to-day coding toolbox, and it's a real python gem.</p>
 </li>
 <li><p class="first"><a class="reference external" href="http://docs.python.org/library/stdtypes.html?highlight=setdefault#dict.setdefault">setdefault</a> Do you find yourself writing this type of <tt class="docutils literal"><span class="pre">try..except</span> KeyError</tt> pattern often?</p>
-<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-</pre></td><td class="code"><pre><code class="pycon"><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">dct</span> <span class="o">=</span> <span class="p">{}</span>
-</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">items</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;anne&#39;</span><span class="p">,</span> <span class="s">&#39;david&#39;</span><span class="p">,</span> <span class="s">&#39;kevin&#39;</span><span class="p">,</span> <span class="s">&#39;eric&#39;</span><span class="p">,</span> <span class="s">&#39;anthony&#39;</span><span class="p">,</span> <span class="s">&#39;andrew&#39;</span><span class="p">]</span>
-</span><span class="line"><span class="gp">... </span><span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
-</span><span class="line"><span class="gp">... </span>    <span class="k">try</span><span class="p">:</span>
-</span><span class="line"><span class="gp">... </span>        <span class="n">dct</span><span class="p">[</span><span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-</span><span class="line"><span class="gp">... </span>    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-</span><span class="line"><span class="gp">... </span>        <span class="n">dct</span><span class="p">[</span><span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span><span class="n">name</span><span class="p">]</span>
-</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">dct</span>
-</span><span class="line"><span class="go">{&#39;a&#39;: [&#39;anne&#39;, &#39;anthony&#39;, &#39;andrew&#39;], &#39;k&#39;: [&#39;kevin&#39;], &#39;e&#39;: [&#39;eric&#39;], &#39;d&#39;: [&#39;david&#39;]}</span>
-</span></code></pre></td></tr></table></div></figure><p>That&#8217;s a lot of boilerplate code for something that seems like it should be much easier.  Thankfully, this can be solved much  more easily by using <strong>setdefault</strong>, like so:</p>
-<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-</pre></td><td class="code"><pre><code class="pycon"><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">dct</span> <span class="o">=</span> <span class="p">{}</span>
-</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">items</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;anne&#39;</span><span class="p">,</span> <span class="s">&#39;david&#39;</span><span class="p">,</span> <span class="s">&#39;kevin&#39;</span><span class="p">,</span> <span class="s">&#39;eric&#39;</span><span class="p">,</span> <span class="s">&#39;anthony&#39;</span><span class="p">,</span> <span class="s">&#39;andrew&#39;</span><span class="p">]</span>
-</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
-</span><span class="line"><span class="gp">... </span>    <span class="n">dct</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-</span><span class="line"><span class="gp">...</span>
-</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">dct</span>
-</span><span class="line"><span class="go">{&#39;a&#39;: [&#39;anne&#39;, &#39;anthony&#39;, &#39;andrew&#39;], &#39;k&#39;: [&#39;kevin&#39;], &#39;e&#39;: [&#39;eric&#39;], &#39;d&#39;: [&#39;david&#39;]}</span>
-</span></code></pre></td></tr></table></div></figure><p>Much better, isn&#8217;t it?</p>
+<pre class="code pycon literal-block">
+<span class="n"></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dct</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">items</span> <span class="o">=</span> <span class="p">[</span><span class="s">'anne'</span><span class="p">,</span> <span class="s">'david'</span><span class="p">,</span> <span class="s">'kevin'</span><span class="p">,</span> <span class="s">'eric'</span><span class="p">,</span> <span class="s">'anthony'</span><span class="p">,</span> <span class="s">'andrew'</span><span class="p">]</span>
+<span class="gp">... </span><span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">try</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="n">dct</span><span class="p">[</span><span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="n">dct</span><span class="p">[</span><span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span><span class="n">name</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dct</span>
+<span class="go">{'a': ['anne', 'anthony', 'andrew'], 'k': ['kevin'], 'e': ['eric'], 'd': ['david']}</span>
+</pre>
+<p>That's a lot of boilerplate code for something that seems like it should be much easier.  Thankfully, this can be solved much  more easily by using <strong>setdefault</strong>, like so:</p>
+<pre class="code pycon literal-block">
+<span class="n"></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dct</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">items</span> <span class="o">=</span> <span class="p">[</span><span class="s">'anne'</span><span class="p">,</span> <span class="s">'david'</span><span class="p">,</span> <span class="s">'kevin'</span><span class="p">,</span> <span class="s">'eric'</span><span class="p">,</span> <span class="s">'anthony'</span><span class="p">,</span> <span class="s">'andrew'</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">dct</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dct</span>
+<span class="go">{'a': ['anne', 'anthony', 'andrew'], 'k': ['kevin'], 'e': ['eric'], 'd': ['david']}</span>
+</pre>
+<p>Much better, isn't it?</p>
 </li>
-<li><p class="first"><a class="reference external" href="http://docs.python.org/library/collections.html?highlight=defaultdict#collections.defaultdict">defaultdict</a> Given <cite>setdefault</cite>, it still seems like there should be a better way.  If you know upfront that you will be setting everything to an empty list if it isn&#8217;t found, you should be able to specify that and have it just Do The Right Thing.  Thankfully, <strong>defaultdict</strong> does just that:</p>
-<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-</pre></td><td class="code"><pre><code class="pycon"><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
-</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">dct</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
-</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">items</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;anne&#39;</span><span class="p">,</span> <span class="s">&#39;david&#39;</span><span class="p">,</span> <span class="s">&#39;kevin&#39;</span><span class="p">,</span> <span class="s">&#39;eric&#39;</span><span class="p">,</span> <span class="s">&#39;anthony&#39;</span><span class="p">,</span> <span class="s">&#39;andrew&#39;</span><span class="p">]</span>
-</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
-</span><span class="line"><span class="gp">... </span>    <span class="n">dct</span><span class="p">[</span><span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-</span><span class="line"><span class="gp">...</span>
-</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">dct</span>
-</span><span class="line"><span class="go">defaultdict(&lt;type &#39;list&#39;&gt;, {&#39;a&#39;: [&#39;anne&#39;, &#39;anthony&#39;, &#39;andrew&#39;], &#39;k&#39;: [&#39;kevin&#39;], &#39;e&#39;: [&#39;eric&#39;], &#39;d&#39;: [&#39;david&#39;]})</span>
-</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="nb">dict</span><span class="p">(</span><span class="n">dct</span><span class="p">)</span>
-</span><span class="line"><span class="go">{&#39;a&#39;: [&#39;anne&#39;, &#39;anthony&#39;, &#39;andrew&#39;], &#39;k&#39;: [&#39;kevin&#39;], &#39;e&#39;: [&#39;eric&#39;], &#39;d&#39;: [&#39;david&#39;]}</span>
-</span></code></pre></td></tr></table></div></figure><p>I usually end up converting the defaultdict back to a regular dict before passing it around, but other than that, it&#8217;s quite a useful tool to use.</p>
+<li><p class="first"><a class="reference external" href="http://docs.python.org/library/collections.html?highlight=defaultdict#collections.defaultdict">defaultdict</a> Given <cite>setdefault</cite>, it still seems like there should be a better way.  If you know upfront that you will be setting everything to an empty list if it isn't found, you should be able to specify that and have it just Do The Right Thing.  Thankfully, <strong>defaultdict</strong> does just that:</p>
+<pre class="code pycon literal-block">
+<span class="kn"></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dct</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">items</span> <span class="o">=</span> <span class="p">[</span><span class="s">'anne'</span><span class="p">,</span> <span class="s">'david'</span><span class="p">,</span> <span class="s">'kevin'</span><span class="p">,</span> <span class="s">'eric'</span><span class="p">,</span> <span class="s">'anthony'</span><span class="p">,</span> <span class="s">'andrew'</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">dct</span><span class="p">[</span><span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dct</span>
+<span class="go">defaultdict(&lt;type 'list'&gt;, {'a': ['anne', 'anthony', 'andrew'], 'k': ['kevin'], 'e': ['eric'], 'd': ['david']})
+</span><span class="nb"></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">dict</span><span class="p">(</span><span class="n">dct</span><span class="p">)</span>
+<span class="go">{'a': ['anne', 'anthony', 'andrew'], 'k': ['kevin'], 'e': ['eric'], 'd': ['david']}</span>
+</pre>
+<p>I usually end up converting the defaultdict back to a regular dict before passing it around, but other than that, it's quite a useful tool to use.</p>
 </li>
 <li><p class="first"><a class="reference external" href="http://docs.python.org/library/functions.html?highlight=zip#zip">zip</a> This is one that most people usually know, but still I find that sometimes people do strange things where a zip would be much easier.</p>
-<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-</pre></td><td class="code"><pre><code class="pycon"><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">numbers</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
-</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">letters</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="s">&#39;c&#39;</span><span class="p">,</span> <span class="s">&#39;d&#39;</span><span class="p">,</span> <span class="s">&#39;e&#39;</span><span class="p">]</span>
-</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">num</span><span class="p">,</span> <span class="n">let</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">numbers</span><span class="p">,</span> <span class="n">letters</span><span class="p">):</span>
-</span><span class="line"><span class="gp">... </span>    <span class="k">print</span> <span class="s">&quot;Letter </span><span class="si">%d</span><span class="s"> is &#39;</span><span class="si">%s</span><span class="s">&#39;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">num</span><span class="p">,</span> <span class="n">let</span><span class="p">)</span>
-</span><span class="line"><span class="gp">...</span>
-</span><span class="line"><span class="go">Letter 1 is &#39;a&#39;</span>
-</span><span class="line"><span class="go">Letter 2 is &#39;b&#39;</span>
-</span><span class="line"><span class="go">Letter 3 is &#39;c&#39;</span>
-</span><span class="line"><span class="go">Letter 4 is &#39;d&#39;</span>
-</span><span class="line"><span class="go">Letter 5 is &#39;e&#39;</span>
-</span></code></pre></td></tr></table></div></figure><p>Pretty simple, very common, and yet sometimes coders seem to work around it.  Also worth mentioning is that there&#8217;s an iterable version of this, <a class="reference external" href="http://docs.python.org/library/itertools.html?highlight=izip#itertools.izip">izip</a>, which is located in itertools.</p>
+<pre class="code pycon literal-block">
+<span class="n"></span><span class="gp">&gt;&gt;&gt; </span><span class="n">numbers</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">letters</span> <span class="o">=</span> <span class="p">[</span><span class="s">'a'</span><span class="p">,</span> <span class="s">'b'</span><span class="p">,</span> <span class="s">'c'</span><span class="p">,</span> <span class="s">'d'</span><span class="p">,</span> <span class="s">'e'</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">num</span><span class="p">,</span> <span class="n">let</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">numbers</span><span class="p">,</span> <span class="n">letters</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="s">&quot;Letter </span><span class="si">%d</span><span class="s"> is '</span><span class="si">%s</span><span class="s">'&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">num</span><span class="p">,</span> <span class="n">let</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="go">Letter 1 is 'a'
+Letter 2 is 'b'
+Letter 3 is 'c'
+Letter 4 is 'd'
+Letter 5 is 'e'</span>
+</pre>
+<p>Pretty simple, very common, and yet sometimes coders seem to work around it.  Also worth mentioning is that there's an iterable version of this, <a class="reference external" href="http://docs.python.org/library/itertools.html?highlight=izip#itertools.izip">izip</a>, which is located in itertools.</p>
 </li>
-<li><p class="first"><a class="reference external" href="http://docs.python.org/library/stdtypes.html?highlight=title#str.title">title</a>  I wrote some little function to turn a string of lower case text into a &#8216;titleized&#8217; string at work, and a few coworkers laughed and said,  &quot;why didn&#8217;t you just use title&quot;?  The answer: I didn&#8217;t know about it.  It&#8217;s not something you run into every day, but when you need it, it&#8217;s super useful.  Here&#8217;s an example:</p>
-<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-</pre></td><td class="code"><pre><code class="pycon"><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="s">&#39;the little green men&#39;</span>
-</span><span class="line"><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">title</span><span class="p">()</span>
-</span><span class="line"><span class="go">&#39;The Little Green Men&#39;</span>
-</span></code></pre></td></tr></table></div></figure><p>It&#8217;s that easy!  Next time you need to turn something into a title, look for this method on strings first.</p>
+<li><p class="first"><a class="reference external" href="http://docs.python.org/library/stdtypes.html?highlight=title#str.title">title</a>  I wrote some little function to turn a string of lower case text into a 'titleized' string at work, and a few coworkers laughed and said,  &quot;why didn't you just use title&quot;?  The answer: I didn't know about it.  It's not something you run into every day, but when you need it, it's super useful.  Here's an example:</p>
+<pre class="code pycon literal-block">
+<span class="n"></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="s">'the little green men'</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">title</span><span class="p">()</span>
+<span class="go">'The Little Green Men'</span>
+</pre>
+<p>It's that easy!  Next time you need to turn something into a title, look for this method on strings first.</p>
 </li>
 </ol>
-<p>That&#8217;s all I&#8217;ve got for now.  There are many more gems in the Python programming language, but these are some that I think are especially useful.  Please share in the comments if you have any other gems that you have found in your uses of Python.</p>
-<p><strong>UPDATE</strong>: Eric Holscher has posted <a class="reference external" href="http://ericholscher.com/blog/2008/nov/3/python-gems-my-own/">a list of his Python gems as well</a>, and it&#8217;s got some great stuff on it.  Check it out!</p></div>
-
-
-  <footer>
-    <p class="meta">
-      
-  
-
-<span class="byline author vcard">Posted by <span class="fn">Eric Florenzano</span></span>
-
-      
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-11-02T14:04:42-08:00" pubdate data-updated="true">Nov 2<span>nd</span>, 2008</time>
-      
-
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/programming/'>Programming</a>, <a class='category' href='/blog/categories/python/'>Python</a>
-  
-</span>
-
-
-    </p>
-    
-      <div class="sharing">
-  
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://eflorenzano.com/blog/2008/11/02/gems-python/" data-via="ericflo" data-counturl="http://eflorenzano.com/blog/2008/11/02/gems-python/" >Tweet</a>
-  
-  
-  <div class="g-plusone" data-size="medium"></div>
-  
-  
-    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
-  
+<p>That's all I've got for now.  There are many more gems in the Python programming language, but these are some that I think are especially useful.  Please share in the comments if you have any other gems that you have found in your uses of Python.</p>
+<p><strong>UPDATE</strong>: Eric Holscher has posted <a class="reference external" href="http://ericholscher.com/blog/2008/nov/3/python-gems-my-own/">a list of his Python gems as well</a>, and it's got some great stuff on it.  Check it out!</p>
 </div>
 
-    
-    <p class="meta">
+<div class="categories">
+    Posted in:
+    <ul>
       
-        <a class="basic-alignment left" href="/blog/2008/11/01/whats-next/" title="Previous Post: What's Next?">&laquo; What's Next?</a>
+        <li><a href="/blog/categories/python/">Python</a></li>
       
+        <li><a href="/blog/categories/programming/">Programming</a></li>
       
-        <a class="basic-alignment right" href="/blog/2008/11/03/database-triggers-arent-evil-and-they-actually-kin/" title="next Post: Database triggers aren't evil, and they actually kind of rock">Database triggers aren't evil, and they actually kind of rock &raquo;</a>
-      
-    </p>
-  </footer>
-</article>
-
-</div>
-
-<aside class="sidebar">
-  
-    <section>
-  <h1>Recent Posts</h1>
-  <ul id="recent_posts">
-    
-      <li class="post">
-        <a href="/blog/2012/04/18/using-twitter-ios5-integration-single-sign-on/">Using Twitter's iOS5 Integration for Single Sign-On</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/01/01/reducing-code-nesting/">Reducing Code Nesting</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2011/02/16/technology-behind-convore/">The Technology Behind Convore</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2010/10/10/object-lesson-how-respond-criticism/">An Object Lesson in How to Respond to Criticism</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2010/09/27/why-node-disappoints-me/">Why node.js disappoints me</a>
-      </li>
-    
-  </ul>
-</section>
-
-
-<section>
-  <h1>Latest Tweets</h1>
-  <ul id="tweets">
-    <li class="loading">Status updating...</li>
-  </ul>
-  <script type="text/javascript">
-    $.domReady(function(){
-      getTwitterFeed("ericflo", 4, false);
-    });
-  </script>
-  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
-  
-    <a href="http://twitter.com/ericflo" class="twitter-follow-button" data-show-count="false">Follow @ericflo</a>
-  
-</section>
-
-
-
-<section class="googleplus">
-  <h1>
-    <a href="https://plus.google.com/109591387819364984777?rel=author">
-      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
-      Google+
-    </a>
-  </h1>
-</section>
-
-
-
-  
-</aside>
-
-
-    </div>
+    </ul>
   </div>
-  <footer role="contentinfo"><p>
-  Copyright &copy; 2012 - Eric Florenzano -
-  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
-</p>
+  </div>
+  <hr />
+  <br />
+  <br />
 
-</footer>
-  
-
-
-
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) {return;}
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
-
-
-
-  <script type="text/javascript">
-    (function() {
-      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
-      script.src = 'https://apis.google.com/js/plusone.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
-    })();
-  </script>
-
-
-
-  <script type="text/javascript">
-    (function(){
-      var twitterWidgets = document.createElement('script');
-      twitterWidgets.type = 'text/javascript';
-      twitterWidgets.async = true;
-      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
-      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
-    })();
-  </script>
-
-
-
-
-
-</body>
+      </div>
+    </div>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    
+  </body>
 </html>

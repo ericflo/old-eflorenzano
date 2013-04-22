@@ -1,0 +1,105 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>What&#39;s Next? - Eric Florenzano&rsquo;s Blog</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+
+    <link href="/atom.xml" rel="alternate" title="Eric Florenzano's Blog" type="application/atom+xml">
+
+    <link href="/static/css/bootstrap.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="/static/css/code.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="/static/js/html5shiv.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="center-column">
+        <h1 class="blog-header"><a href="/">Eric Florenzano&rsquo;s Blog</a></h1>
+        <ul class="blog-header-links">
+          <li><a href="/">Home</a></li>
+          <li><a href="/blog/archives/">Archives</a></li>
+          <li><a href="https://twitter.com/ericflo" class="twitter-follow-button" data-show-count="false">Follow @ericflo</a></li>
+          <li class="feed"><a href="/atom.xml"><img src="/static/img/feed-icon-28x28.png" width="20" height="20" alt="Subscribe to this blog" /></a></li>
+        </ul>
+        
+  <div class="blog-post-detail">
+    <h3><a href="/blog/2008/11/02/whats-next/">What&#39;s Next?</a></h3>
+<p class="datetime">Nov 02, 2008</p>
+<div class="document">
+<p>A few days ago, someone asked me &quot;What's the next big thing?&quot;  The context was a discussion of web development tools, as they exist today.  At first I laughed and brushed off the question as clichA, because everyone seems to have a different answer and almost nobody ends up being correct.  But it is a good question to ask oneself, and I'm noticing that more and more people seem to be searching for that &quot;next big thing&quot;.</p>
+<p>The standard response du jour seems to be &quot;cloud computing&quot;.  However with a term like that, you can understand why there are disagreements as to what exactly cloud computing is.  I'm not so convinced.  I'm not convinced that thick client computing will come back, either, but certainly the thought of distributed computing will continue to resurface--which is quite directly at odds with the concept of cloud computing (depending on how you define cloud computing, of course).</p>
+<div class="section" id="examining-today-s-problems">
+<h4>Examining today's problems</h4>
+<p>Before we can talk about what will emerge as the next big thing, we need to first look at what sucks right now:</p>
+<ol class="arabic simple">
+<li><strong>Concurrency.</strong>  Do I even need to spell out why this sucks right now?  It's easy to get wrong, and anyone who thinks that it isn't, is probably getting it wrong.</li>
+<li><strong>Database technology, specifically relational databases.</strong>  This area of study is a proven and well-understood area of computer science, and for simple tasks, using a database could not get any easier.  Especially with the advance of <a class="reference external" href="http://en.wikipedia.org/wiki/Object-relational_mapping">object relational mappers</a> that are starting to generate really good SQL, it's easier than ever to set up some data structures to store and retrieve data from a database.  Try to start scaling this solution, as <a class="reference external" href="http://twitter.com/">many</a> <a class="reference external" href="http://mahalo.com/">people</a> <a class="reference external" href="http://digg.com/">are</a>, and you'll see why this technology (as it is today) doesn't hold up.</li>
+<li><strong>Push.</strong>  With the emergence of data whose value is highly time dilated (think <a class="reference external" href="http://twitter.com/">Twitter</a>, <a class="reference external" href="http://friendfeed.com/">FriendFeed</a>, etc.), systems which operate under a &quot;pull&quot;-only interface are growing long in the tooth.  In fact, <a class="reference external" href="http://friendfeed.com/">FriendFeed</a> has a post explaining <a class="reference external" href="http://blog.friendfeed.com/2008/08/simple-update-protocol-fetch-updates.html">just how hard this is for them</a> (and proposing their own protocol which hasn't seemed to get any traction).</li>
+</ol>
+</div>
+<div class="section" id="those-next-big-things">
+<h4>Those next big things</h4>
+<p>Given the aforementioned problems facing developers today, is the outlook bleak?  Is there no hope for the future?  Of course not!  As always, there are some exciting new technologies that are addressing these very problems.</p>
+<ol class="arabic simple">
+<li><a class="reference external" href="http://erlang.org/">Erlang</a>.  People who hype it up will tell you that this magically solves all concurrency problems, and they are simply being overzealous.  That being said, erlang encourages a style of programming that is extremely conducive to writing highly scalable applications.  Not only that, but there are over 20 years worth of experience and effort that have gone into making this language rock solid.  We've seen, over the past few years, an uptake in the number of applications that are written in erlang.  I expect that trend to continue, and as our need for highly concurrent applications increases, that rate will increase as well.  It's a good time to be an erlang programmer!</li>
+<li><a class="reference external" href="http://incubator.apache.org/couchdb/">CouchDB</a>.  This is a system which, from the ground up, was designed for scale.  Built upon the aforementioned Erlang programming language, and upon the well tested and trusted <a class="reference external" href="http://spawnlink.com/articles/introduction-to-the-open-telecom-platform/">OTP</a> methodology, CouchDB takes a completely new approach to databases.  It is a document-oriented database, which means that it's best suited towards those documents which can easily be written down on a piece of paper.  (A business card is the prototypical example of a type of document that would be great to store in CouchDB.)  It's a blog post unto itself, but the forward-looking nature of CouchDB, along with it's adherence to the fundamentals of what makes the web work so well, has gotten a lot of people interested in the project.  I'd bet my career on CouchDB becoming a Very Big Deal.</li>
+<li><a class="reference external" href="http://xmpp.org/">XMPP</a>.  Let's first start with the bad things about it.  It's complicated, overly abstract, obtuse, and there doesn't seem to be a succinct definition of what it is.  You may disagree with any or all of those points, but one thing is clear: what it does well, it does better than anything else, and that is push communication.  Look for laconi.ca and twitter to be early leaders in this field, and for the technology to be simplified and clarified.  If you're not subscribed to <a class="reference external" href="http://metajack.im/">Jack Moffitt</a>'s blog, do so.  Now.  He has pretty much single handedly rekindled my excitement for this technology, and with a few more people like him, we'll see this technology execute on its vast potential.</li>
+<li><a class="reference external" href="http://python.org/">Python</a> and <a class="reference external" href="http://djangoproject.com/">Django</a>.  Of course I'm biased due to my closeness to these projects, and these are already big deals really.  But I think they will continue to further distinguish themselves from the competition.  Both projects have a reputation for not making important design decisions rashly and for sticking to their ideals.  As long as this trend continues, I believe the number of people flocking to these technologies will continue to grow.</li>
+</ol>
+</div>
+<div class="section" id="what-do-you-think">
+<h4>What do you think?</h4>
+<p>I suspect I won't meet a lot of resistance on these choices.  But I hope I do!  What do you think about these choices?  Is there something that I'm missing?  Please share your thoughts in a blog post or in the comments.</p>
+</div>
+<div class="section" id="an-aside">
+<h4>An aside</h4>
+<p>I'm going to try to post one blog post each day of the month of November, as a challenge to myself and with some of my friends.  Others participating are:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://oebfare.com/">Brian Rosner</a>.</li>
+<li><a class="reference external" href="http://jtauber.com/blog/">James Tauber</a>.</li>
+<li><a class="reference external" href="http://ericholscher.com/">Eric Holscher</a>.</li>
+<li><a class="reference external" href="http://www.20seven.org/">Greg Newman</a>.</li>
+<li><a class="reference external" href="http://justinlilly.com/">Justin Lilly</a>.</li>
+<li><a class="reference external" href="http://adam.gomaa.us/blog/">Adam Gomaa</a>.</li>
+<li><a class="reference external" href="http://jannisleidel.com/">Jannis Leidel</a>.</li>
+</ul>
+<p>Please check out their blogs and see all of the amazing content that they're already creating.</p>
+</div>
+</div>
+
+<div class="categories">
+    Posted in:
+    <ul>
+      
+        <li><a href="/blog/categories/python/">Python</a></li>
+      
+        <li><a href="/blog/categories/django/">Django</a></li>
+      
+        <li><a href="/blog/categories/programming/">Programming</a></li>
+      
+    </ul>
+  </div>
+  </div>
+  <hr />
+  <br />
+  <br />
+
+      </div>
+    </div>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    
+  </body>
+</html>

@@ -1,0 +1,109 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>April Fools - Eric Florenzano&rsquo;s Blog</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+
+    <link href="/atom.xml" rel="alternate" title="Eric Florenzano's Blog" type="application/atom+xml">
+
+    <link href="/static/css/bootstrap.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="/static/css/code.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="/static/js/html5shiv.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="center-column">
+        <h1 class="blog-header"><a href="/">Eric Florenzano&rsquo;s Blog</a></h1>
+        <ul class="blog-header-links">
+          <li><a href="/">Home</a></li>
+          <li><a href="/blog/archives/">Archives</a></li>
+          <li><a href="https://twitter.com/ericflo" class="twitter-follow-button" data-show-count="false">Follow @ericflo</a></li>
+          <li class="feed"><a href="/atom.xml"><img src="/static/img/feed-icon-28x28.png" width="20" height="20" alt="Subscribe to this blog" /></a></li>
+        </ul>
+        
+  <div class="blog-post-detail">
+    <h3><a href="/blog/2008/04/01/april-fools/">April Fools</a></h3>
+<p class="datetime">Apr 01, 2008</p>
+<div class="document">
+<p>April Fool's Day rocks!  Maybe I enjoy it because it happens to share the same day as my birthday, but I think it's more to do with the fact that everyone's having fun, being lighthearted, and simply not taking things too seriously.  Last year the blog wasn't in any shape to do anything fun for the occasion, but this year it took me about 10 minutes to whip up some middleware fun.  That's right, if you can read and understand this right now, the secret is out: a bit of Django middleware is all that's needed to turn your blog into l33t-sp34k central.</p>
+<p>I'll even go one step further than telling you how I did it, I'll give you the code:</p>
+<pre class="code python literal-block">
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">lxml.html</span>
+
+<span class="n">trans</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">'cks'</span><span class="p">:</span> <span class="s">r'xxors'</span><span class="p">,</span>
+    <span class="s">'lol'</span><span class="p">:</span> <span class="s">r'r0flc0pt3r'</span><span class="p">,</span>
+    <span class="s">'the'</span><span class="p">:</span> <span class="s">r'teh'</span><span class="p">,</span>
+    <span class="s">'a'</span><span class="p">:</span> <span class="s">r'4'</span><span class="p">,</span>
+    <span class="s">'e'</span><span class="p">:</span> <span class="s">r'3'</span><span class="p">,</span>
+    <span class="s">'f'</span><span class="p">:</span> <span class="s">r'ph'</span><span class="p">,</span>
+    <span class="s">'g'</span><span class="p">:</span> <span class="s">r'6'</span><span class="p">,</span>
+    <span class="s">'h'</span><span class="p">:</span> <span class="s">r'|-|'</span><span class="p">,</span>
+    <span class="s">'i'</span><span class="p">:</span> <span class="s">r'1'</span><span class="p">,</span>
+    <span class="s">'o'</span><span class="p">:</span> <span class="s">r'0'</span><span class="p">,</span>
+    <span class="s">'s'</span><span class="p">:</span> <span class="s">r'5'</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="k">def</span> <span class="nf">is_code_block</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">node</span><span class="o">.</span><span class="n">attrib</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'class'</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span> <span class="o">==</span> <span class="s">'highlight'</span>
+
+<span class="k">def</span> <span class="nf">recursive_leetifier</span><span class="p">(</span><span class="n">node</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">iterchildren</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">child</span><span class="o">.</span><span class="n">text</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">is_code_block</span><span class="p">(</span><span class="n">child</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">trans</span><span class="o">.</span><span class="n">iterkeys</span><span class="p">():</span>
+                <span class="n">child</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">I</span><span class="p">)</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">trans</span><span class="p">[</span><span class="n">pattern</span><span class="p">],</span> <span class="n">child</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">is_code_block</span><span class="p">(</span><span class="n">child</span><span class="p">):</span>
+            <span class="n">recursive_leetifier</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">LeetSpeakMiddleware</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">process_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">html</span> <span class="o">=</span> <span class="n">lxml</span><span class="o">.</span><span class="n">html</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+            <span class="n">recursive_leetifier</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
+            <span class="n">response</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="n">lxml</span><span class="o">.</span><span class="n">html</span><span class="o">.</span><span class="n">tostring</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">return</span> <span class="n">response</span>
+</pre>
+<p>The idea behind it is simple: Let the request go completely through Django's request/response cycle, and just before returning the correct response, parse the HTML and convert all of the actual content to l33t by doing some simple regular expression substitution.  I'm using <a class="reference external" href="http://codespeak.net/lxml/parsing.html#parsing-html">lxml.html</a> simply because I attended <a class="reference external" href="http://blog.ianbicking.org/2008/03/21/pycon-talks/">Ian Bicking's talk at Pycon 2008</a> and was intrigued.  I must say that the familiar <a class="reference external" href="http://docs.python.org/lib/module-xml.etree.ElementTree.html">ElementTree</a> interface helped a lot in getting this code up and running in a short amount of time.</p>
+<p>Hopefully you all find this holiday to be as fun as I do, and maybe I'll see some more l33t next year!</p>
+</div>
+
+<div class="categories">
+    Posted in:
+    <ul>
+      
+        <li><a href="/blog/categories/april-1st/">April 1st</a></li>
+      
+        <li><a href="/blog/categories/django/">Django</a></li>
+      
+        <li><a href="/blog/categories/python/">Python</a></li>
+      
+    </ul>
+  </div>
+  </div>
+  <hr />
+  <br />
+  <br />
+
+      </div>
+    </div>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    
+  </body>
+</html>

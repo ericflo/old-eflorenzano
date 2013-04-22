@@ -1,0 +1,226 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Using CouchDB with Django - Eric Florenzano&rsquo;s Blog</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+
+    <link href="/atom.xml" rel="alternate" title="Eric Florenzano's Blog" type="application/atom+xml">
+
+    <link href="/static/css/bootstrap.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="/static/css/code.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="/static/js/html5shiv.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="center-column">
+        <h1 class="blog-header"><a href="/">Eric Florenzano&rsquo;s Blog</a></h1>
+        <ul class="blog-header-links">
+          <li><a href="/">Home</a></li>
+          <li><a href="/blog/archives/">Archives</a></li>
+          <li><a href="https://twitter.com/ericflo" class="twitter-follow-button" data-show-count="false">Follow @ericflo</a></li>
+          <li class="feed"><a href="/atom.xml"><img src="/static/img/feed-icon-28x28.png" width="20" height="20" alt="Subscribe to this blog" /></a></li>
+        </ul>
+        
+  <div class="blog-post-detail">
+    <h3><a href="/blog/2008/11/10/using-couchdb-django/">Using CouchDB with Django</a></h3>
+<p class="datetime">Nov 10, 2008</p>
+<div class="document">
+<p>Ahhh, <a class="reference external" href="http://www.djangoproject.com/">Django</a>: my favorite web framework.  And <a class="reference external" href="http://incubator.apache.org/couchdb/">CouchDB</a>: my favorite new
+database technology.  How can I pair these two awesomes together to make an
+awesome-er?</p>
+<p>One of the features that I would like to add to this site when it's time for an
+upgrade is a lifestream.  It seems like everyone is doing it these days (isn't
+this great logic!), so I probably should too.  Originally this was going to be
+written in the standard Django way--write some models, fill it with data, and
+slice and dice that data to make it pretty.</p>
+<p>After thinking about it, I decided not to go that route.  Why?  Well, let's go
+over it: There needs to be a <a class="reference external" href="http://twitter.com/">Twitter</a> model, that's for sure.  I also want a
+<a class="reference external" href="http://pownce.com/">Pownce</a> model, and a <a class="reference external" href="http://flickr.com/">Flickr</a> model.  Already this is becoming tedious!  At this
+point we have two options: continue creating these individual models and fill
+them with data, or try to find the common bits and group them into Ubermodels
+of some sort, with some type of field to use as a discriminator.  Ugh.</p>
+<p>This is the perfect use case for a schemaless database, and <a class="reference external" href="http://incubator.apache.org/couchdb/">CouchDB</a> fits that
+bill just perfectly.  Plus its <a class="reference external" href="http://code.google.com/p/couchdb-python/">python support</a> is actually quite mature, and
+running it on a mac is, quite literally, <a class="reference external" href="http://jan.prima.de/~jan/plok/archives/142-CouchDBX-Revival.html">one click</a>.  So now that we've all
+agreed (we all agree, right?) that we want to use <a class="reference external" href="http://incubator.apache.org/couchdb/">CouchDB</a> with <a class="reference external" href="http://www.djangoproject.com/">Django</a>, how
+can we make it happen?</p>
+<p>First let's set some database settings:</p>
+<pre class="code python literal-block">
+<span class="n">COUCHDB_HOST</span> <span class="o">=</span> <span class="s">'http://localhost:5984/'</span>
+<span class="n">TWITTER_USERNAME</span> <span class="o">=</span> <span class="s">'ericflo'</span>
+</pre>
+<p>So far, so good.  Now let's write some initialization code and put it in to an
+application in the <tt class="docutils literal">__init__.py</tt>:</p>
+<pre class="code python literal-block">
+<span class="kn">from</span> <span class="nn">couchdb</span> <span class="kn">import</span> <span class="n">client</span>
+<span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
+
+<span class="k">class</span> <span class="nc">CouchDBImproperlyConfigured</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">HOST</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">COUCHDB_HOST</span>
+<span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="n">CouchDBImproperlyConfigured</span><span class="p">(</span><span class="s">&quot;Please ensure that COUCHDB_HOST is &quot;</span> <span class="o">+</span> \
+        <span class="s">&quot;set in your settings file.&quot;</span><span class="p">)</span>
+
+<span class="n">DATABASE_NAME</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s">'COUCHDB_DATABASE_NAME'</span><span class="p">,</span> <span class="s">'couch_lifestream'</span><span class="p">)</span>
+<span class="n">COUCHDB_DESIGN_DOCNAME</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s">'COUCHDB_DESIGN_DOCNAME'</span><span class="p">,</span>
+    <span class="s">'couch_lifestream-design'</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s">'couchdb_server'</span><span class="p">):</span>
+    <span class="n">server</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">Server</span><span class="p">(</span><span class="n">HOST</span><span class="p">)</span>
+    <span class="n">settings</span><span class="o">.</span><span class="n">couchdb_server</span> <span class="o">=</span> <span class="n">server</span>
+
+<span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s">'couchdb_db'</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">db</span> <span class="o">=</span> <span class="n">server</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">DATABASE_NAME</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">client</span><span class="o">.</span><span class="n">ResourceConflict</span><span class="p">:</span>
+        <span class="n">db</span> <span class="o">=</span> <span class="n">server</span><span class="p">[</span><span class="n">DATABASE_NAME</span><span class="p">]</span>
+    <span class="n">settings</span><span class="o">.</span><span class="n">couchdb_db</span> <span class="o">=</span> <span class="n">db</span>
+</pre>
+<p>In this code, we're loading the CouchDB client and either creating or
+connecting to a database.  We do a bit of error checking to ensure that if we
+forgot to add <tt class="docutils literal">COUCHDB_HOST</tt> in our settings file, it will yell at us. So how
+do we use this?  Let's write some data importing stuff!</p>
+<pre class="code python literal-block">
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">simplejson</span> <span class="kn">as</span> <span class="nn">json</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">json</span>
+
+<span class="n">TWITTER_USERNAME</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="s">'TWITTER_USERNAME'</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+
+<span class="n">fetched</span> <span class="o">=</span> <span class="n">urlopen</span><span class="p">(</span><span class="s">'http://twitter.com/statuses/user_timeline.json?id=</span><span class="si">%s</span><span class="s">'</span> <span class="o">%</span> <span class="p">(</span>
+    <span class="n">TWITTER_USERNAME</span><span class="p">,))</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">fetched</span><span class="p">)</span>
+<span class="n">map_fun</span> <span class="o">=</span> <span class="s">'function(doc) { emit(doc.id, null); }'</span>
+<span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+    <span class="n">item</span><span class="p">[</span><span class="s">'item_type'</span><span class="p">]</span> <span class="o">=</span> <span class="s">'twitter'</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">map_fun</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">item</span><span class="p">[</span><span class="s">'id'</span><span class="p">]))</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+</pre>
+<p>This can go inside a Django management command or in a standalone script.
+Essentially what we're doing is loading the timeline for a user, and then for
+each item in that response we're setting the <tt class="docutils literal">item_type</tt> to 'twitter'.  Then
+we're checking to see if an item with that current twitter id already exists,
+and if not, we're creating it.</p>
+<p>Now we need a way to query this data.  In <a class="reference external" href="http://incubator.apache.org/couchdb/">CouchDB</a>, the way to query for data is
+using <a class="reference external" href="http://wiki.apache.org/couchdb/Views">views</a>.  Views are stored in the database, so they can be entered
+manually, but I much prefer to manage views programmatically.  Thankfully,
+Python's CouchDB library and Django give us all we need to make this very, very
+easy:</p>
+<pre class="code python literal-block">
+<span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">signals</span>
+<span class="kn">from</span> <span class="nn">couch_lifestream</span> <span class="kn">import</span> <span class="n">models</span><span class="p">,</span> <span class="n">db</span><span class="p">,</span> <span class="n">COUCHDB_DESIGN_DOCNAME</span>
+<span class="kn">from</span> <span class="nn">couchdb.design</span> <span class="kn">import</span> <span class="n">ViewDefinition</span>
+<span class="kn">from</span> <span class="nn">textwrap</span> <span class="kn">import</span> <span class="n">dedent</span>
+
+<span class="n">by_date</span> <span class="o">=</span> <span class="n">ViewDefinition</span><span class="p">(</span><span class="n">COUCHDB_DESIGN_DOCNAME</span><span class="p">,</span> <span class="s">'by_date'</span><span class="p">,</span>
+    <span class="n">dedent</span><span class="p">(</span><span class="s">&quot;&quot;&quot;
+    function(doc) {
+        emit(doc.couch_lifestream_date, null);
+    }
+&quot;&quot;&quot;</span><span class="p">))</span>
+
+<span class="k">def</span> <span class="nf">create_couchdb_views</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">created_models</span><span class="p">,</span> <span class="n">verbosity</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">ViewDefinition</span><span class="o">.</span><span class="n">sync_many</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="p">[</span><span class="n">by_date</span><span class="p">])</span>
+<span class="n">signals</span><span class="o">.</span><span class="n">post_syncdb</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">create_couchdb_views</span><span class="p">,</span> <span class="n">sender</span><span class="o">=</span><span class="n">models</span><span class="p">)</span>
+</pre>
+<p>Make sure that this is placed somewhere that will be loaded when Django's
+<tt class="docutils literal">manage.py</tt> is called.  In this case, I put it in the <tt class="docutils literal">__init__.py</tt> file
+under <tt class="docutils literal">management/</tt>.  What we're doing is creating two views--one which is
+keyed by the <tt class="docutils literal">item_type</tt> (we set this earlier to be 'twitter'), and another
+which is keyed simply by date.  When we run <tt class="docutils literal">python manage.py syncdb</tt>, these
+views will automatically be re-synced with the database.  Using this method, we
+are able to manage these views quickly and easily, and distribute them in a
+reusable way.</p>
+<p>Now let's create some Django views so that we can visualize this data:</p>
+<pre class="code python literal-block">
+<span class="kn">from</span> <span class="nn">couch_lifestream</span> <span class="kn">import</span> <span class="n">db</span><span class="p">,</span> <span class="n">COUCHDB_DESIGN_DOCNAME</span>
+<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render_to_response</span>
+<span class="kn">from</span> <span class="nn">django.template</span> <span class="kn">import</span> <span class="n">RequestContext</span>
+<span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">Http404</span>
+<span class="kn">from</span> <span class="nn">couchdb</span> <span class="kn">import</span> <span class="n">client</span>
+
+<span class="k">def</span> <span class="nf">item</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="n">db</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span>
+    <span class="k">except</span> <span class="n">client</span><span class="o">.</span><span class="n">ResourceNotFound</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">Http404</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">'item'</span><span class="p">:</span> <span class="n">obj</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span>
+        <span class="s">'couch_lifestream/item.html'</span><span class="p">,</span>
+        <span class="n">context</span><span class="p">,</span>
+        <span class="n">context_instance</span><span class="o">=</span><span class="n">RequestContext</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+    <span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">items</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">item_type_viewname</span> <span class="o">=</span> <span class="s">'</span><span class="si">%s</span><span class="s">/by_date'</span> <span class="o">%</span> <span class="p">(</span><span class="n">COUCHDB_DESIGN_DOCNAME</span><span class="p">,)</span>
+    <span class="n">lifestream_items</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">item_type_viewname</span><span class="p">,</span> <span class="n">descending</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">'items'</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">lifestream_items</span><span class="p">),</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span>
+        <span class="s">'couch_lifestream/list.html'</span><span class="p">,</span>
+        <span class="n">context</span><span class="p">,</span>
+        <span class="n">context_instance</span><span class="o">=</span><span class="n">RequestContext</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+    <span class="p">)</span>
+</pre>
+<p>The <tt class="docutils literal">item</tt> view is fairly self-explanatory.  We query the db for the object of
+the specified id, and if it doesn't exist, we throw a 404.  If it does exist, we
+throw it into the context and let the template render the page.  The <tt class="docutils literal">items</tt>
+view is slightly more interesting.  In this case, we're using that CouchDB view
+that we created to query the database by date, and passing that list into the
+context.</p>
+<p>Obviously there's a ton more that we could cover, but these basic building
+blocks that I've demonstrated are enough to get you started.  After this it's
+mostly all presentational work.  I've open sourced all of the code that has been
+written so far for the upcoming lifestream portion of this site, even though
+right now it only supports <a class="reference external" href="http://twitter.com/">Twitter</a> and <a class="reference external" href="http://pownce.com/">Pownce</a>.  I plan on continuing work
+on it to support all of the services that I use.  You can track my progress
+at the <a class="reference external" href="http://github.com/ericflo/django-couch-lifestream/tree/master">project's page</a>.</p>
+<p>I'll make sure to blog about this again once the project is more mature, but for
+now it should be fun to play around with.  Are you using CouchDB with Django?
+If yes, then how are you dealing with that interaction?</p>
+</div>
+
+<div class="categories">
+    Posted in:
+    <ul>
+      
+        <li><a href="/blog/categories/python/">Python</a></li>
+      
+        <li><a href="/blog/categories/django/">Django</a></li>
+      
+        <li><a href="/blog/categories/couchdb/">CouchDB</a></li>
+      
+    </ul>
+  </div>
+  </div>
+  <hr />
+  <br />
+  <br />
+
+      </div>
+    </div>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    
+  </body>
+</html>

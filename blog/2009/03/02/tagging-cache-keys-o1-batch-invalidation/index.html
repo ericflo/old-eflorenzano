@@ -1,0 +1,143 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Tagging cache keys for O(1) batch invalidation - Eric Florenzano&rsquo;s Blog</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+
+    <link href="/atom.xml" rel="alternate" title="Eric Florenzano's Blog" type="application/atom+xml">
+
+    <link href="/static/css/bootstrap.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="/static/css/code.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="/static/js/html5shiv.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="center-column">
+        <h1 class="blog-header"><a href="/">Eric Florenzano&rsquo;s Blog</a></h1>
+        <ul class="blog-header-links">
+          <li><a href="/">Home</a></li>
+          <li><a href="/blog/archives/">Archives</a></li>
+          <li><a href="https://twitter.com/ericflo" class="twitter-follow-button" data-show-count="false">Follow @ericflo</a></li>
+          <li class="feed"><a href="/atom.xml"><img src="/static/img/feed-icon-28x28.png" width="20" height="20" alt="Subscribe to this blog" /></a></li>
+        </ul>
+        
+  <div class="blog-post-detail">
+    <h3><a href="/blog/2009/03/02/tagging-cache-keys-o1-batch-invalidation/">Tagging cache keys for O(1) batch invalidation</a></h3>
+<p class="datetime">Mar 02, 2009</p>
+<div class="document">
+<p>Recently I've been spending some quality time trying to decrease page load times and decrease the number of database accesses on a site I'm working on.    As you would probably suspect, that means dealing with caching.  One common thing that I need to do, however, is invalidate a large group of cache keys when some action takes place.  I've devised a pattern for doing this, and while I'm sure it's not novel, I haven't seen any recent write-ups of this technique.  The base idea is that we're going to add another thin cache layer, and use the value from that first layer in the key to the second layer.</p>
+<p>First, let me give a concrete example of the problem that I'm trying to solve.  I'm going to use Django/Python from here on in, but you could substitute anything else, as this pattern should work across other frameworks and even other languages.</p>
+<pre class="code python literal-block">
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+
+<span class="k">class</span> <span class="nc">Favorite</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">User</span><span class="p">)</span>
+    <span class="n">item</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Item</span><span class="p">)</span>
+    <span class="n">date_added</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s">u'</span><span class="si">%s</span><span class="s"> has favorited </span><span class="si">%s</span><span class="s">'</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">item</span><span class="p">)</span>
+</pre>
+<p>Given this model, now let's say that we have a function that gets the Favorite instances for a given user, which might look like this:</p>
+<pre class="code python literal-block">
+<span class="k">def</span> <span class="nf">get_favorites</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="n">faves</span> <span class="o">=</span> <span class="n">Favorite</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">faves</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">])</span>
+</pre>
+<p>There's not much here yet--we're simply filtering to only include the Favorite instances for the given user, slicing it based on the given start and end numbers, and forcing evaluation before returning a list.  Now let's start thinking about how we will cache this.  We'll start by just implementing a naive cache strategy, which in this case simply means that the cache is never invalidated:</p>
+<pre class="code python literal-block">
+<span class="kn">from</span> <span class="nn">django.core.cache</span> <span class="kn">import</span> <span class="n">cache</span>
+
+<span class="k">def</span> <span class="nf">get_favorites</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="s">'get_favorites-</span><span class="si">%s</span><span class="s">-</span><span class="si">%s</span><span class="s">-</span><span class="si">%s</span><span class="s">'</span> <span class="o">%</span> <span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span>
+    <span class="n">faves</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">faves</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">faves</span>
+    <span class="n">faves</span> <span class="o">=</span> <span class="n">Favorite</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">]</span>
+    <span class="n">cache</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">faves</span><span class="p">),</span> <span class="mi">86400</span> <span class="o">*</span> <span class="mi">7</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">faves</span>
+</pre>
+<p>Now we come to the hard part: how do we invalidate those cache keys?  It's especially tricky because we don't know exactly what keys have been created.  What combinations of start/end have been given? We could invalidate all combinations of start/end up to some number, but that's horribly inefficient and wasteful.  So what do we do?  My solution is to introduce another layer.  Let me explain with code:</p>
+<pre class="code python literal-block">
+<span class="kn">import</span> <span class="nn">uuid</span>
+<span class="kn">from</span> <span class="nn">django.core.cache</span> <span class="kn">import</span> <span class="n">cache</span>
+
+<span class="k">def</span> <span class="nf">favorite_list_hash</span><span class="p">(</span><span class="n">user</span><span class="p">):</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="s">'favorite-list-hash-</span><span class="si">%s</span><span class="s">'</span> <span class="o">%</span> <span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">,)</span>
+    <span class="n">cached_key_hash</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">cached_key_hash</span><span class="p">:</span>
+        <span class="n">key_hash</span> <span class="o">=</span> <span class="n">cached_key_hash</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">key_hash</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">())</span>
+        <span class="n">cache</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">key_hash</span><span class="p">,</span> <span class="mi">86400</span> <span class="o">*</span> <span class="mi">7</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">key_hash</span><span class="p">,</span> <span class="ow">not</span> <span class="n">cached_key_hash</span><span class="p">)</span>
+</pre>
+<p>Essentially what this gives us is a temporary unique identifier for each user, that's either stored in cache or generated and stuffed into the cache.  How does this help?  We can use this identifier in the <em>keys</em> to the <tt class="docutils literal">get_favorites</tt> function:</p>
+<pre class="code python literal-block">
+<span class="kn">from</span> <span class="nn">django.core.cache</span> <span class="kn">import</span> <span class="n">cache</span>
+
+<span class="k">def</span> <span class="nf">get_favorites</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="n">key_hash</span><span class="p">,</span> <span class="n">created</span> <span class="o">=</span> <span class="n">favorite_list_hash</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="s">'get_favorites-</span><span class="si">%s</span><span class="s">-</span><span class="si">%s</span><span class="s">-</span><span class="si">%s</span><span class="s">-</span><span class="si">%s</span><span class="s">'</span> <span class="o">%</span> <span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">key_hash</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">created</span><span class="p">:</span>
+        <span class="n">faves</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">faves</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">faves</span>
+    <span class="n">faves</span> <span class="o">=</span> <span class="n">Favorite</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="p">]</span>
+    <span class="n">cache</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">faves</span><span class="p">),</span> <span class="mi">86400</span> <span class="o">*</span> <span class="mi">7</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">faves</span>
+</pre>
+<p>As you can see, the first thing we do is grab that hash for the user, then we use it as the last part of the key for the function.  The whole <tt class="docutils literal">if not created</tt> thing is just an optimization that helps to avoid cache fetches when we know they will fail.  Here's the great thing now: invalidating all of the different cached versions of <tt class="docutils literal">get_favorite</tt> for a given user is a single function call:</p>
+<pre class="code python literal-block">
+<span class="kn">from</span> <span class="nn">django.core.cache</span> <span class="kn">import</span> <span class="n">cache</span>
+
+<span class="k">def</span> <span class="nf">clear_favorite_cache</span><span class="p">(</span><span class="n">user</span><span class="p">):</span>
+    <span class="n">cache</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s">'favorite-list-hash-</span><span class="si">%s</span><span class="s">'</span> <span class="o">%</span> <span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">,))</span>
+</pre>
+<p>By deleting that single key, the next time <tt class="docutils literal">get_favorites</tt> is called, it will call <tt class="docutils literal">favorite_list_hash</tt> which will result in a cache miss, which will mean it will generate a new unique identifier and stuff it in cache, meaning that all of the keys for <tt class="docutils literal">get_favorites</tt> are instantly different.  I think that this is a powerful pattern that allows for coarser-grained caching without really sacrificing much of anything.</p>
+<p>There is one aspect of this technique that some people will not like: it leaves old cache keys around taking up memory.  I don't consider this a problem because memory is cheap these days and Memcached is generally smart about evicting the least recently used data.</p>
+<p>I'm interested though, since I don't see people posting much about nontrivial cache key generation and invalidation.  How are you doing this type of thing?  Are most people just doing naive caching and calling that good enough?</p>
+</div>
+
+<div class="categories">
+    Posted in:
+    <ul>
+      
+        <li><a href="/blog/categories/memcached/">Memcached</a></li>
+      
+        <li><a href="/blog/categories/python/">Python</a></li>
+      
+        <li><a href="/blog/categories/django/">Django</a></li>
+      
+        <li><a href="/blog/categories/programming/">Programming</a></li>
+      
+        <li><a href="/blog/categories/software-development/">Software Development</a></li>
+      
+    </ul>
+  </div>
+  </div>
+  <hr />
+  <br />
+  <br />
+
+      </div>
+    </div>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    
+  </body>
+</html>

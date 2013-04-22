@@ -1,0 +1,75 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Syntax Highlighting - Eric Florenzano&rsquo;s Blog</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+
+    <link href="/atom.xml" rel="alternate" title="Eric Florenzano's Blog" type="application/atom+xml">
+
+    <link href="/static/css/bootstrap.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="/static/css/code.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="/static/js/html5shiv.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="center-column">
+        <h1 class="blog-header"><a href="/">Eric Florenzano&rsquo;s Blog</a></h1>
+        <ul class="blog-header-links">
+          <li><a href="/">Home</a></li>
+          <li><a href="/blog/archives/">Archives</a></li>
+          <li><a href="https://twitter.com/ericflo" class="twitter-follow-button" data-show-count="false">Follow @ericflo</a></li>
+          <li class="feed"><a href="/atom.xml"><img src="/static/img/feed-icon-28x28.png" width="20" height="20" alt="Subscribe to this blog" /></a></li>
+        </ul>
+        
+  <div class="blog-post-detail">
+    <h3><a href="/blog/2008/02/22/syntax-highlighting/">Syntax Highlighting</a></h3>
+<p class="datetime">Feb 22, 2008</p>
+<div class="document">
+<p>Over the past week, I've had several people write me asking how I prefer to do syntax highlighting.  It's funny that this question cropped up now, just as I changed the way that it's handled on this blog.  The way that I used to do it was what I <a class="reference external" href="http://www.djangosnippets.org/snippets/25/">posted to djangosnippets</a> almost a year ago: use a regular expression to parse out <tt class="docutils literal"><span class="pre">&lt;code&gt;&lt;/code&gt;</span></tt> blocks, highlight the stuff in-between, and spit it back out.</p>
+<p>The problem with that method was that that would require some more sophisticated logic now that I'm using <a class="reference external" href="http://docutils.sourceforge.net/rst.html">RestructuredText</a> to write all of my posts.  Unwilling to think any harder than necessary, I did a quick <a class="reference external" href="http://www.google.com/search?q=restructured+text+pygments">google search</a>, and the second result was exactly what I was looking for: a RestructuredText <a class="reference external" href="http://docutils.sourceforge.net/docs/ref/rst/directives.html">directive</a>, ready-made by the <a class="reference external" href="http://pygments.org/">Pygments</a> people.</p>
+<p>The trick is to put <a class="reference external" href="http://dev.pocoo.org/projects/pygments/browser/external/rst-directive.py">this file</a> somewhere on your python path.  Then, in the <tt class="docutils literal">__init__.py</tt> of one of the Django apps that will use syntax highlighting, just import the file.  It's <strong>that simple</strong>!  (I love RestructuredText.)  But it's not only RestructuredText that benefits from this style of plugin.  <a class="reference external" href="http://daringfireball.net/projects/markdown/">Markdown</a>, too, has a <a class="reference external" href="http://dev.pocoo.org/projects/pygments/browser/external/markdown-processor.py">similar plugin</a>--again provided by the Pygments people.</p>
+<pre class="code restructuredtext literal-block">
+<span class="p">..</span> <span class="ow">code-block</span><span class="p">::</span> python
+
+    print &quot;This is an example of how to use RestructuredText's new directive.&quot;
+</pre>
+<p>I hope that this answers some of the questions that people had.  On a similar note, I'm extremely happy to see that people have been finding the <a class="reference external" href="http://www.eflorenzano.com/contact/">Contact Me</a> link on the right side of the page.  Please continue to send me any questions and comments that you have for me!</p>
+</div>
+
+<div class="categories">
+    Posted in:
+    <ul>
+      
+        <li><a href="/blog/categories/python/">Python</a></li>
+      
+        <li><a href="/blog/categories/restructured-text/">Restructured Text</a></li>
+      
+        <li><a href="/blog/categories/syntax-highlighting/">Syntax Highlighting</a></li>
+      
+    </ul>
+  </div>
+  </div>
+  <hr />
+  <br />
+  <br />
+
+      </div>
+    </div>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    
+  </body>
+</html>

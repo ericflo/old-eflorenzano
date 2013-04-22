@@ -1,316 +1,104 @@
 
 <!DOCTYPE html>
-<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
-<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
-<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
-<head>
-  <meta charset="utf-8">
-  <title>Why CouchDB Sucks - Eric Florenzano's Blog</title>
-  <meta name="author" content="Eric Florenzano">
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Why CouchDB Sucks - Eric Florenzano&rsquo;s Blog</title>
 
-  
-  <meta name="description" content="CouchDB really sucks at doing some things. That should come as no surprise, as
-every technology has its advantages and its drawbacks. The thing is, &hellip;">
-  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
 
-  <!-- http://t.co/dKP3o1e -->
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="/atom.xml" rel="alternate" title="Eric Florenzano's Blog" type="application/atom+xml">
 
-  
-  <link rel="canonical" href="http://eflorenzano.com/blog/2008/11/23/why-couchdb-sucks">
-  <link href="/favicon.png" rel="icon">
-  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="/javascripts/ender.js"></script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
-  <link href="/atom.xml" rel="alternate" title="Eric Florenzano's Blog" type="application/atom+xml">
-  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
-<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+    <link href="/static/css/bootstrap.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="/static/css/code.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
 
-  
-  <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-1959803-2']);
-    _gaq.push(['_trackPageview']);
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="/static/js/html5shiv.js"></script>
+    <![endif]-->
 
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-  </script>
-
-
-</head>
-
-<body   >
-  <header role="banner"><hgroup>
-  <h1><a href="/">Eric Florenzano's Blog</a></h1>
-  
-    <h2>I am me.</h2>
-  
-</hgroup>
-
-</header>
-  <nav role="navigation"><ul class="subscription" data-subscription="rss">
-  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
-  
-</ul>
-  
-<form action="http://google.com/search" method="get">
-  <fieldset role="search">
-    <input type="hidden" name="q" value="site:eflorenzano.com" />
-    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
-  </fieldset>
-</form>
-  
-<ul class="main-navigation">
-  <li><a href="/">Blog</a></li>
-  <li><a href="/blog/archives">Archives</a></li>
-</ul>
-
-</nav>
-  <div id="main">
-    <div id="content">
-      <div>
-<article class="hentry" role="article">
-  
-  <header>
+    <!-- Fav and touch icons -->
     
-      <h1 class="entry-title">Why CouchDB Sucks</h1>
-    
-    
-      <p class="meta">
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="center-column">
+        <h1 class="blog-header"><a href="/">Eric Florenzano&rsquo;s Blog</a></h1>
+        <ul class="blog-header-links">
+          <li><a href="/">Home</a></li>
+          <li><a href="/blog/archives/">Archives</a></li>
+          <li><a href="https://twitter.com/ericflo" class="twitter-follow-button" data-show-count="false">Follow @ericflo</a></li>
+          <li class="feed"><a href="/atom.xml"><img src="/static/img/feed-icon-28x28.png" width="20" height="20" alt="Subscribe to this blog" /></a></li>
+        </ul>
         
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-11-23T11:14:12-08:00" pubdate data-updated="true">Nov 23<span>rd</span>, 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-<div class="entry-content"><p><a class="reference external" href="http://couchdb.org/">CouchDB</a> really sucks at doing some things.  That should come as no surprise, as
+  <div class="blog-post-detail">
+    <h3><a href="/blog/2008/11/23/why-couchdb-sucks/">Why CouchDB Sucks</a></h3>
+<p class="datetime">Nov 23, 2008</p>
+<div class="document">
+<p><a class="reference external" href="http://couchdb.org/">CouchDB</a> really sucks at doing some things.  That should come as no surprise, as
 every technology has its advantages and its drawbacks.  The thing is, when a new
 technology comes out that looks really promising and cool, everyone writes about
 all of its advantages, and none of its drawbacks.  Then, people start to use it
-for things it isn&#8217;t very good at, and they are disappointed.  In that spirit, I
+for things it isn't very good at, and they are disappointed.  In that spirit, I
 would like to talk about some of the things that (in my experience) CouchDB is
-absolutely not good at, and that you shouldn&#8217;t try to use it for.</p>
-<p>First, it doesn&#8217;t support transactions in the way that most people typically
+absolutely not good at, and that you shouldn't try to use it for.</p>
+<p>First, it doesn't support transactions in the way that most people typically
 think about them.  That means, enforcing uniqueness of one field across all
 documents is not safe.  A classic example of this would be enforcing that a
 username is unique.  You can check whether a username exists, and if not, create
 a new one.  There is no guarantee, however, that between the time that your app
 has checked for its existence, and the time that you write the new user to the
-database, that some other instance of your app hasn&#8217;t beat you to that write.</p>
-<p>Another consequence of CouchDB&#8217;s inability to support the typical notion of a
+database, that some other instance of your app hasn't beat you to that write.</p>
+<p>Another consequence of CouchDB's inability to support the typical notion of a
 transaction is that things like inc/decrementing a value and saving it back are
-also dangerous.  Fortunately there aren&#8217;t many instances that you would want to
-simply inc/decrement some value where you couldn&#8217;t just store the individual
+also dangerous.  Fortunately there aren't many instances that you would want to
+simply inc/decrement some value where you couldn't just store the individual
 documents separately and aggregate them with a view.</p>
 <p>Secondly, CouchDB sucks at dealing with relational data.  If your data makes a
 lot of sense to be in <a class="reference external" href="http://en.wikipedia.org/wiki/Third_normal_form">3rd normal form</a>, and you try to follow that form in
-CouchDB, you&#8217;re going to run into a lot of trouble.  Yes, it&#8217;s probably possible
-with tricks with view collations, but you&#8217;re constantly going to be fighting
+CouchDB, you're going to run into a lot of trouble.  Yes, it's probably possible
+with tricks with view collations, but you're constantly going to be fighting
 with the system.  If your data can be reformatted to be much more denormalized,
 then CouchDB will work fine.</p>
 <p>Thirdly, CouchDB sucks at being a data warehouse.  In every data warehouse that
-I&#8217;ve ever run into, people have all kinds of different requests for how to slice
+I've ever run into, people have all kinds of different requests for how to slice
 the data.  And they all want it to be done, yesterday.  The problem with this is
 that temporary views in CouchDB on large datasets are really slow, because it
-can&#8217;t use any of its normal indexing tricks.  If you by some chance have a very
+can't use any of its normal indexing tricks.  If you by some chance have a very
 rigid way of looking at your data, using CouchDB and permanent views could work
 quite well.  But in 99% of cases, a <a class="reference external" href="http://en.wikipedia.org/wiki/Column-oriented_DBMS">Column-Oriented Database</a> of some sort is
 a much better tool for the data warehousing job.</p>
-<p>So does CouchDB suck?  No, it&#8217;s by far my favorite new database technology on
-the block.  What it&#8217;s good at doing, it&#8217;s <em>great</em> at doing, but that doesn&#8217;t
+<p>So does CouchDB suck?  No, it's by far my favorite new database technology on
+the block.  What it's good at doing, it's <em>great</em> at doing, but that doesn't
 mean that it should be used for everything.  With the kinds of scaling issues
-that we&#8217;re seeing with today&#8217;s highly-interactive web applications, we need to
+that we're seeing with today's highly-interactive web applications, we need to
 make use of a broad range of technologies, and use each one for its greatest
-strengths.  That&#8217;s called using the right tool for the job, and that&#8217;s never
-gone out of style.</p></div>
-
-
-  <footer>
-    <p class="meta">
-      
-  
-
-<span class="byline author vcard">Posted by <span class="fn">Eric Florenzano</span></span>
-
-      
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-11-23T11:14:12-08:00" pubdate data-updated="true">Nov 23<span>rd</span>, 2008</time>
-      
-
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/couchdb/'>CouchDB</a>, <a class='category' href='/blog/categories/programming/'>Programming</a>
-  
-</span>
-
-
-    </p>
-    
-      <div class="sharing">
-  
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://eflorenzano.com/blog/2008/11/23/why-couchdb-sucks/" data-via="ericflo" data-counturl="http://eflorenzano.com/blog/2008/11/23/why-couchdb-sucks/" >Tweet</a>
-  
-  
-  <div class="g-plusone" data-size="medium"></div>
-  
-  
-    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
-  
+strengths.  That's called using the right tool for the job, and that's never
+gone out of style.</p>
 </div>
 
-    
-    <p class="meta">
+<div class="categories">
+    Posted in:
+    <ul>
       
-        <a class="basic-alignment left" href="/blog/2008/11/22/most-widely-available-virtual-machine/" title="Previous Post: The most widely available virtual machine">&laquo; The most widely available virtual machine</a>
+        <li><a href="/blog/categories/couchdb/">CouchDB</a></li>
       
+        <li><a href="/blog/categories/programming/">Programming</a></li>
       
-        <a class="basic-alignment right" href="/blog/2008/11/24/trying-start-programming-meme/" title="next Post: Trying to Start a Programming Meme">Trying to Start a Programming Meme &raquo;</a>
-      
-    </p>
-  </footer>
-</article>
-
-</div>
-
-<aside class="sidebar">
-  
-    <section>
-  <h1>Recent Posts</h1>
-  <ul id="recent_posts">
-    
-      <li class="post">
-        <a href="/blog/2012/04/18/using-twitter-ios5-integration-single-sign-on/">Using Twitter's iOS5 Integration for Single Sign-On</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/01/01/reducing-code-nesting/">Reducing Code Nesting</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2011/02/16/technology-behind-convore/">The Technology Behind Convore</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2010/10/10/object-lesson-how-respond-criticism/">An Object Lesson in How to Respond to Criticism</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2010/09/27/why-node-disappoints-me/">Why node.js disappoints me</a>
-      </li>
-    
-  </ul>
-</section>
-
-
-<section>
-  <h1>Latest Tweets</h1>
-  <ul id="tweets">
-    <li class="loading">Status updating...</li>
-  </ul>
-  <script type="text/javascript">
-    $.domReady(function(){
-      getTwitterFeed("ericflo", 4, false);
-    });
-  </script>
-  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
-  
-    <a href="http://twitter.com/ericflo" class="twitter-follow-button" data-show-count="false">Follow @ericflo</a>
-  
-</section>
-
-
-
-<section class="googleplus">
-  <h1>
-    <a href="https://plus.google.com/109591387819364984777?rel=author">
-      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
-      Google+
-    </a>
-  </h1>
-</section>
-
-
-
-  
-</aside>
-
-
-    </div>
+    </ul>
   </div>
-  <footer role="contentinfo"><p>
-  Copyright &copy; 2012 - Eric Florenzano -
-  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
-</p>
+  </div>
+  <hr />
+  <br />
+  <br />
 
-</footer>
-  
-
-
-
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) {return;}
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
-
-
-
-  <script type="text/javascript">
-    (function() {
-      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
-      script.src = 'https://apis.google.com/js/plusone.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
-    })();
-  </script>
-
-
-
-  <script type="text/javascript">
-    (function(){
-      var twitterWidgets = document.createElement('script');
-      twitterWidgets.type = 'text/javascript';
-      twitterWidgets.async = true;
-      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
-      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
-    })();
-  </script>
-
-
-
-
-
-</body>
+      </div>
+    </div>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    
+  </body>
 </html>

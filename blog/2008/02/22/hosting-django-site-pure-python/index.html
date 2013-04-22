@@ -1,160 +1,83 @@
 
 <!DOCTYPE html>
-<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
-<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
-<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
-<head>
-  <meta charset="utf-8">
-  <title>Hosting a Django Site with Pure Python - Eric Florenzano's Blog</title>
-  <meta name="author" content="Eric Florenzano">
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Hosting a Django Site with Pure Python - Eric Florenzano&rsquo;s Blog</title>
 
-  
-  <meta name="description" content="Developing a site with Django is usually a breeze. You&#8217;ve set up your models, created some views and used some generic views, and you&#8217;ve &hellip;">
-  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
 
-  <!-- http://t.co/dKP3o1e -->
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="/atom.xml" rel="alternate" title="Eric Florenzano's Blog" type="application/atom+xml">
 
-  
-  <link rel="canonical" href="http://eflorenzano.com/blog/2008/02/22/hosting-django-site-pure-python">
-  <link href="/favicon.png" rel="icon">
-  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="/javascripts/ender.js"></script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
-  <link href="/atom.xml" rel="alternate" title="Eric Florenzano's Blog" type="application/atom+xml">
-  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
-<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+    <link href="/static/css/bootstrap.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="/static/css/code.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
 
-  
-  <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-1959803-2']);
-    _gaq.push(['_trackPageview']);
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="/static/js/html5shiv.js"></script>
+    <![endif]-->
 
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-  </script>
-
-
-</head>
-
-<body   >
-  <header role="banner"><hgroup>
-  <h1><a href="/">Eric Florenzano's Blog</a></h1>
-  
-    <h2>I am me.</h2>
-  
-</hgroup>
-
-</header>
-  <nav role="navigation"><ul class="subscription" data-subscription="rss">
-  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
-  
-</ul>
-  
-<form action="http://google.com/search" method="get">
-  <fieldset role="search">
-    <input type="hidden" name="q" value="site:eflorenzano.com" />
-    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
-  </fieldset>
-</form>
-  
-<ul class="main-navigation">
-  <li><a href="/">Blog</a></li>
-  <li><a href="/blog/archives">Archives</a></li>
-</ul>
-
-</nav>
-  <div id="main">
-    <div id="content">
-      <div>
-<article class="hentry" role="article">
-  
-  <header>
+    <!-- Fav and touch icons -->
     
-      <h1 class="entry-title">Hosting a Django Site With Pure Python</h1>
-    
-    
-      <p class="meta">
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="center-column">
+        <h1 class="blog-header"><a href="/">Eric Florenzano&rsquo;s Blog</a></h1>
+        <ul class="blog-header-links">
+          <li><a href="/">Home</a></li>
+          <li><a href="/blog/archives/">Archives</a></li>
+          <li><a href="https://twitter.com/ericflo" class="twitter-follow-button" data-show-count="false">Follow @ericflo</a></li>
+          <li class="feed"><a href="/atom.xml"><img src="/static/img/feed-icon-28x28.png" width="20" height="20" alt="Subscribe to this blog" /></a></li>
+        </ul>
         
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-02-22T12:47:48-08:00" pubdate data-updated="true">Feb 22<span>nd</span>, 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-<div class="entry-content"><p>Developing a site with Django is usually a breeze.  You&#8217;ve set up your models, created some views and used some generic views, and you&#8217;ve even created some spiffy templates.  Now it&#8217;s time to publish that site for everyone to see.  Now if you&#8217;re not already familiar with Apache, Lighttpd, or Nginx, you&#8217;re stuck trying to figure out complicated configuration files and settings directives.  &quot;Why can&#8217;t deployment be just as easy as running the development server?&quot;, you scream.</p>
-<p>It&#8217;s tempting to just attempt to use the development server in production.  But then you read the documentation (you do read the documentation, right?) and it clearly says:</p>
+  <div class="blog-post-detail">
+    <h3><a href="/blog/2008/02/22/hosting-django-site-pure-python/">Hosting a Django Site with Pure Python</a></h3>
+<p class="datetime">Feb 22, 2008</p>
+<div class="document">
+<p>Developing a site with Django is usually a breeze.  You've set up your models, created some views and used some generic views, and you've even created some spiffy templates.  Now it's time to publish that site for everyone to see.  Now if you're not already familiar with Apache, Lighttpd, or Nginx, you're stuck trying to figure out complicated configuration files and settings directives.  &quot;Why can't deployment be just as easy as running the development server?&quot;, you scream.</p>
+<p>It's tempting to just attempt to use the development server in production.  But then you read the documentation (you do read the documentation, right?) and it clearly says:</p>
 <blockquote>
 DO NOT USE THIS SERVER IN A PRODUCTION SETTING. It has not gone through security audits or
-performance tests. (And that&#8211;  s how it&#8211;  s gonna stay. We&#8211;  re in the business of making Web
+performance tests. (And that--  s how it--  s gonna stay. We--  re in the business of making Web
 frameworks, not Web servers, so improving this server to be able to handle a production
 environment is outside the scope of Django.)</blockquote>
-<p>Looks like it&#8217;s time to fire up Apache, right?  Wrong.  At least, you don&#8217;t have to.</p>
+<p>Looks like it's time to fire up Apache, right?  Wrong.  At least, you don't have to.</p>
 <div class="section" id="cherrypy-to-the-rescue">
-<h2>CherryPy to the Rescue</h2>
-<p>One of the features that <a class="reference external" href="http://www.cherrypy.org/">CherryPy</a> touts quite highly is that they include <tt class="docutils literal">&quot;A fast, <span class="pre">HTTP/1.1-compliant,</span> WSGI <span class="pre">thread-pooled</span> webserver&quot;</tt>, however a lesser known fact about that webserver is that it can be run completely independently of the rest of CherryPy&#8211;it&#8217;s a standalone WSGI server.</p>
-<p>So let&#8217;s grab a copy of the CherryPy WSGI webserver:</p>
-<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class="bash"><span class="line">wget http://svn.cherrypy.org/trunk/cherrypy/wsgiserver/__init__.py -O wsgiserver.py
-</span></code></pre></td></tr></table></div></figure><p>Now that you&#8217;ve got a copy of the server, let&#8217;s write a script to start it up.  Your choices may vary depending on how many threads you want to run, etc.</p>
-<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="kn">import</span> <span class="nn">wsgiserver</span>
-</span><span class="line"><span class="c">#This can be from cherrypy import wsgiserver if you&#39;re not running it standalone.</span>
-</span><span class="line"><span class="kn">import</span> <span class="nn">os</span>
-</span><span class="line"><span class="kn">import</span> <span class="nn">django.core.handlers.wsgi</span>
-</span><span class="line">
-</span><span class="line"><span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
-</span><span class="line">    <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">&#39;DJANGO_SETTINGS_MODULE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;settings&#39;</span>
-</span><span class="line">    <span class="n">server</span> <span class="o">=</span> <span class="n">wsgiserver</span><span class="o">.</span><span class="n">CherryPyWSGIServer</span><span class="p">(</span>
-</span><span class="line">        <span class="p">(</span><span class="s">&#39;0.0.0.0&#39;</span><span class="p">,</span> <span class="mi">8000</span><span class="p">),</span>
-</span><span class="line">        <span class="n">django</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">handlers</span><span class="o">.</span><span class="n">wsgi</span><span class="o">.</span><span class="n">WSGIHandler</span><span class="p">(),</span>
-</span><span class="line">        <span class="n">server_name</span><span class="o">=</span><span class="s">&#39;www.django.example&#39;</span><span class="p">,</span>
-</span><span class="line">        <span class="n">numthreads</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span>
-</span><span class="line">    <span class="p">)</span>
-</span><span class="line">    <span class="k">try</span><span class="p">:</span>
-</span><span class="line">        <span class="n">server</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-</span><span class="line">    <span class="k">except</span> <span class="ne">KeyboardInterrupt</span><span class="p">:</span>
-</span><span class="line">        <span class="n">server</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
-</span></code></pre></td></tr></table></div></figure></div>
+<h4>CherryPy to the Rescue</h4>
+<p>One of the features that <a class="reference external" href="http://www.cherrypy.org/">CherryPy</a> touts quite highly is that they include <tt class="docutils literal">&quot;A fast, <span class="pre">HTTP/1.1-compliant,</span> WSGI <span class="pre">thread-pooled</span> webserver&quot;</tt>, however a lesser known fact about that webserver is that it can be run completely independently of the rest of CherryPy--it's a standalone WSGI server.</p>
+<p>So let's grab a copy of the CherryPy WSGI webserver:</p>
+<pre class="code bash literal-block">
+wget http://svn.cherrypy.org/trunk/cherrypy/wsgiserver/__init__.py -O wsgiserver.py
+</pre>
+<p>Now that you've got a copy of the server, let's write a script to start it up.  Your choices may vary depending on how many threads you want to run, etc.</p>
+<pre class="code python literal-block">
+<span class="kn">import</span> <span class="nn">wsgiserver</span>
+<span class="c">#This can be from cherrypy import wsgiserver if you're not running it standalone.</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">django.core.handlers.wsgi</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">'DJANGO_SETTINGS_MODULE'</span><span class="p">]</span> <span class="o">=</span> <span class="s">'settings'</span>
+    <span class="n">server</span> <span class="o">=</span> <span class="n">wsgiserver</span><span class="o">.</span><span class="n">CherryPyWSGIServer</span><span class="p">(</span>
+        <span class="p">(</span><span class="s">'0.0.0.0'</span><span class="p">,</span> <span class="mi">8000</span><span class="p">),</span>
+        <span class="n">django</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">handlers</span><span class="o">.</span><span class="n">wsgi</span><span class="o">.</span><span class="n">WSGIHandler</span><span class="p">(),</span>
+        <span class="n">server_name</span><span class="o">=</span><span class="s">'www.django.example'</span><span class="p">,</span>
+        <span class="n">numthreads</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">server</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+    <span class="k">except</span> <span class="ne">KeyboardInterrupt</span><span class="p">:</span>
+        <span class="n">server</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+</pre>
+</div>
 <div class="section" id="consequences">
-<h2>Consequences</h2>
-<p>Now you&#8217;ve got the server up and running, lets talk about some consequences of this approach.</p>
+<h4>Consequences</h4>
+<p>Now you've got the server up and running, lets talk about some consequences of this approach.</p>
 <ol class="arabic simple">
 <li>This is a multithreaded server.  Django is not guaranteed to be completely thread safe.  Many people seem to be running it fine in multithreaded environments, but thread safety may break at any time without notice.  It might be an interesting project to convert cherrypy.wsgiserver to use <a class="reference external" href="http://pyprocessing.berlios.de/">processing</a> instead of <a class="reference external" href="http://www.python.org/doc/lib/module-threading.html">threading</a> and see how the performance changes.</li>
 <li>This server is written in Python, and as with any other Python program, it will be difficult for it to match the speed of pure C.  For exactly this reason, <a class="reference external" href="http://code.google.com/p/modwsgi/">mod_wsgi</a> is probably always going to be faster than this solution.</li>
@@ -162,177 +85,33 @@ environment is outside the scope of Django.)</blockquote>
 </ol>
 </div>
 <div class="section" id="conclusion">
-<h2>Conclusion</h2>
-<p>Would I use this instead of a fully-featured web server like Apache or Nginx?  Probably not.  I would, however, use it for an intranet which demands more performance and security than the built-in development server.  In any case, it&#8217;s a nice nugget of information to have in your deployment toolbox.</p>
-</div></div>
-
-
-  <footer>
-    <p class="meta">
-      
-  
-
-<span class="byline author vcard">Posted by <span class="fn">Eric Florenzano</span></span>
-
-      
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-02-22T12:47:48-08:00" pubdate data-updated="true">Feb 22<span>nd</span>, 2008</time>
-      
-
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/cherrypy/'>CherryPy</a>, <a class='category' href='/blog/categories/django/'>Django</a>, <a class='category' href='/blog/categories/programming/'>Programming</a>, <a class='category' href='/blog/categories/python/'>Python</a>
-  
-</span>
-
-
-    </p>
-    
-      <div class="sharing">
-  
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://eflorenzano.com/blog/2008/02/22/hosting-django-site-pure-python/" data-via="ericflo" data-counturl="http://eflorenzano.com/blog/2008/02/22/hosting-django-site-pure-python/" >Tweet</a>
-  
-  
-  <div class="g-plusone" data-size="medium"></div>
-  
-  
-    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
-  
+<h4>Conclusion</h4>
+<p>Would I use this instead of a fully-featured web server like Apache or Nginx?  Probably not.  I would, however, use it for an intranet which demands more performance and security than the built-in development server.  In any case, it's a nice nugget of information to have in your deployment toolbox.</p>
+</div>
 </div>
 
-    
-    <p class="meta">
+<div class="categories">
+    Posted in:
+    <ul>
       
-        <a class="basic-alignment left" href="/blog/2008/02/21/syntax-highlighting/" title="Previous Post: Syntax Highlighting">&laquo; Syntax Highlighting</a>
+        <li><a href="/blog/categories/cherrypy/">CherryPy</a></li>
       
+        <li><a href="/blog/categories/django/">Django</a></li>
       
-        <a class="basic-alignment right" href="/blog/2008/03/12/ideas-and-execution/" title="next Post: Ideas and Execution">Ideas and Execution &raquo;</a>
+        <li><a href="/blog/categories/programming/">Programming</a></li>
       
-    </p>
-  </footer>
-</article>
-
-</div>
-
-<aside class="sidebar">
-  
-    <section>
-  <h1>Recent Posts</h1>
-  <ul id="recent_posts">
-    
-      <li class="post">
-        <a href="/blog/2012/04/18/using-twitter-ios5-integration-single-sign-on/">Using Twitter's iOS5 Integration for Single Sign-On</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/01/01/reducing-code-nesting/">Reducing Code Nesting</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2011/02/16/technology-behind-convore/">The Technology Behind Convore</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2010/10/10/object-lesson-how-respond-criticism/">An Object Lesson in How to Respond to Criticism</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2010/09/27/why-node-disappoints-me/">Why node.js disappoints me</a>
-      </li>
-    
-  </ul>
-</section>
-
-
-<section>
-  <h1>Latest Tweets</h1>
-  <ul id="tweets">
-    <li class="loading">Status updating...</li>
-  </ul>
-  <script type="text/javascript">
-    $.domReady(function(){
-      getTwitterFeed("ericflo", 4, false);
-    });
-  </script>
-  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
-  
-    <a href="http://twitter.com/ericflo" class="twitter-follow-button" data-show-count="false">Follow @ericflo</a>
-  
-</section>
-
-
-
-<section class="googleplus">
-  <h1>
-    <a href="https://plus.google.com/109591387819364984777?rel=author">
-      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
-      Google+
-    </a>
-  </h1>
-</section>
-
-
-
-  
-</aside>
-
-
-    </div>
+        <li><a href="/blog/categories/python/">Python</a></li>
+      
+    </ul>
   </div>
-  <footer role="contentinfo"><p>
-  Copyright &copy; 2012 - Eric Florenzano -
-  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
-</p>
+  </div>
+  <hr />
+  <br />
+  <br />
 
-</footer>
-  
-
-
-
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) {return;}
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
-
-
-
-  <script type="text/javascript">
-    (function() {
-      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
-      script.src = 'https://apis.google.com/js/plusone.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
-    })();
-  </script>
-
-
-
-  <script type="text/javascript">
-    (function(){
-      var twitterWidgets = document.createElement('script');
-      twitterWidgets.type = 'text/javascript';
-      twitterWidgets.async = true;
-      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
-      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
-    })();
-  </script>
-
-
-
-
-
-</body>
+      </div>
+    </div>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    
+  </body>
 </html>

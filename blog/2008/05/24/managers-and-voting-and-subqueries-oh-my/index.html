@@ -1,320 +1,95 @@
 
 <!DOCTYPE html>
-<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
-<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
-<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
-<head>
-  <meta charset="utf-8">
-  <title>Managers and Voting and Subqueries, Oh My! - Eric Florenzano's Blog</title>
-  <meta name="author" content="Eric Florenzano">
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Managers and Voting and Subqueries, Oh My! - Eric Florenzano&rsquo;s Blog</title>
 
-  
-  <meta name="description" content="Recently I launched Peevalizer, a website for talking about your pet peeves, which of course was written in Python using the Django web framework. In &hellip;">
-  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
 
-  <!-- http://t.co/dKP3o1e -->
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="/atom.xml" rel="alternate" title="Eric Florenzano's Blog" type="application/atom+xml">
 
-  
-  <link rel="canonical" href="http://eflorenzano.com/blog/2008/05/24/managers-and-voting-and-subqueries-oh-my">
-  <link href="/favicon.png" rel="icon">
-  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="/javascripts/ender.js"></script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
-  <link href="/atom.xml" rel="alternate" title="Eric Florenzano's Blog" type="application/atom+xml">
-  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
-<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+    <link href="/static/css/bootstrap.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="/static/css/code.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
 
-  
-  <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-1959803-2']);
-    _gaq.push(['_trackPageview']);
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="/static/js/html5shiv.js"></script>
+    <![endif]-->
 
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-  </script>
-
-
-</head>
-
-<body   >
-  <header role="banner"><hgroup>
-  <h1><a href="/">Eric Florenzano's Blog</a></h1>
-  
-    <h2>I am me.</h2>
-  
-</hgroup>
-
-</header>
-  <nav role="navigation"><ul class="subscription" data-subscription="rss">
-  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
-  
-</ul>
-  
-<form action="http://google.com/search" method="get">
-  <fieldset role="search">
-    <input type="hidden" name="q" value="site:eflorenzano.com" />
-    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
-  </fieldset>
-</form>
-  
-<ul class="main-navigation">
-  <li><a href="/">Blog</a></li>
-  <li><a href="/blog/archives">Archives</a></li>
-</ul>
-
-</nav>
-  <div id="main">
-    <div id="content">
-      <div>
-<article class="hentry" role="article">
-  
-  <header>
+    <!-- Fav and touch icons -->
     
-      <h1 class="entry-title">Managers and Voting and Subqueries, Oh My!</h1>
-    
-    
-      <p class="meta">
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="center-column">
+        <h1 class="blog-header"><a href="/">Eric Florenzano&rsquo;s Blog</a></h1>
+        <ul class="blog-header-links">
+          <li><a href="/">Home</a></li>
+          <li><a href="/blog/archives/">Archives</a></li>
+          <li><a href="https://twitter.com/ericflo" class="twitter-follow-button" data-show-count="false">Follow @ericflo</a></li>
+          <li class="feed"><a href="/atom.xml"><img src="/static/img/feed-icon-28x28.png" width="20" height="20" alt="Subscribe to this blog" /></a></li>
+        </ul>
         
+  <div class="blog-post-detail">
+    <h3><a href="/blog/2008/05/24/managers-and-voting-and-subqueries-oh-my/">Managers and Voting and Subqueries, Oh My!</a></h3>
+<p class="datetime">May 24, 2008</p>
+<div class="document">
+<p>Recently I launched <a class="reference external" href="http://peevalizer.com/">Peevalizer</a>, a website for talking about your pet peeves, which of course was written in Python using the Django web framework.  In fact, it was the culmination of my efforts to <a class="reference external" href="http://www.eflorenzano.com/blog/post/learning-design/">teach myself design</a>, and while I made some progress, it's clear that I'll never be a designer.  Anyway, part of <a class="reference external" href="http://peevalizer.com/">Peevalizer</a> is that users can vote on different pet peeves, and view the peeves with the highest score.  I used <a class="reference external" href="http://code.google.com/p/django-voting/">django-voting</a> as the application to enable this functionality, and it provides a manager on the <tt class="docutils literal">Vote</tt> object with methods for getting the top N results, where N is a positive integer.</p>
+<p>One of the reasons for custom manager on <tt class="docutils literal">Vote</tt> is because <a class="reference external" href="http://code.google.com/p/django-aggregation/">aggregate support</a> has not yet been finished.  However with Django's built-in <a class="reference external" href="http://www.djangoproject.com/documentation/pagination/">Pagination</a> support, it's necessary to retrieve not only a list of the top N voted pet peeves, but a list of all of the pet peeves, ordered by score.  How is this possible?  Specifically, how is this possible without forking <a class="reference external" href="http://code.google.com/p/django-voting/">django-voting</a>?  Here is the solution that I came up with:</p>
+<pre class="code python literal-block">
+<span class="k">class</span> <span class="nc">VoteAwareManager</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Manager</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_get_score_annotation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">model_type</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_for_model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
+        <span class="n">table_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">db_table</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">extra</span><span class="p">(</span><span class="n">select</span><span class="o">=</span><span class="p">{</span>
+            <span class="s">'score'</span><span class="p">:</span> <span class="s">'SELECT COALESCE(SUM(vote),0) FROM </span><span class="si">%s</span><span class="s"> WHERE content_type_id=</span><span class="si">%d</span><span class="s"> AND object_id=</span><span class="si">%s</span><span class="s">.id'</span> <span class="o">%</span>
+                <span class="p">(</span><span class="n">Vote</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">db_table</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">model_type</span><span class="o">.</span><span class="n">id</span><span class="p">),</span> <span class="n">table_name</span><span class="p">)}</span>
+        <span class="p">)</span>
 
+    <span class="k">def</span> <span class="nf">most_hated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_score_annotation</span><span class="p">()</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">'-score'</span><span class="p">)</span>
 
+    <span class="k">def</span> <span class="nf">most_loved</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_score_annotation</span><span class="p">()</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">'score'</span><span class="p">)</span>
+</pre>
+<p>Then I assigned that manager onto all of the objects that could be voted on.  What that's doing is literally issuing a subquery for every row, doing an aggregate on all of the votes for that row, and assigning it to an attribute named <em>score</em>.</p>
+<p>However, we also wanted to allow for voting on <tt class="docutils literal">User</tt> objects, which is built in to Django and cannot be easily changed.  How do we add this manager to user?  I spent a while thinking about that before realizing that it's not the right question to ask.  The right question to ask is, how can we associate the <tt class="docutils literal">User</tt> model with this manager?  A quick look through some Django source code revealed this to be an absolutely trivial task.  Here's how it goes in our code:</p>
+<pre class="code python literal-block">
+<span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">User</span>
+<span class="n">manager</span> <span class="o">=</span> <span class="n">VoteAwareManager</span><span class="p">()</span>
+<span class="n">manager</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">User</span>
 
-
-
-
-
-
-  
-
-
-<time datetime="2008-05-24T16:12:19-07:00" pubdate data-updated="true">May 24<span>th</span>, 2008</time>
-        
-      </p>
-    
-  </header>
-
-
-<div class="entry-content"><p>Recently I launched <a class="reference external" href="http://peevalizer.com/">Peevalizer</a>, a website for talking about your pet peeves, which of course was written in Python using the Django web framework.  In fact, it was the culmination of my efforts to <a class="reference external" href="http://www.eflorenzano.com/blog/post/learning-design/">teach myself design</a>, and while I made some progress, it&#8217;s clear that I&#8217;ll never be a designer.  Anyway, part of <a class="reference external" href="http://peevalizer.com/">Peevalizer</a> is that users can vote on different pet peeves, and view the peeves with the highest score.  I used <a class="reference external" href="http://code.google.com/p/django-voting/">django-voting</a> as the application to enable this functionality, and it provides a manager on the <tt class="docutils literal">Vote</tt> object with methods for getting the top N results, where N is a positive integer.</p>
-<p>One of the reasons for custom manager on <tt class="docutils literal">Vote</tt> is because <a class="reference external" href="http://code.google.com/p/django-aggregation/">aggregate support</a> has not yet been finished.  However with Django&#8217;s built-in <a class="reference external" href="http://www.djangoproject.com/documentation/pagination/">Pagination</a> support, it&#8217;s necessary to retrieve not only a list of the top N voted pet peeves, but a list of all of the pet peeves, ordered by score.  How is this possible?  Specifically, how is this possible without forking <a class="reference external" href="http://code.google.com/p/django-voting/">django-voting</a>?  Here is the solution that I came up with:</p>
-<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="k">class</span> <span class="nc">VoteAwareManager</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Manager</span><span class="p">):</span>
-</span><span class="line">    <span class="k">def</span> <span class="nf">_get_score_annotation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span class="line">        <span class="n">model_type</span> <span class="o">=</span> <span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_for_model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
-</span><span class="line">        <span class="n">table_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">db_table</span>
-</span><span class="line">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">extra</span><span class="p">(</span><span class="n">select</span><span class="o">=</span><span class="p">{</span>
-</span><span class="line">            <span class="s">&#39;score&#39;</span><span class="p">:</span> <span class="s">&#39;SELECT COALESCE(SUM(vote),0) FROM </span><span class="si">%s</span><span class="s"> WHERE content_type_id=</span><span class="si">%d</span><span class="s"> AND object_id=</span><span class="si">%s</span><span class="s">.id&#39;</span> <span class="o">%</span>
-</span><span class="line">                <span class="p">(</span><span class="n">Vote</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">db_table</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">model_type</span><span class="o">.</span><span class="n">id</span><span class="p">),</span> <span class="n">table_name</span><span class="p">)}</span>
-</span><span class="line">        <span class="p">)</span>
-</span><span class="line">
-</span><span class="line">    <span class="k">def</span> <span class="nf">most_hated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span class="line">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_score_annotation</span><span class="p">()</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;-score&#39;</span><span class="p">)</span>
-</span><span class="line">
-</span><span class="line">    <span class="k">def</span> <span class="nf">most_loved</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span class="line">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_score_annotation</span><span class="p">()</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;score&#39;</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure><p>Then I assigned that manager onto all of the objects that could be voted on.  What that&#8217;s doing is literally issuing a subquery for every row, doing an aggregate on all of the votes for that row, and assigning it to an attribute named <em>score</em>.</p>
-<p>However, we also wanted to allow for voting on <tt class="docutils literal">User</tt> objects, which is built in to Django and cannot be easily changed.  How do we add this manager to user?  I spent a while thinking about that before realizing that it&#8217;s not the right question to ask.  The right question to ask is, how can we associate the <tt class="docutils literal">User</tt> model with this manager?  A quick look through some Django source code revealed this to be an absolutely trivial task.  Here&#8217;s how it goes in our code:</p>
-<figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">User</span>
-</span><span class="line"><span class="n">manager</span> <span class="o">=</span> <span class="n">VoteAwareManager</span><span class="p">()</span>
-</span><span class="line"><span class="n">manager</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">User</span>
-</span><span class="line">
-</span><span class="line"><span class="k">for</span> <span class="n">user</span> <span class="ow">in</span> <span class="n">manager</span><span class="o">.</span><span class="n">most_hated</span><span class="p">():</span>
-</span><span class="line">    <span class="c"># Do something with user&#39;s score</span>
-</span></code></pre></td></tr></table></div></figure><p>There are a few things to note about this implementation.  Firstly, it can be much more computationally expensive to use this method instead of using <a class="reference external" href="http://code.google.com/p/django-voting/">django-voting</a>&#8217;s method (which executes some custom SQL), so either be aware of that or use aggressive caching strategies to overcome this shortcoming.  The other thing is if you&#8217;re not using a manager like this on multiple models, and since managers mostly just proxy to <tt class="docutils literal">QuerySet</tt> anyway, it might be simpler to just acquire a <tt class="docutils literal">QuerySet</tt> on the model that you would like to get, and run the <tt class="docutils literal">extra()</tt> method in the calling function.</p></div>
-
-
-  <footer>
-    <p class="meta">
-      
-  
-
-<span class="byline author vcard">Posted by <span class="fn">Eric Florenzano</span></span>
-
-      
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-05-24T16:12:19-07:00" pubdate data-updated="true">May 24<span>th</span>, 2008</time>
-      
-
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/django/'>Django</a>, <a class='category' href='/blog/categories/programming/'>Programming</a>, <a class='category' href='/blog/categories/python/'>Python</a>
-  
-</span>
-
-
-    </p>
-    
-      <div class="sharing">
-  
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://eflorenzano.com/blog/2008/05/24/managers-and-voting-and-subqueries-oh-my/" data-via="ericflo" data-counturl="http://eflorenzano.com/blog/2008/05/24/managers-and-voting-and-subqueries-oh-my/" >Tweet</a>
-  
-  
-  <div class="g-plusone" data-size="medium"></div>
-  
-  
-    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
-  
+<span class="k">for</span> <span class="n">user</span> <span class="ow">in</span> <span class="n">manager</span><span class="o">.</span><span class="n">most_hated</span><span class="p">():</span>
+    <span class="c"># Do something with user's score</span>
+</pre>
+<p>There are a few things to note about this implementation.  Firstly, it can be much more computationally expensive to use this method instead of using <a class="reference external" href="http://code.google.com/p/django-voting/">django-voting</a>'s method (which executes some custom SQL), so either be aware of that or use aggressive caching strategies to overcome this shortcoming.  The other thing is if you're not using a manager like this on multiple models, and since managers mostly just proxy to <tt class="docutils literal">QuerySet</tt> anyway, it might be simpler to just acquire a <tt class="docutils literal">QuerySet</tt> on the model that you would like to get, and run the <tt class="docutils literal">extra()</tt> method in the calling function.</p>
 </div>
 
-    
-    <p class="meta">
+<div class="categories">
+    Posted in:
+    <ul>
       
-        <a class="basic-alignment left" href="/blog/2008/05/17/exploring-mixins-django-model-inheritance/" title="Previous Post: Exploring Mixins with Django Model Inheritance">&laquo; Exploring Mixins with Django Model Inheritance</a>
+        <li><a href="/blog/categories/django/">Django</a></li>
       
+        <li><a href="/blog/categories/programming/">Programming</a></li>
       
-        <a class="basic-alignment right" href="/blog/2008/05/27/friendfeed-comment-expand-bookmarklet/" title="next Post: FriendFeed Comment Expand Bookmarklet">FriendFeed Comment Expand Bookmarklet &raquo;</a>
+        <li><a href="/blog/categories/python/">Python</a></li>
       
-    </p>
-  </footer>
-</article>
-
-</div>
-
-<aside class="sidebar">
-  
-    <section>
-  <h1>Recent Posts</h1>
-  <ul id="recent_posts">
-    
-      <li class="post">
-        <a href="/blog/2012/04/18/using-twitter-ios5-integration-single-sign-on/">Using Twitter's iOS5 Integration for Single Sign-On</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/01/01/reducing-code-nesting/">Reducing Code Nesting</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2011/02/16/technology-behind-convore/">The Technology Behind Convore</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2010/10/10/object-lesson-how-respond-criticism/">An Object Lesson in How to Respond to Criticism</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2010/09/27/why-node-disappoints-me/">Why node.js disappoints me</a>
-      </li>
-    
-  </ul>
-</section>
-
-
-<section>
-  <h1>Latest Tweets</h1>
-  <ul id="tweets">
-    <li class="loading">Status updating...</li>
-  </ul>
-  <script type="text/javascript">
-    $.domReady(function(){
-      getTwitterFeed("ericflo", 4, false);
-    });
-  </script>
-  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
-  
-    <a href="http://twitter.com/ericflo" class="twitter-follow-button" data-show-count="false">Follow @ericflo</a>
-  
-</section>
-
-
-
-<section class="googleplus">
-  <h1>
-    <a href="https://plus.google.com/109591387819364984777?rel=author">
-      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
-      Google+
-    </a>
-  </h1>
-</section>
-
-
-
-  
-</aside>
-
-
-    </div>
+    </ul>
   </div>
-  <footer role="contentinfo"><p>
-  Copyright &copy; 2012 - Eric Florenzano -
-  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
-</p>
+  </div>
+  <hr />
+  <br />
+  <br />
 
-</footer>
-  
-
-
-
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) {return;}
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
-
-
-
-  <script type="text/javascript">
-    (function() {
-      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
-      script.src = 'https://apis.google.com/js/plusone.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
-    })();
-  </script>
-
-
-
-  <script type="text/javascript">
-    (function(){
-      var twitterWidgets = document.createElement('script');
-      twitterWidgets.type = 'text/javascript';
-      twitterWidgets.async = true;
-      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
-      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
-    })();
-  </script>
-
-
-
-
-
-</body>
+      </div>
+    </div>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    
+  </body>
 </html>

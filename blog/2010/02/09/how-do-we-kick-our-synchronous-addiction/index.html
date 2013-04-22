@@ -1,0 +1,143 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>How do we kick our synchronous addiction? - Eric Florenzano&rsquo;s Blog</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+
+    <link href="/atom.xml" rel="alternate" title="Eric Florenzano's Blog" type="application/atom+xml">
+
+    <link href="/static/css/bootstrap.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="/static/css/code.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="/static/js/html5shiv.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="center-column">
+        <h1 class="blog-header"><a href="/">Eric Florenzano&rsquo;s Blog</a></h1>
+        <ul class="blog-header-links">
+          <li><a href="/">Home</a></li>
+          <li><a href="/blog/archives/">Archives</a></li>
+          <li><a href="https://twitter.com/ericflo" class="twitter-follow-button" data-show-count="false">Follow @ericflo</a></li>
+          <li class="feed"><a href="/atom.xml"><img src="/static/img/feed-icon-28x28.png" width="20" height="20" alt="Subscribe to this blog" /></a></li>
+        </ul>
+        
+  <div class="blog-post-detail">
+    <h3><a href="/blog/2010/02/09/how-do-we-kick-our-synchronous-addiction/">How do we kick our synchronous addiction?</a></h3>
+<p class="datetime">Feb 09, 2010</p>
+<div class="document">
+<p>Asynchronous programming is superior <a class="reference external" href="http://blog.webfaction.com/a-little-holiday-present">both in memory usage and in overall throughput</a> when compared to synchronous programming .  We've <a class="reference external" href="http://www.kegel.com/c10k.html">known this fact for years</a>.  If we look at Django or Ruby on Rails, arguably the two most promising new web application frameworks to emerge in the past few years, both of them are written in such a way that synchronous programming  is assumed. Why is it that even in 2010 we're still writing programs that rely on synchronous programming ?</p>
+<p>The reason that we're stuck on synchronous programming  is twofold.  Firstly, the programming model required for straightforward asynchronous implementations is inconvenient.  Secondly, popular and/or mainstream languages lack the built-in language constructs that are needed to implement a less-straightforward approach to asynchronous programming.</p>
+<div class="section" id="asynchronous-programming-is-too-hard">
+<h4>Asynchronous programming is too hard</h4>
+<p>Let's first examine the straightforward implementation: an event loop.  In this programming model, we have a single process with a single loop that runs continuously.  Functionality is achieved by writing functions to execute small tasks quickly, and inserting those functions into that event loop.  One of those functions might read some bytes from a socket, while another function might write a few bytes to a file, and yet another function might do something computational like calculating an XOR on the data that's been buffered from that first socket.</p>
+<p>The most important part about this event loop is that only one thing is ever happening at a time.  That means that you really have to break your logic up into small chunks that can be performed incrementally.  If any one of our functions blocks, it hogs the event loop and nothing else can execute during that time.</p>
+<p>We have some really great frameworks geared towards making this event loop model easier to work with.  In Python, there's <a class="reference external" href="http://twistedmatrix.com/trac/">Twisted</a> and, more recently, <a class="reference external" href="http://www.tornadoweb.org/">Tornado</a>.  In Ruby there's <a class="reference external" href="http://rubyeventmachine.com/">EventMachine</a>.  In PERL there's <a class="reference external" href="http://poe.perl.org/">POE</a>.  What these frameworks do is twofold: provide constructs for more easily working with an event loop (e.g. <a class="reference external" href="http://twistedmatrix.com/documents/current/core/howto/defer.html">Deferreds</a> or <a class="reference external" href="http://en.wikipedia.org/wiki/Futures_and_promises">Promises</a>), and provide asynchronous implementations of common tasks (e.g. HTTP clients and DNS resolution).</p>
+<p>But these frameworks stop very short of making asynchronous programming easy for two reasons.  The first reason is that we really do have to completely change our coding style.  Consider what it would take to render a simple blog web page with comments.  Here's some JavaScript code to demonstrate how this might work in a synchronous framework:</p>
+<pre class="code javascript literal-block">
+<span class="kd">function</span> <span class="nx">handleBlogPostRequest</span><span class="p">(</span><span class="nx">request</span><span class="p">,</span> <span class="nx">response</span><span class="p">,</span> <span class="nx">postSlug</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">db</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">DBClient</span><span class="p">(</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">post</span> <span class="o">=</span> <span class="nx">db</span><span class="p">.</span><span class="nx">getBlogPost</span><span class="p">(</span><span class="nx">postSlug</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">comments</span> <span class="o">=</span> <span class="nx">db</span><span class="p">.</span><span class="nx">getComments</span><span class="p">(</span><span class="nx">post</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">html</span> <span class="o">=</span> <span class="nx">template</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">'blog/post.html'</span><span class="p">,</span>
+        <span class="p">{</span><span class="s1">'post'</span><span class="o">:</span> <span class="nx">post</span><span class="p">,</span> <span class="s1">'comments'</span><span class="o">:</span> <span class="nx">comments</span><span class="p">});</span>
+    <span class="nx">response</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">html</span><span class="p">);</span>
+    <span class="nx">response</span><span class="p">.</span><span class="nx">close</span><span class="p">(</span><span class="p">);</span>
+<span class="p">}</span>
+</pre>
+<p>Now here's some JavaScript code to demonstrate how this might look in an asynchronous framework.  Note several things here: We've specifically written this in such a way that it doesn't become nested four levels deep.  We've also written these callback functions inside of the <tt class="docutils literal">handleBlogPostRequest</tt> function to take advantage of closure so as to retain access to the request and response objects, the template context, and the database client. Both the desire to avoid nesting and the closure are things that we need to think about as we write this code, that were not even considerations in the synchronous version:</p>
+<pre class="code javascript literal-block">
+<span class="kd">function</span> <span class="nx">handleBlogPostRequest</span><span class="p">(</span><span class="nx">request</span><span class="p">,</span> <span class="nx">response</span><span class="p">,</span> <span class="nx">postSlug</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">context</span> <span class="o">=</span> <span class="p">{</span><span class="p">};</span>
+    <span class="kd">var</span> <span class="nx">db</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">DBClient</span><span class="p">(</span><span class="p">);</span>
+    <span class="kd">function</span> <span class="nx">pageRendered</span><span class="p">(</span><span class="nx">html</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">response</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">html</span><span class="p">);</span>
+        <span class="nx">response</span><span class="p">.</span><span class="nx">close</span><span class="p">(</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="kd">function</span> <span class="nx">gotComments</span><span class="p">(</span><span class="nx">comments</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">context</span><span class="p">[</span><span class="s1">'comments'</span><span class="p">]</span> <span class="o">=</span> <span class="nx">comments</span><span class="p">;</span>
+        <span class="nx">template</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">'blog/post.html'</span><span class="p">,</span> <span class="nx">context</span><span class="p">).</span><span class="nx">addCallback</span><span class="p">(</span><span class="nx">pageRendered</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="kd">function</span> <span class="nx">gotBlogPost</span><span class="p">(</span><span class="nx">post</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">context</span><span class="p">[</span><span class="s1">'post'</span><span class="p">]</span> <span class="o">=</span> <span class="nx">post</span><span class="p">;</span>
+        <span class="nx">db</span><span class="p">.</span><span class="nx">getComments</span><span class="p">(</span><span class="nx">post</span><span class="p">.</span><span class="nx">id</span><span class="p">).</span><span class="nx">addCallback</span><span class="p">(</span><span class="nx">gotComments</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="nx">db</span><span class="p">.</span><span class="nx">getBlogPost</span><span class="p">(</span><span class="nx">postSlug</span><span class="p">).</span><span class="nx">addCallback</span><span class="p">(</span><span class="nx">gotBlogPost</span><span class="p">);</span>
+<span class="p">}</span>
+</pre>
+<p>I've chosen JavaScript here to prove a point, by the way.  People are very excited about <a class="reference external" href="http://nodejs.org/">node.js</a> right now, and it's a very cool framework, but it doesn't hide all of the complexities involved in doing things asynchronously.  It only hides some of the implementation details of the event loop.</p>
+<p>The second reason why these frameworks fall short is because not all IO can be handled properly by a framework, and in these cases we have to resort to bad hacks.  For example, MySQL does not offer an asynchronous database driver, so most of the major frameworks end up using threads to ensure that this communication happens out of band.</p>
+<p>Given the inconvenient API, the added complexity, and the simple fact that most developers haven't switched to using this style of programming, leads us to the conclusion that this type of framework is not a desirable final solution to the problem (even though I do concede that you can get Real Work done today using these techniques, and many people do).  That being the case, what other options do we have for asynchronous programming? Coroutines and lightweight processes, which brings us to our next major problem.</p>
+</div>
+<div class="section" id="languages-don-t-support-easier-asynchronous-paradigms">
+<h4>Languages don't support easier asynchronous paradigms</h4>
+<p>There are a few language constructs that, if implemented properly in modern programming languages, could pave the way for alternative methods of doing asynchronous programming that don't have the drawbacks of the event loop.  These constructs are coroutines and lightweight processes.</p>
+<p>A coroutine is a function that can suspend and resume its execution at certain, programmatically specified, locations.  This simple concept can serve to transform blocking-looking code to be non-blocking.  At certain critical points in your IO library code, the low-level functions that are doing IO can choose to &quot;cooperate&quot;.  That is, it can choose to suspend execution in order for another function to resume execution and continue on.</p>
+<p>Here's an example (it's Python, but fairly understandable for all I hope):</p>
+<pre class="code python literal-block">
+<span class="k">def</span> <span class="nf">download_pages</span><span class="p">():</span>
+    <span class="n">google</span> <span class="o">=</span> <span class="n">urlopen</span><span class="p">(</span><span class="s">'http://www.google.com/'</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="n">yahoo</span> <span class="o">=</span> <span class="n">urlopen</span><span class="p">(</span><span class="s">'http://www.yahoo.com/'</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</pre>
+<p>Normally the way this would work is that a socket would be opened, connected to Google, an HTTP request sent, and the full response would be read, buffered, and assigned to the <tt class="docutils literal">google</tt> variable, and then in turn the same series of steps would be taken for the <tt class="docutils literal">yahoo</tt> variable.</p>
+<p>Ok, now imagine that the underlying socket implementation were built using coroutines that cooperated with each other.  This time, just like before, the socket would be opened and a connection would be made to Google, and then a request would be fired off.  This time, however, after sending the request, the socket implementation suspends its own execution.</p>
+<p>Having suspended its execution (but not yet having returned a value), execution continues on to the next line.  The same thing happens on the Yahoo line: once its request has been fired off, the Yahoo line suspends its execution.  But now there's something else to cooperate with--there's actually some data ready to be read on the Google socket--so it resumes execution at that point.  It reads some data from the Gooogle socket, and then suspends its execution again.</p>
+<p>It jumps back and forth between the two coroutines until one has finished.  Let's say that the Yahoo socket has finished, but the Google one has not.  In this case, the Google socket just continues to read from its socket until it has completed, because there are no other coroutines to cooperate with.  Once the Google socket is finally finished, the function returns with all of the buffered data.</p>
+<p>Then the Yahoo line returns with all of its buffered data.</p>
+<p>We've preserved the style of our blocking code, but we've used asynchronous programming to do it.  Best of all, we've preserved our original program flow--the <tt class="docutils literal">google</tt> variable is assigned first, and then the <tt class="docutils literal">yahoo</tt> variable is assigned.  In truth, we've got a smart event loop going on underneath the covers to control who gets to execute, but it's hidden from us due to the fact that coroutines are in play.</p>
+<p>Languages like PHP, Python, Ruby, and Perl simply don't have built-in coroutines that are robust enough to implement this kind of behind-the-scenes transformation.  So what about these lightweight processes?</p>
+<p>Lightweight processes are what Erlang uses as its main concurrency primitive.  Essentially these are processes that are mostly implemented in the Erlang VM itself.  Each process has approximately 300 words of overhead and its execution is scheduled primarily by the Erlang VM, sharing no state at all amongst processes.  Essentially, we don't have to think twice about spawning a process, as it's essentially free.  The catch is that these processes can only communicate via message passing.</p>
+<p>Implementing these lightweight processes at the VM level gets rid of the memory overhead, the context switching, and the relative sluggishness of interprocess communication provided by the operating system.  Since the VM also has insight into the memory stack of each process, it can freely move or resize those processes and their stacks.  That's something that the OS simply cannot do.</p>
+<p>With this model of lightweight processes, it's possible to again revert back to the convenient model of using a separate process for all of our asynchronous programming needs.  The question becomes this: can this notion of lightweight processes be implemented in languages other than Erlang?  The answer to that is &quot;I don't know.&quot;  To my knowledge, Erlang takes advantage of some features of the language itself (such as having no mutable data structures) in its lightweight process implementation.</p>
+</div>
+<div class="section" id="where-do-we-go-from-here">
+<h4>Where do we go from here?</h4>
+<p>The key to moving forward is to drop the notion that developers need to learn to think about all of their code in terms of callbacks and asynchrony, as the asynchronous event loop frameworks require them to do.  Over the past ten years, we can see that most developers, when faced with that decision, simply choose to ignore it.  They continue to use the inferior blocking methodologies of yesteryear.</p>
+<p>We need to look at these alternative implementations like coroutines and lightweight processes, so that we can make asynchronous programming as easy as synchronous programming.  Only then will we be able to kick this synchronous addiction.</p>
+</div>
+</div>
+
+<div class="categories">
+    Posted in:
+    <ul>
+      
+        <li><a href="/blog/categories/django/">Django</a></li>
+      
+        <li><a href="/blog/categories/asynchronous/">Asynchronous</a></li>
+      
+        <li><a href="/blog/categories/threads/">Threads</a></li>
+      
+        <li><a href="/blog/categories/processes/">Processes</a></li>
+      
+        <li><a href="/blog/categories/coroutines/">Coroutines</a></li>
+      
+        <li><a href="/blog/categories/erlang/">Erlang</a></li>
+      
+        <li><a href="/blog/categories/python/">Python</a></li>
+      
+    </ul>
+  </div>
+  </div>
+  <hr />
+  <br />
+  <br />
+
+      </div>
+    </div>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    
+  </body>
+</html>

@@ -1,0 +1,127 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Cheetah and Django - Eric Florenzano&rsquo;s Blog</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+
+    <link href="/atom.xml" rel="alternate" title="Eric Florenzano's Blog" type="application/atom+xml">
+
+    <link href="/static/css/bootstrap.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="/static/css/code.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="/static/js/html5shiv.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="center-column">
+        <h1 class="blog-header"><a href="/">Eric Florenzano&rsquo;s Blog</a></h1>
+        <ul class="blog-header-links">
+          <li><a href="/">Home</a></li>
+          <li><a href="/blog/archives/">Archives</a></li>
+          <li><a href="https://twitter.com/ericflo" class="twitter-follow-button" data-show-count="false">Follow @ericflo</a></li>
+          <li class="feed"><a href="/atom.xml"><img src="/static/img/feed-icon-28x28.png" width="20" height="20" alt="Subscribe to this blog" /></a></li>
+        </ul>
+        
+  <div class="blog-post-detail">
+    <h3><a href="/blog/2007/08/04/cheetah-and-django/">Cheetah and Django</a></h3>
+<p class="datetime">Aug 04, 2007</p>
+<div class="document">
+<p>Django is my preferred web development framework.  As such, I like it as a total solution: ORM, Template System, and Request/Response Mechanisms.  One of the criticisms that gets tossed around regarding Django is that it's a monolithic web framework, and as such it is not loosely coupled.  I would argue that while it is a monolithic framework, it is still loosely coupled, and I'll prove it by showing just how easy it is to replace the templating system.</p>
+<p>After a quick google search for django and cheetah, I was surprised to find that there seem to be no really great examples online of the replacement of the template part of the Django stack.  That being the case, I have decided to provide some examples of how that can be accomplished.  In short, I'm going to demonstrate how to use the <a class="reference external" href="http://www.cheetahtemplate.org/">Cheetah template language</a> with the <a class="reference external" href="http://www.djangoproject.com/">Django web framework</a>.</p>
+<p>Before we delve into how to integrate Cheetah with Django, first let's look at some basic Cheetah syntax.  Basically all placeholders in cheetah templates are prefixed by $, and all control flow logic is prefaced by #.  Beyond that, mostly the syntax follows normal Python syntax.</p>
+<p>If there's a python object <tt class="docutils literal">test = [1, 2, &quot;3.1415&quot;, 4, range]</tt>, the Cheetah placeholder <tt class="docutils literal">$test[0]</tt> would return 1, <tt class="docutils literal">$test[2]</tt> would return 3.1415, and <tt class="docutils literal"><span class="pre">$test[4](0,$test[1])</span></tt> would return <tt class="docutils literal">[0, 1]</tt>.  To learn about control flow or any of the more advanced topics, you'll have to visit <a class="reference external" href="http://www.cheetahtemplate.org/docs/users_guide_html/users_guide.html">the excellent Cheetah Users Guide</a>.</p>
+<p>To demonstrate using Cheetah with Django, we're going to use the canonical example: the blog.  First, the model (about the most simplistic one I could think of for a blog):</p>
+<pre class="code python literal-block">
+<span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+
+<span class="k">class</span> <span class="nc">BlogPost</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">maxlength</span> <span class="o">=</span> <span class="mi">128</span><span class="p">)</span>
+    <span class="n">body</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__unicode__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span>
+</pre>
+<p>Now, let's make sure to add a template folder to TEMPLATE_DIRS in settings.py:</p>
+<pre class="code python literal-block">
+<span class="n">TEMPLATE_DIRS</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s">'/path/to/myproject/templates'</span><span class="p">,</span>
+<span class="p">)</span>
+</pre>
+<p>Now, one aspect of Django that I've gotten really accustomed to is the render_to_response method.  It's nice to be able to specify a template name and pass in some context, and get an <tt class="docutils literal">HttpResponse</tt> object back.  So we'll start by replacing that method, but for cheetah:</p>
+<pre class="code python literal-block">
+<span class="kn">import</span> <span class="nn">os.path</span>
+<span class="kn">from</span> <span class="nn">Cheetah.Template</span> <span class="kn">import</span> <span class="n">Template</span>
+<span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
+<span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span>
+<span class="k">def</span> <span class="nf">render_to_response</span><span class="p">(</span><span class="n">template_name</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">template_dir</span> <span class="ow">in</span> <span class="n">settings</span><span class="o">.</span><span class="n">TEMPLATE_DIRS</span><span class="p">:</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">template_dir</span><span class="p">,</span> <span class="n">template_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+            <span class="n">template</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="nb">file</span> <span class="o">=</span> <span class="n">path</span><span class="p">,</span> <span class="n">searchList</span> <span class="o">=</span> <span class="p">(</span><span class="n">context</span><span class="p">,))</span>
+            <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="nb">unicode</span><span class="p">(</span><span class="n">template</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">,</span> <span class="s">'Could not find template for </span><span class="si">%s</span><span class="s">'</span> <span class="o">%</span> <span class="n">template_name</span>
+</pre>
+<p>This code snippet can go anywhere, but to make it easy you can just put it in your <tt class="docutils literal">views.py</tt>.  As for how it works: basically we're just iterating over each template directory in <tt class="docutils literal">TEMPLATE_DIRS</tt>.  If we find that a file exists, we create a cheetah Template object with that file as its base and with the specified context as its search list.  Then, we simply render the result into an <tt class="docutils literal">HttpResponse</tt> object.  I feel that this solution is both simple and robust--two concepts that usually exclude each other.</p>
+<p>So, how would a simple view look using our new helper render_to_response?</p>
+<pre class="code python literal-block">
+<span class="kn">from</span> <span class="nn">myproject.blog.models</span> <span class="kn">import</span> <span class="n">BlogPost</span>
+<span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">blogs</span> <span class="o">=</span> <span class="n">BlogPost</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span> <span class="s">'blogs'</span> <span class="p">:</span> <span class="n">blogs</span> <span class="p">}</span>
+    <span class="k">return</span> <span class="n">render_to_response</span><span class="p">(</span><span class="s">'index.tmpl'</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+</pre>
+<p>Ok, it's going to take a bit of explaining for that last snippet.  There's a lot of advanced things going on that make it look totally unfamiliar.  But actually that's just one big lie: this looks EXACTLY like any other Django view!  We've just completely and transparently replaced the templating system of Django, and all it took was a 7-line helper function.  But we're not done yet.  We still have to write the template:</p>
+<pre class="code html literal-block">
+<span class="nt">&lt;html&gt;</span>
+    <span class="nt">&lt;head&gt;&lt;title&gt;</span>I can has cheetah templates!<span class="nt">&lt;/title&gt;&lt;/head&gt;</span>
+    <span class="nt">&lt;body&gt;</span>
+    #for $post in $blogs
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;blogpost&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;h1&gt;</span>$post.title<span class="nt">&lt;/h1&gt;</span>
+        <span class="nt">&lt;p&gt;</span>$post.body<span class="nt">&lt;/p&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+    #end for
+    <span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</pre>
+<p>Now point a url to the example view, and watch the magic unfold.  I'm not a Cheetah user normally, so I can't really comment about some of the more complex features of that language, but I can't imagine that enabling them would be much more difficult than what we've already done here.  So, that means I'm totally aware that there may be some naivity in my implementation.  If so, please comment and I'll change it accordingly.</p>
+</div>
+
+<div class="categories">
+    Posted in:
+    <ul>
+      
+        <li><a href="/blog/categories/django/">Django</a></li>
+      
+        <li><a href="/blog/categories/python/">Python</a></li>
+      
+        <li><a href="/blog/categories/cheetah/">Cheetah</a></li>
+      
+        <li><a href="/blog/categories/templating/">Templating</a></li>
+      
+    </ul>
+  </div>
+  </div>
+  <hr />
+  <br />
+  <br />
+
+      </div>
+    </div>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    
+  </body>
+</html>

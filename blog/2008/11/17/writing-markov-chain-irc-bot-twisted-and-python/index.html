@@ -1,0 +1,263 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Writing an Markov-Chain IRC Bot with Twisted and Python - Eric Florenzano&rsquo;s Blog</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+
+    <link href="/atom.xml" rel="alternate" title="Eric Florenzano's Blog" type="application/atom+xml">
+
+    <link href="/static/css/bootstrap.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="/static/css/code.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="/static/js/html5shiv.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="center-column">
+        <h1 class="blog-header"><a href="/">Eric Florenzano&rsquo;s Blog</a></h1>
+        <ul class="blog-header-links">
+          <li><a href="/">Home</a></li>
+          <li><a href="/blog/archives/">Archives</a></li>
+          <li><a href="https://twitter.com/ericflo" class="twitter-follow-button" data-show-count="false">Follow @ericflo</a></li>
+          <li class="feed"><a href="/atom.xml"><img src="/static/img/feed-icon-28x28.png" width="20" height="20" alt="Subscribe to this blog" /></a></li>
+        </ul>
+        
+  <div class="blog-post-detail">
+    <h3><a href="/blog/2008/11/17/writing-markov-chain-irc-bot-twisted-and-python/">Writing an Markov-Chain IRC Bot with Twisted and Python</a></h3>
+<p class="datetime">Nov 17, 2008</p>
+<div class="document">
+<p><a class="reference external" href="http://twistedmatrix.com/trac/">Twisted</a> is one of Python's great secret weapons.  It is an absolute workhorse,
+allowing for insanely fast network applications to be written with very little
+effort.  So let's do what everyone does when they want to learn more about
+Twisted: let's write an IRC bot!  This bot is going to use <a class="reference external" href="http://en.wikipedia.org/wiki/Markov_chain">Markov Chains</a> to
+simulate human speech.  For whatever reason, I named this bot &quot;YourMomDotCom&quot;.</p>
+<p>First let's create a skeleton on top of which the rest of the bot will be
+created:</p>
+<pre class="code python literal-block">
+<span class="kn">from</span> <span class="nn">twisted.words.protocols</span> <span class="kn">import</span> <span class="n">irc</span>
+<span class="kn">from</span> <span class="nn">twisted.internet</span> <span class="kn">import</span> <span class="n">protocol</span>
+
+<span class="k">class</span> <span class="nc">MomBot</span><span class="p">(</span><span class="n">irc</span><span class="o">.</span><span class="n">IRCClient</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_get_nickname</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">factory</span><span class="o">.</span><span class="n">nickname</span>
+    <span class="n">nickname</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_nickname</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">signedOn</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">factory</span><span class="o">.</span><span class="n">channel</span><span class="p">)</span>
+        <span class="k">print</span> <span class="s">&quot;Signed on as </span><span class="si">%s</span><span class="s">.&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nickname</span><span class="p">,)</span>
+
+    <span class="k">def</span> <span class="nf">joined</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">channel</span><span class="p">):</span>
+        <span class="k">print</span> <span class="s">&quot;Joined </span><span class="si">%s</span><span class="s">.&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">channel</span><span class="p">,)</span>
+
+    <span class="k">def</span> <span class="nf">privmsg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">channel</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
+        <span class="k">print</span> <span class="n">msg</span>
+
+<span class="k">class</span> <span class="nc">MomBotFactory</span><span class="p">(</span><span class="n">protocol</span><span class="o">.</span><span class="n">ClientFactory</span><span class="p">):</span>
+    <span class="n">protocol</span> <span class="o">=</span> <span class="n">MomBot</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">channel</span><span class="p">,</span> <span class="n">nickname</span><span class="o">=</span><span class="s">'YourMomDotCom'</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">channel</span> <span class="o">=</span> <span class="n">channel</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nickname</span> <span class="o">=</span> <span class="n">nickname</span>
+
+    <span class="k">def</span> <span class="nf">clientConnectionLost</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connector</span><span class="p">,</span> <span class="n">reason</span><span class="p">):</span>
+        <span class="k">print</span> <span class="s">&quot;Lost connection (</span><span class="si">%s</span><span class="s">), reconnecting.&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">reason</span><span class="p">,)</span>
+        <span class="n">connector</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">clientConnectionFailed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connector</span><span class="p">,</span> <span class="n">reason</span><span class="p">):</span>
+        <span class="k">print</span> <span class="s">&quot;Could not connect: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">reason</span><span class="p">,)</span>
+</pre>
+<p>We've now created an <tt class="docutils literal">IRCClient</tt> subclass which will hold our application
+logic, and we've also written a factory class which will create instances of
+that <tt class="docutils literal">MomBot</tt> client.  Let's tie these together and start the event loop:</p>
+<pre class="code python literal-block">
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">twisted.internet</span> <span class="kn">import</span> <span class="n">reactor</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">chan</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">reactor</span><span class="o">.</span><span class="n">connectTCP</span><span class="p">(</span><span class="s">'irc.freenode.net'</span><span class="p">,</span> <span class="mi">6667</span><span class="p">,</span> <span class="n">MomBotFactory</span><span class="p">(</span><span class="s">'#'</span> <span class="o">+</span> <span class="n">chan</span><span class="p">))</span>
+    <span class="n">reactor</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre>
+<p>Now already we have a complete working IRC bot.  Right now all it will do is
+connect to an IRC channel and echo all of the output to the command line.  Not
+bad for how little code we've written. Now all we have to do is implement our
+application logic.  Let's first start by creating the 'brain' of our Markov
+chain responder, and adding a function to train the brain:</p>
+<pre class="code python literal-block">
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+
+<span class="n">markov</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+<span class="n">STOP_WORD</span> <span class="o">=</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
+
+<span class="k">def</span> <span class="nf">add_to_brain</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">chain_length</span><span class="p">,</span> <span class="n">write_to_file</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">write_to_file</span><span class="p">:</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">'training_text.txt'</span><span class="p">,</span> <span class="s">'a'</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">msg</span> <span class="o">+</span> <span class="s">'</span><span class="se">\n</span><span class="s">'</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">buf</span> <span class="o">=</span> <span class="p">[</span><span class="n">STOP_WORD</span><span class="p">]</span> <span class="o">*</span> <span class="n">chain_length</span>
+    <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">msg</span><span class="o">.</span><span class="n">split</span><span class="p">():</span>
+        <span class="n">markov</span><span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">buf</span><span class="p">)]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+        <span class="k">del</span> <span class="n">buf</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">buf</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+    <span class="n">markov</span><span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">buf</span><span class="p">)]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">STOP_WORD</span><span class="p">)</span>
+</pre>
+<p>In this, we are creating a defaultdict of lists.  For every n-word sliding
+window, the word after that window is appended to the list of possible words.
+Here's an image which hopefully depicts better than words how the algorithm
+populates the brain:</p>
+<img alt="http://media.eflorenzano.com/img/markov.png" src="http://media.eflorenzano.com/img/markov.png" />
+<p>But what good is a brain like this if we can't get words back from it.  We're
+going to need to write a function to generate sentences from that brain:</p>
+<pre class="code python literal-block">
+<span class="k">def</span> <span class="nf">generate_sentence</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">chain_length</span><span class="p">,</span> <span class="n">max_words</span><span class="o">=</span><span class="mi">10000</span><span class="p">):</span>
+    <span class="n">buf</span> <span class="o">=</span> <span class="n">msg</span><span class="o">.</span><span class="n">split</span><span class="p">()[:</span><span class="n">chain_length</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">split</span><span class="p">())</span> <span class="o">&gt;</span> <span class="n">chain_length</span><span class="p">:</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="n">buf</span><span class="p">[:]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">chain_length</span><span class="p">):</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">markov</span><span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">markov</span><span class="o">.</span><span class="n">keys</span><span class="p">())]))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">max_words</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">next_word</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">markov</span><span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">buf</span><span class="p">)])</span>
+        <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="k">if</span> <span class="n">next_word</span> <span class="o">==</span> <span class="n">STOP_WORD</span><span class="p">:</span>
+            <span class="k">break</span>
+        <span class="n">message</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">next_word</span><span class="p">)</span>
+        <span class="k">del</span> <span class="n">buf</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">buf</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">next_word</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s">' '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+</pre>
+<p>We start out our seed buffer with the first few words of the message, and if the
+message wasn't long enough, we fill the seed buffer with some random words from
+the markov's brain.  Then we use the buffer as a key into the markov brain and
+randomly pick one of the values as our next word.  Then we slide that buffer
+so that the chosen word is now the next word in the buffer (ejecting the oldest
+word in the buffer).  If we ever see a stop word, we stop and return the
+generated sentence.</p>
+<p>Now it's a matter of expanding our bot to take advantage of our markov brain.
+The first change we will need to make is to modify the <tt class="docutils literal">MomBotFactory</tt> to take
+more parameters in its <tt class="docutils literal">__init__</tt> method:</p>
+<pre class="code python literal-block">
+<span class="k">class</span> <span class="nc">MomBotFactory</span><span class="p">(</span><span class="n">protocol</span><span class="o">.</span><span class="n">ClientFactory</span><span class="p">):</span>
+    <span class="n">protocol</span> <span class="o">=</span> <span class="n">MomBot</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">channel</span><span class="p">,</span> <span class="n">nickname</span><span class="o">=</span><span class="s">'YourMomDotCom'</span><span class="p">,</span> <span class="n">chain_length</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+        <span class="n">chattiness</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">max_words</span><span class="o">=</span><span class="mi">10000</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">channel</span> <span class="o">=</span> <span class="n">channel</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nickname</span> <span class="o">=</span> <span class="n">nickname</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">chain_length</span> <span class="o">=</span> <span class="n">chain_length</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">chattiness</span> <span class="o">=</span> <span class="n">chattiness</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_words</span> <span class="o">=</span> <span class="n">max_words</span>
+
+    <span class="c"># ...</span>
+</pre>
+<p>Now that it has all of that new information, we can add the final bit of
+functionality to <tt class="docutils literal">MomBot</tt> responding using sentences generated from the
+markov brain by updating the <tt class="docutils literal">privmsg</tt> method:</p>
+<pre class="code python literal-block">
+<span class="k">class</span> <span class="nc">MomBot</span><span class="p">(</span><span class="n">irc</span><span class="o">.</span><span class="n">IRCClient</span><span class="p">):</span>
+
+    <span class="c"># ...</span>
+
+    <span class="k">def</span> <span class="nf">privmsg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">channel</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">user</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nickname</span> <span class="ow">in</span> <span class="n">msg</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nickname</span> <span class="o">+</span> <span class="s">&quot;[:,]* ?&quot;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">I</span><span class="p">)</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s">''</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+            <span class="n">prefix</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">: &quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">'!'</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span> <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">prefix</span> <span class="o">=</span> <span class="s">''</span>
+        <span class="n">add_to_brain</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">factory</span><span class="o">.</span><span class="n">chain_length</span><span class="p">,</span> <span class="n">write_to_file</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">prefix</span> <span class="ow">or</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">factory</span><span class="o">.</span><span class="n">chattiness</span><span class="p">:</span>
+            <span class="n">sentence</span> <span class="o">=</span> <span class="n">generate_sentence</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">factory</span><span class="o">.</span><span class="n">chain_length</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">factory</span><span class="o">.</span><span class="n">max_words</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">sentence</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">factory</span><span class="o">.</span><span class="n">channel</span><span class="p">,</span> <span class="n">prefix</span> <span class="o">+</span> <span class="n">sentence</span><span class="p">)</span>
+</pre>
+<p>If it gets a message from a non-user, we don't care about it, so we just
+disregard that message.  Otherwise, if it's a message directed at the bot, we
+want to respond to the sending user so we add the user as a prefix to our next
+message.  Then we grab a sentence from the markov brain and send it to the
+channel.</p>
+<p>Not so bad.  Now lets modify our startup portion of the script to re-train the
+brain with anything learned during the course of the bot's life.  Here's how
+the new script will look:</p>
+<pre class="code python literal-block">
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">chan</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&quot;Please specify a channel name.&quot;</span>
+        <span class="k">print</span> <span class="s">&quot;Example:&quot;</span>
+        <span class="k">print</span> <span class="s">&quot;  python yourmomdotcom.py django-hotclub&quot;</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s">'training_text.txt'</span><span class="p">):</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">'training_text.txt'</span><span class="p">,</span> <span class="s">'r'</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">add_to_brain</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">chain_length</span><span class="p">)</span>
+        <span class="k">print</span> <span class="s">'Brain Reloaded'</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">reactor</span><span class="o">.</span><span class="n">connectTCP</span><span class="p">(</span><span class="s">'irc.freenode.net'</span><span class="p">,</span> <span class="mi">6667</span><span class="p">,</span> <span class="n">MomBotFactory</span><span class="p">(</span><span class="s">'#'</span> <span class="o">+</span> <span class="n">chan</span><span class="p">,</span>
+        <span class="s">'YourMomDotCom'</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">chattiness</span><span class="o">=</span><span class="mf">0.05</span><span class="p">))</span>
+    <span class="n">reactor</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre>
+<p>I have found personally that, counter-intuitively, a length of <strong>2</strong> seems to
+produce the most realistic-looking responses.  We've really accomplished a lot
+in a very little amount of code.  Instead of my normal closing remarks, let me
+simply close with a snippet of conversation recently had with YourMomDotCom:</p>
+<pre class="literal-block">
+[9:57pm] ericflo: YourMomDotCom: Hello, I'd like to show you off for the readers of my blog.
+[9:57pm] YourMomDotCom: ericflo: Hello, I'd like to do, after checking with another.
+[9:57pm] ericflo: YourMomDotCom: I'm not exactly sure what you mean by that.
+[9:57pm] YourMomDotCom: ericflo: I'm not sure, but I'm in &quot;Easter mode&quot; already I think.
+[9:58pm] ericflo: YourMomDotCom: That's funny since we aren't really very close to easter.
+[9:58pm] YourMomDotCom: ericflo: That's funny since i missed much of a ForeignKey field?
+[9:58pm] ericflo: YourMomDotCom: I miss ForeignKey fields all the time
+[9:58pm] YourMomDotCom: ericflo: I miss that
+[9:58pm] ericflo: YourMomDotCom: We both agree, then.
+[9:58pm] YourMomDotCom: ericflo: We both agree, then.
+[9:58pm] ericflo: YourMomDotCom: yay!
+</pre>
+</div>
+
+<div class="categories">
+    Posted in:
+    <ul>
+      
+        <li><a href="/blog/categories/python/">Python</a></li>
+      
+        <li><a href="/blog/categories/twisted/">Twisted</a></li>
+      
+        <li><a href="/blog/categories/irc/">IRC</a></li>
+      
+        <li><a href="/blog/categories/markov-chains/">Markov Chains</a></li>
+      
+        <li><a href="/blog/categories/bot/">Bot</a></li>
+      
+    </ul>
+  </div>
+  </div>
+  <hr />
+  <br />
+  <br />
+
+      </div>
+    </div>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    
+  </body>
+</html>
