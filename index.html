@@ -36,6 +36,60 @@
         </ul>
         
 
+  <h3><a href="/blog/2013/07/01/fix-it/">So fix it!</a></h3>
+<p class="datetime">Jul 01, 2013</p>
+<div class="document">
+<p>&quot;Uhh, why is this single controller method 500 lines of code?&quot; - Me, a few
+months into my first job after college.  I remember saying it out loud,
+expecting to hear a faint chuckle from my co-workers, as if it were a joke. &quot;We
+should really break this up into smaller functions,&quot; I said, confident that I
+was right.</p>
+<p>What <a class="reference external" href="https://twitter.com/donovanpreston">my coworker</a> said in response surprised me in the best possible way, and
+what I learned then is something I still remind myself of to this day.  He
+said, &quot;You're right, that's too long. So fix it!&quot;  I responded with, &quot;yeah, we
+really should.&quot;  To which he responded, &quot;You are one of us, so fix it!&quot;</p>
+<p>This became somewhat of a refrain.  Someone would complain about something and
+another person would shout back at them, &quot;So fix it!&quot;</p>
+<p>It's interesting how easy it is for us to associate with a group so strongly
+that it becomes part of our identity--part of who we are--yet in some
+situations it's easy to diffuse that responsibility and dismiss it as not being
+our own.</p>
+<p>But, of course, he was right--I was one of &quot;we&quot;, and &quot;we&quot; should fix it,
+so I should fix it!  If you're running a small startup with just a few people,
+this mentality is easy to have.  There are so few people contributing that you
+don't have much choice in the matter.</p>
+<p>As a company grows, people start to specialize, to carve out their area, and to
+take some ownership.  This can be a good thing!  By allowing people to
+specialize, and hiring more people, we can build something bigger.  But
+everyone's still in it together, and the individual is still part of &quot;we&quot;.  If
+you ever find yourself thinking &quot;that's not my job,&quot; then it's a red flag that
+you've let things go too far.</p>
+<p>All this being said, you have to find a balance.  You can't fix every code
+smell you find, or you'd never get anything done.  In fact there may be code
+that you recognize as bad, but you just don't have the knowledge or resources
+to fix it.  That's just the name of the game, and that's fine, but you also
+can't fix nothing, or your tech debt will grow unbounded and that will end in
+disaster as well.</p>
+<p>Anyway, it's been almost a year since I made the jump from working at
+<a class="reference external" href="http://www.crunchbase.com/company/clutch-io">a company of 2</a>, to working at a company that's <a class="reference external" href="https://twitter.com">much much larger</a>, and this
+early lesson is one thing that I often find myself thinking and reminding
+myself of.</p>
+</div>
+
+<div class="categories">
+    Posted in:
+    <ul>
+      
+        <li><a href="/blog/categories/opinion/">Opinion</a></li>
+      
+        <li><a href="/blog/categories/programming/">Programming</a></li>
+      
+        <li><a href="/blog/categories/maintenance/">Maintenance</a></li>
+      
+    </ul>
+  </div>
+  <hr />
+
   <h3><a href="/blog/2012/04/18/using-twitter-ios5-integration-single-sign-on/">Using Twitter&#39;s iOS5 Integration for Single Sign-On</a></h3>
 <p class="datetime">Apr 18, 2012</p>
 <div class="document">
@@ -649,39 +703,6 @@ voice.  This is just written from my perspective.</p>
         <li><a href="/blog/categories/django/">Django</a></li>
       
         <li><a href="/blog/categories/criticism/">Criticism</a></li>
-      
-    </ul>
-  </div>
-  <hr />
-
-  <h3><a href="/blog/2010/09/27/why-node-disappoints-me/">Why node.js disappoints me</a></h3>
-<p class="datetime">Sep 27, 2010</p>
-<div class="document">
-<p><a class="reference external" href="http://nodejs.org/">Node.js</a> is currently at the center of a huge cyclone of hype.  At this point it's clear that Node is going to be a major player in the next few years of web development.  It's no wonder, either!  It represents a fresh start, one with no legacy synchronous baggage in our increasingly asynchronous, increasingly real-time web. And it's accessible to anyone who's written JavaScript (read: all web developers.)</p>
-<p>Oh, and those benchmarks!  Compared trivially to the currently popular web technologies, it seems an obvious leap forward.</p>
-<p>Yet one of Node's advantages that you'll hear repeated again and again by its proponents is that you can now code in One Language, and you won't have to deal with the cognitive load of context switching between different languages.  Especially as ORMs and NoSQL continue to rise in popularity, there's no need to even deal with SQL. At the end of the day you're writing JavaScript, HTML, and CSS, and that's it.</p>
-<p>Seeing this happen with all of these pieces falling into place--a fresh start with a unified language--I started to get excited.  This would change the way we thought about our web code.  The frontend is the backend is the query language is the storage layer is JavaScript!  It's a revolution.</p>
-<p>And then I saw what people did with this opportunity.  They effectively ported Sinatra/Django/Rails to JavaScript--and did it in such a way that it would only run on the server, with a specific feature set of JavaScript that only Node can reasonably understand.</p>
-<p>Not exactly the revolution I was hoping for.</p>
-<p>Instead of coding in one language, we're actually coding in two. One is the subset JavaScript that can be run in all browsers, and another is the set of JavaScript that can be run by Node.  Knowing the difference between the two languages and context switching between them is simply a required skill.</p>
-<p>You know what would be awesome? If we wrote our libraries so that they could run either on the server or on the client, and they did so in a transparent way.  Maybe it would help to give a concrete example of how this could be awesome.  Let's talk about HTML templating.</p>
-<p>Imagine a framework where the first page-load was always rendered server-side, meaning the client gets a single fully-rendered page.  Then for desktop browsers, browsing around the site just made calls to API endpoints returning JSON or XML, and the client rendered the templates for the changed portions of the page.  For mobile browsers with less power or for search engines, the rendering would always be done on the server.  Imagine that the templating library could record some key metrics to determine how long things were taking to render, and dynamically switch between rendering on the server and client based on server load or client speed.</p>
-<p>Imagine a case where a back-end service fails temporarily.  In this case the rendering of that particular component could be deferred, the browser could be told to poll a resource.  When the back-end service is recovered, it could send the data for the client to render on its own.</p>
-<p>How awesome would that be?</p>
-<p>It's not just HTML templating, either.  This same principle could be applied to any number of things: URL routing, form validation, hell even most application logic could be done using this style.</p>
-<p>But it's going to take discipline.  Instead of reaching for those fancy V8 features, code will need to be written in a strict subset of the JavaScript that's available.  Maybe Node could detect incompatible code and throw warnings, that would be cool.</p>
-<p>I just really hope that someday we stop re-inventing the same exact wheel, and instead build something substantially different and better.</p>
-</div>
-
-<div class="categories">
-    Posted in:
-    <ul>
-      
-        <li><a href="/blog/categories/javascript/">Javascript</a></li>
-      
-        <li><a href="/blog/categories/node/">Node</a></li>
-      
-        <li><a href="/blog/categories/programming/">Programming</a></li>
       
     </ul>
   </div>
