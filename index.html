@@ -36,6 +36,142 @@
         </ul>
         
 
+  <h3><a href="/blog/2013/01/23/react-finally-server-client/">React: Finally, a great server/client web stack</a></h3>
+<p class="datetime">Jan 23, 2013</p>
+<div class="document">
+<p>We started with static websites, simple pages that could link between each
+other.  Then we started constructing those pages on demand, customizing the
+contents of the page for each individual user.  Next we started using
+Javascript to add more interactivity, and these pages started to become more
+like applications.  But now we have XMLHttpRequest, and most new projects are
+moving towards building their pages entirely in the browser.</p>
+<p>But when we do it purely in the browser, we have to make quite a few
+concessions: search engines have a hard time indexing that content, for
+example. It also takes longer for users to see the rendered content (not in
+every case, but in many, many cases.)  Also if you're using a lot of plugins
+for your favorite library, or a heavyweight MVC framework, sometimes it can
+slow down interactivity.</p>
+<p>I've thought for a long time (<a class="reference external" href="http://eflorenzano.com/blog/2010/09/27/why-node-disappoints-me/">and blogged about it previously</a>) that the
+ideal solution would fully render the markup on the server, deliver it to the
+client so that it can be shown to the user instantly.  Then it would
+asynchronously load some Javascript that would attach to the rendered markup,
+and invisibly promote the page into a full app that can render its own markup.
+This code would also have to be fast enough to meet or exceed the performance
+of other modern solutions, or it won't be worth it.</p>
+<p>What I've discovered is that enough of the pieces have come together, that this
+futuristic-sounding web environment is actually surprisingly easy to do now
+with <a class="reference external" href="http://facebook.github.io/react/">React.js</a>.  React isn't a full-fledged framework, it's a library, so
+you'll have to build your own foundation and write some glue code.  I've been
+rewriting an existing website in React (usually a terrible idea, we'll see
+about this time), and now that the code is settling down a little bit, I'd like
+to share how it works.  This post will just be an overview, but up next I'll
+share some of my glue code and lessons learned etc.</p>
+<div class="section" id="react-js">
+<h4><a class="reference external" href="http://facebook.github.io/react/">React.js</a></h4>
+<p>First, a bit about React.  It was released by Facebook and was apparently a
+collaboration between the Instagram and Facebook web engineers.  It looks
+similar in shape but not in size to Angular.js, but even though it looks
+similar, it has a very different philosophy underneath.  React has a few key
+ideas: a virtual DOM, a component framework, and a Javascript syntax extension.</p>
+<div class="section" id="virtual-dom">
+<h2>Virtual DOM</h2>
+<p>The key innovation of React is that it has a pure-Javascript reimplementation
+of the browser's DOM.  It builds the DOM tree in Javascript and then has two
+options for output: a root browser element, or a string.  How can it output
+to a root browser element without having horrible performance?  Core to React
+is a tree diffing algorithm that can look at the in-memory virtual DOM, and the
+real browser DOM, and build the optimal diff.  Then it applies that diff to the
+browser's DOM.</p>
+<p>The second option for output is equally interesting to me though.  If you can
+walk this virtual DOM tree and render to a string, then you can do that all
+on the server and then send it down to the client.  And since it's a tree,
+React simply stores a checksum in a data attribute on the root node, and if
+those checksums match, then React will simply attach its event handlers and do
+nothing more.</p>
+</div>
+<div class="section" id="component-framework">
+<h2>Component Framework</h2>
+<p>React's component framework is how you construct that virtual DOM.  Each
+component has a <tt class="docutils literal">render()</tt> function which returns a virtual DOM node with any
+number of children and event handlers attached.  So at its core, React
+components are widgets that can render themselves and react to user input.  At
+render time, components should only access two instance objects: <tt class="docutils literal">props</tt>, and
+<tt class="docutils literal">state</tt>.</p>
+<p>Props are passed-in and are immutable, whereas state is assigned and updated
+entirely by the component itself.  Callback functions can be passed from parent
+node to child node, as <tt class="docutils literal">props</tt>, and attached directly to the virtual DOM
+nodes in the <tt class="docutils literal">render()</tt> function.  In fact, that's the primary way that
+components communicate with each other.</p>
+<p>These components have a lifecycle, and ways to hook into state and prop
+changes.  They also support mixins, which can hook into the component lifecycle
+and take care of things easily, like canceling timers when a component is
+removed from the DOM, for example.</p>
+</div>
+<div class="section" id="jsx-a-javascript-syntax-extension">
+<h2>JSX (A Javascript syntax extension)</h2>
+<p>JSX lets you write components without pulling your hair out.  Instead of
+writing tedious code like this:</p>
+<pre class="literal-block">
+.. code-block:: js
+</pre>
+<blockquote>
+React.DOM.a({href: '/about'}, 'About this site')</blockquote>
+<p>It allows you to just write this right alongside your javascript:</p>
+<pre class="literal-block">
+.. code-block:: html
+</pre>
+<blockquote>
+&lt;a href=&quot;/about&quot;&gt;About this site&lt;/a&gt;</blockquote>
+<p>The transformer is smart enough to not need any special indicators about where
+the markup blocks are, but it also allows you to drop into Javascript, like
+so:</p>
+<pre class="literal-block">
+.. code-block:: html
+</pre>
+<blockquote>
+&lt;a href={this.props.aboutUrl}&gt;About this site&lt;/a&gt;</blockquote>
+<p>You can choose to use this, but after getting over my initial distaste for it
+(&quot;Ack! Who got markup in my code!&quot;), I could never go back to not using it.</p>
+</div>
+<div class="section" id="next">
+<h2>Next</h2>
+<p>In a future post, I'll talk about all the other parts you'll need to pull in to
+build a fuller framework for your site.</p>
+<ul class="simple">
+<li>HTTP middleware and server (<a class="reference external" href="http://www.senchalabs.org/connect/">Connect</a>)</li>
+<li>API client (<a class="reference external" href="http://visionmedia.github.io/superagent/">Superagent</a> and optionally <a class="reference external" href="https://github.com/nodejitsu/node-http-proxy">node-http-proxy</a>)</li>
+<li>URL routing (<a class="reference external" href="https://github.com/flatiron/director">Director</a>)</li>
+<li>Asset management</li>
+<li>Interfacing with legacy Javascript</li>
+<li>Useful mixins for components</li>
+</ul>
+<p>Also, I'm not sure if this is interesting for anyone else other than myself, so
+let me know if I should post that stuff, or any other feedback.  I'm always
+yapping on Twitter, so <a class="reference external" href="https://twitter.com/ericflo">catch me over there</a>!</p>
+</div>
+</div>
+</div>
+
+<div class="categories">
+    Posted in:
+    <ul>
+      
+        <li><a href="/blog/categories/react/">React</a></li>
+      
+        <li><a href="/blog/categories/reactjs/">ReactJS</a></li>
+      
+        <li><a href="/blog/categories/programming/">Programming</a></li>
+      
+        <li><a href="/blog/categories/server/">Server</a></li>
+      
+        <li><a href="/blog/categories/client/">Client</a></li>
+      
+        <li><a href="/blog/categories/javascript/">Javascript</a></li>
+      
+    </ul>
+  </div>
+  <hr />
+
   <h3><a href="/blog/2013/07/01/fix-it/">So fix it!</a></h3>
 <p class="datetime">Jul 01, 2013</p>
 <div class="document">
@@ -626,83 +762,6 @@ feel free to join <a class="reference external" href="https://convore.com/">Conv
         <li><a href="/blog/categories/solr/">Solr</a></li>
       
         <li><a href="/blog/categories/eventlet/">Eventlet</a></li>
-      
-    </ul>
-  </div>
-  <hr />
-
-  <h3><a href="/blog/2010/10/10/object-lesson-how-respond-criticism/">An Object Lesson in How to Respond to Criticism</a></h3>
-<p class="datetime">Oct 10, 2010</p>
-<div class="document">
-<p>In the moments leading up to my DjangoCon keynote this year (called
-<a class="reference external" href="http://djangocon.blip.tv/file/4112452/">Why Django Sucks, and How We Can Fix It</a>), I pictured the room an hour in the
-future and imagined what things would be like.  I envisioned all kinds of
-scenarios: one where people were literally booing, or another where I needed to
-sneak back to my hotel room to avoid embarassment.  I imagined all of these
-scenarios because I was about to level some harsh criticism at a technology
-that everyone in the room was enthusiastic about.</p>
-<p>And then I went on stage and gave the talk.</p>
-<p>When it was finished, I braced myself for one of these scenarios to unfold.
-Instead, what happened in the following moments, the following days, and indeed
-the following month since then has been what I consider to be the most gracious
-and useful response to criticism that I've ever seen.  And I think it deserves
-to be highlighted, because I believe that reacting well to criticism is vital
-for any successful community.</p>
-<p>So what happened in the moments directly following the talk?
-<a class="reference external" href="http://cecinestpasun.com/">Russell Keith-Magee</a>, arguably the most active core developer at the time,
-made a special point to march up to the front of the stage and publicly shake
-my hand. This gesture not only legitimized some of the things that I said (some
-of which were quite extreme), but it also set the tone for the discourse around
-my talk; civility.</p>
-<p>Afterwards, privately, I apologized to several of the Django core developers.
-These are people I respect and admire, and I wanted to make sure that they knew
-that, at least on my end, it wasn't personal.  I was expecting forgiveness, but
-instead I received thanks.  Thanking me for criticising their project?  Not
-what I was expecting.</p>
-<p>One of the things that I suggested was to make <a class="reference external" href="http://alexgaynor.net/">Alex Gaynor</a> a core developer.
-A few people at the conference made comments wondering how many days it would
-take before that would happen.  Days went by, and the conference ended without
-this happening.  A week went by.  A few more.  But I knew better, because the
-Django core committers don't do anything brashly.  They took their time, let
-all dust and emotions settle down, and listened to the discussion.</p>
-<p>And then <a class="reference external" href="http://jacobian.org/">Jacob Kaplan-Moss</a> issued <a class="reference external" href="http://groups.google.com/group/django-developers/browse_thread/thread/9ebc3e57d539d1ff">an official announcement</a>.  I
-particularly agreed with one of the <a class="reference external" href="http://news.ycombinator.com/item?id=1740675">top comments on hackernews</a>:</p>
-<pre class="literal-block">
-&quot;I don't know enough about the specifics of the case to
-assess the new policy on the merits, but I will say that
-as a piece of writing this is a model of how to change
-policy gracefully: clear, forthright, and non-defensive.&quot;
-</pre>
-<p>Clear.  Forthright.  Non-defensive.</p>
-<p>Some people saw this as an opening to change even more about Django, and even
-when some of the discussion was phrased rudely or accusatory, the Django team's
-responses were thoughtful and calm.  Now, over a week later (again
-demonstrating that things aren't done brashly), we see that a half-dozen new
-people have been added to the core team.  Yes, that includes <a class="reference external" href="http://alexgaynor.net/">Alex Gaynor</a>.
-So not only was the new policy clear, forthright, and non-defensive, but there
-was concrete follow-through so that everyone can see that it wasn't just words.</p>
-<p>And even in that short time since the new committers were added, Django's code
-is already reaping the benefits--we've seen a flurry of bugs fixed and tickets
-closed.  Django's future has never looked so promising!</p>
-<p>Why do I think this is so important?  Because a community which welcomes
-constructive criticism is one in which people feel they can make a difference.
-And it's because they <em>can</em> make a difference.  It's a community that's never
-satisfied with the status quo.  It's a community that can grow and change and
-adapt, when the world around it changes.  It's a community that we can be proud
-of.</p>
-<p>NB: I was not the only one to criticize Django at DjangoCon.  I was merely one
-voice.  This is just written from my perspective.</p>
-</div>
-
-<div class="categories">
-    Posted in:
-    <ul>
-      
-        <li><a href="/blog/categories/djangocon/">DjangoCon</a></li>
-      
-        <li><a href="/blog/categories/django/">Django</a></li>
-      
-        <li><a href="/blog/categories/criticism/">Criticism</a></li>
       
     </ul>
   </div>
