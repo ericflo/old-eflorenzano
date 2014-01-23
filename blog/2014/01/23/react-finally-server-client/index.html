@@ -1,0 +1,188 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>React: Finally, a great server/client web stack - Eric Florenzano&rsquo;s Blog</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+
+    <link href="/atom.xml" rel="alternate" title="Eric Florenzano's Blog" type="application/atom+xml">
+
+    <link href="/static/css/bootstrap.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="/static/css/code.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="/static/js/html5shiv.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="center-column">
+        <h1 class="blog-header"><a href="/">Eric Florenzano&rsquo;s Blog</a></h1>
+        <ul class="blog-header-links">
+          <li><a href="/">Home</a></li>
+          <li><a href="/blog/archives/">Archives</a></li>
+          <li><a href="https://twitter.com/ericflo" class="twitter-follow-button" data-show-count="false">Follow @ericflo</a></li>
+          <li class="feed"><a href="/atom.xml"><img src="/static/img/feed-icon-28x28.png" width="20" height="20" alt="Subscribe to this blog" /></a></li>
+        </ul>
+        
+  <div class="blog-post-detail">
+    <h3><a href="/blog/2014/01/23/react-finally-server-client/">React: Finally, a great server/client web stack</a></h3>
+<p class="datetime">Jan 23, 2014</p>
+<div class="document">
+<p>We started with static websites, simple pages that could link between each
+other.  Then we started constructing those pages on demand, customizing the
+contents of the page for each individual user.  Next we started using
+Javascript to add more interactivity, and these pages started to become more
+like applications.  But now we have XMLHttpRequest, and most new projects are
+moving towards building their pages entirely in the browser.</p>
+<p>But when we do it purely in the browser, we have to make quite a few
+concessions: search engines have a hard time indexing that content, for
+example. It also takes longer for users to see the rendered content (not in
+every case, but in many, many cases.)  Also if you're using a lot of plugins
+for your favorite library, or a heavyweight MVC framework, sometimes it can
+slow down interactivity.</p>
+<p>I've thought for a long time (<a class="reference external" href="http://eflorenzano.com/blog/2010/09/27/why-node-disappoints-me/">and blogged about it previously</a>) that the
+ideal solution would fully render the markup on the server, deliver it to the
+client so that it can be shown to the user instantly.  Then it would
+asynchronously load some Javascript that would attach to the rendered markup,
+and invisibly promote the page into a full app that can render its own markup.
+This code would also have to be fast enough to meet or exceed the performance
+of other modern solutions, or it won't be worth it.</p>
+<p>What I've discovered is that enough of the pieces have come together, that this
+futuristic-sounding web environment is actually surprisingly easy to do now
+with <a class="reference external" href="http://facebook.github.io/react/">React.js</a>.  React isn't a full-fledged framework, it's a library, so
+you'll have to build your own foundation and write some glue code.  I've been
+rewriting an existing website in React (usually a terrible idea, we'll see
+about this time), and now that the code is settling down a little bit, I'd like
+to share how it works.  This post will just be an overview, but up next I'll
+share some of my glue code and lessons learned etc.</p>
+<div class="section" id="react-js">
+<h4><a class="reference external" href="http://facebook.github.io/react/">React.js</a></h4>
+<p>First, a bit about React.  It was released by Facebook and was apparently a
+collaboration between the Instagram and Facebook web engineers.  It looks
+similar in shape but not in size to Angular.js, but even though it looks
+similar, it has a very different philosophy underneath.  React has a few key
+ideas: a virtual DOM, a component framework, and a Javascript syntax extension.</p>
+<div class="section" id="virtual-dom">
+<h2>Virtual DOM</h2>
+<p>The key innovation of React is that it has a pure-Javascript reimplementation
+of the browser's DOM.  It builds the DOM tree in Javascript and then has two
+options for output: a root browser element, or a string.  How can it output
+to a root browser element without having horrible performance?  Core to React
+is a tree diffing algorithm that can look at the in-memory virtual DOM, and the
+real browser DOM, and build the optimal diff.  Then it applies that diff to the
+browser's DOM.</p>
+<p>The second option for output is equally interesting to me though.  If you can
+walk this virtual DOM tree and render to a string, then you can do that all
+on the server and then send it down to the client.  And since it's a tree,
+React simply stores a checksum in a data attribute on the root node, and if
+those checksums match, then React will simply attach its event handlers and do
+nothing more.</p>
+</div>
+<div class="section" id="component-framework">
+<h2>Component Framework</h2>
+<p>React's component framework is how you construct that virtual DOM.  Each
+component has a <tt class="docutils literal">render()</tt> function which returns a virtual DOM node with any
+number of children and event handlers attached.  So at its core, React
+components are widgets that can render themselves and react to user input.  At
+render time, components should only access two instance objects: <tt class="docutils literal">props</tt>, and
+<tt class="docutils literal">state</tt>.</p>
+<p>Props are passed-in and are immutable, whereas state is assigned and updated
+entirely by the component itself.  Callback functions can be passed from parent
+node to child node, as <tt class="docutils literal">props</tt>, and attached directly to the virtual DOM
+nodes in the <tt class="docutils literal">render()</tt> function.  In fact, that's the primary way that
+components communicate with each other.</p>
+<p>These components have a lifecycle, and ways to hook into state and prop
+changes.  They also support mixins, which can hook into the component lifecycle
+and take care of things easily, like canceling timers when a component is
+removed from the DOM, for example.</p>
+</div>
+<div class="section" id="jsx-a-javascript-syntax-extension">
+<h2>JSX (A Javascript syntax extension)</h2>
+<p>JSX lets you write components without pulling your hair out.  Instead of
+writing tedious code like this:</p>
+<pre class="code js literal-block">
+<span class="nx">React</span><span class="p">.</span><span class="nx">DOM</span><span class="p">.</span><span class="nx">a</span><span class="p">(</span><span class="p">{</span><span class="nx">href</span><span class="o">:</span> <span class="s1">'/about'</span><span class="p">},</span> <span class="s1">'About this site'</span><span class="p">)</span>
+</pre>
+<p>It allows you to just write this right alongside your javascript:</p>
+<pre class="code html literal-block">
+<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;/about&quot;</span><span class="nt">&gt;</span>About this site<span class="nt">&lt;/a&gt;</span>
+</pre>
+<p>The transformer is smart enough to not need any special indicators about where
+the markup blocks are, but it also allows you to drop into Javascript, like
+so:</p>
+<pre class="code html literal-block">
+<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">{this.props.aboutUrl}</span><span class="nt">&gt;</span>About this site<span class="nt">&lt;/a&gt;</span>
+</pre>
+<p>You can choose not to use this, but after getting over my initial distaste for
+it (&quot;Ack! Who got markup in my code!&quot;), I could never go back to not using it.</p>
+</div>
+<div class="section" id="next">
+<h2>Next</h2>
+<p>In a future post, I'll talk about all the other parts you'll need to pull in to
+build a fuller framework for your site.</p>
+<ul class="simple">
+<li>HTTP middleware and server (<a class="reference external" href="http://www.senchalabs.org/connect/">Connect</a>)</li>
+<li>API client (<a class="reference external" href="http://visionmedia.github.io/superagent/">Superagent</a> and optionally <a class="reference external" href="https://github.com/nodejitsu/node-http-proxy">node-http-proxy</a>)</li>
+<li>URL routing (<a class="reference external" href="https://github.com/flatiron/director">Director</a>)</li>
+<li>Asset management</li>
+<li>Interfacing with legacy Javascript</li>
+<li>Useful mixins for components</li>
+</ul>
+<p>Also, I'm not sure if this is interesting for anyone else other than myself, so
+let me know if I should post that stuff, or any other feedback.  I'm always
+yapping on Twitter, so <a class="reference external" href="https://twitter.com/ericflo">catch me over there</a>!</p>
+</div>
+</div>
+</div>
+
+<div class="categories">
+    Posted in:
+    <ul>
+      
+        <li><a href="/blog/categories/react/">React</a></li>
+      
+        <li><a href="/blog/categories/reactjs/">ReactJS</a></li>
+      
+        <li><a href="/blog/categories/programming/">Programming</a></li>
+      
+        <li><a href="/blog/categories/server/">Server</a></li>
+      
+        <li><a href="/blog/categories/client/">Client</a></li>
+      
+        <li><a href="/blog/categories/javascript/">Javascript</a></li>
+      
+    </ul>
+  </div>
+  </div>
+  <hr />
+  <br />
+  <br />
+
+      </div>
+    </div>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-1959803-2']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    
+  </body>
+</html>

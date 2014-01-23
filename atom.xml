@@ -3,7 +3,7 @@
     <title><![CDATA[Eric Florenzano's Blog]]></title>
     <link href="http://eflorenzano.com/atom.xml" rel="self"/>
     <link href="http://eflorenzano.com/"/>
-    <updated>2014-01-23T20:34:47.744706</updated>
+    <updated>2014-01-23T21:54:59.779023</updated>
     <id>http://eflorenzano.com/</id>
     <author>
         <name><![CDATA[Eric Florenzano]]></name>
@@ -12,11 +12,11 @@
     
     <entry>
         <title type="html"><![CDATA[React: Finally, a great server/client web stack]]></title>
-        <link href="http://eflorenzano.com/blog/2013/01/23/react-finally-server-client/"/>
-        <updated>2013-01-23T20:29:00</updated>
-        <id>http://eflorenzano.com/blog/2013/01/23/react-finally-server-client/</id>
-        <content type="html"><![CDATA[<h3><a href="/blog/2013/01/23/react-finally-server-client/">React: Finally, a great server/client web stack</a></h3>
-<p class="datetime">Jan 23, 2013</p>
+        <link href="http://eflorenzano.com/blog/2014/01/23/react-finally-server-client/"/>
+        <updated>2014-01-23T20:29:00</updated>
+        <id>http://eflorenzano.com/blog/2014/01/23/react-finally-server-client/</id>
+        <content type="html"><![CDATA[<h3><a href="/blog/2014/01/23/react-finally-server-client/">React: Finally, a great server/client web stack</a></h3>
+<p class="datetime">Jan 23, 2014</p>
 <div class="document">
 <p>We started with static websites, simple pages that could link between each
 other.  Then we started constructing those pages on demand, customizing the
@@ -103,8 +103,8 @@ so:</p>
 <pre class="code html literal-block">
 <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">{this.props.aboutUrl}</span><span class="nt">&gt;</span>About this site<span class="nt">&lt;/a&gt;</span>
 </pre>
-<p>You can choose to use this, but after getting over my initial distaste for it
-(&quot;Ack! Who got markup in my code!&quot;), I could never go back to not using it.</p>
+<p>You can choose not to use this, but after getting over my initial distaste for
+it (&quot;Ack! Who got markup in my code!&quot;), I could never go back to not using it.</p>
 </div>
 <div class="section" id="next">
 <h2>Next</h2>
