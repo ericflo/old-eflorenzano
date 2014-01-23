@@ -3,7 +3,7 @@
     <title><![CDATA[Eric Florenzano's Blog]]></title>
     <link href="http://eflorenzano.com/atom.xml" rel="self"/>
     <link href="http://eflorenzano.com/"/>
-    <updated>2014-01-23T20:31:50.464415</updated>
+    <updated>2014-01-23T20:34:47.744706</updated>
     <id>http://eflorenzano.com/</id>
     <author>
         <name><![CDATA[Eric Florenzano]]></name>
@@ -90,25 +90,19 @@ removed from the DOM, for example.</p>
 <h2>JSX (A Javascript syntax extension)</h2>
 <p>JSX lets you write components without pulling your hair out.  Instead of
 writing tedious code like this:</p>
-<pre class="literal-block">
-.. code-block:: js
+<pre class="code js literal-block">
+<span class="nx">React</span><span class="p">.</span><span class="nx">DOM</span><span class="p">.</span><span class="nx">a</span><span class="p">(</span><span class="p">{</span><span class="nx">href</span><span class="o">:</span> <span class="s1">'/about'</span><span class="p">},</span> <span class="s1">'About this site'</span><span class="p">)</span>
 </pre>
-<blockquote>
-React.DOM.a({href: '/about'}, 'About this site')</blockquote>
 <p>It allows you to just write this right alongside your javascript:</p>
-<pre class="literal-block">
-.. code-block:: html
+<pre class="code html literal-block">
+<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;/about&quot;</span><span class="nt">&gt;</span>About this site<span class="nt">&lt;/a&gt;</span>
 </pre>
-<blockquote>
-&lt;a href=&quot;/about&quot;&gt;About this site&lt;/a&gt;</blockquote>
 <p>The transformer is smart enough to not need any special indicators about where
 the markup blocks are, but it also allows you to drop into Javascript, like
 so:</p>
-<pre class="literal-block">
-.. code-block:: html
+<pre class="code html literal-block">
+<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">{this.props.aboutUrl}</span><span class="nt">&gt;</span>About this site<span class="nt">&lt;/a&gt;</span>
 </pre>
-<blockquote>
-&lt;a href={this.props.aboutUrl}&gt;About this site&lt;/a&gt;</blockquote>
 <p>You can choose to use this, but after getting over my initial distaste for it
 (&quot;Ack! Who got markup in my code!&quot;), I could never go back to not using it.</p>
 </div>
