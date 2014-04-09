@@ -36,6 +36,182 @@
         </ul>
         
 
+  <h3><a href="/blog/2014/04/09/react-part-1-project-structure/">Server/Client With React, Part 1: Getting Started</a></h3>
+<p class="datetime">Apr 09, 2014</p>
+<div class="document">
+<p>A few months ago <a class="reference external" href="http://eflorenzano.com/blog/2014/01/23/react-finally-server-client">I wrote about</a> how React.js has made it possible (and
+relatively easy) to write code that renders markup quickly on the server, and
+also can be executed on the client to perform all page updates.  Now that we
+know what the goal is, we can explore how to put all these pieces together, or
+how I've managed to do it anyway.</p>
+<div class="section" id="let-s-build-something">
+<h4>Let's Build Something!</h4>
+<p>It's easiest to talk about concepts if we can also work on something concrete,
+so in the next few posts we'll build a little example site called IRLMoji,
+which asks users to post pictures that look like emoji.  All credit goes to
+<a class="reference external" href="https://twitter.com/dwiskus">&#64;dwiskus</a> for originally starting this <a class="reference external" href="http://betterelevation.com/irlmoji/">meme on Twitter</a>.  But we're going
+to turn it into its own app for demo purposes, which will look something like
+this:</p>
+<a class="reference external image-reference" href="https://www.irlmoji.com/"><img alt="A screenshot of what we are building" src="http://eflorenzano.com.s3-us-west-2.amazonaws.com/irlmoji-screenshot.jpg" style="width: 200px;" /></a>
+<p>It's definitely not pretty (sorry), but it's got all the stuff we need to learn
+about React including auth, content creation, server communication, integration
+with third-party JS libraries, etc.  If you'd like to follow along and see the
+code for the finished site, it's all up on GitHub:
+<a class="reference external" href="https://github.com/ericflo/irlmoji">https://github.com/ericflo/irlmoji</a>.</p>
+</div>
+<div class="section" id="let-s-begin">
+<h4>Let's Begin</h4>
+<p>There will be two entry points to our app: <tt class="docutils literal">server.js</tt>, which will sit at the
+project's top level, and <tt class="docutils literal">frontend/javascript/client.js</tt>.  Let's start with
+the client, because it's a bit simpler.  First let's start small and build a
+<tt class="docutils literal">render()</tt> function, which will take a React component and some options, and
+render it to the page:</p>
+<pre class="code js literal-block">
+<span class="kd">function</span> <span class="nx">render</span><span class="p">(</span><span class="nx">reactComp</span><span class="p">,</span> <span class="nx">opts</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">opts</span> <span class="o">=</span> <span class="nx">opts</span> <span class="o">||</span> <span class="p">{</span><span class="p">};</span>
+  <span class="kd">var</span> <span class="nx">elt</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'react-root'</span><span class="p">);</span>
+  <span class="nx">React</span><span class="p">.</span><span class="nx">renderComponent</span><span class="p">(</span><span class="nx">reactComp</span><span class="p">,</span> <span class="nx">elt</span><span class="p">);</span>
+<span class="p">}</span>
+</pre>
+<p>All we're doing here is calling <tt class="docutils literal">React.renderComponent</tt> on the component that
+was passed in, rendering the component into that <cite>#react-root</cite> DOM element.
+We'll end up making this function do a bit more work in a future post, but for
+now let's move on to writing some handlers, and hooking them up to URL routes.</p>
+<p>In the past I've used <a class="reference external" href="https://github.com/flatiron/director">director</a> to handle URL routing, but eventually I wrote
+<a class="reference external" href="https://github.com/ericflo/irlmoji/blob/master/frontend/javascript/router.js">a small router</a> which escews <a class="reference external" href="http://www.webmonkey.com/2011/02/gawker-learns-the-hard-way-why-hash-bang-urls-are-evil/">hashbang-style</a> URLs in favor of HTML5
+pushState.  If needed, we can always fall back to full page reloads, rather
+than resort to hashbangs.  Now we've got this router to work with, let's put it
+to use, starting with a new file at <tt class="docutils literal">frontend/javascript/routes.js</tt>:</p>
+<pre class="code as literal-block">
+<span class="cm">/** &#64;jsx React.DOM */</span>
+
+<span class="c1">// Lodash is a fast/light underscore replacement that works better for me
+</span><span class="k">var</span> <span class="nx">_</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'lodash/dist/lodash.underscore'</span><span class="p">);</span>
+<span class="k">var</span> <span class="nx">common</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'./components/common'</span><span class="p">);</span>
+
+<span class="c1">// Renders the index page, for now just &quot;Hello, World!&quot;
+</span><span class="kd">function</span> <span class="nx">handleIndex</span><span class="p">(</span><span class="nx">app</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">app</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="nx">Hello</span><span class="o">,</span> <span class="nx">World</span><span class="o">!&lt;/</span><span class="nx">p</span><span class="o">&gt;,</span> <span class="p">{</span>
+    <span class="nx">title</span><span class="o">:</span> <span class="s1">'Welcome'</span><span class="o">,</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+
+<span class="c1">// Prepares a handler for use. For now all we're doing is making sure
+// that 'app' is passed as the first argument to the handler function.
+</span><span class="kd">function</span> <span class="nx">prepareHandler</span><span class="p">(</span><span class="nx">app</span><span class="o">,</span> <span class="nx">handler</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">_</span><span class="p">.</span><span class="nx">partial</span><span class="p">(</span><span class="nx">handler</span><span class="o">,</span> <span class="nx">app</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// Gets a list of routes to be passed to the router
+</span><span class="kd">function</span> <span class="nx">getRoutes</span><span class="p">(</span><span class="nx">app</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="p">[</span>
+    <span class="p">[</span><span class="s1">'/'</span><span class="o">,</span> <span class="nx">prepareHandler</span><span class="p">(</span><span class="nx">app</span><span class="o">,</span> <span class="nx">handleIndex</span><span class="p">)]</span>
+  <span class="p">];</span>
+<span class="p">}</span>
+
+<span class="c1">// Gets a function that should be called when no routes match
+</span><span class="kd">function</span> <span class="nx">getNotFound</span><span class="p">(</span><span class="nx">app</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// At the time this post was written, JSX does not allow namespacing,
+</span>    <span class="c1">// so we need to grab a reference to the NotFound component class.
+</span>    <span class="k">var</span> <span class="nx">NotFound</span> <span class="o">=</span> <span class="nx">common</span><span class="p">.</span><span class="nx">NotFound</span><span class="o">;</span>
+    <span class="nx">app</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="o">&lt;</span><span class="nx">NotFound</span> <span class="o">/&gt;,</span> <span class="p">{</span><span class="nx">statusCode</span><span class="o">:</span> <span class="mi">404</span><span class="p">});</span>
+  <span class="p">};</span>
+<span class="p">}</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">getRoutes</span><span class="o">:</span> <span class="nx">getRoutes</span><span class="o">,</span>
+  <span class="nx">getNotFound</span><span class="o">:</span> <span class="nx">getNotFound</span>
+<span class="p">};</span>
+</pre>
+<p>&quot;Wait a minute,&quot; you may be thinking.  What is this <tt class="docutils literal">app</tt> thing that every
+function seems to refer to?  The <tt class="docutils literal">app</tt> is what I've chosen to call the object
+that is used to tie everything together.  It's because of this object that
+we're able to use one codebase for both server and client.  Right now all we're
+using is the <tt class="docutils literal">render</tt> function that we created earlier, but through the
+interface of this <tt class="docutils literal">app</tt> object.  Let's go back to <tt class="docutils literal">client.js</tt> and create
+a basic app object.</p>
+<pre class="code js literal-block">
+<span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">render</span><span class="o">:</span> <span class="nx">render</span><span class="p">,</span>
+  <span class="nx">isServer</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+  <span class="p">},</span>
+  <span class="nx">getUrl</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="s1">''</span> <span class="o">+</span> <span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">;</span>
+  <span class="p">},</span>
+  <span class="nx">getPath</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">pathname</span> <span class="o">+</span> <span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">search</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+</pre>
+<p>Here we've got a basic <tt class="docutils literal">app</tt> object, with access to a render function and a
+few helpers like the ability to get the current path or get the full URL or to
+detect whether we're on the server or the client.  We're building this in
+<tt class="docutils literal">client.js</tt>, so we know we're not on the server, and can just return false.</p>
+<p>Now that we have our app, and our routes, let's tie them together:</p>
+<pre class="code js literal-block">
+<span class="c1">// Import the routes we created earlier
+</span><span class="kd">var</span> <span class="nx">routes</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'./routes'</span><span class="p">);</span>
+<span class="c1">// ...and the simple router we're using
+</span><span class="kd">var</span> <span class="nx">makeRouter</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'./router'</span><span class="p">).</span><span class="nx">makeRouter</span><span class="p">;</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">router</span> <span class="o">=</span> <span class="nx">makeRouter</span><span class="p">(</span><span class="nx">routes</span><span class="p">.</span><span class="nx">getRoutes</span><span class="p">(</span><span class="nx">app</span><span class="p">),</span> <span class="nx">routes</span><span class="p">.</span><span class="nx">getNotFound</span><span class="p">(</span><span class="nx">app</span><span class="p">));</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">router</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="p">);</span>
+</pre>
+<p>To finish up this part, we still have to create that NotFound React component,
+so let's create a new file in <tt class="docutils literal">frontend/javascript/components/common.js</tt> with
+this as its content:</p>
+<pre class="code as literal-block">
+<span class="cm">/** &#64;jsx React.DOM */</span>
+
+<span class="k">var</span> <span class="nx">React</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'react/addons'</span><span class="p">);</span>
+
+<span class="k">var</span> <span class="nx">NotFound</span> <span class="o">=</span> <span class="nx">React</span><span class="p">.</span><span class="nx">createClass</span><span class="p">({</span>
+  <span class="nx">render</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span><span class="nx">That</span> <span class="nx">page</span> <span class="nx">could</span> <span class="nx">not</span> <span class="nx">be</span> <span class="nx">found</span><span class="p">.</span><span class="o">&lt;/</span><span class="nx">p</span><span class="o">&gt;;</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span><span class="nx">NotFound</span><span class="o">:</span> <span class="nx">NotFound</span><span class="p">};</span>
+</pre>
+</div>
+<div class="section" id="what-s-next">
+<h4>What's Next?</h4>
+<p>It would be great if we could fire up our browsers now and see in action what
+we've built so far.  Unfortunately, however, we haven't built the server yet.
+Here are some of the high level things that we're going to cover next:</p>
+<ul class="simple">
+<li>Set up <a class="reference external" href="http://gulpjs.com/">Gulp</a> and <a class="reference external" href="http://browserify.org/">Browserify</a> to compile our node JavaScript into Browser JS</li>
+<li>Write the <tt class="docutils literal">server.js</tt> that mimics the <tt class="docutils literal">client.js</tt> we've been building and
+acts as http server.</li>
+<li>Build the communications layer between the frontend and the API</li>
+<li>Ensure that the client re-uses the same data the server used when it rendered</li>
+<li>Oh yeah, write our app :)</li>
+</ul>
+</div>
+</div>
+
+<div class="categories">
+    Posted in:
+    <ul>
+      
+        <li><a href="/blog/categories/react/">React</a></li>
+      
+        <li><a href="/blog/categories/reactjs/">ReactJS</a></li>
+      
+        <li><a href="/blog/categories/programming/">Programming</a></li>
+      
+        <li><a href="/blog/categories/server/">Server</a></li>
+      
+        <li><a href="/blog/categories/client/">Client</a></li>
+      
+        <li><a href="/blog/categories/javascript/">Javascript</a></li>
+      
+    </ul>
+  </div>
+  <hr />
+
   <h3><a href="/blog/2014/01/23/react-finally-server-client/">React: Finally, a great server/client web stack</a></h3>
 <p class="datetime">Jan 23, 2014</p>
 <div class="document">
@@ -599,163 +775,6 @@ admirable goal, and you find more and more ways to achieve it.</p>
         <li><a href="/blog/categories/programming/">Programming</a></li>
       
         <li><a href="/blog/categories/observations/">Observations</a></li>
-      
-    </ul>
-  </div>
-  <hr />
-
-  <h3><a href="/blog/2011/02/16/technology-behind-convore/">The Technology Behind Convore</a></h3>
-<p class="datetime">Feb 16, 2011</p>
-<div class="document">
-<p>We launched <a class="reference external" href="https://convore.com/">Convore</a> last week, and the first question developers tend to ask
-when they find <a class="reference external" href="https://convore.com/">Convore</a> is &quot;what technology powers this site?&quot;  It is asked so
-often, in fact, that we have started to copy and paste the same short response
-again and again.  That response was good enough to satisfy people who simply
-wanted to know if we were Rails or Django, or whether we were using node.js for
-the real-time stuff, but this article will expand upon that--  not only giving
-more details for the curious, but also giving us a link to point people at when
-they ask the question in the future.  I always wish other people were totally
-open about their architectures, so that I can learn from their good choices and
-their bad, so I'd like to be as open as possible about ours.  Let's dive in!</p>
-<div class="section" id="the-basics">
-<h4>The basics</h4>
-<p>All of our application code is powered by Python.  Our front-end html page
-generation is done by Django, which we use in a surprisingly traditional way
-given the real-time nature of Convore as a product.  Everything is assembled
-at once: all messages, the sidebar, and the header are all rendered on the
-server instead of being pulled in after-the-fact with JavaScript.  All of the
-important data is canonically stored in PostgreSQL, including messages, topics,
-groups, unread counts, and user profiles.  Search functionality is provided by
-Solr, which is interfaced into our application by way of the handy Haystack
-Django application.</p>
-</div>
-<div class="section" id="the-message-lifecycle">
-<h4>The message lifecycle</h4>
-<p>When a new message comes into the system, first it's parsed by a series of
-regular expressions designed to pull out interesting bits of information from
-the message.  Right now all we're looking for is username references and
-links (and further, whether those links point at images which should be
-rendered in-line.)  At the end of this parsing stage, we have a structured
-message parse list, which is converted into JSON.</p>
-<p>So, for example if someone posted the message:</p>
-<pre class="code text literal-block">
-&#64;ericflo &#64;simonw Here's how we connect/disconnect from Redis in production: http://dpaste.com/406797/
-</pre>
-<p>The resulting JSON parse list would look like this:</p>
-<pre class="code text literal-block">
-[
-    {
-        &quot;type&quot;: &quot;username&quot;,
-        &quot;user_id&quot;: 1,
-        &quot;username&quot;: &quot;ericflo&quot;,
-        &quot;markup&quot;: &quot;&lt;a href=\&quot;/users/ericflo/\&quot;&gt;&#64;ericflo&lt;/a&gt;&quot;
-    },
-    {
-        &quot;type&quot;: &quot;username&quot;,
-        &quot;user_id&quot;: 56,
-        &quot;username&quot;: &quot;simonw&quot;,
-        &quot;markup&quot;: &quot; &lt;a href=\&quot;/users/simonw/\&quot;&gt;&#64;simonw&lt;/a&gt;&quot;
-    },
-    {
-        &quot;type&quot;: &quot;text&quot;,
-        &quot;markup&quot;: &quot; Here&amp;#39;s how we connect/disconnect from Redis in production: &quot;
-    },
-    {
-        &quot;type&quot;: &quot;url&quot;,
-        &quot;url&quot;: &quot;http://dpaste.com/406797/&quot;,
-        &quot;markup&quot;: &quot;&lt;a href=\&quot;http://dpaste.com/406797/\&quot; target=\&quot;_blank\&quot;&gt;http://dpaste.com/406797/&lt;/a&gt;&quot;
-    }
-]
-</pre>
-<p>After this is constructed, we log all our available information about this
-message, and then save to the database--  both the raw message as it was received,
-and the JSON-encoded parsed node list.</p>
-<p>Now a task is sent to Celery (by way of Redis) notifying it that this new
-message has been received.  This Celery task now increments the unread count
-for everyone who has access to the topic that the message was posted in, and
-then it publishes to a Redis pub/sub for the group that the message was posted
-to.  Finally, the task scans through the message, looking for any users that
-were mentioned in the message, and writes entries to the database for every
-mention.</p>
-<p>On the other end of that pub/sub are the many open http requests that our users
-have initiated, which are waiting for any new messages or information.  Those
-all simultaneously return the new message information, at which point they
-reconnect again, waiting for the next message to arrive.</p>
-</div>
-<div class="section" id="the-real-time-endpoint">
-<h4>The real-time endpoint</h4>
-<p>Our live updates endpoint is actually a very simple and lightweight pure-WSGI
-Python application, hosted using Eventlet.  It spawns off a coroutine for each
-request, and in that coroutine, it looks up all the groups that a user is a
-member of, and then opens a connection to Redis subscribing to all of those
-channels.  Each of these Eventlet-hosted Python applications has the ability to
-host hundreds-to-thousands of open connections, and we run several instances
-on each of our front-end machines.  It has a few more responsibilities, like
-marking a topic as read before it returns a response, but the most important
-thing is to be a bridge between the user and Redis pub/sub.</p>
-</div>
-<div class="section" id="future-improvements">
-<h4>Future improvements</h4>
-<p>There are so many places where our architecture can be improved.  This is our
-first version, and now that real users are using the system, already some of
-our initial assumptions are being challenged.  For instance, we thought that
-pub/sub to a channel per group would be enough, but what that means is that
-everyone in a group sees the exact same events as everyone else in that group.</p>
-<p>This means we don't have the ability to customize each user's experience based
-on their preferences--no way to put a user on ignore, filter certain messages,
-etc.  It also means that we aren't able to sync up a user's experience across
-tabs or browsers, since we don't really want to broadcast to everyone in the
-group that one user has visited a topic, thereby removing any unread messages
-in that topic.  So going forward we're going to have to break up that per-group
-pub/sub into per-user pub/sub.</p>
-<p>Another area that could be improved is our unread counts.  Right now they're
-stored as rows in our PostgreSQL database, which makes it extremely easy to
-batch update them and do aggregate queries on them, but the number of these
-rows is increasing rapidly, and without some kind of sharding scheme, it will
-at some point become more difficult to work with such a large amount of rows.
-My feeling is that this will eventually need to be moved into a non-relational
-data store, and we'll need to write a service layer in front of it to deal with
-pre-aggregating and distributing updates, but nothing is set in stone just yet.</p>
-<p>Finally, Python may not be the best language for this real-time endpoint.
-Eventlet is a fantastic Python library and it allowed us to build something
-extremely fast that has scaled to several thousand concurrent connections
-without breaking a sweat on launch day, but it has its limits.  There is a
-large body of work out there on handling a large number of open connections,
-using Java's NIO framework, Erlang's mochiweb, or node.js.</p>
-</div>
-<div class="section" id="that-s-all-folks">
-<h4>That's all folks</h4>
-<p>We're pretty proud of what we've built in a very short time, and we're glad
-it has held up as well as it has on our launch day and afterwards.  We're
-excited about the problems we're now being faced with, both scaling the
-technology, and scaling the product.  I hope this article has quenched any
-curiosity out there about how Convore works.  If there are any questions,
-feel free to join <a class="reference external" href="https://convore.com/">Convore</a> and ask away!</p>
-<p>(Or discuss it <a class="reference external" href="http://news.ycombinator.com/item?id=2228137">on Hacker News</a>)</p>
-</div>
-</div>
-
-<div class="categories">
-    Posted in:
-    <ul>
-      
-        <li><a href="/blog/categories/django/">Django</a></li>
-      
-        <li><a href="/blog/categories/python/">Python</a></li>
-      
-        <li><a href="/blog/categories/postgresql/">PostgreSQL</a></li>
-      
-        <li><a href="/blog/categories/convore/">Convore</a></li>
-      
-        <li><a href="/blog/categories/realtime/">Realtime</a></li>
-      
-        <li><a href="/blog/categories/redis/">Redis</a></li>
-      
-        <li><a href="/blog/categories/haystack/">Haystack</a></li>
-      
-        <li><a href="/blog/categories/solr/">Solr</a></li>
-      
-        <li><a href="/blog/categories/eventlet/">Eventlet</a></li>
       
     </ul>
   </div>
