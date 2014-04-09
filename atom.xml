@@ -3,7 +3,7 @@
     <title><![CDATA[Eric Florenzano's Blog]]></title>
     <link href="http://eflorenzano.com/atom.xml" rel="self"/>
     <link href="http://eflorenzano.com/"/>
-    <updated>2014-04-09T21:12:26.569157</updated>
+    <updated>2014-04-09T21:34:26.523185</updated>
     <id>http://eflorenzano.com/</id>
     <author>
         <name><![CDATA[Eric Florenzano]]></name>
@@ -12,10 +12,10 @@
     
     <entry>
         <title type="html"><![CDATA[Server/Client With React, Part 1: Getting Started]]></title>
-        <link href="http://eflorenzano.com/blog/2014/04/09/react-part-1-project-structure/"/>
+        <link href="http://eflorenzano.com/blog/2014/04/09/react-part-1-getting-started/"/>
         <updated>2014-04-09T22:12:00</updated>
-        <id>http://eflorenzano.com/blog/2014/04/09/react-part-1-project-structure/</id>
-        <content type="html"><![CDATA[<h3><a href="/blog/2014/04/09/react-part-1-project-structure/">Server/Client With React, Part 1: Getting Started</a></h3>
+        <id>http://eflorenzano.com/blog/2014/04/09/react-part-1-getting-started/</id>
+        <content type="html"><![CDATA[<h3><a href="/blog/2014/04/09/react-part-1-getting-started/">Server/Client With React, Part 1: Getting Started</a></h3>
 <p class="datetime">Apr 09, 2014</p>
 <div class="document">
 <p>A few months ago <a class="reference external" href="http://eflorenzano.com/blog/2014/01/23/react-finally-server-client">I wrote about</a> how React.js has made it possible (and
