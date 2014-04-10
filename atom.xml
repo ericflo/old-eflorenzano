@@ -3,7 +3,7 @@
     <title><![CDATA[Eric Florenzano's Blog]]></title>
     <link href="http://eflorenzano.com/atom.xml" rel="self"/>
     <link href="http://eflorenzano.com/"/>
-    <updated>2014-04-10T19:13:32.304864</updated>
+    <updated>2014-04-10T19:16:17.004524</updated>
     <id>http://eflorenzano.com/</id>
     <author>
         <name><![CDATA[Eric Florenzano]]></name>
@@ -12,10 +12,10 @@
     
     <entry>
         <title type="html"><![CDATA[Server/Client With React, Part 2: The Build System]]></title>
-        <link href="http://eflorenzano.com/blog/2014/04/10/react-part-2-frontend-server/"/>
+        <link href="http://eflorenzano.com/blog/2014/04/10/react-part-2-build-system/"/>
         <updated>2014-04-10T20:12:00</updated>
-        <id>http://eflorenzano.com/blog/2014/04/10/react-part-2-frontend-server/</id>
-        <content type="html"><![CDATA[<h3><a href="/blog/2014/04/10/react-part-2-frontend-server/">Server/Client With React, Part 2: The Build System</a></h3>
+        <id>http://eflorenzano.com/blog/2014/04/10/react-part-2-build-system/</id>
+        <content type="html"><![CDATA[<h3><a href="/blog/2014/04/10/react-part-2-build-system/">Server/Client With React, Part 2: The Build System</a></h3>
 <p class="datetime">Apr 10, 2014</p>
 <div class="document">
 <p>In the <a class="reference external" href="http://eflorenzano.com/blog/2014/04/09/react-part-1-getting-started/">last post</a>, we started writing the client glue code and our first React
