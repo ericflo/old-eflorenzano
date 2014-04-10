@@ -1,0 +1,298 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Server/Client With React, Part 2: The Build System - Eric Florenzano&rsquo;s Blog</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+
+    <link href="/atom.xml" rel="alternate" title="Eric Florenzano's Blog" type="application/atom+xml">
+
+    <link href="/static/css/bootstrap.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="/static/css/code.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="/static/js/html5shiv.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="center-column">
+        <h1 class="blog-header"><a href="/">Eric Florenzano&rsquo;s Blog</a></h1>
+        <ul class="blog-header-links">
+          <li><a href="/">Home</a></li>
+          <li><a href="/blog/archives/">Archives</a></li>
+          <li><a href="https://twitter.com/ericflo" class="twitter-follow-button" data-show-count="false">Follow @ericflo</a></li>
+          <li class="feed"><a href="/atom.xml"><img src="/static/img/feed-icon-28x28.png" width="20" height="20" alt="Subscribe to this blog" /></a></li>
+        </ul>
+        
+  <div class="blog-post-detail">
+    <h3><a href="/blog/2014/04/10/react-part-2-frontend-server/">Server/Client With React, Part 2: The Build System</a></h3>
+<p class="datetime">Apr 10, 2014</p>
+<div class="document">
+<p>In the <a class="reference external" href="http://eflorenzano.com/blog/2014/04/09/react-part-1-getting-started/">last post</a>, we started writing the client glue code and our first React
+component.  But we're using things like <tt class="docutils literal">require()</tt> for something that should
+be run on the client, how will that work?  <a class="reference external" href="http://browserify.org/">Browserify</a> can take a look at our
+<tt class="docutils literal">client.js</tt>, walk the dependencies, and spit out something that browsers can
+actually execute.  Let's set that up!</p>
+<p>But first a bit about we'll structure the app.  This is how things look
+currently:</p>
+<pre class="literal-block">
+frontend/
+    javascript/
+        client.js
+        routes.js
+        components/
+            common.js
+</pre>
+<p>But these JavaScript files need processing.  Some of them have JSX in them,
+which needs to be converted to pure JavaScript.  It all needs to be transformed
+to work in the browser.  Additionally, we may have other non-JS files that we
+want to preprocess.  To address this, we'll do all this processing and save it
+in a directory adjacent to <tt class="docutils literal">frontend</tt> named <tt class="docutils literal">build</tt>.</p>
+<p>Here's the basic idea of how things will look after this blog post:</p>
+<pre class="literal-block">
+build/
+    images/
+    javascript/
+        compiled.js
+        compiled.min.js
+        client.js
+        client.min.js
+        routes.js
+        routes.min.js
+        components/
+            common.js
+            common.min.js
+    styles/
+        main.js
+        main.min.js
+frontend/
+    images/
+    javascript/
+        client.js
+        routes.js
+        components/
+            common.js
+    styles/
+        main.less
+    tests/
+gulpfile.js
+package.json
+</pre>
+<p>First make sure you have a <tt class="docutils literal">package.json</tt> file.  If you're not familiar with
+this file, here's <a class="reference external" href="http://docs.nodejitsu.com/articles/getting-started/npm/what-is-the-file-package-json">some light reading</a> about it.  We're going to use <a class="reference external" href="http://gulpjs.com/">Gulp</a> to
+do our processing, and we need a number of plugins to make that work.  These
+commands should get you started:</p>
+<pre class="code console literal-block">
+<span class="go">npm install --save react react-tools lodash
+npm install --save-dev browserify envify gulp gulp-util gulp-uglify \
+    gulp-clean gulp-rename gulp-browserify gulp-less gulp-react \
+    gulp-minify-css gulp-nodemon</span>
+</pre>
+<p>Now that we have the dependencies installed, let's create a file named
+<tt class="docutils literal">gulpfile.js</tt> which will describe to <a class="reference external" href="http://gulpjs.com/">Gulp</a> how to build the app:</p>
+<pre class="code js literal-block">
+<span class="kd">var</span> <span class="nx">gulp</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'gulp'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">clean</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'gulp-clean'</span><span class="p">);</span>
+
+<span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">'clean'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">gulp</span><span class="p">.</span><span class="nx">src</span><span class="p">(</span><span class="p">[</span><span class="s1">'build/*'</span><span class="p">],</span> <span class="p">{</span><span class="nx">read</span><span class="o">:</span> <span class="kc">false</span><span class="p">}).</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">clean</span><span class="p">(</span><span class="p">));</span>
+<span class="p">});</span>
+</pre>
+<p>So far it's not that impressive, all we're doing is deleting anything inside
+the <tt class="docutils literal">build/</tt>, directory, which doesn't even exist.  We noted earlier that
+some of the JavaScript had JSX in it, and would need to be processed, so let's
+set that up by adding this to <tt class="docutils literal">gulpfile.js</tt>:</p>
+<pre class="code js literal-block">
+<span class="kd">var</span> <span class="nx">react</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'gulp-react'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">uglify</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'gulp-uglify'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">rename</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'gulp-rename'</span><span class="p">);</span>
+
+<span class="c1">// Parse and compress JS and JSX files
+</span>
+<span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">'javascript'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// Listen to every JS file in ./frontend/javascript
+</span>  <span class="k">return</span> <span class="nx">gulp</span><span class="p">.</span><span class="nx">src</span><span class="p">(</span><span class="s1">'frontend/javascript/**/*.js'</span><span class="p">)</span>
+    <span class="c1">// Turn React JSX syntax into regular javascript
+</span>    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">react</span><span class="p">(</span><span class="p">))</span>
+    <span class="c1">// Output each file into the ./build/javascript/ directory
+</span>    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">gulp</span><span class="p">.</span><span class="nx">dest</span><span class="p">(</span><span class="s1">'build/javascript/'</span><span class="p">))</span>
+    <span class="c1">// Optimize each JavaScript file
+</span>    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">uglify</span><span class="p">(</span><span class="p">))</span>
+    <span class="c1">// Add .min.js to the end of each optimized file
+</span>    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">rename</span><span class="p">(</span><span class="p">{</span><span class="nx">suffix</span><span class="o">:</span> <span class="s1">'.min'</span><span class="p">}))</span>
+    <span class="c1">// Output each optimized .min.js file into the ./build/javascript/ dir
+</span>    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">gulp</span><span class="p">.</span><span class="nx">dest</span><span class="p">(</span><span class="s1">'build/javascript/'</span><span class="p">));</span>
+<span class="p">});</span>
+</pre>
+<p>Now let's set up browserify to transform the <tt class="docutils literal">require()</tt> calls into
+JavaScript the browser understands.  You'll notice this matches the structure
+of the previous code block almost exactly, except we're swapping out a
+call to <tt class="docutils literal">browserify()</tt> instead of a call to <tt class="docutils literal">react()</tt>:</p>
+<pre class="code js literal-block">
+<span class="kd">var</span> <span class="nx">browserify</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'gulp-browserify'</span><span class="p">);</span>
+
+<span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">'browserify'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'javascript'</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">gulp</span><span class="p">.</span><span class="nx">src</span><span class="p">(</span><span class="s1">'build/javascript/client.js'</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">browserify</span><span class="p">(</span><span class="p">{</span><span class="nx">transform</span><span class="o">:</span> <span class="p">[</span><span class="s1">'envify'</span><span class="p">]}))</span>
+    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">rename</span><span class="p">(</span><span class="s1">'compiled.js'</span><span class="p">))</span>
+    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">gulp</span><span class="p">.</span><span class="nx">dest</span><span class="p">(</span><span class="s1">'build/javascript/'</span><span class="p">))</span>
+    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">uglify</span><span class="p">(</span><span class="p">))</span>
+    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">rename</span><span class="p">(</span><span class="p">{</span><span class="nx">suffix</span><span class="o">:</span> <span class="s1">'.min'</span><span class="p">}))</span>
+    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">gulp</span><span class="p">.</span><span class="nx">dest</span><span class="p">(</span><span class="s1">'build/javascript/'</span><span class="p">));</span>
+<span class="p">});</span>
+</pre>
+<p>And like I mentioned, there are things other than JavaScript which need to be
+processed too!</p>
+<pre class="code js literal-block">
+<span class="kd">var</span> <span class="nx">less</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'gulp-less'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">minifycss</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'gulp-minify-css'</span><span class="p">);</span>
+
+<span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">'styles'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">gulp</span><span class="p">.</span><span class="nx">src</span><span class="p">(</span><span class="s1">'frontend/**/*.less'</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">less</span><span class="p">(</span><span class="p">))</span>
+    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">gulp</span><span class="p">.</span><span class="nx">dest</span><span class="p">(</span><span class="s1">'build/'</span><span class="p">))</span>
+    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">minifycss</span><span class="p">(</span><span class="p">))</span>
+    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">rename</span><span class="p">(</span><span class="p">{</span><span class="nx">suffix</span><span class="o">:</span> <span class="s1">'.min'</span><span class="p">}))</span>
+    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">gulp</span><span class="p">.</span><span class="nx">dest</span><span class="p">(</span><span class="s1">'build/'</span><span class="p">));</span>
+<span class="p">});</span>
+</pre>
+<p>But no <tt class="docutils literal">gulpfile.js</tt> is complete without a <tt class="docutils literal">default</tt> task that will run
+when the user types just <tt class="docutils literal">gulp</tt> in their console:</p>
+<pre class="code js literal-block">
+<span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">'default'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'clean'</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">gulp</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="s1">'browserify'</span><span class="p">,</span> <span class="s1">'styles'</span><span class="p">);</span>
+<span class="p">});</span>
+</pre>
+<p>This says to run <tt class="docutils literal">clean</tt> as a dependency, then to run the <tt class="docutils literal">browserify</tt> and
+<tt class="docutils literal">styles</tt> tasks in parallel, and finish when everything returns.  So just to
+hammer this point home, all you need to do to build everything is to open
+a terminal, navigate to your project directory and type:</p>
+<pre class="code console literal-block">
+<span class="go">gulp</span>
+</pre>
+<div class="section" id="local-development">
+<h4>Local Development</h4>
+<p>Doing local development is slightly more tricky, but not so bad to set up.
+What we'd like is to be able to run a command, and then have it watch for
+changes and automatically rebuild the parts that have changed.  Let's add a
+<tt class="docutils literal">watch</tt> task which does this:</p>
+<pre class="code js literal-block">
+<span class="kd">var</span> <span class="nx">nodemon</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'gulp-nodemon'</span><span class="p">);</span>
+
+<span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">'watch'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'clean'</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">watching</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+  <span class="nx">gulp</span><span class="p">.</span><span class="nx">start</span><span class="p">(</span><span class="s1">'browserify'</span><span class="p">,</span> <span class="s1">'styles'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// Protect against this function being called twice. (Bug?)
+</span>    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">watching</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">watching</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+
+      <span class="c1">// Watch for changes in frontend js and run the 'javascript' task
+</span>      <span class="nx">gulp</span><span class="p">.</span><span class="nx">watch</span><span class="p">(</span><span class="s1">'frontend/**/*.js'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'javascript'</span><span class="p">]);</span>
+
+      <span class="c1">// Run the 'browserify_nodep' task when client.js changes
+</span>      <span class="nx">gulp</span><span class="p">.</span><span class="nx">watch</span><span class="p">(</span><span class="s1">'build/javascript/client.js'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'browserify_nodep'</span><span class="p">]);</span>
+
+      <span class="c1">// Watch for .less file changes and re-run the 'styles' task
+</span>      <span class="nx">gulp</span><span class="p">.</span><span class="nx">watch</span><span class="p">(</span><span class="s1">'frontend/**/*.less'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'styles'</span><span class="p">]);</span>
+
+      <span class="c1">// Start up the server and have it reload when anything in the
+</span>      <span class="c1">// ./build/ directory changes
+</span>      <span class="nx">nodemon</span><span class="p">(</span><span class="p">{</span><span class="nx">script</span><span class="o">:</span> <span class="s1">'server.js'</span><span class="p">,</span> <span class="nx">watch</span><span class="o">:</span> <span class="s1">'build'</span><span class="p">});</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</pre>
+<p>Most of this is fairly self-explanatory except two things:</p>
+<ul class="simple">
+<li>What is 'browserify_nodep'?</li>
+<li>We haven't built <tt class="docutils literal">server.js</tt> yet.</li>
+</ul>
+<p>The latter we'll tackle in the next post, but the reason for 'browserify_nodep'
+is that we don't need/want all the javascript to be rebuilt every time just
+client.js changes.  We have something already watching for that.  So let's
+modify our <tt class="docutils literal">browserify</tt> task and split it into <tt class="docutils literal">browserify</tt> and
+<tt class="docutils literal">browserify_nodep</tt>:</p>
+<pre class="code js literal-block">
+<span class="kd">function</span> <span class="nx">browserifyTask</span><span class="p">(</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">gulp</span><span class="p">.</span><span class="nx">src</span><span class="p">(</span><span class="s1">'build/javascript/client.js'</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">browserify</span><span class="p">(</span><span class="p">{</span>
+      <span class="nx">transform</span><span class="o">:</span> <span class="p">[</span><span class="s1">'envify'</span><span class="p">]</span>
+    <span class="p">}))</span>
+    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">rename</span><span class="p">(</span><span class="s1">'compiled.js'</span><span class="p">))</span>
+    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">gulp</span><span class="p">.</span><span class="nx">dest</span><span class="p">(</span><span class="s1">'build/javascript/'</span><span class="p">))</span>
+    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">uglify</span><span class="p">(</span><span class="p">))</span>
+    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">rename</span><span class="p">(</span><span class="p">{</span><span class="nx">suffix</span><span class="o">:</span> <span class="s1">'.min'</span><span class="p">}))</span>
+    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">gulp</span><span class="p">.</span><span class="nx">dest</span><span class="p">(</span><span class="s1">'build/javascript/'</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">'browserify'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'javascript'</span><span class="p">],</span> <span class="nx">browserifyTask</span><span class="p">);</span>
+<span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">'browserify_nodep'</span><span class="p">,</span> <span class="nx">browserifyTask</span><span class="p">);</span>
+</pre>
+<p>This is why it's awesome that Gulpfiles are just javascript files: we can break
+out common functionality into a function, and apply it to different tasks.  If
+you ever want to see the fully finished gulpfile.js for the final project, you
+can <a class="reference external" href="https://github.com/ericflo/irlmoji/blob/master/gulpfile.js">check it out here</a>.</p>
+</div>
+<div class="section" id="what-s-next">
+<h4>What's Next?</h4>
+<ul class="simple">
+<li>Write the <tt class="docutils literal">server.js</tt> that mimics the <tt class="docutils literal">client.js</tt> we've been building and
+acts as http server.</li>
+<li>Build the communications layer between the frontend and the API</li>
+<li>Ensure that the client re-uses the same data the server used when it rendered</li>
+<li>Oh yeah, write our app :)</li>
+</ul>
+</div>
+</div>
+
+<div class="categories">
+    Posted in:
+    <ul>
+      
+        <li><a href="/blog/categories/react/">React</a></li>
+      
+        <li><a href="/blog/categories/reactjs/">ReactJS</a></li>
+      
+        <li><a href="/blog/categories/programming/">Programming</a></li>
+      
+        <li><a href="/blog/categories/server/">Server</a></li>
+      
+        <li><a href="/blog/categories/client/">Client</a></li>
+      
+        <li><a href="/blog/categories/javascript/">Javascript</a></li>
+      
+    </ul>
+  </div>
+  </div>
+  <hr />
+  <br />
+  <br />
+
+      </div>
+    </div>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-1959803-2']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    
+  </body>
+</html>
