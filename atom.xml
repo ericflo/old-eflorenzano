@@ -3,7 +3,7 @@
     <title><![CDATA[Eric Florenzano's Blog]]></title>
     <link href="http://eflorenzano.com/atom.xml" rel="self"/>
     <link href="http://eflorenzano.com/"/>
-    <updated>2014-04-11T19:03:18.450574</updated>
+    <updated>2014-04-11T19:10:01.122886</updated>
     <id>http://eflorenzano.com/</id>
     <author>
         <name><![CDATA[Eric Florenzano]]></name>
@@ -25,8 +25,8 @@ middleware we'll use to build our http server.</p>
 <pre class="code console literal-block">
 <span class="go">npm install --save connect</span>
 </pre>
-<p>Why not some other thing like <a class="reference external" href="http://koajs.com/">Koa</a>, <a class="reference external" href="https://github.com/spumko/hapi">hapi</a>, or <a class="reference external" href="https://github.com/mjijackson/mach">mach</a>?  Literally no reason.  Our
-needs are simple and any one of those would work great.  I chose <a class="reference external" href="http://www.senchalabs.org/connect/">Connect</a>
+<p>Why not some other thing like <a class="reference external" href="http://koajs.com/">Koa</a>, <a class="reference external" href="https://github.com/spumko/hapi">hapi</a>, or <a class="reference external" href="https://github.com/mjijackson/mach">mach</a>?  No real reason.  Our
+needs are simple and any one of those would work well.  I chose <a class="reference external" href="http://www.senchalabs.org/connect/">Connect</a>
 because it's popular, it'd been around a while, and it seemed to work well
 enough.</p>
 <p>Now let's create a file <tt class="docutils literal">server.js</tt> right at the root of our project,
@@ -47,8 +47,8 @@ starting with the basics, and we'll fill in more as we go:</p>
 <p>Running this file will start up a server listening on port 5000, serving any
 static files that are found in /build, which knows how to parse querystrings,
 form submissions, and json, and is protected against CSRF attacks.  So far, so
-easy.  Now let's add cookie sessions, which for some reason requires a bit of a
-hack:</p>
+easy.  Now let's add cookie sessions, where I've found that <tt class="docutils literal">maxAge</tt> needs to
+be set per-request in <a class="reference external" href="http://www.senchalabs.org/connect/">Connect</a> for some reason:</p>
 <pre class="code js literal-block">
 <span class="kd">var</span> <span class="nx">connect</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'connect'</span><span class="p">);</span>
 
@@ -75,8 +75,8 @@ hack:</p>
   <span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">connect</span><span class="p">.</span><span class="nx">json</span><span class="p">(</span><span class="p">))</span>
   <span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="mi">5000</span><span class="p">);</span>
 </pre>
-<p>Now we're up and running with a cookie-based session system, which we're not
-using.  In fact, we're not using any of this yet, because we're not rendering
+<p>Now we're up and running with a cookie-based session system, but we're not yet
+using it.  In fact, we're not using any of this yet, because we're not rendering
 or serving the main site yet.  We can write that now:</p>
 <pre class="code js literal-block">
 <span class="c1">// Note that we're importing from the build directory
@@ -128,7 +128,7 @@ the information available to us from the request.  Then we import that same
 simple router we used before, and tell the router to route and render its
 contents by calling the <tt class="docutils literal">go</tt> function with the current path as a parameter.</p>
 <p>How do we actually render it though?  We left that function blank.  Before we
-work on that though, we need some sort of HTML template to work from.   Let's
+work on that, we need some sort of HTML template to work from.   Let's
 build our basic HTML page template in <tt class="docutils literal">frontend/page.html</tt>:</p>
 <pre class="code html+django literal-block">
 <span class="cp">&lt;!DOCTYPE html&gt;</span>
@@ -154,7 +154,7 @@ build our basic HTML page template in <tt class="docutils literal">frontend/page
 <span class="nt">&lt;/body&gt;</span>
 <span class="nt">&lt;/html&gt;</span>
 </pre>
-<p>This &quot;template&quot; has no fancy logic or anything, it's just a frame, so we can
+<p>This &quot;template&quot; has no real logic (it's just a frame) so we can
 use basic variable substitution -- in this case, in the style of Django
 templates.  So that's what our render function will have to do: determine what
 should be inserted for e.g. <tt class="docutils literal">BODY_CONTENT</tt> and <tt class="docutils literal">PAGE_TITLE</tt>, render the
@@ -198,7 +198,7 @@ at it:</p>
     <span class="p">}));</span>
 <span class="p">}</span>
 </pre>
-<p>We honestly could have used any templating language, but as you can see, most
+<p>We could have used any templating language, but as you can see, most
 of what's going on happens inside of <tt class="docutils literal"><span class="pre">react-root</span></tt>, so this is all we'll need.</p>
 <p>Hey, we're live!  If we start up our server by running:</p>
 <pre class="literal-block">
