@@ -1,0 +1,265 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>An idea for an alternative Android hybrid native/html approach - Eric Florenzano&rsquo;s Blog</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+
+    <link href="/atom.xml" rel="alternate" title="Eric Florenzano's Blog" type="application/atom+xml">
+
+    <link href="/static/css/bootstrap.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="/static/css/code.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="/static/js/html5shiv.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="center-column">
+        <h1 class="blog-header"><a href="/">Eric Florenzano&rsquo;s Blog</a></h1>
+        <ul class="blog-header-links">
+          <li><a href="/">Home</a></li>
+          <li><a href="/blog/archives/">Archives</a></li>
+          <li><a href="https://twitter.com/ericflo" class="twitter-follow-button" data-show-count="false">Follow @ericflo</a></li>
+          <li class="feed"><a href="/atom.xml"><img src="/static/img/feed-icon-28x28.png" width="20" height="20" alt="Subscribe to this blog" /></a></li>
+        </ul>
+        
+  <div class="blog-post-detail">
+    <h3><a href="/blog/2014/04/12/an-idea-for-android-hybrid-native-html/">An idea for an alternative Android hybrid native/html approach</a></h3>
+<p class="datetime">Apr 12, 2014</p>
+<div class="document">
+<p>I've been doing Android development again recently, and right after doing so
+much work using React.js, it's made me really aware of how we handle state and
+state transitions.  The way React handles it is handy and I was thinking, it
+would be nice if there were something in the Android world to help manage that.</p>
+<p>Then I went to edit one of my layout XML files and had an epiphany: React.js
+renders out HTML to be interpreted by the browser, but these layout XML files
+aren't very different at all from HTML.  If we could just write a diff engine
+on the Android side to apply view hierarchy changes, we could render fully
+native widgets with React.js components.</p>
+<p>Here's an example layout XML file that could come from some kind of funny
+images app, where it shows an image alongside some text representing that
+image's 'tags':</p>
+<pre class="code xml literal-block">
+<span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
+<span class="nt">&lt;RelativeLayout</span> <span class="na">xmlns:android=</span><span class="s">&quot;http://schemas.android.com/apk/res/android&quot;</span>
+    <span class="na">android:layout_width=</span><span class="s">&quot;match_parent&quot;</span>
+    <span class="na">android:layout_height=</span><span class="s">&quot;match_parent&quot;</span>
+    <span class="na">android:paddingLeft=</span><span class="s">&quot;64dp&quot;</span>
+    <span class="na">android:paddingRight=</span><span class="s">&quot;64dp&quot;</span>
+    <span class="na">android:paddingTop=</span><span class="s">&quot;4dp&quot;</span>
+    <span class="na">android:paddingBottom=</span><span class="s">&quot;16dp&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;ImageView</span>
+      <span class="na">android:id=</span><span class="s">&quot;&#64;+id/image&quot;</span>
+      <span class="na">android:layout_width=</span><span class="s">&quot;match_parent&quot;</span>
+      <span class="na">android:layout_height=</span><span class="s">&quot;wrap_content&quot;</span>
+      <span class="na">android:scaleType=</span><span class="s">&quot;centerCrop&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;TextView</span>
+      <span class="na">android:id=</span><span class="s">&quot;&#64;+id/tags&quot;</span>
+      <span class="na">android:layout_width=</span><span class="s">&quot;match_parent&quot;</span>
+      <span class="na">android:layout_height=</span><span class="s">&quot;wrap_content&quot;</span>
+      <span class="na">android:layout_below=</span><span class="s">&quot;&#64;id/image&quot;</span>
+      <span class="na">android:gravity=</span><span class="s">&quot;center&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/RelativeLayout&gt;</span>
+</pre>
+<p>Android developers write Java classes which inflate this XML, attach to the
+subviews it cares about ('image' and 'tags', in this case) and set the correct
+text and image bitmaps.  Here's a simple version of what that looks like:</p>
+<pre class="code java literal-block">
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">FunnyImage</span> <span class="n">extendds</span> <span class="n">RelativeLayout</span> <span class="o">{</span>
+  <span class="kd">private</span> <span class="n">ImageView</span> <span class="n">mImage</span><span class="o">;</span>
+  <span class="kd">private</span> <span class="n">TextView</span> <span class="n">mTags</span><span class="o">;</span>
+
+  <span class="kd">public</span> <span class="nf">FunnyImage</span><span class="o">(</span><span class="n">Context</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">super</span><span class="o">(</span><span class="n">context</span><span class="o">);</span>
+    <span class="kd">final</span> <span class="n">LayoutInflater</span> <span class="n">inflater</span> <span class="o">=</span> <span class="o">(</span><span class="n">LayoutInflater</span><span class="o">)</span>
+      <span class="n">context</span><span class="o">.</span><span class="na">getSystemService</span><span class="o">(</span><span class="n">Context</span><span class="o">.</span><span class="na">LAYOUT_INFLATER_SERVICE</span><span class="o">);</span>
+    <span class="n">inflater</span><span class="o">.</span><span class="na">inflate</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">layout</span><span class="o">.</span><span class="na">funny_image</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+    <span class="n">mImage</span> <span class="o">=</span> <span class="o">(</span><span class="n">ImageView</span><span class="o">)</span> <span class="n">findViewById</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">image</span><span class="o">);</span>
+    <span class="n">mTags</span> <span class="o">=</span> <span class="o">(</span><span class="n">TextView</span><span class="o">)</span> <span class="n">findViewById</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">tags</span><span class="o">);</span>
+  <span class="o">}</span>
+
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setTags</span><span class="o">(</span><span class="n">String</span> <span class="n">tags</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">mTags</span><span class="o">.</span><span class="na">setText</span><span class="o">(</span><span class="n">tags</span><span class="o">);</span>
+  <span class="o">}</span>
+
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setImageBitmap</span><span class="o">(</span><span class="n">Bitmap</span> <span class="n">bitmap</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">mImage</span><span class="o">.</span><span class="na">setImageBitmap</span><span class="o">(</span><span class="n">bitmap</span><span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</pre>
+<p>What if we could write this same thing in React.js style?</p>
+<pre class="code as literal-block">
+<span class="k">var</span> <span class="nx">FunnyImage</span> <span class="o">=</span> <span class="nx">React</span><span class="p">.</span><span class="nx">createComponent</span><span class="p">({</span>
+  <span class="nx">render</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span>
+      <span class="o">&lt;</span><span class="nx">RelativeLayout</span>
+        <span class="nx">layoutWidth</span><span class="o">=</span><span class="s2">&quot;match_parent&quot;</span>
+        <span class="nx">layoutHeight</span><span class="o">=</span><span class="s2">&quot;match_parent&quot;</span>
+        <span class="nx">paddingLeft</span><span class="o">=</span><span class="s2">&quot;64dp&quot;</span>
+        <span class="nx">paddingRight</span><span class="o">=</span><span class="s2">&quot;64dp&quot;</span>
+        <span class="nx">paddingTop</span><span class="o">=</span><span class="s2">&quot;4dp&quot;</span>
+        <span class="nx">paddingBottom</span><span class="o">=</span><span class="s2">&quot;16dp&quot;</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="nx">ImageView</span>
+          <span class="nx">id</span><span class="o">=</span><span class="s2">&quot;&#64;+id/image&quot;</span>
+          <span class="nx">layoutWidth</span><span class="o">=</span><span class="s2">&quot;match_parent&quot;</span>
+          <span class="nx">layoutHeight</span><span class="o">=</span><span class="s2">&quot;wrap_content&quot;</span>
+          <span class="nx">scaleType</span><span class="o">=</span><span class="s2">&quot;centerCrop&quot;</span>
+          <span class="nx">src</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">image</span><span class="p">.</span><span class="nx">bitmap</span><span class="p">}</span> <span class="o">/&gt;</span>
+        <span class="o">&lt;</span><span class="nx">TextView</span>
+          <span class="nx">layoutWidth</span><span class="o">=</span><span class="s2">&quot;match_parent&quot;</span>
+          <span class="nx">layoutHeight</span><span class="o">=</span><span class="s2">&quot;wrap_content&quot;</span>
+          <span class="nx">layoutBelow</span><span class="o">=</span><span class="s2">&quot;&#64;id/image&quot;</span>
+          <span class="nx">gravity</span><span class="o">=</span><span class="s2">&quot;center&quot;</span>
+          <span class="nx">text</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">image</span><span class="p">.</span><span class="nx">tags</span><span class="p">}</span> <span class="o">/&gt;</span>
+      <span class="o">&lt;/</span><span class="nx">RelativeLayout</span><span class="o">&gt;</span>
+    <span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</pre>
+<p>I quite like this declarative style.  But we haven't really accomplished much
+here yet.  How about we take it further, and take a URL and load a bitmap,
+updating the state and using a loading drawable in the meantime:</p>
+<pre class="code as literal-block">
+<span class="k">var</span> <span class="nx">FunnyImage</span> <span class="o">=</span> <span class="nx">React</span><span class="p">.</span><span class="nx">createComponent</span><span class="p">({</span>
+  <span class="nx">getInitialData</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">{</span><span class="nx">bitmap</span><span class="o">:</span> <span class="kc">null</span><span class="p">};</span>
+  <span class="p">}</span><span class="o">,</span>
+
+  <span class="nx">componentDidMount</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">HttpUtils</span><span class="p">.</span><span class="nx">getImageBitmap</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">image</span><span class="p">.</span><span class="nx">url</span><span class="o">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">handleBitmapLoaded</span><span class="p">);</span>
+  <span class="p">}</span><span class="o">,</span>
+
+  <span class="nx">handleBitmapLoaded</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="o">,</span> <span class="nx">bitmap</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span><span class="nx">bitmap</span><span class="o">:</span> <span class="nx">bitmap</span><span class="p">});</span>
+  <span class="p">}</span><span class="o">,</span>
+
+  <span class="nx">getLoadingDrawable</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">ResourceUtils</span><span class="p">.</span><span class="nx">getDrawable</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">loading</span><span class="p">);</span>
+  <span class="p">}</span><span class="o">,</span>
+
+  <span class="nx">render</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span>
+      <span class="o">&lt;</span><span class="nx">RelativeLayout</span>
+        <span class="nx">layoutWidth</span><span class="o">=</span><span class="s2">&quot;match_parent&quot;</span>
+        <span class="nx">layoutHeight</span><span class="o">=</span><span class="s2">&quot;match_parent&quot;</span>
+        <span class="nx">paddingLeft</span><span class="o">=</span><span class="s2">&quot;64dp&quot;</span>
+        <span class="nx">paddingRight</span><span class="o">=</span><span class="s2">&quot;64dp&quot;</span>
+        <span class="nx">paddingTop</span><span class="o">=</span><span class="s2">&quot;4dp&quot;</span>
+        <span class="nx">paddingBottom</span><span class="o">=</span><span class="s2">&quot;16dp&quot;</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="nx">ImageView</span>
+          <span class="nx">id</span><span class="o">=</span><span class="s2">&quot;&#64;+id/image&quot;</span>
+          <span class="nx">layoutWidth</span><span class="o">=</span><span class="s2">&quot;match_parent&quot;</span>
+          <span class="nx">layoutHeight</span><span class="o">=</span><span class="s2">&quot;wrap_content&quot;</span>
+          <span class="nx">scaleType</span><span class="o">=</span><span class="s2">&quot;centerCrop&quot;</span>
+          <span class="nx">src</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">bitmap</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">getLoadingDrawable</span><span class="p">()}</span> <span class="o">/&gt;</span>
+        <span class="o">&lt;</span><span class="nx">TextView</span>
+          <span class="nx">layoutWidth</span><span class="o">=</span><span class="s2">&quot;match_parent&quot;</span>
+          <span class="nx">layoutHeight</span><span class="o">=</span><span class="s2">&quot;wrap_content&quot;</span>
+          <span class="nx">layoutBelow</span><span class="o">=</span><span class="s2">&quot;&#64;id/image&quot;</span>
+          <span class="nx">gravity</span><span class="o">=</span><span class="s2">&quot;center&quot;</span>
+          <span class="nx">text</span><span class="o">=</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">props</span><span class="p">.</span><span class="nx">image</span><span class="p">.</span><span class="nx">tags</span><span class="p">}</span> <span class="o">/&gt;</span>
+      <span class="o">&lt;/</span><span class="nx">RelativeLayout</span><span class="o">&gt;</span>
+    <span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</pre>
+<p>Let's pull it all together and create an app that fetches these images from
+a public data feed:</p>
+<pre class="code as literal-block">
+<span class="k">var</span> <span class="nx">FunnyImages</span> <span class="o">=</span> <span class="nx">React</span><span class="p">.</span><span class="nx">createComponent</span><span class="p">({</span>
+  <span class="nx">getInitialData</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">{</span><span class="nx">images</span><span class="o">:</span> <span class="p">[]};</span>
+  <span class="p">}</span><span class="o">,</span>
+
+  <span class="nx">componentDidMount</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">HttpUtils</span><span class="p">.</span><span class="nx">getJSON</span><span class="p">(</span><span class="s1">'http://puppygifs.net/api/read/json'</span><span class="o">,</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">handleImagesLoaded</span><span class="p">);</span>
+  <span class="p">}</span><span class="o">,</span>
+
+  <span class="nx">handleImagesLoaded</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="o">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">AlertDialog</span><span class="p">.</span><span class="nx">show</span><span class="p">(</span><span class="s1">'Could not fetch puppies: '</span> <span class="o">+</span> <span class="nx">error</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">var</span> <span class="nx">images</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="nx">data</span><span class="p">.</span><span class="nx">posts</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">post</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">var</span> <span class="nx">image</span> <span class="o">=</span> <span class="nx">post</span><span class="p">[</span><span class="s1">'photo-url-500'</span><span class="p">];</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">image</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">images</span><span class="p">.</span><span class="nx">push</span><span class="p">({</span><span class="nx">url</span><span class="o">:</span> <span class="nx">image</span><span class="o">,</span> <span class="nx">tags</span><span class="o">:</span> <span class="nx">post</span><span class="p">.</span><span class="nx">tags</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">', '</span><span class="p">)});</span>
+      <span class="p">}</span>
+    <span class="p">});</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">setState</span><span class="p">({</span><span class="nx">images</span><span class="o">:</span> <span class="nx">images</span><span class="p">});</span>
+  <span class="p">}</span><span class="o">,</span>
+
+  <span class="nx">render</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span>
+      <span class="o">&lt;</span><span class="nx">RelativeLayout</span>
+        <span class="nx">layoutWidth</span><span class="o">=</span><span class="s2">&quot;match_parent&quot;</span>
+        <span class="nx">layoutHeight</span><span class="o">=</span><span class="s2">&quot;match_parent&quot;</span><span class="o">&gt;</span>
+        <span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">images</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">image</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">return</span> <span class="p">(</span>
+            <span class="o">&lt;</span><span class="nx">FunnyImage</span>
+              <span class="nx">key</span><span class="o">=</span><span class="p">{</span><span class="nx">image</span><span class="p">.</span><span class="nx">url</span><span class="p">}</span>
+              <span class="nx">image</span><span class="o">=</span><span class="p">{</span><span class="nx">image</span><span class="p">}</span>
+              <span class="nx">loading</span><span class="o">=</span><span class="s2">&quot;&#64;drawable/loading&quot;</span> <span class="o">/&gt;;</span>
+          <span class="p">);</span>
+        <span class="p">})}</span>
+      <span class="o">&lt;/</span><span class="nx">RelativeLayout</span><span class="o">&gt;</span>
+    <span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</pre>
+<p>Alas this is it for now.  I haven't written that diff engine to prove this is
+even possible.  Hopefully on a rainy day I'll have a chance to hack on it and
+see whether there's merit.  But for now, I just had to get the idea out of my
+brain and at least into words and pseudocode, and to get feedback.  Am I off my
+rocker here, or does this sound genuinely cool?</p>
+</div>
+
+<div class="categories">
+    Posted in:
+    <ul>
+      
+        <li><a href="/blog/categories/react/">React</a></li>
+      
+        <li><a href="/blog/categories/reactjs/">ReactJS</a></li>
+      
+        <li><a href="/blog/categories/programming/">Programming</a></li>
+      
+        <li><a href="/blog/categories/android/">Android</a></li>
+      
+    </ul>
+  </div>
+  </div>
+  <hr />
+  <br />
+  <br />
+
+      </div>
+    </div>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-1959803-2']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    
+  </body>
+</html>
