@@ -3,7 +3,7 @@
     <title><![CDATA[Eric Florenzano's Blog]]></title>
     <link href="http://eflorenzano.com/atom.xml" rel="self"/>
     <link href="http://eflorenzano.com/"/>
-    <updated>2014-07-27 01:43:15</updated>
+    <updated>2014-07-27 01:46:49</updated>
     <id>http://eflorenzano.com/</id>
     <author>
         <name><![CDATA[Eric Florenzano]]></name>
@@ -490,7 +490,7 @@ component.  But we're using things like <tt class="docutils literal">require()</
 be run on the client, how will that work?  <a class="reference external" href="http://browserify.org/">Browserify</a> can take a look at our
 <tt class="docutils literal">client.js</tt>, walk the dependencies, and spit out something that browsers can
 actually execute.  Let's set that up!</p>
-<p>But first a bit about we'll structure the app.  This is how things look
+<p>But first a bit about how we'll structure the app.  This is how things look
 currently:</p>
 <pre class="literal-block">
 frontend/
