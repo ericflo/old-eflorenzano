@@ -3,7 +3,7 @@
     <title><![CDATA[Eric Florenzano's Blog]]></title>
     <link href="http://eflorenzano.com/atom.xml" rel="self"/>
     <link href="http://eflorenzano.com/"/>
-    <updated>2014-05-17T09:55:12.467323</updated>
+    <updated>2014-07-27 01:43:15</updated>
     <id>http://eflorenzano.com/</id>
     <author>
         <name><![CDATA[Eric Florenzano]]></name>
@@ -13,7 +13,7 @@
     <entry>
         <title type="html"><![CDATA[An idea for an alternative Android hybrid native/html approach]]></title>
         <link href="http://eflorenzano.com/blog/2014/04/12/an-idea-for-android-hybrid-native-html/"/>
-        <updated>2014-04-12T20:29:00</updated>
+        <updated>2014-04-12 20:29:00</updated>
         <id>http://eflorenzano.com/blog/2014/04/12/an-idea-for-android-hybrid-native-html/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2014/04/12/an-idea-for-android-hybrid-native-html/">An idea for an alternative Android hybrid native/html approach</a></h3>
 <p class="datetime">Apr 12, 2014</p>
@@ -225,7 +225,7 @@ rocker here, or does this sound genuinely cool?</p>
     <entry>
         <title type="html"><![CDATA[Server/Client With React, Part 3: Frontend Server]]></title>
         <link href="http://eflorenzano.com/blog/2014/04/11/react-part-3-frontend-server/"/>
-        <updated>2014-04-11T20:03:00</updated>
+        <updated>2014-04-11 20:03:00</updated>
         <id>http://eflorenzano.com/blog/2014/04/11/react-part-3-frontend-server/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2014/04/11/react-part-3-frontend-server/">Server/Client With React, Part 3: Frontend Server</a></h3>
 <p class="datetime">Apr 11, 2014</p>
@@ -480,7 +480,7 @@ but right now we're not taking advantage of that.  Soon we will :)</p>
     <entry>
         <title type="html"><![CDATA[Server/Client With React, Part 2: The Build System]]></title>
         <link href="http://eflorenzano.com/blog/2014/04/10/react-part-2-build-system/"/>
-        <updated>2014-04-10T20:12:00</updated>
+        <updated>2014-04-10 20:12:00</updated>
         <id>http://eflorenzano.com/blog/2014/04/10/react-part-2-build-system/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2014/04/10/react-part-2-build-system/">Server/Client With React, Part 2: The Build System</a></h3>
 <p class="datetime">Apr 10, 2014</p>
@@ -725,7 +725,7 @@ acts as http server.</li>
     <entry>
         <title type="html"><![CDATA[Server/Client With React, Part 1: Getting Started]]></title>
         <link href="http://eflorenzano.com/blog/2014/04/09/react-part-1-getting-started/"/>
-        <updated>2014-04-09T22:12:00</updated>
+        <updated>2014-04-09 22:12:00</updated>
         <id>http://eflorenzano.com/blog/2014/04/09/react-part-1-getting-started/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2014/04/09/react-part-1-getting-started/">Server/Client With React, Part 1: Getting Started</a></h3>
 <p class="datetime">Apr 09, 2014</p>
@@ -906,7 +906,7 @@ acts as http server.</li>
     <entry>
         <title type="html"><![CDATA[React: Finally, a great server/client web stack]]></title>
         <link href="http://eflorenzano.com/blog/2014/01/23/react-finally-server-client/"/>
-        <updated>2014-01-23T20:29:00</updated>
+        <updated>2014-01-23 20:29:00</updated>
         <id>http://eflorenzano.com/blog/2014/01/23/react-finally-server-client/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2014/01/23/react-finally-server-client/">React: Finally, a great server/client web stack</a></h3>
 <p class="datetime">Jan 23, 2014</p>
@@ -1041,7 +1041,7 @@ yapping on Twitter, so <a class="reference external" href="https://twitter.com/e
     <entry>
         <title type="html"><![CDATA[So fix it!]]></title>
         <link href="http://eflorenzano.com/blog/2013/07/01/fix-it/"/>
-        <updated>2013-07-01T18:15:00</updated>
+        <updated>2013-07-01 18:15:00</updated>
         <id>http://eflorenzano.com/blog/2013/07/01/fix-it/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2013/07/01/fix-it/">So fix it!</a></h3>
 <p class="datetime">Jul 01, 2013</p>
@@ -1100,7 +1100,7 @@ myself of.</p>
     <entry>
         <title type="html"><![CDATA[Using Twitter&#39;s iOS5 Integration for Single Sign-On]]></title>
         <link href="http://eflorenzano.com/blog/2012/04/18/using-twitter-ios5-integration-single-sign-on/"/>
-        <updated>2012-04-18T22:34:47</updated>
+        <updated>2012-04-18 22:34:47</updated>
         <id>http://eflorenzano.com/blog/2012/04/18/using-twitter-ios5-integration-single-sign-on/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2012/04/18/using-twitter-ios5-integration-single-sign-on/">Using Twitter&#39;s iOS5 Integration for Single Sign-On</a></h3>
 <p class="datetime">Apr 18, 2012</p>
@@ -1232,7 +1232,7 @@ myself of.</p>
     <entry>
         <title type="html"><![CDATA[Reducing Code Nesting]]></title>
         <link href="http://eflorenzano.com/blog/2012/01/02/reducing-code-nesting/"/>
-        <updated>2012-01-02T02:00:00</updated>
+        <updated>2012-01-02 02:00:00</updated>
         <id>http://eflorenzano.com/blog/2012/01/02/reducing-code-nesting/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2012/01/02/reducing-code-nesting/">Reducing Code Nesting</a></h3>
 <p class="datetime">Jan 02, 2012</p>
@@ -1494,7 +1494,7 @@ admirable goal, and you find more and more ways to achieve it.</p>
     <entry>
         <title type="html"><![CDATA[The Technology Behind Convore]]></title>
         <link href="http://eflorenzano.com/blog/2011/02/16/technology-behind-convore/"/>
-        <updated>2011-02-16T20:29:35</updated>
+        <updated>2011-02-16 20:29:35</updated>
         <id>http://eflorenzano.com/blog/2011/02/16/technology-behind-convore/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2011/02/16/technology-behind-convore/">The Technology Behind Convore</a></h3>
 <p class="datetime">Feb 16, 2011</p>
@@ -1656,7 +1656,7 @@ feel free to join <a class="reference external" href="https://convore.com/">Conv
     <entry>
         <title type="html"><![CDATA[An Object Lesson in How to Respond to Criticism]]></title>
         <link href="http://eflorenzano.com/blog/2010/10/10/object-lesson-how-respond-criticism/"/>
-        <updated>2010-10-10T16:56:12</updated>
+        <updated>2010-10-10 16:56:12</updated>
         <id>http://eflorenzano.com/blog/2010/10/10/object-lesson-how-respond-criticism/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2010/10/10/object-lesson-how-respond-criticism/">An Object Lesson in How to Respond to Criticism</a></h3>
 <p class="datetime">Oct 10, 2010</p>
@@ -1738,7 +1738,7 @@ voice.  This is just written from my perspective.</p>
     <entry>
         <title type="html"><![CDATA[Why node.js disappoints me]]></title>
         <link href="http://eflorenzano.com/blog/2010/09/27/why-node-disappoints-me/"/>
-        <updated>2010-09-27T08:23:47</updated>
+        <updated>2010-09-27 08:23:47</updated>
         <id>http://eflorenzano.com/blog/2010/09/27/why-node-disappoints-me/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2010/09/27/why-node-disappoints-me/">Why node.js disappoints me</a></h3>
 <p class="datetime">Sep 27, 2010</p>
@@ -1776,7 +1776,7 @@ voice.  This is just written from my perspective.</p>
     <entry>
         <title type="html"><![CDATA[We need a new word for &#34;Open&#34;]]></title>
         <link href="http://eflorenzano.com/blog/2010/05/20/we-need-new-word-open/"/>
-        <updated>2010-05-20T07:09:27</updated>
+        <updated>2010-05-20 07:09:27</updated>
         <id>http://eflorenzano.com/blog/2010/05/20/we-need-new-word-open/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2010/05/20/we-need-new-word-open/">We need a new word for &#34;Open&#34;</a></h3>
 <p class="datetime">May 20, 2010</p>
@@ -1803,7 +1803,7 @@ voice.  This is just written from my perspective.</p>
     <entry>
         <title type="html"><![CDATA[How do we kick our synchronous addiction?]]></title>
         <link href="http://eflorenzano.com/blog/2010/02/09/how-do-we-kick-our-synchronous-addiction/"/>
-        <updated>2010-02-09T06:15:31</updated>
+        <updated>2010-02-09 06:15:31</updated>
         <id>http://eflorenzano.com/blog/2010/02/09/how-do-we-kick-our-synchronous-addiction/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2010/02/09/how-do-we-kick-our-synchronous-addiction/">How do we kick our synchronous addiction?</a></h3>
 <p class="datetime">Feb 09, 2010</p>
@@ -1904,7 +1904,7 @@ voice.  This is just written from my perspective.</p>
     <entry>
         <title type="html"><![CDATA[You care about Facebook, you just might not know it yet]]></title>
         <link href="http://eflorenzano.com/blog/2009/11/11/you-care-about-facebook-you-just-might-not-know-it/"/>
-        <updated>2009-11-11T06:25:12</updated>
+        <updated>2009-11-11 06:25:12</updated>
         <id>http://eflorenzano.com/blog/2009/11/11/you-care-about-facebook-you-just-might-not-know-it/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2009/11/11/you-care-about-facebook-you-just-might-not-know-it/">You care about Facebook, you just might not know it yet</a></h3>
 <p class="datetime">Nov 11, 2009</p>
@@ -1938,7 +1938,7 @@ voice.  This is just written from my perspective.</p>
     <entry>
         <title type="html"><![CDATA[My Thoughts on NoSQL]]></title>
         <link href="http://eflorenzano.com/blog/2009/07/21/my-thoughts-nosql/"/>
-        <updated>2009-07-21T13:44:17</updated>
+        <updated>2009-07-21 13:44:17</updated>
         <id>http://eflorenzano.com/blog/2009/07/21/my-thoughts-nosql/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2009/07/21/my-thoughts-nosql/">My Thoughts on NoSQL</a></h3>
 <p class="datetime">Jul 21, 2009</p>
@@ -2110,7 +2110,7 @@ agree with my thoughts or do you think I'm full of it?</p>
     <entry>
         <title type="html"><![CDATA[Flojax: A unobtrusive and easy strategy for creating AJAX-style web applications]]></title>
         <link href="http://eflorenzano.com/blog/2009/04/03/flojax-unobtrusive-and-easy-strategy-creating-ajax/"/>
-        <updated>2009-04-03T02:05:18</updated>
+        <updated>2009-04-03 02:05:18</updated>
         <id>http://eflorenzano.com/blog/2009/04/03/flojax-unobtrusive-and-easy-strategy-creating-ajax/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2009/04/03/flojax-unobtrusive-and-easy-strategy-creating-ajax/">Flojax: A unobtrusive and easy strategy for creating AJAX-style web applications</a></h3>
 <p class="datetime">Apr 03, 2009</p>
@@ -2348,7 +2348,7 @@ for your web applications?  If so, how do they differ from what I've described?<
     <entry>
         <title type="html"><![CDATA[Tagging cache keys for O(1) batch invalidation]]></title>
         <link href="http://eflorenzano.com/blog/2009/03/02/tagging-cache-keys-o1-batch-invalidation/"/>
-        <updated>2009-03-02T04:46:37</updated>
+        <updated>2009-03-02 04:46:37</updated>
         <id>http://eflorenzano.com/blog/2009/03/02/tagging-cache-keys-o1-batch-invalidation/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2009/03/02/tagging-cache-keys-o1-batch-invalidation/">Tagging cache keys for O(1) batch invalidation</a></h3>
 <p class="datetime">Mar 02, 2009</p>
@@ -2449,7 +2449,7 @@ for your web applications?  If so, how do they differ from what I've described?<
     <entry>
         <title type="html"><![CDATA[Notice Something Different?]]></title>
         <link href="http://eflorenzano.com/blog/2009/03/01/notice-something-different/"/>
-        <updated>2009-03-01T01:24:25</updated>
+        <updated>2009-03-01 01:24:25</updated>
         <id>http://eflorenzano.com/blog/2009/03/01/notice-something-different/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2009/03/01/notice-something-different/">Notice Something Different?</a></h3>
 <p class="datetime">Mar 01, 2009</p>
@@ -2474,7 +2474,7 @@ for your web applications?  If so, how do they differ from what I've described?<
     <entry>
         <title type="html"><![CDATA[Writing Blazing Fast, Infinitely Scalable, Pure-WSGI Utilities]]></title>
         <link href="http://eflorenzano.com/blog/2009/01/08/writing-blazing-fast-infinitely-scalable-pure-wsgi/"/>
-        <updated>2009-01-08T10:29:10</updated>
+        <updated>2009-01-08 10:29:10</updated>
         <id>http://eflorenzano.com/blog/2009/01/08/writing-blazing-fast-infinitely-scalable-pure-wsgi/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2009/01/08/writing-blazing-fast-infinitely-scalable-pure-wsgi/">Writing Blazing Fast, Infinitely Scalable, Pure-WSGI Utilities</a></h3>
 <p class="datetime">Jan 08, 2009</p>
@@ -2774,7 +2774,7 @@ subject.</p>
     <entry>
         <title type="html"><![CDATA[2008 in Review &amp; 2009 Goals]]></title>
         <link href="http://eflorenzano.com/blog/2009/01/03/2008-review-2009-goals/"/>
-        <updated>2009-01-03T03:19:17</updated>
+        <updated>2009-01-03 03:19:17</updated>
         <id>http://eflorenzano.com/blog/2009/01/03/2008-review-2009-goals/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2009/01/03/2008-review-2009-goals/">2008 in Review &amp; 2009 Goals</a></h3>
 <p class="datetime">Jan 03, 2009</p>
@@ -2869,7 +2869,7 @@ anything like last year, I'm in for quite a ride.</p>
     <entry>
         <title type="html"><![CDATA[It&#39;s been a wild ride]]></title>
         <link href="http://eflorenzano.com/blog/2008/11/30/its-been-wild-ride/"/>
-        <updated>2008-11-30T23:58:11</updated>
+        <updated>2008-11-30 23:58:11</updated>
         <id>http://eflorenzano.com/blog/2008/11/30/its-been-wild-ride/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/11/30/its-been-wild-ride/">It&#39;s been a wild ride</a></h3>
 <p class="datetime">Nov 30, 2008</p>
@@ -2923,7 +2923,7 @@ anything like last year, I'm in for quite a ride.</p>
     <entry>
         <title type="html"><![CDATA[Why CouchDB Rocks]]></title>
         <link href="http://eflorenzano.com/blog/2008/11/29/why-couchdb-rocks/"/>
-        <updated>2008-11-29T22:31:31</updated>
+        <updated>2008-11-29 22:31:31</updated>
         <id>http://eflorenzano.com/blog/2008/11/29/why-couchdb-rocks/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/11/29/why-couchdb-rocks/">Why CouchDB Rocks</a></h3>
 <p class="datetime">Nov 29, 2008</p>
@@ -3020,7 +3020,7 @@ CouchDB rocks.  But don't take my word for it--try it out for yourself!</p>
     <entry>
         <title type="html"><![CDATA[Drop-dead simple Django caching]]></title>
         <link href="http://eflorenzano.com/blog/2008/11/29/drop-dead-simple-django-caching/"/>
-        <updated>2008-11-29T05:30:13</updated>
+        <updated>2008-11-29 05:30:13</updated>
         <id>http://eflorenzano.com/blog/2008/11/29/drop-dead-simple-django-caching/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/11/29/drop-dead-simple-django-caching/">Drop-dead simple Django caching</a></h3>
 <p class="datetime">Nov 29, 2008</p>
@@ -3157,7 +3157,7 @@ good, simple, Django caching library have?</p>
     <entry>
         <title type="html"><![CDATA[Reverse HTTP]]></title>
         <link href="http://eflorenzano.com/blog/2008/11/27/reverse-http/"/>
-        <updated>2008-11-27T18:31:05</updated>
+        <updated>2008-11-27 18:31:05</updated>
         <id>http://eflorenzano.com/blog/2008/11/27/reverse-http/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/11/27/reverse-http/">Reverse HTTP</a></h3>
 <p class="datetime">Nov 27, 2008</p>
@@ -3217,7 +3217,7 @@ implementation of the protocol in action, check out <a class="reference external
     <entry>
         <title type="html"><![CDATA[&#34;Web Hooks&#34;]]></title>
         <link href="http://eflorenzano.com/blog/2008/11/27/web-hooks/"/>
-        <updated>2008-11-27T04:43:30</updated>
+        <updated>2008-11-27 04:43:30</updated>
         <id>http://eflorenzano.com/blog/2008/11/27/web-hooks/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/11/27/web-hooks/">&#34;Web Hooks&#34;</a></h3>
 <p class="datetime">Nov 27, 2008</p>
@@ -3305,7 +3305,7 @@ hooks, because by doing just that, we can make the web a lot better.</p>
     <entry>
         <title type="html"><![CDATA[Screencast Competition for Pinax/Django]]></title>
         <link href="http://eflorenzano.com/blog/2008/11/26/screencast-competition-pinaxdjango/"/>
-        <updated>2008-11-26T04:47:04</updated>
+        <updated>2008-11-26 04:47:04</updated>
         <id>http://eflorenzano.com/blog/2008/11/26/screencast-competition-pinaxdjango/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/11/26/screencast-competition-pinaxdjango/">Screencast Competition for Pinax/Django</a></h3>
 <p class="datetime">Nov 26, 2008</p>
@@ -3348,7 +3348,7 @@ entries.  So what are you waiting for?  Head on over to the
     <entry>
         <title type="html"><![CDATA[Trying to Start a Programming Meme]]></title>
         <link href="http://eflorenzano.com/blog/2008/11/25/trying-start-programming-meme/"/>
-        <updated>2008-11-25T05:13:18</updated>
+        <updated>2008-11-25 05:13:18</updated>
         <id>http://eflorenzano.com/blog/2008/11/25/trying-start-programming-meme/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/11/25/trying-start-programming-meme/">Trying to Start a Programming Meme</a></h3>
 <p class="datetime">Nov 25, 2008</p>
@@ -3440,7 +3440,7 @@ Please enter your age: 22
     <entry>
         <title type="html"><![CDATA[Why CouchDB Sucks]]></title>
         <link href="http://eflorenzano.com/blog/2008/11/23/why-couchdb-sucks/"/>
-        <updated>2008-11-23T19:14:12</updated>
+        <updated>2008-11-23 19:14:12</updated>
         <id>http://eflorenzano.com/blog/2008/11/23/why-couchdb-sucks/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/11/23/why-couchdb-sucks/">Why CouchDB Sucks</a></h3>
 <p class="datetime">Nov 23, 2008</p>
@@ -3502,7 +3502,7 @@ gone out of style.</p>
     <entry>
         <title type="html"><![CDATA[The most widely available virtual machine]]></title>
         <link href="http://eflorenzano.com/blog/2008/11/23/most-widely-available-virtual-machine/"/>
-        <updated>2008-11-23T05:37:57</updated>
+        <updated>2008-11-23 05:37:57</updated>
         <id>http://eflorenzano.com/blog/2008/11/23/most-widely-available-virtual-machine/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/11/23/most-widely-available-virtual-machine/">The most widely available virtual machine</a></h3>
 <p class="datetime">Nov 23, 2008</p>
@@ -3556,7 +3556,7 @@ targeting the most widely adopted virtual machine ever: JavaScript.</p>
     <entry>
         <title type="html"><![CDATA[Are pure client-side web apps the wave of the future?]]></title>
         <link href="http://eflorenzano.com/blog/2008/11/22/are-pure-client-side-web-apps-wave-future/"/>
-        <updated>2008-11-22T03:11:49</updated>
+        <updated>2008-11-22 03:11:49</updated>
         <id>http://eflorenzano.com/blog/2008/11/22/are-pure-client-side-web-apps-wave-future/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/11/22/are-pure-client-side-web-apps-wave-future/">Are pure client-side web apps the wave of the future?</a></h3>
 <p class="datetime">Nov 22, 2008</p>
@@ -3627,7 +3627,7 @@ this time, get to help shape that direction.</p>
     <entry>
         <title type="html"><![CDATA[Blog Updated (now with more CouchDB)]]></title>
         <link href="http://eflorenzano.com/blog/2008/11/21/blog-updated-now-more-couchdb/"/>
-        <updated>2008-11-21T05:56:20</updated>
+        <updated>2008-11-21 05:56:20</updated>
         <id>http://eflorenzano.com/blog/2008/11/21/blog-updated-now-more-couchdb/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/11/21/blog-updated-now-more-couchdb/">Blog Updated (now with more CouchDB)</a></h3>
 <p class="datetime">Nov 21, 2008</p>
@@ -3661,7 +3661,7 @@ fab deploy
     <entry>
         <title type="html"><![CDATA[Lambda Calculus]]></title>
         <link href="http://eflorenzano.com/blog/2008/11/20/lambda-calculus/"/>
-        <updated>2008-11-20T05:00:09</updated>
+        <updated>2008-11-20 05:00:09</updated>
         <id>http://eflorenzano.com/blog/2008/11/20/lambda-calculus/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/11/20/lambda-calculus/">Lambda Calculus</a></h3>
 <p class="datetime">Nov 20, 2008</p>
@@ -3806,7 +3806,7 @@ my teacher forced me to learn it, I actively didn't want to know about it.</p>
     <entry>
         <title type="html"><![CDATA[Why you should blog]]></title>
         <link href="http://eflorenzano.com/blog/2008/11/19/why-you-should-blog/"/>
-        <updated>2008-11-19T05:17:48</updated>
+        <updated>2008-11-19 05:17:48</updated>
         <id>http://eflorenzano.com/blog/2008/11/19/why-you-should-blog/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/11/19/why-you-should-blog/">Why you should blog</a></h3>
 <p class="datetime">Nov 19, 2008</p>
@@ -3858,7 +3858,7 @@ to get into.</p>
     <entry>
         <title type="html"><![CDATA[WSGI middleware is awesome, and Django should use it more]]></title>
         <link href="http://eflorenzano.com/blog/2008/11/18/wsgi-middlware-awesome-django-use-it-more/"/>
-        <updated>2008-11-18T03:26:48</updated>
+        <updated>2008-11-18 03:26:48</updated>
         <id>http://eflorenzano.com/blog/2008/11/18/wsgi-middlware-awesome-django-use-it-more/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/11/18/wsgi-middlware-awesome-django-use-it-more/">WSGI middleware is awesome, and Django should use it more</a></h3>
 <p class="datetime">Nov 18, 2008</p>
@@ -3968,7 +3968,7 @@ I for one wish I had listened sooner.</p>
     <entry>
         <title type="html"><![CDATA[Writing an Markov-Chain IRC Bot with Twisted and Python]]></title>
         <link href="http://eflorenzano.com/blog/2008/11/17/writing-markov-chain-irc-bot-twisted-and-python/"/>
-        <updated>2008-11-17T05:59:34</updated>
+        <updated>2008-11-17 05:59:34</updated>
         <id>http://eflorenzano.com/blog/2008/11/17/writing-markov-chain-irc-bot-twisted-and-python/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/11/17/writing-markov-chain-irc-bot-twisted-and-python/">Writing an Markov-Chain IRC Bot with Twisted and Python</a></h3>
 <p class="datetime">Nov 17, 2008</p>
@@ -4189,7 +4189,7 @@ simply close with a snippet of conversation recently had with YourMomDotCom:</p>
     <entry>
         <title type="html"><![CDATA[Exploring Erlang&#39;s gen_server]]></title>
         <link href="http://eflorenzano.com/blog/2008/11/16/exploring-erlangs-genserver/"/>
-        <updated>2008-11-16T04:20:40</updated>
+        <updated>2008-11-16 04:20:40</updated>
         <id>http://eflorenzano.com/blog/2008/11/16/exploring-erlangs-genserver/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/11/16/exploring-erlangs-genserver/">Exploring Erlang&#39;s gen_server</a></h3>
 <p class="datetime">Nov 16, 2008</p>
@@ -4414,7 +4414,7 @@ now that all of that is said, show me how to slice in Erlang!</p>
     <entry>
         <title type="html"><![CDATA[Easy Multi-Database Support for Django]]></title>
         <link href="http://eflorenzano.com/blog/2008/11/15/easy-multi-database-support-django/"/>
-        <updated>2008-11-15T05:51:44</updated>
+        <updated>2008-11-15 05:51:44</updated>
         <id>http://eflorenzano.com/blog/2008/11/15/easy-multi-database-support-django/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/11/15/easy-multi-database-support-django/">Easy Multi-Database Support for Django</a></h3>
 <p class="datetime">Nov 15, 2008</p>
@@ -4645,7 +4645,7 @@ problems that were encountered along the way?</p>
     <entry>
         <title type="html"><![CDATA[&#34;To IDE or not to IDE?&#34;, that is the question]]></title>
         <link href="http://eflorenzano.com/blog/2008/11/14/ide-or-not-ide-question/"/>
-        <updated>2008-11-14T04:24:18</updated>
+        <updated>2008-11-14 04:24:18</updated>
         <id>http://eflorenzano.com/blog/2008/11/14/ide-or-not-ide-question/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/11/14/ide-or-not-ide-question/">&#34;To IDE or not to IDE?&#34;, that is the question</a></h3>
 <p class="datetime">Nov 14, 2008</p>
@@ -4698,7 +4698,7 @@ off their feet?</p>
     <entry>
         <title type="html"><![CDATA[Book Meme]]></title>
         <link href="http://eflorenzano.com/blog/2008/11/13/book-meme/"/>
-        <updated>2008-11-13T05:19:41</updated>
+        <updated>2008-11-13 05:19:41</updated>
         <id>http://eflorenzano.com/blog/2008/11/13/book-meme/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/11/13/book-meme/">Book Meme</a></h3>
 <p class="datetime">Nov 13, 2008</p>
@@ -4736,7 +4736,7 @@ From <em>Practical Django Projects</em> by <a class="reference external" href="h
     <entry>
         <title type="html"><![CDATA[Why use a VARCHAR when you can use TEXT?]]></title>
         <link href="http://eflorenzano.com/blog/2008/11/11/why-use-varchar-when-you-can-use-text/"/>
-        <updated>2008-11-11T16:23:24</updated>
+        <updated>2008-11-11 16:23:24</updated>
         <id>http://eflorenzano.com/blog/2008/11/11/why-use-varchar-when-you-can-use-text/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/11/11/why-use-varchar-when-you-can-use-text/">Why use a VARCHAR when you can use TEXT?</a></h3>
 <p class="datetime">Nov 11, 2008</p>
@@ -4788,7 +4788,7 @@ only reason we're doing it is for historical reasons.  Is anyone with me?</p>
     <entry>
         <title type="html"><![CDATA[Making Django Imports Less Painful]]></title>
         <link href="http://eflorenzano.com/blog/2008/11/11/making-django-imports-less-painful/"/>
-        <updated>2008-11-11T03:25:58</updated>
+        <updated>2008-11-11 03:25:58</updated>
         <id>http://eflorenzano.com/blog/2008/11/11/making-django-imports-less-painful/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/11/11/making-django-imports-less-painful/">Making Django Imports Less Painful</a></h3>
 <p class="datetime">Nov 11, 2008</p>
@@ -4895,7 +4895,7 @@ only reason we're doing it is for historical reasons.  Is anyone with me?</p>
     <entry>
         <title type="html"><![CDATA[Using CouchDB with Django]]></title>
         <link href="http://eflorenzano.com/blog/2008/11/10/using-couchdb-django/"/>
-        <updated>2008-11-10T05:59:59</updated>
+        <updated>2008-11-10 05:59:59</updated>
         <id>http://eflorenzano.com/blog/2008/11/10/using-couchdb-django/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/11/10/using-couchdb-django/">Using CouchDB with Django</a></h3>
 <p class="datetime">Nov 10, 2008</p>
@@ -5079,7 +5079,7 @@ If yes, then how are you dealing with that interaction?</p>
     <entry>
         <title type="html"><![CDATA[Legacy Code]]></title>
         <link href="http://eflorenzano.com/blog/2008/11/09/legacy-code/"/>
-        <updated>2008-11-09T02:45:13</updated>
+        <updated>2008-11-09 02:45:13</updated>
         <id>http://eflorenzano.com/blog/2008/11/09/legacy-code/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/11/09/legacy-code/">Legacy Code</a></h3>
 <p class="datetime">Nov 09, 2008</p>
@@ -5137,7 +5137,7 @@ it?  Do you think that it's better to just start from scratch?</p>
     <entry>
         <title type="html"><![CDATA[It&#39;s Caches All the Way Down]]></title>
         <link href="http://eflorenzano.com/blog/2008/11/08/its-caches-all-way-down/"/>
-        <updated>2008-11-08T05:52:53</updated>
+        <updated>2008-11-08 05:52:53</updated>
         <id>http://eflorenzano.com/blog/2008/11/08/its-caches-all-way-down/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/11/08/its-caches-all-way-down/">It&#39;s Caches All the Way Down</a></h3>
 <p class="datetime">Nov 08, 2008</p>
@@ -5208,7 +5208,7 @@ have the answers, but I'm interested if you do.</p>
     <entry>
         <title type="html"><![CDATA[Secrets of the Django ORM]]></title>
         <link href="http://eflorenzano.com/blog/2008/11/06/secrets-django-orm/"/>
-        <updated>2008-11-06T17:14:54</updated>
+        <updated>2008-11-06 17:14:54</updated>
         <id>http://eflorenzano.com/blog/2008/11/06/secrets-django-orm/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/11/06/secrets-django-orm/">Secrets of the Django ORM</a></h3>
 <p class="datetime">Nov 06, 2008</p>
@@ -5287,7 +5287,7 @@ you have the knowledge, so you have the power, and it's up to you to use it wise
     <entry>
         <title type="html"><![CDATA[The internet is in immediate danger of collapse]]></title>
         <link href="http://eflorenzano.com/blog/2008/11/06/internet-immediate-danger-collapse/"/>
-        <updated>2008-11-06T05:38:48</updated>
+        <updated>2008-11-06 05:38:48</updated>
         <id>http://eflorenzano.com/blog/2008/11/06/internet-immediate-danger-collapse/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/11/06/internet-immediate-danger-collapse/">The internet is in immediate danger of collapse</a></h3>
 <p class="datetime">Nov 06, 2008</p>
@@ -5372,7 +5372,7 @@ it.</p>
     <entry>
         <title type="html"><![CDATA[Why SQLAlchemy is the best ORM on the face of the planet]]></title>
         <link href="http://eflorenzano.com/blog/2008/11/05/why-sqlalchemy-best-orm-face-planet/"/>
-        <updated>2008-11-05T02:03:04</updated>
+        <updated>2008-11-05 02:03:04</updated>
         <id>http://eflorenzano.com/blog/2008/11/05/why-sqlalchemy-best-orm-face-planet/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/11/05/why-sqlalchemy-best-orm-face-planet/">Why SQLAlchemy is the best ORM on the face of the planet</a></h3>
 <p class="datetime">Nov 05, 2008</p>
@@ -5402,7 +5402,7 @@ it.</p>
     <entry>
         <title type="html"><![CDATA[Database triggers aren&#39;t evil, and they actually kind of rock]]></title>
         <link href="http://eflorenzano.com/blog/2008/11/04/database-triggers-arent-evil-and-they-actually-kin/"/>
-        <updated>2008-11-04T02:44:19</updated>
+        <updated>2008-11-04 02:44:19</updated>
         <id>http://eflorenzano.com/blog/2008/11/04/database-triggers-arent-evil-and-they-actually-kin/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/11/04/database-triggers-arent-evil-and-they-actually-kin/">Database triggers aren&#39;t evil, and they actually kind of rock</a></h3>
 <p class="datetime">Nov 04, 2008</p>
@@ -5544,7 +5544,7 @@ fast, and it kind of rocks.</p>
     <entry>
         <title type="html"><![CDATA[Gems of Python]]></title>
         <link href="http://eflorenzano.com/blog/2008/11/02/gems-python/"/>
-        <updated>2008-11-02T22:04:42</updated>
+        <updated>2008-11-02 22:04:42</updated>
         <id>http://eflorenzano.com/blog/2008/11/02/gems-python/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/11/02/gems-python/">Gems of Python</a></h3>
 <p class="datetime">Nov 02, 2008</p>
@@ -5666,7 +5666,7 @@ Letter 5 is 'e'</span>
     <entry>
         <title type="html"><![CDATA[What&#39;s Next?]]></title>
         <link href="http://eflorenzano.com/blog/2008/11/02/whats-next/"/>
-        <updated>2008-11-02T01:24:11</updated>
+        <updated>2008-11-02 01:24:11</updated>
         <id>http://eflorenzano.com/blog/2008/11/02/whats-next/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/11/02/whats-next/">What&#39;s Next?</a></h3>
 <p class="datetime">Nov 02, 2008</p>
@@ -5729,7 +5729,7 @@ Letter 5 is 'e'</span>
     <entry>
         <title type="html"><![CDATA[Programming Languages I&#39;ve Learned (In Rough Order) Meme]]></title>
         <link href="http://eflorenzano.com/blog/2008/09/29/programming-languages-ive-learned-rough-order/"/>
-        <updated>2008-09-29T00:49:15</updated>
+        <updated>2008-09-29 00:49:15</updated>
         <id>http://eflorenzano.com/blog/2008/09/29/programming-languages-ive-learned-rough-order/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/09/29/programming-languages-ive-learned-rough-order/">Programming Languages I&#39;ve Learned (In Rough Order) Meme</a></h3>
 <p class="datetime">Sep 29, 2008</p>
@@ -5770,7 +5770,7 @@ Letter 5 is 'e'</span>
     <entry>
         <title type="html"><![CDATA[&#34;Django From the Ground Up&#34; Screencast Series Launched]]></title>
         <link href="http://eflorenzano.com/blog/2008/09/19/django-ground-screencast-series-launched/"/>
-        <updated>2008-09-19T04:33:09</updated>
+        <updated>2008-09-19 04:33:09</updated>
         <id>http://eflorenzano.com/blog/2008/09/19/django-ground-screencast-series-launched/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/09/19/django-ground-screencast-series-launched/">&#34;Django From the Ground Up&#34; Screencast Series Launched</a></h3>
 <p class="datetime">Sep 19, 2008</p>
@@ -5800,7 +5800,7 @@ Letter 5 is 'e'</span>
     <entry>
         <title type="html"><![CDATA[DjangoCon: Great conference, or greatest conference ever?]]></title>
         <link href="http://eflorenzano.com/blog/2008/09/08/djangocon-great-conference-or-greatest-conference/"/>
-        <updated>2008-09-08T07:58:30</updated>
+        <updated>2008-09-08 07:58:30</updated>
         <id>http://eflorenzano.com/blog/2008/09/08/djangocon-great-conference-or-greatest-conference/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/09/08/djangocon-great-conference-or-greatest-conference/">DjangoCon: Great conference, or greatest conference ever?</a></h3>
 <p class="datetime">Sep 08, 2008</p>
@@ -5839,7 +5839,7 @@ Letter 5 is 'e'</span>
     <entry>
         <title type="html"><![CDATA[Spawning + Django]]></title>
         <link href="http://eflorenzano.com/blog/2008/07/31/spawning-django/"/>
-        <updated>2008-07-31T04:51:17</updated>
+        <updated>2008-07-31 04:51:17</updated>
         <id>http://eflorenzano.com/blog/2008/07/31/spawning-django/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/07/31/spawning-django/">Spawning + Django</a></h3>
 <p class="datetime">Jul 31, 2008</p>
@@ -5888,7 +5888,7 @@ inside the project dir(ie the one that contains manage.py)
     <entry>
         <title type="html"><![CDATA[Intermediary Models and PyMag]]></title>
         <link href="http://eflorenzano.com/blog/2008/07/30/intermediary-models-and-pymag/"/>
-        <updated>2008-07-30T06:11:17</updated>
+        <updated>2008-07-30 06:11:17</updated>
         <id>http://eflorenzano.com/blog/2008/07/30/intermediary-models-and-pymag/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/07/30/intermediary-models-and-pymag/">Intermediary Models and PyMag</a></h3>
 <p class="datetime">Jul 30, 2008</p>
@@ -5929,7 +5929,7 @@ inside the project dir(ie the one that contains manage.py)
     <entry>
         <title type="html"><![CDATA[First Two Django Screencasts]]></title>
         <link href="http://eflorenzano.com/blog/2008/07/13/first-two-django-screencasts/"/>
-        <updated>2008-07-13T03:09:49</updated>
+        <updated>2008-07-13 03:09:49</updated>
         <id>http://eflorenzano.com/blog/2008/07/13/first-two-django-screencasts/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/07/13/first-two-django-screencasts/">First Two Django Screencasts</a></h3>
 <p class="datetime">Jul 13, 2008</p>
@@ -5992,7 +5992,7 @@ ln -sfnv <span class="sb">`</span><span class="nb">pwd</span><span class="sb">`<
     <entry>
         <title type="html"><![CDATA[Japan and San Francisco]]></title>
         <link href="http://eflorenzano.com/blog/2008/07/10/japan-and-san-francisco/"/>
-        <updated>2008-07-10T08:20:14</updated>
+        <updated>2008-07-10 08:20:14</updated>
         <id>http://eflorenzano.com/blog/2008/07/10/japan-and-san-francisco/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/07/10/japan-and-san-francisco/">Japan and San Francisco</a></h3>
 <p class="datetime">Jul 10, 2008</p>
@@ -6032,7 +6032,7 @@ ln -sfnv <span class="sb">`</span><span class="nb">pwd</span><span class="sb">`<
     <entry>
         <title type="html"><![CDATA[Djangodash was Fun!]]></title>
         <link href="http://eflorenzano.com/blog/2008/06/07/djangodash-was-fun/"/>
-        <updated>2008-06-07T08:05:00</updated>
+        <updated>2008-06-07 08:05:00</updated>
         <id>http://eflorenzano.com/blog/2008/06/07/djangodash-was-fun/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/06/07/djangodash-was-fun/">Djangodash was Fun!</a></h3>
 <p class="datetime">Jun 07, 2008</p>
@@ -6079,7 +6079,7 @@ ln -sfnv <span class="sb">`</span><span class="nb">pwd</span><span class="sb">`<
     <entry>
         <title type="html"><![CDATA[Where I&#39;ve Been, and Where I&#39;m Going]]></title>
         <link href="http://eflorenzano.com/blog/2008/06/06/where-ive-been-and-where-im-going/"/>
-        <updated>2008-06-06T07:43:28</updated>
+        <updated>2008-06-06 07:43:28</updated>
         <id>http://eflorenzano.com/blog/2008/06/06/where-ive-been-and-where-im-going/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/06/06/where-ive-been-and-where-im-going/">Where I&#39;ve Been, and Where I&#39;m Going</a></h3>
 <p class="datetime">Jun 06, 2008</p>
@@ -6123,7 +6123,7 @@ ln -sfnv <span class="sb">`</span><span class="nb">pwd</span><span class="sb">`<
     <entry>
         <title type="html"><![CDATA[FriendFeed Comment Expand Bookmarklet]]></title>
         <link href="http://eflorenzano.com/blog/2008/05/27/friendfeed-comment-expand-bookmarklet/"/>
-        <updated>2008-05-27T07:47:57</updated>
+        <updated>2008-05-27 07:47:57</updated>
         <id>http://eflorenzano.com/blog/2008/05/27/friendfeed-comment-expand-bookmarklet/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/05/27/friendfeed-comment-expand-bookmarklet/">FriendFeed Comment Expand Bookmarklet</a></h3>
 <p class="datetime">May 27, 2008</p>
@@ -6153,7 +6153,7 @@ ln -sfnv <span class="sb">`</span><span class="nb">pwd</span><span class="sb">`<
     <entry>
         <title type="html"><![CDATA[Managers and Voting and Subqueries, Oh My!]]></title>
         <link href="http://eflorenzano.com/blog/2008/05/24/managers-and-voting-and-subqueries-oh-my/"/>
-        <updated>2008-05-24T23:12:19</updated>
+        <updated>2008-05-24 23:12:19</updated>
         <id>http://eflorenzano.com/blog/2008/05/24/managers-and-voting-and-subqueries-oh-my/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/05/24/managers-and-voting-and-subqueries-oh-my/">Managers and Voting and Subqueries, Oh My!</a></h3>
 <p class="datetime">May 24, 2008</p>
@@ -6206,7 +6206,7 @@ ln -sfnv <span class="sb">`</span><span class="nb">pwd</span><span class="sb">`<
     <entry>
         <title type="html"><![CDATA[Exploring Mixins with Django Model Inheritance]]></title>
         <link href="http://eflorenzano.com/blog/2008/05/17/exploring-mixins-django-model-inheritance/"/>
-        <updated>2008-05-17T07:24:03</updated>
+        <updated>2008-05-17 07:24:03</updated>
         <id>http://eflorenzano.com/blog/2008/05/17/exploring-mixins-django-model-inheritance/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/05/17/exploring-mixins-django-model-inheritance/">Exploring Mixins with Django Model Inheritance</a></h3>
 <p class="datetime">May 17, 2008</p>
@@ -6380,7 +6380,7 @@ ln -sfnv <span class="sb">`</span><span class="nb">pwd</span><span class="sb">`<
     <entry>
         <title type="html"><![CDATA[Revolutionary Ideas]]></title>
         <link href="http://eflorenzano.com/blog/2008/05/15/revolutionary-ideas/"/>
-        <updated>2008-05-15T16:18:44</updated>
+        <updated>2008-05-15 16:18:44</updated>
         <id>http://eflorenzano.com/blog/2008/05/15/revolutionary-ideas/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/05/15/revolutionary-ideas/">Revolutionary Ideas</a></h3>
 <p class="datetime">May 15, 2008</p>
@@ -6413,7 +6413,7 @@ ln -sfnv <span class="sb">`</span><span class="nb">pwd</span><span class="sb">`<
     <entry>
         <title type="html"><![CDATA[My Awesome Regex Snippet]]></title>
         <link href="http://eflorenzano.com/blog/2008/05/06/my-awesome-regex-snippet/"/>
-        <updated>2008-05-06T08:24:07</updated>
+        <updated>2008-05-06 08:24:07</updated>
         <id>http://eflorenzano.com/blog/2008/05/06/my-awesome-regex-snippet/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/05/06/my-awesome-regex-snippet/">My Awesome Regex Snippet</a></h3>
 <p class="datetime">May 06, 2008</p>
@@ -6489,7 +6489,7 @@ ln -sfnv <span class="sb">`</span><span class="nb">pwd</span><span class="sb">`<
     <entry>
         <title type="html"><![CDATA[Inheritance vs. Composition]]></title>
         <link href="http://eflorenzano.com/blog/2008/05/04/inheritance-vs-composition/"/>
-        <updated>2008-05-04T23:12:38</updated>
+        <updated>2008-05-04 23:12:38</updated>
         <id>http://eflorenzano.com/blog/2008/05/04/inheritance-vs-composition/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/05/04/inheritance-vs-composition/">Inheritance vs. Composition</a></h3>
 <p class="datetime">May 04, 2008</p>
@@ -6559,7 +6559,7 @@ ln -sfnv <span class="sb">`</span><span class="nb">pwd</span><span class="sb">`<
     <entry>
         <title type="html"><![CDATA[Learning Design]]></title>
         <link href="http://eflorenzano.com/blog/2008/04/17/learning-design/"/>
-        <updated>2008-04-17T17:49:29</updated>
+        <updated>2008-04-17 17:49:29</updated>
         <id>http://eflorenzano.com/blog/2008/04/17/learning-design/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/04/17/learning-design/">Learning Design</a></h3>
 <p class="datetime">Apr 17, 2008</p>
@@ -6589,7 +6589,7 @@ ln -sfnv <span class="sb">`</span><span class="nb">pwd</span><span class="sb">`<
     <entry>
         <title type="html"><![CDATA[Lessons Learned]]></title>
         <link href="http://eflorenzano.com/blog/2008/04/10/lessions-learned/"/>
-        <updated>2008-04-10T17:08:40</updated>
+        <updated>2008-04-10 17:08:40</updated>
         <id>http://eflorenzano.com/blog/2008/04/10/lessions-learned/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/04/10/lessions-learned/">Lessons Learned</a></h3>
 <p class="datetime">Apr 10, 2008</p>
@@ -6629,7 +6629,7 @@ ln -sfnv <span class="sb">`</span><span class="nb">pwd</span><span class="sb">`<
     <entry>
         <title type="html"><![CDATA[April Fools]]></title>
         <link href="http://eflorenzano.com/blog/2008/04/01/april-fools/"/>
-        <updated>2008-04-01T06:14:03</updated>
+        <updated>2008-04-01 06:14:03</updated>
         <id>http://eflorenzano.com/blog/2008/04/01/april-fools/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/04/01/april-fools/">April Fools</a></h3>
 <p class="datetime">Apr 01, 2008</p>
@@ -6696,7 +6696,7 @@ ln -sfnv <span class="sb">`</span><span class="nb">pwd</span><span class="sb">`<
     <entry>
         <title type="html"><![CDATA[Talk Controversy, Django Community, Sprints, and People]]></title>
         <link href="http://eflorenzano.com/blog/2008/03/21/talk-controversy-django-community-sprints-and-peop/"/>
-        <updated>2008-03-21T00:14:33</updated>
+        <updated>2008-03-21 00:14:33</updated>
         <id>http://eflorenzano.com/blog/2008/03/21/talk-controversy-django-community-sprints-and-peop/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/03/21/talk-controversy-django-community-sprints-and-peop/">Talk Controversy, Django Community, Sprints, and People</a></h3>
 <p class="datetime">Mar 21, 2008</p>
@@ -6802,7 +6802,7 @@ I love PyCon.</p>
     <entry>
         <title type="html"><![CDATA[PyCon 2008]]></title>
         <link href="http://eflorenzano.com/blog/2008/03/14/pycon-2008/"/>
-        <updated>2008-03-14T01:04:47</updated>
+        <updated>2008-03-14 01:04:47</updated>
         <id>http://eflorenzano.com/blog/2008/03/14/pycon-2008/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/03/14/pycon-2008/">PyCon 2008</a></h3>
 <p class="datetime">Mar 14, 2008</p>
@@ -6829,7 +6829,7 @@ I love PyCon.</p>
     <entry>
         <title type="html"><![CDATA[Ideas and Execution]]></title>
         <link href="http://eflorenzano.com/blog/2008/03/12/ideas-and-execution/"/>
-        <updated>2008-03-12T10:57:30</updated>
+        <updated>2008-03-12 10:57:30</updated>
         <id>http://eflorenzano.com/blog/2008/03/12/ideas-and-execution/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/03/12/ideas-and-execution/">Ideas and Execution</a></h3>
 <p class="datetime">Mar 12, 2008</p>
@@ -6877,7 +6877,7 @@ I love PyCon.</p>
     <entry>
         <title type="html"><![CDATA[Hosting a Django Site with Pure Python]]></title>
         <link href="http://eflorenzano.com/blog/2008/02/22/hosting-django-site-pure-python/"/>
-        <updated>2008-02-22T20:47:48</updated>
+        <updated>2008-02-22 20:47:48</updated>
         <id>http://eflorenzano.com/blog/2008/02/22/hosting-django-site-pure-python/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/02/22/hosting-django-site-pure-python/">Hosting a Django Site with Pure Python</a></h3>
 <p class="datetime">Feb 22, 2008</p>
@@ -6952,7 +6952,7 @@ wget http://svn.cherrypy.org/trunk/cherrypy/wsgiserver/__init__.py -O wsgiserver
     <entry>
         <title type="html"><![CDATA[Syntax Highlighting]]></title>
         <link href="http://eflorenzano.com/blog/2008/02/22/syntax-highlighting/"/>
-        <updated>2008-02-22T01:12:01</updated>
+        <updated>2008-02-22 01:12:01</updated>
         <id>http://eflorenzano.com/blog/2008/02/22/syntax-highlighting/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/02/22/syntax-highlighting/">Syntax Highlighting</a></h3>
 <p class="datetime">Feb 22, 2008</p>
@@ -6985,7 +6985,7 @@ wget http://svn.cherrypy.org/trunk/cherrypy/wsgiserver/__init__.py -O wsgiserver
     <entry>
         <title type="html"><![CDATA[Django Tip: A Denormalization Alternative]]></title>
         <link href="http://eflorenzano.com/blog/2008/02/15/django-tip-denormalization-alternative/"/>
-        <updated>2008-02-15T21:28:06</updated>
+        <updated>2008-02-15 21:28:06</updated>
         <id>http://eflorenzano.com/blog/2008/02/15/django-tip-denormalization-alternative/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/02/15/django-tip-denormalization-alternative/">Django Tip: A Denormalization Alternative</a></h3>
 <p class="datetime">Feb 15, 2008</p>
@@ -7041,7 +7041,7 @@ wget http://svn.cherrypy.org/trunk/cherrypy/wsgiserver/__init__.py -O wsgiserver
     <entry>
         <title type="html"><![CDATA[On Context Processors in Django]]></title>
         <link href="http://eflorenzano.com/blog/2008/02/11/context-processors-django/"/>
-        <updated>2008-02-11T20:20:01</updated>
+        <updated>2008-02-11 20:20:01</updated>
         <id>http://eflorenzano.com/blog/2008/02/11/context-processors-django/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/02/11/context-processors-django/">On Context Processors in Django</a></h3>
 <p class="datetime">Feb 11, 2008</p>
@@ -7077,7 +7077,7 @@ wget http://svn.cherrypy.org/trunk/cherrypy/wsgiserver/__init__.py -O wsgiserver
     <entry>
         <title type="html"><![CDATA[OOP and Django]]></title>
         <link href="http://eflorenzano.com/blog/2008/02/09/oop-and-django/"/>
-        <updated>2008-02-09T07:06:52</updated>
+        <updated>2008-02-09 07:06:52</updated>
         <id>http://eflorenzano.com/blog/2008/02/09/oop-and-django/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/02/09/oop-and-django/">OOP and Django</a></h3>
 <p class="datetime">Feb 09, 2008</p>
@@ -7122,7 +7122,7 @@ wget http://svn.cherrypy.org/trunk/cherrypy/wsgiserver/__init__.py -O wsgiserver
     <entry>
         <title type="html"><![CDATA[XFN Markup Enabled]]></title>
         <link href="http://eflorenzano.com/blog/2008/02/05/xfn-markup-enabled/"/>
-        <updated>2008-02-05T18:35:01</updated>
+        <updated>2008-02-05 18:35:01</updated>
         <id>http://eflorenzano.com/blog/2008/02/05/xfn-markup-enabled/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/02/05/xfn-markup-enabled/">XFN Markup Enabled</a></h3>
 <p class="datetime">Feb 05, 2008</p>
@@ -7154,7 +7154,7 @@ wget http://svn.cherrypy.org/trunk/cherrypy/wsgiserver/__init__.py -O wsgiserver
     <entry>
         <title type="html"><![CDATA[AJAX, Voting, and Some Nicer CSS: Putting django-threadedcomments to the Test]]></title>
         <link href="http://eflorenzano.com/blog/2008/01/30/ajax-voting-nicer-css-threadedcomments-test/"/>
-        <updated>2008-01-30T18:02:13</updated>
+        <updated>2008-01-30 18:02:13</updated>
         <id>http://eflorenzano.com/blog/2008/01/30/ajax-voting-nicer-css-threadedcomments-test/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/01/30/ajax-voting-nicer-css-threadedcomments-test/">AJAX, Voting, and Some Nicer CSS: Putting django-threadedcomments to the Test</a></h3>
 <p class="datetime">Jan 30, 2008</p>
@@ -7195,7 +7195,7 @@ functionality...&quot;</blockquote>
     <entry>
         <title type="html"><![CDATA[Announcing django-threadedcomments]]></title>
         <link href="http://eflorenzano.com/blog/2008/01/23/announcing-django-threadedcomments/"/>
-        <updated>2008-01-23T17:26:04</updated>
+        <updated>2008-01-23 17:26:04</updated>
         <id>http://eflorenzano.com/blog/2008/01/23/announcing-django-threadedcomments/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/01/23/announcing-django-threadedcomments/">Announcing django-threadedcomments</a></h3>
 <p class="datetime">Jan 23, 2008</p>
@@ -7233,7 +7233,7 @@ functionality...&quot;</blockquote>
     <entry>
         <title type="html"><![CDATA[I Caucused Tonight]]></title>
         <link href="http://eflorenzano.com/blog/2008/01/04/i-caucused-tonight/"/>
-        <updated>2008-01-04T02:20:58</updated>
+        <updated>2008-01-04 02:20:58</updated>
         <id>http://eflorenzano.com/blog/2008/01/04/i-caucused-tonight/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2008/01/04/i-caucused-tonight/">I Caucused Tonight</a></h3>
 <p class="datetime">Jan 04, 2008</p>
@@ -7266,7 +7266,7 @@ Biden: 1 delegate</p>
     <entry>
         <title type="html"><![CDATA[Creating a Pownce Widget Using Django]]></title>
         <link href="http://eflorenzano.com/blog/2007/12/18/creating-pownce-widget-using-django/"/>
-        <updated>2007-12-18T18:37:52</updated>
+        <updated>2007-12-18 18:37:52</updated>
         <id>http://eflorenzano.com/blog/2007/12/18/creating-pownce-widget-using-django/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2007/12/18/creating-pownce-widget-using-django/">Creating a Pownce Widget Using Django</a></h3>
 <p class="datetime">Dec 18, 2007</p>
@@ -7366,7 +7366,7 @@ document.write('<span class="cp">{{</span> <span class="nv">widget_content</span
     <entry>
         <title type="html"><![CDATA[Django-Related Audio from Last Year&#39;s PyCon]]></title>
         <link href="http://eflorenzano.com/blog/2007/12/11/django-related-audio-last-years-pycon/"/>
-        <updated>2007-12-11T23:44:14</updated>
+        <updated>2007-12-11 23:44:14</updated>
         <id>http://eflorenzano.com/blog/2007/12/11/django-related-audio-last-years-pycon/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2007/12/11/django-related-audio-last-years-pycon/">Django-Related Audio from Last Year&#39;s PyCon</a></h3>
 <p class="datetime">Dec 11, 2007</p>
@@ -7393,7 +7393,7 @@ document.write('<span class="cp">{{</span> <span class="nv">widget_content</span
     <entry>
         <title type="html"><![CDATA[Looking Forward: Upcoming Django Developments Worth Waiting For]]></title>
         <link href="http://eflorenzano.com/blog/2007/12/10/looking-forward-upcoming-django-developments-worth/"/>
-        <updated>2007-12-10T20:18:26</updated>
+        <updated>2007-12-10 20:18:26</updated>
         <id>http://eflorenzano.com/blog/2007/12/10/looking-forward-upcoming-django-developments-worth/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2007/12/10/looking-forward-upcoming-django-developments-worth/">Looking Forward: Upcoming Django Developments Worth Waiting For</a></h3>
 <p class="datetime">Dec 10, 2007</p>
@@ -7476,7 +7476,7 @@ about naming everything differently!</p>
     <entry>
         <title type="html"><![CDATA[Getting Involved in the Django Project]]></title>
         <link href="http://eflorenzano.com/blog/2007/12/07/getting-involved-django-project/"/>
-        <updated>2007-12-07T18:24:10</updated>
+        <updated>2007-12-07 18:24:10</updated>
         <id>http://eflorenzano.com/blog/2007/12/07/getting-involved-django-project/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2007/12/07/getting-involved-django-project/">Getting Involved in the Django Project</a></h3>
 <p class="datetime">Dec 07, 2007</p>
@@ -7594,7 +7594,7 @@ on the django-dev mailing list.</p>
     <entry>
         <title type="html"><![CDATA[Fun Way of Displaying a Blogroll]]></title>
         <link href="http://eflorenzano.com/blog/2007/12/06/fun-way-displaying-blogroll/"/>
-        <updated>2007-12-06T03:33:14</updated>
+        <updated>2007-12-06 03:33:14</updated>
         <id>http://eflorenzano.com/blog/2007/12/06/fun-way-displaying-blogroll/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2007/12/06/fun-way-displaying-blogroll/">Fun Way of Displaying a Blogroll</a></h3>
 <p class="datetime">Dec 06, 2007</p>
@@ -7661,7 +7661,7 @@ on the django-dev mailing list.</p>
     <entry>
         <title type="html"><![CDATA[Picky]]></title>
         <link href="http://eflorenzano.com/blog/2007/09/14/picky/"/>
-        <updated>2007-09-14T02:36:02</updated>
+        <updated>2007-09-14 02:36:02</updated>
         <id>http://eflorenzano.com/blog/2007/09/14/picky/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2007/09/14/picky/">Picky</a></h3>
 <p class="datetime">Sep 14, 2007</p>
@@ -7682,7 +7682,7 @@ on the django-dev mailing list.</p>
     <entry>
         <title type="html"><![CDATA[Eyespot Internship: Complete]]></title>
         <link href="http://eflorenzano.com/blog/2007/08/11/eyespot-internship-complete/"/>
-        <updated>2007-08-11T04:48:35</updated>
+        <updated>2007-08-11 04:48:35</updated>
         <id>http://eflorenzano.com/blog/2007/08/11/eyespot-internship-complete/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2007/08/11/eyespot-internship-complete/">Eyespot Internship: Complete</a></h3>
 <p class="datetime">Aug 11, 2007</p>
@@ -7707,7 +7707,7 @@ on the django-dev mailing list.</p>
     <entry>
         <title type="html"><![CDATA[Interesting Discussion, Nginx]]></title>
         <link href="http://eflorenzano.com/blog/2007/08/08/interesting-discussion-nginx/"/>
-        <updated>2007-08-08T05:09:21</updated>
+        <updated>2007-08-08 05:09:21</updated>
         <id>http://eflorenzano.com/blog/2007/08/08/interesting-discussion-nginx/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2007/08/08/interesting-discussion-nginx/">Interesting Discussion, Nginx</a></h3>
 <p class="datetime">Aug 08, 2007</p>
@@ -7738,7 +7738,7 @@ on the django-dev mailing list.</p>
     <entry>
         <title type="html"><![CDATA[Sphinx Search, Totally Rad Website]]></title>
         <link href="http://eflorenzano.com/blog/2007/08/07/sphinx-search-totally-rad-website/"/>
-        <updated>2007-08-07T05:00:36</updated>
+        <updated>2007-08-07 05:00:36</updated>
         <id>http://eflorenzano.com/blog/2007/08/07/sphinx-search-totally-rad-website/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2007/08/07/sphinx-search-totally-rad-website/">Sphinx Search, Totally Rad Website</a></h3>
 <p class="datetime">Aug 07, 2007</p>
@@ -7772,7 +7772,7 @@ on the django-dev mailing list.</p>
     <entry>
         <title type="html"><![CDATA[Cheetah and Django]]></title>
         <link href="http://eflorenzano.com/blog/2007/08/04/cheetah-and-django/"/>
-        <updated>2007-08-04T03:18:41</updated>
+        <updated>2007-08-04 03:18:41</updated>
         <id>http://eflorenzano.com/blog/2007/08/04/cheetah-and-django/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2007/08/04/cheetah-and-django/">Cheetah and Django</a></h3>
 <p class="datetime">Aug 04, 2007</p>
@@ -7857,7 +7857,7 @@ on the django-dev mailing list.</p>
     <entry>
         <title type="html"><![CDATA[SimpleAggregation update, Eyespot]]></title>
         <link href="http://eflorenzano.com/blog/2007/08/03/simpleaggregation-update-eyespot/"/>
-        <updated>2007-08-03T03:06:05</updated>
+        <updated>2007-08-03 03:06:05</updated>
         <id>http://eflorenzano.com/blog/2007/08/03/simpleaggregation-update-eyespot/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2007/08/03/simpleaggregation-update-eyespot/">SimpleAggregation update, Eyespot</a></h3>
 <p class="datetime">Aug 03, 2007</p>
@@ -7908,7 +7908,7 @@ on the django-dev mailing list.</p>
     <entry>
         <title type="html"><![CDATA[35W Bridge]]></title>
         <link href="http://eflorenzano.com/blog/2007/08/02/35w-bridge/"/>
-        <updated>2007-08-02T01:35:42</updated>
+        <updated>2007-08-02 01:35:42</updated>
         <id>http://eflorenzano.com/blog/2007/08/02/35w-bridge/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2007/08/02/35w-bridge/">35W Bridge</a></h3>
 <p class="datetime">Aug 02, 2007</p>
@@ -7934,7 +7934,7 @@ on the django-dev mailing list.</p>
     <entry>
         <title type="html"><![CDATA[iPhone Says: &#34;Hello, World&#34;]]></title>
         <link href="http://eflorenzano.com/blog/2007/07/31/iphone-says-hello-world/"/>
-        <updated>2007-07-31T05:45:48</updated>
+        <updated>2007-07-31 05:45:48</updated>
         <id>http://eflorenzano.com/blog/2007/07/31/iphone-says-hello-world/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2007/07/31/iphone-says-hello-world/">iPhone Says: &#34;Hello, World&#34;</a></h3>
 <p class="datetime">Jul 31, 2007</p>
@@ -7969,7 +7969,7 @@ on the django-dev mailing list.</p>
     <entry>
         <title type="html"><![CDATA[Information has a Long Way to Go]]></title>
         <link href="http://eflorenzano.com/blog/2007/08/01/information-has-long-way-go/"/>
-        <updated>2007-08-01T03:29:33</updated>
+        <updated>2007-08-01 03:29:33</updated>
         <id>http://eflorenzano.com/blog/2007/08/01/information-has-long-way-go/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2007/08/01/information-has-long-way-go/">Information has a Long Way to Go</a></h3>
 <p class="datetime">Aug 01, 2007</p>
@@ -8015,7 +8015,7 @@ on the django-dev mailing list.</p>
     <entry>
         <title type="html"><![CDATA[Introducing django_simpleaggregation]]></title>
         <link href="http://eflorenzano.com/blog/2007/07/30/introducing-django_simpleaggregation/"/>
-        <updated>2007-07-30T08:44:58</updated>
+        <updated>2007-07-30 08:44:58</updated>
         <id>http://eflorenzano.com/blog/2007/07/30/introducing-django_simpleaggregation/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2007/07/30/introducing-django_simpleaggregation/">Introducing django_simpleaggregation</a></h3>
 <p class="datetime">Jul 30, 2007</p>
@@ -8043,7 +8043,7 @@ on the django-dev mailing list.</p>
     <entry>
         <title type="html"><![CDATA[Woohoo!]]></title>
         <link href="http://eflorenzano.com/blog/2007/07/26/woohoo/"/>
-        <updated>2007-07-26T15:44:43</updated>
+        <updated>2007-07-26 15:44:43</updated>
         <id>http://eflorenzano.com/blog/2007/07/26/woohoo/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2007/07/26/woohoo/">Woohoo!</a></h3>
 <p class="datetime">Jul 26, 2007</p>
@@ -8067,7 +8067,7 @@ on the django-dev mailing list.</p>
     <entry>
         <title type="html"><![CDATA[Web Design]]></title>
         <link href="http://eflorenzano.com/blog/2007/07/26/web-design/"/>
-        <updated>2007-07-26T07:40:10</updated>
+        <updated>2007-07-26 07:40:10</updated>
         <id>http://eflorenzano.com/blog/2007/07/26/web-design/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2007/07/26/web-design/">Web Design</a></h3>
 <p class="datetime">Jul 26, 2007</p>
@@ -8111,7 +8111,7 @@ on the django-dev mailing list.</p>
     <entry>
         <title type="html"><![CDATA[Simple Random Character Function]]></title>
         <link href="http://eflorenzano.com/blog/2007/04/16/simple-random-character-function/"/>
-        <updated>2007-04-16T05:27:22</updated>
+        <updated>2007-04-16 05:27:22</updated>
         <id>http://eflorenzano.com/blog/2007/04/16/simple-random-character-function/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2007/04/16/simple-random-character-function/">Simple Random Character Function</a></h3>
 <p class="datetime">Apr 16, 2007</p>
@@ -8143,7 +8143,7 @@ on the django-dev mailing list.</p>
     <entry>
         <title type="html"><![CDATA[Notice Anything?]]></title>
         <link href="http://eflorenzano.com/blog/2007/03/09/notice-anything/"/>
-        <updated>2007-03-09T08:15:13</updated>
+        <updated>2007-03-09 08:15:13</updated>
         <id>http://eflorenzano.com/blog/2007/03/09/notice-anything/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2007/03/09/notice-anything/">Notice Anything?</a></h3>
 <p class="datetime">Mar 09, 2007</p>
@@ -8176,7 +8176,7 @@ on the django-dev mailing list.</p>
     <entry>
         <title type="html"><![CDATA[Post-Pycon Thoughts]]></title>
         <link href="http://eflorenzano.com/blog/2007/02/26/post-pycon-thoughts/"/>
-        <updated>2007-02-26T09:10:01</updated>
+        <updated>2007-02-26 09:10:01</updated>
         <id>http://eflorenzano.com/blog/2007/02/26/post-pycon-thoughts/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2007/02/26/post-pycon-thoughts/">Post-Pycon Thoughts</a></h3>
 <p class="datetime">Feb 26, 2007</p>
@@ -8207,7 +8207,7 @@ on the django-dev mailing list.</p>
     <entry>
         <title type="html"><![CDATA[I&#39;m at PyCon]]></title>
         <link href="http://eflorenzano.com/blog/2007/02/22/at-pycon-at-django/"/>
-        <updated>2007-02-22T21:10:23</updated>
+        <updated>2007-02-22 21:10:23</updated>
         <id>http://eflorenzano.com/blog/2007/02/22/at-pycon-at-django/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2007/02/22/at-pycon-at-django/">I&#39;m at PyCon</a></h3>
 <p class="datetime">Feb 22, 2007</p>
@@ -8232,7 +8232,7 @@ on the django-dev mailing list.</p>
     <entry>
         <title type="html"><![CDATA[PyCon Plans]]></title>
         <link href="http://eflorenzano.com/blog/2007/02/21/pycon-plans/"/>
-        <updated>2007-02-21T04:53:35</updated>
+        <updated>2007-02-21 04:53:35</updated>
         <id>http://eflorenzano.com/blog/2007/02/21/pycon-plans/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2007/02/21/pycon-plans/">PyCon Plans</a></h3>
 <p class="datetime">Feb 21, 2007</p>
@@ -8294,7 +8294,7 @@ on the django-dev mailing list.</p>
     <entry>
         <title type="html"><![CDATA[Yet Another Project]]></title>
         <link href="http://eflorenzano.com/blog/2007/02/14/yet-another-project/"/>
-        <updated>2007-02-14T08:29:31</updated>
+        <updated>2007-02-14 08:29:31</updated>
         <id>http://eflorenzano.com/blog/2007/02/14/yet-another-project/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2007/02/14/yet-another-project/">Yet Another Project</a></h3>
 <p class="datetime">Feb 14, 2007</p>
@@ -8323,7 +8323,7 @@ on the django-dev mailing list.</p>
     <entry>
         <title type="html"><![CDATA[A Poem Crossed My Mind]]></title>
         <link href="http://eflorenzano.com/blog/2007/02/14/poem-crossed-mind/"/>
-        <updated>2007-02-14T09:29:12</updated>
+        <updated>2007-02-14 09:29:12</updated>
         <id>http://eflorenzano.com/blog/2007/02/14/poem-crossed-mind/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2007/02/14/poem-crossed-mind/">A Poem Crossed My Mind</a></h3>
 <p class="datetime">Feb 14, 2007</p>
@@ -8344,7 +8344,7 @@ on the django-dev mailing list.</p>
     <entry>
         <title type="html"><![CDATA[Writing a Gallery App in Django, Part I]]></title>
         <link href="http://eflorenzano.com/blog/2006/12/20/writing-gallery-app-part-one/"/>
-        <updated>2006-12-20T04:28:17</updated>
+        <updated>2006-12-20 04:28:17</updated>
         <id>http://eflorenzano.com/blog/2006/12/20/writing-gallery-app-part-one/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2006/12/20/writing-gallery-app-part-one/">Writing a Gallery App in Django, Part I</a></h3>
 <p class="datetime">Dec 20, 2006</p>
@@ -8443,7 +8443,7 @@ on the django-dev mailing list.</p>
     <entry>
         <title type="html"><![CDATA[Free Icons!]]></title>
         <link href="http://eflorenzano.com/blog/2006/12/09/free-icons/"/>
-        <updated>2006-12-09T09:25:04</updated>
+        <updated>2006-12-09 09:25:04</updated>
         <id>http://eflorenzano.com/blog/2006/12/09/free-icons/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2006/12/09/free-icons/">Free Icons!</a></h3>
 <p class="datetime">Dec 09, 2006</p>
@@ -8492,7 +8492,7 @@ on the django-dev mailing list.</p>
     <entry>
         <title type="html"><![CDATA[MythTV Box Down]]></title>
         <link href="http://eflorenzano.com/blog/2006/12/06/mythtv-box-down/"/>
-        <updated>2006-12-06T07:27:13</updated>
+        <updated>2006-12-06 07:27:13</updated>
         <id>http://eflorenzano.com/blog/2006/12/06/mythtv-box-down/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2006/12/06/mythtv-box-down/">MythTV Box Down</a></h3>
 <p class="datetime">Dec 06, 2006</p>
@@ -8518,7 +8518,7 @@ on the django-dev mailing list.</p>
     <entry>
         <title type="html"><![CDATA[Memcached and OpenWebLoad]]></title>
         <link href="http://eflorenzano.com/blog/2006/12/04/memcached-and-openwebload/"/>
-        <updated>2006-12-04T21:46:58</updated>
+        <updated>2006-12-04 21:46:58</updated>
         <id>http://eflorenzano.com/blog/2006/12/04/memcached-and-openwebload/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2006/12/04/memcached-and-openwebload/">Memcached and OpenWebLoad</a></h3>
 <p class="datetime">Dec 04, 2006</p>
@@ -8547,7 +8547,7 @@ on the django-dev mailing list.</p>
     <entry>
         <title type="html"><![CDATA[New Site Live!]]></title>
         <link href="http://eflorenzano.com/blog/2006/12/03/new-site-live/"/>
-        <updated>2006-12-03T22:23:54</updated>
+        <updated>2006-12-03 22:23:54</updated>
         <id>http://eflorenzano.com/blog/2006/12/03/new-site-live/</id>
         <content type="html"><![CDATA[<h3><a href="/blog/2006/12/03/new-site-live/">New Site Live!</a></h3>
 <p class="datetime">Dec 03, 2006</p>
